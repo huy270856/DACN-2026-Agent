@@ -1,0 +1,33 @@
+{
+  "schema_version": "d0-v1",
+  "tool_id": "static.ember_features",
+  "tool_version": "0.1.0",
+  "capability": "static.pe_features",
+  "description": "Read-only PE feature extraction on a verified file",
+  "input_schema_id": "ember-input-v1",
+  "output_schema_id": "ember-output-v1",
+  "provider": {
+    "id": "ember_local",
+    "version": "0.1.0",
+    "adapter": "ember_adapter",
+    "runtime": "python"
+  },
+  "effects": {
+    "reads_target": true,
+    "executes_foreign_code": false,
+    "writes_filesystem": false,
+    "mutates_target": false,
+    "requires_human_approval": false,
+    "cleanup_required": false
+  },
+  "limits": {
+    "timeout_ms": 30000,
+    "max_output_bytes": 65536,
+    "max_artifact_bytes": 1048576,
+    "max_concurrency": 1
+  },
+  "supported_targets": [
+    "FILE"
+  ],
+  "enabled": true
+}

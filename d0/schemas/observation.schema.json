@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/dacn/d0/observation.schema.json",
+  "title": "observation d0-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "facet",
+    "status",
+    "coverage",
+    "value",
+    "limitations",
+    "content_origin",
+    "trust_level",
+    "artifact_ref"
+  ],
+  "properties": {
+    "facet": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z][a-z0-9_.-]{1,80}$"
+    },
+    "status": {
+      "type": "string",
+      "minLength": 1,
+      "enum": [
+        "SUCCESS",
+        "DEGRADED",
+        "FAILED",
+        "UNAVAILABLE",
+        "NOT_COLLECTED"
+      ]
+    },
+    "coverage": {
+      "type": "string",
+      "minLength": 1,
+      "enum": [
+        "COMPLETE",
+        "PARTIAL",
+        "NONE",
+        "UNKNOWN"
+      ]
+    },
+    "value": {},
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "content_origin": {
+      "type": "string",
+      "minLength": 1,
+      "enum": [
+        "analysis_target",
+        "provider_output",
+        "trusted_system"
+      ]
+    },
+    "trust_level": {
+      "type": "string",
+      "minLength": 1,
+      "enum": [
+        "UNTRUSTED_CONTENT",
+        "TRUSTED_SYSTEM_METADATA"
+      ]
+    },
+    "artifact_ref": {
+      "anyOf": [
+        {
+          "$ref": "artifact.schema.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  }
+}

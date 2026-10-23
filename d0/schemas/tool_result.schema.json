@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/dacn/d0/tool_result.schema.json",
+  "title": "tool_result d0-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_id",
+    "call_id",
+    "case_id",
+    "target_ref",
+    "tool_id",
+    "tool_version",
+    "provider",
+    "status",
+    "observations",
+    "receipt_sha256",
+    "raw_artifacts",
+    "error"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^d0-v1$"
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "call_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "case_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target_ref": {
+      "$ref": "target_ref.schema.json"
+    },
+    "tool_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z][a-z0-9_.-]{1,80}$"
+    },
+    "tool_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "provider": {
+      "$ref": "provider.schema.json"
+    },
+    "status": {
+      "type": "string",
+      "minLength": 1,
+      "enum": [
+        "SUCCESS",
+        "PARTIAL",
+        "FAILED",
+        "TIMEOUT",
+        "CANCELLED",
+        "DENIED"
+      ]
+    },
+    "observations": {
+      "type": "array",
+      "items": {
+        "$ref": "observation.schema.json"
+      }
+    },
+    "receipt_sha256": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "raw_artifacts": {
+      "type": "array",
+      "items": {
+        "$ref": "artifact.schema.json"
+      }
+    },
+    "error": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "code",
+            "message"
+          ],
+          "properties": {
+            "code": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[a-z][a-z0-9_.-]{1,80}$"
+            },
+            "message": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  }
+}

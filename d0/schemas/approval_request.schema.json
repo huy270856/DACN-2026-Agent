@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/dacn/d0/approval_request.schema.json",
+  "title": "approval_request d0-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "request_id",
+    "case_id",
+    "expected_revision",
+    "action_id",
+    "action_type",
+    "target_ref",
+    "effect_summary",
+    "risk",
+    "reason",
+    "expires_at",
+    "requested_at",
+    "status"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^d0-v1$"
+    },
+    "request_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^APR-[A-Za-z0-9_-]{8,100}$"
+    },
+    "case_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "expected_revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "action_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "action_type": {
+      "type": "string",
+      "minLength": 1,
+      "enum": [
+        "QUARANTINE_FILE",
+        "TERMINATE_PROCESS",
+        "ISOLATE_HOST",
+        "RESTORE_FILE"
+      ]
+    },
+    "target_ref": {
+      "$ref": "target_ref.schema.json"
+    },
+    "effect_summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "risk": {
+      "type": "string",
+      "minLength": 1,
+      "enum": [
+        "LOW",
+        "MEDIUM",
+        "HIGH",
+        "CRITICAL"
+      ]
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "expires_at": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+    },
+    "requested_at": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+    },
+    "status": {
+      "const": "PENDING"
+    }
+  }
+}

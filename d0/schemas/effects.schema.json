@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/dacn/d0/effects.schema.json",
+  "title": "effects d0-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "reads_target",
+    "executes_foreign_code",
+    "writes_filesystem",
+    "mutates_target",
+    "requires_human_approval",
+    "cleanup_required"
+  ],
+  "properties": {
+    "reads_target": {
+      "type": "boolean"
+    },
+    "executes_foreign_code": {
+      "type": "boolean"
+    },
+    "writes_filesystem": {
+      "type": "boolean"
+    },
+    "mutates_target": {
+      "type": "boolean"
+    },
+    "requires_human_approval": {
+      "type": "boolean"
+    },
+    "cleanup_required": {
+      "type": "boolean"
+    }
+  }
+}
