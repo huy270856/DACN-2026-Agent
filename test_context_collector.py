@@ -201,7 +201,7 @@ class CollectorTests(unittest.TestCase):
         self.assertTrue(Path(summary["context_path"]).is_file())
 
     def test_current_pid_identity_and_backing_file(self):
-        result = cc.collect_process_context(os.getpid())
+        result = cc.collect_process_context(os.getpid(), include_backing_file=True)
         self.assertIn(result["status"], ["SUCCESS", "DEGRADED"])
         self.assertEqual(result["target"]["pid"], os.getpid())
         self.assertTrue(result["facets"]["process_identity_still_present"]["value"])
