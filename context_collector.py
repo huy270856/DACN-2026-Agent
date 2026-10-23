@@ -14,7 +14,7 @@ import tempfile
 import time
 import uuid
 
-VERSION = "1.0.1"
+VERSION = "1.1.0"
 SCHEMA = "context-v1"
 CHUNK_BYTES = 1024 * 1024
 # Windows path stat may expose birth time as ctime while fd stat exposes
@@ -122,13 +122,22 @@ def pe_header(handle, file_size):
     })
 
 
-def hash_stream(handle, total, progress=False):
+class HashTimeout(Exception):
+    pass
+
+
+def hash_stream(handle, total, progress=False, timeout_seconds=None):
     handle.seek(0)
     digest = hashlib.sha256()
     read_count = 0
     last_update = 0.0
+    deadline = time.monotonic() + timeout_seconds if timeout_seconds is not None else None
     while True:
+        if deadline is not None and time.monotonic() >= deadline:
+            raise HashTimeout("hash_timeout")
         block = handle.read(CHUNK_BYTES)
+        if deadline is not None and time.monotonic() >= deadline:
+            raise HashTimeout("hash_timeout")
         if not block:
             break
         digest.update(block)
@@ -142,7 +151,7 @@ def hash_stream(handle, total, progress=False):
     return digest.hexdigest()
 
 
-def collect_file_context(file_path, progress=False):
+def collect_file_context(file_path, progress=False, hash_timeout=None):
     started = time.perf_counter()
     path = Path(os.path.abspath(os.path.expanduser(os.fspath(file_path))))
     context = new_context("FILE", {"path": str(path)})
@@ -173,7 +182,7 @@ def collect_file_context(file_path, progress=False):
             except OSError as exc:
                 context["facets"]["pe_header"] = facet(status="FAILED", reason=str(exc))
             try:
-                digest = hash_stream(handle, before.st_size, progress)
+                digest = hash_stream(handle, before.st_size, progress) if hash_timeout is None else hash_stream(handle, before.st_size, progress, hash_timeout)
                 after = os.fstat(handle.fileno())
                 current_path = path.lstat()
                 unchanged = (
@@ -188,6 +197,9 @@ def collect_file_context(file_path, progress=False):
                     context["facets"]["sha256"] = facet(status="UNAVAILABLE", reason="file_changed_during_collection")
                     context["facets"]["pe_header"] = facet(status="UNAVAILABLE", reason="file_changed_during_collection")
                     context["limitations"].append("Metadata describes the initial observation; target changed during collection.")
+            except HashTimeout:
+                context["facets"]["sha256"] = facet(status="UNAVAILABLE", reason="hash_timeout")
+                context["limitations"].append("SHA-256 incomplete: hash time budget exceeded; no digest retained.")
             except KeyboardInterrupt:
                 context["cancelled"] = True
                 context["facets"]["sha256"] = facet(status="FAILED", reason="cancelled_by_user_no_complete_hash")
@@ -202,7 +214,7 @@ def collect_file_context(file_path, progress=False):
     return finish(context, started)
 
 
-def collect_process_context(pid, progress=False):
+def collect_process_context(pid, progress=False, include_backing_file=False, hash_timeout=None):
     started = time.perf_counter()
     context = new_context("PROCESS", {"pid": pid})
     try:
@@ -240,14 +252,16 @@ def collect_process_context(pid, progress=False):
         except OSError as exc:
             context["facets"]["session_id"] = facet(status="UNAVAILABLE", reason=str(exc))
         executable = context["facets"].get("executable_path", {})
-        if executable.get("status") == "SUCCESS":
-            backing_file = collect_file_context(executable["value"], progress)
+        if include_backing_file and executable.get("status") == "SUCCESS":
+            backing_file = collect_file_context(executable["value"], progress, hash_timeout)
             context["backing_file_context"] = backing_file
             if backing_file["status"] != "SUCCESS":
                 context["facets"]["backing_file_collection"] = facet(status="DEGRADED", reason="see_backing_file_context")
             else:
                 context["facets"]["backing_file_collection"] = facet(backing_file["collection_id"])
             context["cancelled"] = backing_file["cancelled"]
+        if include_backing_file and executable.get("status") != "SUCCESS":
+            context["facets"]["backing_file_collection"] = facet(status="UNAVAILABLE", reason="executable_path_unavailable")
         try:
             stable = process.is_running() and psutil.Process(pid).create_time() == start_time
         except (psutil.NoSuchProcess, psutil.ZombieProcess):
@@ -293,10 +307,16 @@ def main(argv=None):
     target.add_argument("--pid", type=int)
     parser.add_argument("--output", type=Path, default=Path("collections"), help="Output directory; unique subdirectory per collection")
     parser.add_argument("--progress", action="store_true", help="Hash progress on stderr; Ctrl+C cancels with best-effort result saving")
+    parser.add_argument("--include-backing-file", action="store_true", help="For PID: also collect executable file context and SHA-256")
+    parser.add_argument("--hash-timeout", type=float, default=None, help="Best-effort hash time budget in seconds (no hard OS I/O timeout)")
     args = parser.parse_args(argv)
     if args.pid is not None and args.pid <= 0:
         parser.error("PID must be positive")
-    context = collect_file_context(args.file, args.progress) if args.file is not None else collect_process_context(args.pid, args.progress)
+    if args.hash_timeout is not None and (not 0 < args.hash_timeout < float("inf")):
+        parser.error("--hash-timeout must be a finite positive number")
+    if args.include_backing_file and args.pid is None:
+        parser.error("--include-backing-file only applies to --pid")
+    context = collect_file_context(args.file, args.progress, args.hash_timeout) if args.file is not None else collect_process_context(args.pid, args.progress, args.include_backing_file, args.hash_timeout)
     try:
         saved = save_context(context, args.output)
     except OSError as exc:

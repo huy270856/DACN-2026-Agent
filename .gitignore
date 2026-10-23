@@ -1,4 +1,35 @@
+# Python / local environment
 .venv/
 __pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Generated evidence and case state (may contain sensitive local data)
 collections/
+cases/
 demo_results/
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+secrets/
+
+# Temporary files and OS/editor noise
+*.tmp
+*.lock
+.DS_Store
+Thumbs.db
+
+# Local test output / archives
+*.log
+
+@"
+
+# Generated large test files
+test_large.bin
+windows-tests/large-256MiB.bin
+"@ | Add-Content .gitignore
