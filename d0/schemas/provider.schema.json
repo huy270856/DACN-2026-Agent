@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/dacn/d0/provider.schema.json",
+  "title": "provider d0-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "version",
+    "adapter",
+    "runtime"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z][a-z0-9_.-]{1,80}$"
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "adapter": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z][a-z0-9_.-]{1,80}$"
+    },
+    "runtime": {
+      "type": "string",
+      "minLength": 1,
+      "enum": [
+        "python",
+        "subprocess",
+        "ffi",
+        "ipc",
+        "http_loopback"
+      ]
+    }
+  }
+}

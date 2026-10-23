@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/dacn/d0/target_ref.schema.json",
+  "title": "target_ref d0-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "observed",
+    "identity_strength",
+    "verified_digest",
+    "snapshot",
+    "revalidation_required"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "target-ref-v1"
+    },
+    "kind": {
+      "type": "string",
+      "minLength": 1,
+      "enum": [
+        "FILE",
+        "PROCESS"
+      ]
+    },
+    "observed": {
+      "type": "object",
+      "minProperties": 1
+    },
+    "identity_strength": {
+      "type": "string",
+      "minLength": 1,
+      "enum": [
+        "STRONG",
+        "PARTIAL",
+        "UNAVAILABLE"
+      ]
+    },
+    "verified_digest": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "algorithm",
+            "value"
+          ],
+          "properties": {
+            "algorithm": {
+              "const": "sha256"
+            },
+            "value": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "snapshot": {
+      "type": "object"
+    },
+    "revalidation_required": {
+      "const": true
+    }
+  }
+}

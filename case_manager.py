@@ -20,6 +20,7 @@ import time
 import uuid
 
 from case_state import build_case_state, save_case_state
+from bc_contracts import target_ref_from_context, validate_target_ref, same_target_ref, evidence_v2
 
 MAX_JSON_BYTES = 8 * 1024 * 1024
 CASE_RE = re.compile(r'^CASE-[a-f0-9]{32}$')
@@ -99,6 +100,12 @@ def validate_case(state):
         raise ValueError('Invalid conflict registry')
     if not isinstance(state.get('available_tools'), dict):
         raise ValueError('Invalid tool registry')
+    # In-memory additive upgrade for old casestate-v1; persisted only on a valid update.
+    if 'target_ref' not in state:
+        state['target_ref'] = target_ref_from_context({
+            'target_type': state['target_type'], 'target': state['target'], 'facets': {}})
+    else:
+        validate_target_ref(state['target_ref'])
     return state
 
 
@@ -113,12 +120,38 @@ def target_matches(case, typ, target):
     return os.path.normcase(os.path.normpath(str(target.get('path', '')))) == os.path.normcase(os.path.normpath(str(old.get('path', ''))))
 
 
-def _resolve(state, facet, *, source, evidence_id=None):
+def _resolve(state, facet, *, source, evidence_id=None, target_ref=None, scope='target'):
+    """Resolve only gaps for the matching target/scope, never by facet alone.
+
+    Legacy gaps lacking TargetRef use their originating collection's evidence to
+    establish a matching target. Case-wide assessment is resolved separately.
+    """
     for gap in list(state['residual_unknowns']):
-        if gap['facet'] == facet:
-            state['residual_unknowns'].remove(gap)
-            state.setdefault('resolved_unknowns', []).append({**gap, 'resolved_at': now(),
-                'resolved_by': source, 'evidence_id': evidence_id})
+        if gap.get('facet') != facet:
+            continue
+        if scope == 'case':
+            if gap.get('scope', 'case' if facet == 'malware_assessment' else 'target') != 'case':
+                continue
+        elif scope == 'backing_file':
+            if gap.get('scope') != 'backing_file':
+                continue
+        else:
+            if gap.get('scope', 'target') != 'target':
+                continue
+            if target_ref is None:
+                continue
+            gap_ref = gap.get('target_ref')
+            if gap_ref is None:
+                origin = next((ev for ev in state['evidence'] if ev.get('collection_id') == gap.get('collection_id')
+                               and ev.get('target_type') and ev.get('target')), None)
+                if origin:
+                    gap_ref = origin.get('target_ref') or target_ref_from_context({
+                        'target_type': origin['target_type'], 'target': origin['target'], 'facets': {}})
+            if gap_ref is None or not same_target_ref(gap_ref, target_ref):
+                continue
+        state['residual_unknowns'].remove(gap)
+        state.setdefault('resolved_unknowns', []).append({**gap, 'resolved_at': now(),
+            'resolved_by': source, 'evidence_id': evidence_id})
 
 
 def _value_fingerprint(value):
@@ -159,7 +192,7 @@ def _record_conflicts(state, new_evidence):
                 assessment['invalidated_at'] = now()
                 assessment.setdefault('invalidating_conflict_ids', []).append(conflicts[-1]['conflict_id'])
                 state.setdefault('residual_unknowns', []).append({'collection_id': None,
-                    'facet': 'malware_assessment', 'reason': 'evidence_conflict_after_assessment',
+                    'facet': 'malware_assessment', 'scope': 'case', 'reason': 'evidence_conflict_after_assessment',
                     'state': 'UNKNOWN'})
 
 
@@ -224,6 +257,9 @@ def _append_collection(state, context, source_path=None):
     incoming = build_case_state(context, source_path=source_path)
     if not target_matches(state, incoming['target_type'], incoming['target']):
         raise ValueError('Collector target identity does not match this case')
+    # Stronger than path/PID matching: reject any known changed snapshot/digest.
+    if state.get('target_ref') and incoming.get('target_ref') and not same_target_ref(state['target_ref'], incoming['target_ref']):
+        raise ValueError('Collector target snapshot/digest differs from original case')
     incoming_ids = set(incoming['collection_ids'])
     if incoming_ids & set(state['collection_ids']):
         raise ValueError('Collection already present; duplicate/reused collection_id rejected')
@@ -235,13 +271,18 @@ def _append_collection(state, context, source_path=None):
     state['tool_runs'].extend(incoming['tool_runs'])
     for ev in incoming['evidence']:
         if ev['status'] == 'SUCCESS':
-            _resolve(state, ev['facet'], source=ev['collection_id'], evidence_id=ev['evidence_id'])
+            _resolve(state, ev['facet'], source=ev['collection_id'], evidence_id=ev['evidence_id'],
+                    target_ref=ev.get('target_ref'))
             if ev['facet'] == 'sha256' and ev['parent_collection_id']:
-                _resolve(state, 'backing_file_sha256', source=ev['collection_id'], evidence_id=ev['evidence_id'])
+                _resolve(state, 'backing_file_sha256', source=ev['collection_id'], evidence_id=ev['evidence_id'], scope='backing_file')
     existing = {(g['collection_id'], g['facet']) for g in state['residual_unknowns']}
     for gap in incoming['residual_unknowns']:
         key = (gap['collection_id'], gap['facet'])
-        if key not in existing and not any(e['facet'] == gap['facet'] and e['status'] == 'SUCCESS' for e in incoming['evidence']):
+        if key not in existing and not any(
+                e['facet'] == gap['facet'] and e['status'] == 'SUCCESS'
+                and gap.get('scope') == 'target'
+                and same_target_ref(e['target_ref'], gap['target_ref'])
+                for e in incoming['evidence']):
             state['residual_unknowns'].append(gap)
             existing.add(key)
     state['collection_status'] = incoming['collection_status']
@@ -277,6 +318,12 @@ def _append_tool(state, data):
         raise ValueError('Invalid tool run status')
     if not target_matches(state, data.get('target_type'), data.get('target')):
         raise ValueError('Tool result target identity mismatch')
+    if 'target_ref' in data:
+        validate_target_ref(data['target_ref'])
+        if not same_target_ref(state['target_ref'], data['target_ref']):
+            raise ValueError('Tool result TargetRef mismatch')
+        if data['target_ref']['kind'] != data['target_type'] or data['target_ref']['observed'] != state['target_ref']['observed']:
+            raise ValueError('Tool result TargetRef disagrees with target')
     observations = data.get('observations')
     if not isinstance(observations, list):
         raise ValueError('observations must be a list')
@@ -288,24 +335,31 @@ def _append_tool(state, data):
             raise ValueError('Non-successful observation must not contain a value')
         if entry['status'] == 'SUCCESS' and 'value' not in entry:
             raise ValueError('Successful observation requires value (can be false/null)')
-        prepared.append({'evidence_id': 'EV-' + uuid.uuid4().hex,
+        prepared.append(evidence_v2({'evidence_id': 'EV-' + uuid.uuid4().hex,
             'collection_id': None, 'tool_run_id': run_id, 'source_tool': tool,
             'target_type': state['target_type'], 'target': state['target'],
             'facet': entry['facet'], 'status': entry['status'],
             'value': entry.get('value') if entry['status'] == 'SUCCESS' else None,
             'reason': entry.get('reason'), 'observed_at': data.get('observed_at', now()),
             'coverage': entry.get('coverage', 'limited'), 'artifact_ref': entry.get('artifact_ref'),
-            'parent_collection_id': None})
+            'parent_collection_id': None}, target_ref=data.get('target_ref') or state['target_ref'],
+            source_kind='tool', source_id=tool, source_version=data.get('tool_version'),
+            provider=data.get('provider'), limitations=entry.get('limitations', []),
+            content_origin='provider_output'))
     state['tool_runs'].append({'tool_run_id': run_id, 'tool': tool, 'status': data['status'],
         'recorded_at': now(), 'error': data.get('error')})
     _record_conflicts(state, prepared)
     state['evidence'].extend(prepared)
     for ev in prepared:
         if ev['status'] == 'SUCCESS':
-            _resolve(state, ev['facet'], source=run_id, evidence_id=ev['evidence_id'])
+            _resolve(state, ev['facet'], source=run_id, evidence_id=ev['evidence_id'], target_ref=ev['target_ref'])
         else:
-            if not any(g['facet'] == ev['facet'] for g in state['residual_unknowns']):
+            if not any(g['facet'] == ev['facet'] and g.get('scope', 'target') == 'target'
+                       and g.get('target_ref') and same_target_ref(g['target_ref'], ev['target_ref'])
+                       for g in state['residual_unknowns']):
                 state['residual_unknowns'].append({'collection_id': None, 'tool_run_id': run_id,
+                    'target_type': state['target_type'], 'target': state['target'],
+                    'target_ref': ev['target_ref'], 'scope': 'target',
                     'facet': ev['facet'], 'reason': ev['reason'] or ev['status'], 'state': 'UNKNOWN'})
     return {'tool_run_id': run_id, 'added_evidence': len(prepared)}
 
@@ -392,7 +446,7 @@ def _assessment(state, data):
         'evidence_ids': ids, 'rationale': data['rationale'],
         'actor': data.get('actor', 'unknown'), 'recorded_at': now(), 'validity': 'CURRENT',
         'note': 'Recorded assessment; CaseManager did not independently verify verdict.'}
-    _resolve(state, 'malware_assessment', source='assessment')
+    _resolve(state, 'malware_assessment', source='assessment', scope='case')
     return {'verdict': data['verdict']}
 
 

@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/dacn/d0/approval_event.schema.json",
+  "title": "approval_event d0-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "request_id",
+    "case_id",
+    "action_id",
+    "decision",
+    "authenticated_subject",
+    "authentication_method",
+    "decided_at",
+    "expires_at",
+    "case_revision",
+    "action_digest_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^d0-v1$"
+    },
+    "request_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "case_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "action_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "decision": {
+      "type": "string",
+      "minLength": 1,
+      "enum": [
+        "APPROVED",
+        "REJECTED"
+      ]
+    },
+    "authenticated_subject": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authentication_method": {
+      "type": "string",
+      "minLength": 1,
+      "enum": [
+        "local_os_account",
+        "local_login_session"
+      ]
+    },
+    "decided_at": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+    },
+    "expires_at": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+    },
+    "case_revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "action_digest_sha256": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  }
+}

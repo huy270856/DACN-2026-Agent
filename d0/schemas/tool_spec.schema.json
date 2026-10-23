@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/dacn/d0/tool_spec.schema.json",
+  "title": "tool_spec d0-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "tool_id",
+    "tool_version",
+    "capability",
+    "description",
+    "input_schema_id",
+    "output_schema_id",
+    "provider",
+    "effects",
+    "limits",
+    "supported_targets",
+    "enabled"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^d0-v1$"
+    },
+    "tool_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z][a-z0-9_.-]{1,80}$"
+    },
+    "tool_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "capability": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z][a-z0-9_.-]{1,80}$"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "input_schema_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "output_schema_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "provider": {
+      "$ref": "provider.schema.json"
+    },
+    "effects": {
+      "$ref": "effects.schema.json"
+    },
+    "limits": {
+      "$ref": "limits.schema.json"
+    },
+    "supported_targets": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "enum": [
+          "FILE",
+          "PROCESS"
+        ]
+      }
+    },
+    "enabled": {
+      "type": "boolean"
+    }
+  }
+}

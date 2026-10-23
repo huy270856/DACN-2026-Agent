@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/dacn/d0/limits.schema.json",
+  "title": "limits d0-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "timeout_ms",
+    "max_output_bytes",
+    "max_artifact_bytes",
+    "max_concurrency"
+  ],
+  "properties": {
+    "timeout_ms": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "max_output_bytes": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "max_artifact_bytes": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "max_concurrency": {
+      "type": "integer",
+      "minimum": 1
+    }
+  }
+}

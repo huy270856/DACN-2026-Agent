@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/dacn/d0/workflow_decision.schema.json",
+  "title": "workflow_decision d0-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "workflow_id",
+    "case_id",
+    "case_revision",
+    "reputation",
+    "phase",
+    "next_step",
+    "reason_code",
+    "agent_role"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^d0-v1$"
+    },
+    "workflow_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "case_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "case_revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "reputation": {
+      "type": "string",
+      "minLength": 1,
+      "enum": [
+        "KNOWN_MALICIOUS",
+        "KNOWN_BENIGN",
+        "UNKNOWN",
+        "UNAVAILABLE",
+        "CONFLICT"
+      ]
+    },
+    "phase": {
+      "type": "string",
+      "minLength": 1,
+      "enum": [
+        "INTAKE",
+        "REPUTATION",
+        "STATIC",
+        "DYNAMIC",
+        "ASSESSMENT",
+        "RESPONSE",
+        "CLOSED"
+      ]
+    },
+    "next_step": {
+      "type": "string",
+      "minLength": 1,
+      "enum": [
+        "STATIC_ANALYSIS",
+        "DYNAMIC_ANALYSIS",
+        "FINAL_ASSESSMENT",
+        "HUMAN_REVIEW",
+        "STOP"
+      ]
+    },
+    "reason_code": {
+      "type": "string",
+      "minLength": 1
+    },
+    "agent_role": {
+      "const": "FOLLOWUP_WITHIN_POLICY"
+    }
+  }
+}
