@@ -14,7 +14,7 @@ import tempfile
 import time
 import uuid
 
-VERSION = "1.1.0"
+VERSION = "1.2.0"
 SCHEMA = "context-v1"
 CHUNK_BYTES = 1024 * 1024
 # Windows path stat may expose birth time as ctime while fd stat exposes
@@ -54,6 +54,8 @@ def finish(context, started):
     successes = sum(f["status"] == "SUCCESS" for f in values)
     problems = any(f["status"] in {"FAILED", "UNAVAILABLE", "DEGRADED"} for f in values)
     context["status"] = "FAILED" if not successes else "DEGRADED" if problems or context["errors"] else "SUCCESS"
+    from bc_contracts import target_ref_from_context
+    context["target_ref"] = target_ref_from_context(context)
     context["finished_at"] = now()
     context["runtime_ms"] = round((time.perf_counter() - started) * 1000, 3)
     return context
@@ -170,6 +172,10 @@ def collect_file_context(file_path, progress=False, hash_timeout=None):
             context["facets"]["readable"] = facet(status="UNAVAILABLE", reason="not_a_regular_file")
             return finish(context, started)
         context["facets"]["metadata"] = facet(metadata(path, initial))
+        context["facets"]["file_identity"] = facet({
+            "device": int(initial.st_dev), "inode": int(initial.st_ino),
+            "size_bytes": int(initial.st_size), "mtime_ns": int(initial.st_mtime_ns),
+        })
         flags = os.O_RDONLY | getattr(os, "O_BINARY", 0) | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_NONBLOCK", 0)
         with os.fdopen(os.open(path, flags), "rb") as handle:
             before = os.fstat(handle.fileno())

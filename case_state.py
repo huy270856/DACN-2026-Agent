@@ -11,6 +11,8 @@ import tempfile
 import os
 import uuid
 
+from bc_contracts import target_ref_from_context, validate_target_ref, evidence_v2
+
 SCHEMA_VERSION = 'casestate-v1'
 VALID_STATUSES = {'SUCCESS', 'DEGRADED', 'FAILED', 'UNAVAILABLE'}
 
@@ -40,11 +42,21 @@ def _validate(ctx):
         raise ValueError('PROCESS target requires integer pid')
     if ctx['target_type'] == 'FILE' and not isinstance(ctx['target'].get('path'), str):
         raise ValueError('FILE target requires path')
+    if 'target_ref' in ctx:
+        validate_target_ref(ctx['target_ref'])
+        expected = target_ref_from_context(ctx)
+        if ctx['target_ref']['kind'] != expected['kind'] or ctx['target_ref']['observed'] != expected['observed']:
+            raise ValueError('TargetRef disagrees with collector target')
+        # A caller may not assert a verified hash that the collector did not observe.
+        if ctx['target_ref'].get('verified_digest') != expected.get('verified_digest'):
+            raise ValueError('TargetRef verified digest disagrees with observed hash')
+        if ctx['target_ref'].get('snapshot') != expected.get('snapshot') or ctx['target_ref'].get('identity_strength') != expected.get('identity_strength'):
+            raise ValueError('TargetRef snapshot/strength disagrees with collector observations')
 
 
 def _evidence(ctx, name, entry, parent=None):
-    """Preserve provenance. A successful false value is still a valid observation."""
-    return {
+    """Preserve v1 fields and append EvidenceRecord v2 provenance envelope."""
+    legacy = {
         'evidence_id': 'EV-' + uuid.uuid4().hex,
         'collection_id': ctx['collection_id'],
         'source_tool': 'context_collector',
@@ -59,6 +71,9 @@ def _evidence(ctx, name, entry, parent=None):
         'parent_collection_id': parent,
         'artifact_ref': None,
     }
+    return evidence_v2(legacy, target_ref=ctx.get('target_ref') or target_ref_from_context(ctx),
+        source_kind='collector', source_id='context_collector',
+        source_version=ctx.get('collector_version'), limitations=ctx.get('limitations', []))
 
 
 def build_case_state(ctx, *, source_path=None):
@@ -76,23 +91,29 @@ def build_case_state(ctx, *, source_path=None):
     collections = [ctx] + ([nested] if nested else [])
     for item in collections:
         parent = ctx['collection_id'] if item is nested else None
+        ref = item.get('target_ref') or target_ref_from_context(item)
         for name, facet in item['facets'].items():
             evidence.append(_evidence(item, name, facet, parent))
             if facet['status'] != 'SUCCESS':
-                gaps.append({'collection_id': item['collection_id'], 'facet': name,
+                gaps.append({'collection_id': item['collection_id'], 'target_type': item['target_type'],
+                             'target': item['target'], 'target_ref': ref, 'scope': 'target', 'facet': name,
                              'reason': facet.get('reason', facet['status']), 'state': 'UNKNOWN'})
         for err in item.get('errors', []):
             collection_errors.append({'collection_id': item['collection_id'], **err})
     # Explicitly model intentionally uncollected facets; absence is NOT benign evidence.
     if ctx['target_type'] == 'PROCESS' and nested is None:
-        gaps.append({'collection_id': ctx['collection_id'], 'facet': 'backing_file_sha256',
+        gaps.append({'collection_id': ctx['collection_id'], 'target_type': ctx['target_type'],
+                     'target': ctx['target'], 'target_ref': ctx.get('target_ref') or target_ref_from_context(ctx),
+                     'scope': 'backing_file', 'facet': 'backing_file_sha256',
                      'reason': 'not_requested', 'state': 'NOT_COLLECTED'})
     if ctx['target_type'] == 'PROCESS':
         gaps.extend([
-            {'collection_id': ctx['collection_id'], 'facet': 'runtime_modules', 'reason': 'outside_collector_scope', 'state': 'NOT_COLLECTED'},
-            {'collection_id': ctx['collection_id'], 'facet': 'network_activity', 'reason': 'outside_collector_scope', 'state': 'NOT_COLLECTED'},
+            {'collection_id': ctx['collection_id'], 'target_type': ctx['target_type'], 'target': ctx['target'], 'target_ref': ctx.get('target_ref') or target_ref_from_context(ctx), 'scope': 'target', 'facet': 'runtime_modules', 'reason': 'outside_collector_scope', 'state': 'NOT_COLLECTED'},
+            {'collection_id': ctx['collection_id'], 'target_type': ctx['target_type'], 'target': ctx['target'], 'target_ref': ctx.get('target_ref') or target_ref_from_context(ctx), 'scope': 'target', 'facet': 'network_activity', 'reason': 'outside_collector_scope', 'state': 'NOT_COLLECTED'},
         ])
-    gaps.append({'collection_id': ctx['collection_id'], 'facet': 'malware_assessment',
+    gaps.append({'collection_id': ctx['collection_id'], 'target_type': ctx['target_type'],
+                 'target': ctx['target'], 'target_ref': ctx.get('target_ref') or target_ref_from_context(ctx),
+                 'scope': 'case', 'facet': 'malware_assessment',
                  'reason': 'analysis_not_performed', 'state': 'NOT_COLLECTED'})
     return {
         'schema_version': SCHEMA_VERSION,
@@ -101,6 +122,8 @@ def build_case_state(ctx, *, source_path=None):
         'lifecycle_status': 'NEEDS_CONTEXT' if ctx['status'] == 'FAILED' else 'READY_FOR_INVESTIGATION',
         'target_type': ctx['target_type'],
         'target': ctx['target'],
+        'target_ref': ctx.get('target_ref') or target_ref_from_context(ctx),
+        'contract_version': 'bc-compat-v1.2',
         'collection_status': ctx['status'],
         'collection_ids': [c['collection_id'] for c in collections],
         'source_context_path': str(Path(source_path).resolve()) if source_path else None,
