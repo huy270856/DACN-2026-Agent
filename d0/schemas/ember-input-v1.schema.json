@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/dacn/d0/ember-input-v1.schema.json",
+  "title": "EMBER v2 feature extraction input (ToolCall.arguments)",
+  "description": "Validate arguments of static.ember_features. TargetRef is supplied separately by ToolCall.target_ref; D5 must revalidate target binding before opening file. Does not execute target.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "feature_version"
+  ],
+  "properties": {
+    "feature_version": {
+      "const": 2
+    },
+    "include_feature_vector": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}
