@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/dacn/d0/ember-output-v1.schema.json",
+  "title": "EMBER v2 feature extraction output (provider payload)",
+  "description": "The provider payload before D7 wraps it in a D.0 ToolResult. Only successful extraction is represented here; failures use ToolResult.status/error. No model inference or malware verdict.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "feature_version",
+    "extractor",
+    "target_sha256",
+    "feature_count",
+    "features"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "ember-output-v1"
+    },
+    "feature_version": {
+      "const": 2
+    },
+    "extractor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "version"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "target_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "feature_count": {
+      "const": 2381
+    },
+    "features": {
+      "type": "array",
+      "minItems": 2381,
+      "maxItems": 2381,
+      "items": {
+        "type": "number"
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    }
+  }
+}
