@@ -1,0 +1,992 @@
+{
+  "producer": "pefile 2024.8.26",
+  "analysis": "static PE tables and raw ASCII scan",
+  "ghidra_executed": false,
+  "functions_recovered": null,
+  "limitations": [
+    "Exports are anchors, not complete recovered functions.",
+    "ASCII scan may include non-string bytes; only known markers checked.",
+    "No runtime behavior, decompilation, malware classification or D.0 integration tested."
+  ],
+  "samples": [
+    {
+      "id": "branch",
+      "sha256": "d603e73eab78958488fdbe900c8919c0be8b9e6c2864142a47b70ee7ef1b6ab9",
+      "imports": [
+        {
+          "dll": "KERNEL32.dll",
+          "name": "DeleteCriticalSection",
+          "ordinal": null,
+          "iat_va": "0x422718"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "EnterCriticalSection",
+          "ordinal": null,
+          "iat_va": "0x422720"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "GetLastError",
+          "ordinal": null,
+          "iat_va": "0x422728"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "GetStdHandle",
+          "ordinal": null,
+          "iat_va": "0x422730"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "InitializeCriticalSection",
+          "ordinal": null,
+          "iat_va": "0x422738"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "LeaveCriticalSection",
+          "ordinal": null,
+          "iat_va": "0x422740"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "SetUnhandledExceptionFilter",
+          "ordinal": null,
+          "iat_va": "0x422748"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "Sleep",
+          "ordinal": null,
+          "iat_va": "0x422750"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "TlsGetValue",
+          "ordinal": null,
+          "iat_va": "0x422758"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "VirtualProtect",
+          "ordinal": null,
+          "iat_va": "0x422760"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "VirtualQuery",
+          "ordinal": null,
+          "iat_va": "0x422768"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "WriteFile",
+          "ordinal": null,
+          "iat_va": "0x422770"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "__C_specific_handler",
+          "ordinal": null,
+          "iat_va": "0x422778"
+        },
+        {
+          "dll": "api-ms-win-crt-heap-l1-1-0.dll",
+          "name": "_set_new_mode",
+          "ordinal": null,
+          "iat_va": "0x422788"
+        },
+        {
+          "dll": "api-ms-win-crt-heap-l1-1-0.dll",
+          "name": "calloc",
+          "ordinal": null,
+          "iat_va": "0x422790"
+        },
+        {
+          "dll": "api-ms-win-crt-heap-l1-1-0.dll",
+          "name": "free",
+          "ordinal": null,
+          "iat_va": "0x422798"
+        },
+        {
+          "dll": "api-ms-win-crt-heap-l1-1-0.dll",
+          "name": "malloc",
+          "ordinal": null,
+          "iat_va": "0x4227a0"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "__p___argc",
+          "ordinal": null,
+          "iat_va": "0x4227b0"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "__p___argv",
+          "ordinal": null,
+          "iat_va": "0x4227b8"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "__p___wargv",
+          "ordinal": null,
+          "iat_va": "0x4227c0"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_cexit",
+          "ordinal": null,
+          "iat_va": "0x4227c8"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_configure_narrow_argv",
+          "ordinal": null,
+          "iat_va": "0x4227d0"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_configure_wide_argv",
+          "ordinal": null,
+          "iat_va": "0x4227d8"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_crt_at_quick_exit",
+          "ordinal": null,
+          "iat_va": "0x4227e0"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_crt_atexit",
+          "ordinal": null,
+          "iat_va": "0x4227e8"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_exit",
+          "ordinal": null,
+          "iat_va": "0x4227f0"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_initialize_narrow_environment",
+          "ordinal": null,
+          "iat_va": "0x4227f8"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_initialize_wide_environment",
+          "ordinal": null,
+          "iat_va": "0x422800"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_initterm",
+          "ordinal": null,
+          "iat_va": "0x422808"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_set_app_type",
+          "ordinal": null,
+          "iat_va": "0x422810"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_set_invalid_parameter_handler",
+          "ordinal": null,
+          "iat_va": "0x422818"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "abort",
+          "ordinal": null,
+          "iat_va": "0x422820"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "exit",
+          "ordinal": null,
+          "iat_va": "0x422828"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "signal",
+          "ordinal": null,
+          "iat_va": "0x422830"
+        },
+        {
+          "dll": "api-ms-win-crt-stdio-l1-1-0.dll",
+          "name": "__acrt_iob_func",
+          "ordinal": null,
+          "iat_va": "0x422840"
+        },
+        {
+          "dll": "api-ms-win-crt-stdio-l1-1-0.dll",
+          "name": "__p__commode",
+          "ordinal": null,
+          "iat_va": "0x422848"
+        },
+        {
+          "dll": "api-ms-win-crt-stdio-l1-1-0.dll",
+          "name": "__p__fmode",
+          "ordinal": null,
+          "iat_va": "0x422850"
+        },
+        {
+          "dll": "api-ms-win-crt-stdio-l1-1-0.dll",
+          "name": "__stdio_common_vfprintf",
+          "ordinal": null,
+          "iat_va": "0x422858"
+        },
+        {
+          "dll": "api-ms-win-crt-stdio-l1-1-0.dll",
+          "name": "__stdio_common_vfwprintf",
+          "ordinal": null,
+          "iat_va": "0x422860"
+        },
+        {
+          "dll": "api-ms-win-crt-stdio-l1-1-0.dll",
+          "name": "fwrite",
+          "ordinal": null,
+          "iat_va": "0x422868"
+        },
+        {
+          "dll": "api-ms-win-crt-string-l1-1-0.dll",
+          "name": "strlen",
+          "ordinal": null,
+          "iat_va": "0x422878"
+        },
+        {
+          "dll": "api-ms-win-crt-string-l1-1-0.dll",
+          "name": "strncmp",
+          "ordinal": null,
+          "iat_va": "0x422880"
+        },
+        {
+          "dll": "api-ms-win-crt-math-l1-1-0.dll",
+          "name": "__setusermatherr",
+          "ordinal": null,
+          "iat_va": "0x422890"
+        },
+        {
+          "dll": "api-ms-win-crt-environment-l1-1-0.dll",
+          "name": "__p__environ",
+          "ordinal": null,
+          "iat_va": "0x4228a0"
+        },
+        {
+          "dll": "api-ms-win-crt-environment-l1-1-0.dll",
+          "name": "__p__wenviron",
+          "ordinal": null,
+          "iat_va": "0x4228a8"
+        },
+        {
+          "dll": "api-ms-win-crt-time-l1-1-0.dll",
+          "name": "__daylight",
+          "ordinal": null,
+          "iat_va": "0x4228b8"
+        },
+        {
+          "dll": "api-ms-win-crt-time-l1-1-0.dll",
+          "name": "__timezone",
+          "ordinal": null,
+          "iat_va": "0x4228c0"
+        },
+        {
+          "dll": "api-ms-win-crt-time-l1-1-0.dll",
+          "name": "__tzname",
+          "ordinal": null,
+          "iat_va": "0x4228c8"
+        },
+        {
+          "dll": "api-ms-win-crt-time-l1-1-0.dll",
+          "name": "_tzset",
+          "ordinal": null,
+          "iat_va": "0x4228d0"
+        }
+      ],
+      "exports": [
+        {
+          "name": "classify_value",
+          "rva": "0x1000"
+        }
+      ],
+      "marker_strings": [
+        {
+          "text": "TUAN_RE_BRANCH_v1",
+          "file_offset": "0x1de00"
+        }
+      ],
+      "ascii_string_count": 635,
+      "missing_expected": {
+        "strings": [],
+        "imports": [],
+        "exported_functions": []
+      },
+      "passed": true
+    },
+    {
+      "id": "hello",
+      "sha256": "48eda1c7f194a05b5889ca1bc512ed218d937e423a49c8c06537425a0f680871",
+      "imports": [
+        {
+          "dll": "KERNEL32.dll",
+          "name": "DeleteCriticalSection",
+          "ordinal": null,
+          "iat_va": "0x422718"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "EnterCriticalSection",
+          "ordinal": null,
+          "iat_va": "0x422720"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "GetLastError",
+          "ordinal": null,
+          "iat_va": "0x422728"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "GetStdHandle",
+          "ordinal": null,
+          "iat_va": "0x422730"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "InitializeCriticalSection",
+          "ordinal": null,
+          "iat_va": "0x422738"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "LeaveCriticalSection",
+          "ordinal": null,
+          "iat_va": "0x422740"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "SetUnhandledExceptionFilter",
+          "ordinal": null,
+          "iat_va": "0x422748"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "Sleep",
+          "ordinal": null,
+          "iat_va": "0x422750"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "TlsGetValue",
+          "ordinal": null,
+          "iat_va": "0x422758"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "VirtualProtect",
+          "ordinal": null,
+          "iat_va": "0x422760"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "VirtualQuery",
+          "ordinal": null,
+          "iat_va": "0x422768"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "WriteFile",
+          "ordinal": null,
+          "iat_va": "0x422770"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "__C_specific_handler",
+          "ordinal": null,
+          "iat_va": "0x422778"
+        },
+        {
+          "dll": "api-ms-win-crt-heap-l1-1-0.dll",
+          "name": "_set_new_mode",
+          "ordinal": null,
+          "iat_va": "0x422788"
+        },
+        {
+          "dll": "api-ms-win-crt-heap-l1-1-0.dll",
+          "name": "calloc",
+          "ordinal": null,
+          "iat_va": "0x422790"
+        },
+        {
+          "dll": "api-ms-win-crt-heap-l1-1-0.dll",
+          "name": "free",
+          "ordinal": null,
+          "iat_va": "0x422798"
+        },
+        {
+          "dll": "api-ms-win-crt-heap-l1-1-0.dll",
+          "name": "malloc",
+          "ordinal": null,
+          "iat_va": "0x4227a0"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "__p___argc",
+          "ordinal": null,
+          "iat_va": "0x4227b0"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "__p___argv",
+          "ordinal": null,
+          "iat_va": "0x4227b8"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "__p___wargv",
+          "ordinal": null,
+          "iat_va": "0x4227c0"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_cexit",
+          "ordinal": null,
+          "iat_va": "0x4227c8"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_configure_narrow_argv",
+          "ordinal": null,
+          "iat_va": "0x4227d0"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_configure_wide_argv",
+          "ordinal": null,
+          "iat_va": "0x4227d8"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_crt_at_quick_exit",
+          "ordinal": null,
+          "iat_va": "0x4227e0"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_crt_atexit",
+          "ordinal": null,
+          "iat_va": "0x4227e8"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_exit",
+          "ordinal": null,
+          "iat_va": "0x4227f0"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_initialize_narrow_environment",
+          "ordinal": null,
+          "iat_va": "0x4227f8"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_initialize_wide_environment",
+          "ordinal": null,
+          "iat_va": "0x422800"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_initterm",
+          "ordinal": null,
+          "iat_va": "0x422808"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_set_app_type",
+          "ordinal": null,
+          "iat_va": "0x422810"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_set_invalid_parameter_handler",
+          "ordinal": null,
+          "iat_va": "0x422818"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "abort",
+          "ordinal": null,
+          "iat_va": "0x422820"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "exit",
+          "ordinal": null,
+          "iat_va": "0x422828"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "signal",
+          "ordinal": null,
+          "iat_va": "0x422830"
+        },
+        {
+          "dll": "api-ms-win-crt-stdio-l1-1-0.dll",
+          "name": "__acrt_iob_func",
+          "ordinal": null,
+          "iat_va": "0x422840"
+        },
+        {
+          "dll": "api-ms-win-crt-stdio-l1-1-0.dll",
+          "name": "__p__commode",
+          "ordinal": null,
+          "iat_va": "0x422848"
+        },
+        {
+          "dll": "api-ms-win-crt-stdio-l1-1-0.dll",
+          "name": "__p__fmode",
+          "ordinal": null,
+          "iat_va": "0x422850"
+        },
+        {
+          "dll": "api-ms-win-crt-stdio-l1-1-0.dll",
+          "name": "__stdio_common_vfprintf",
+          "ordinal": null,
+          "iat_va": "0x422858"
+        },
+        {
+          "dll": "api-ms-win-crt-stdio-l1-1-0.dll",
+          "name": "__stdio_common_vfwprintf",
+          "ordinal": null,
+          "iat_va": "0x422860"
+        },
+        {
+          "dll": "api-ms-win-crt-stdio-l1-1-0.dll",
+          "name": "fwrite",
+          "ordinal": null,
+          "iat_va": "0x422868"
+        },
+        {
+          "dll": "api-ms-win-crt-string-l1-1-0.dll",
+          "name": "strlen",
+          "ordinal": null,
+          "iat_va": "0x422878"
+        },
+        {
+          "dll": "api-ms-win-crt-string-l1-1-0.dll",
+          "name": "strncmp",
+          "ordinal": null,
+          "iat_va": "0x422880"
+        },
+        {
+          "dll": "api-ms-win-crt-math-l1-1-0.dll",
+          "name": "__setusermatherr",
+          "ordinal": null,
+          "iat_va": "0x422890"
+        },
+        {
+          "dll": "api-ms-win-crt-environment-l1-1-0.dll",
+          "name": "__p__environ",
+          "ordinal": null,
+          "iat_va": "0x4228a0"
+        },
+        {
+          "dll": "api-ms-win-crt-environment-l1-1-0.dll",
+          "name": "__p__wenviron",
+          "ordinal": null,
+          "iat_va": "0x4228a8"
+        },
+        {
+          "dll": "api-ms-win-crt-time-l1-1-0.dll",
+          "name": "__daylight",
+          "ordinal": null,
+          "iat_va": "0x4228b8"
+        },
+        {
+          "dll": "api-ms-win-crt-time-l1-1-0.dll",
+          "name": "__timezone",
+          "ordinal": null,
+          "iat_va": "0x4228c0"
+        },
+        {
+          "dll": "api-ms-win-crt-time-l1-1-0.dll",
+          "name": "__tzname",
+          "ordinal": null,
+          "iat_va": "0x4228c8"
+        },
+        {
+          "dll": "api-ms-win-crt-time-l1-1-0.dll",
+          "name": "_tzset",
+          "ordinal": null,
+          "iat_va": "0x4228d0"
+        }
+      ],
+      "exports": [
+        {
+          "name": "emit_message",
+          "rva": "0x1000"
+        }
+      ],
+      "marker_strings": [
+        {
+          "text": "TUAN_RE_HELLO_v1",
+          "file_offset": "0x1dc00"
+        }
+      ],
+      "ascii_string_count": 634,
+      "missing_expected": {
+        "strings": [],
+        "imports": [],
+        "exported_functions": []
+      },
+      "passed": true
+    },
+    {
+      "id": "readfile",
+      "sha256": "f0e3d4e10b376c77855ff7a73b0a287eba842b13aa0c58303e3fd14b8a010c3b",
+      "imports": [
+        {
+          "dll": "KERNEL32.dll",
+          "name": "CloseHandle",
+          "ordinal": null,
+          "iat_va": "0x422740"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "CreateFileA",
+          "ordinal": null,
+          "iat_va": "0x422748"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "DeleteCriticalSection",
+          "ordinal": null,
+          "iat_va": "0x422750"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "EnterCriticalSection",
+          "ordinal": null,
+          "iat_va": "0x422758"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "GetLastError",
+          "ordinal": null,
+          "iat_va": "0x422760"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "GetStdHandle",
+          "ordinal": null,
+          "iat_va": "0x422768"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "InitializeCriticalSection",
+          "ordinal": null,
+          "iat_va": "0x422770"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "LeaveCriticalSection",
+          "ordinal": null,
+          "iat_va": "0x422778"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "ReadFile",
+          "ordinal": null,
+          "iat_va": "0x422780"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "SetUnhandledExceptionFilter",
+          "ordinal": null,
+          "iat_va": "0x422788"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "Sleep",
+          "ordinal": null,
+          "iat_va": "0x422790"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "TlsGetValue",
+          "ordinal": null,
+          "iat_va": "0x422798"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "VirtualProtect",
+          "ordinal": null,
+          "iat_va": "0x4227a0"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "VirtualQuery",
+          "ordinal": null,
+          "iat_va": "0x4227a8"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "WriteFile",
+          "ordinal": null,
+          "iat_va": "0x4227b0"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "__C_specific_handler",
+          "ordinal": null,
+          "iat_va": "0x4227b8"
+        },
+        {
+          "dll": "api-ms-win-crt-heap-l1-1-0.dll",
+          "name": "_set_new_mode",
+          "ordinal": null,
+          "iat_va": "0x4227c8"
+        },
+        {
+          "dll": "api-ms-win-crt-heap-l1-1-0.dll",
+          "name": "calloc",
+          "ordinal": null,
+          "iat_va": "0x4227d0"
+        },
+        {
+          "dll": "api-ms-win-crt-heap-l1-1-0.dll",
+          "name": "free",
+          "ordinal": null,
+          "iat_va": "0x4227d8"
+        },
+        {
+          "dll": "api-ms-win-crt-heap-l1-1-0.dll",
+          "name": "malloc",
+          "ordinal": null,
+          "iat_va": "0x4227e0"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "__p___argc",
+          "ordinal": null,
+          "iat_va": "0x4227f0"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "__p___argv",
+          "ordinal": null,
+          "iat_va": "0x4227f8"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "__p___wargv",
+          "ordinal": null,
+          "iat_va": "0x422800"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_cexit",
+          "ordinal": null,
+          "iat_va": "0x422808"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_configure_narrow_argv",
+          "ordinal": null,
+          "iat_va": "0x422810"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_configure_wide_argv",
+          "ordinal": null,
+          "iat_va": "0x422818"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_crt_at_quick_exit",
+          "ordinal": null,
+          "iat_va": "0x422820"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_crt_atexit",
+          "ordinal": null,
+          "iat_va": "0x422828"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_exit",
+          "ordinal": null,
+          "iat_va": "0x422830"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_initialize_narrow_environment",
+          "ordinal": null,
+          "iat_va": "0x422838"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_initialize_wide_environment",
+          "ordinal": null,
+          "iat_va": "0x422840"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_initterm",
+          "ordinal": null,
+          "iat_va": "0x422848"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_set_app_type",
+          "ordinal": null,
+          "iat_va": "0x422850"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "_set_invalid_parameter_handler",
+          "ordinal": null,
+          "iat_va": "0x422858"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "abort",
+          "ordinal": null,
+          "iat_va": "0x422860"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "exit",
+          "ordinal": null,
+          "iat_va": "0x422868"
+        },
+        {
+          "dll": "api-ms-win-crt-runtime-l1-1-0.dll",
+          "name": "signal",
+          "ordinal": null,
+          "iat_va": "0x422870"
+        },
+        {
+          "dll": "api-ms-win-crt-stdio-l1-1-0.dll",
+          "name": "__acrt_iob_func",
+          "ordinal": null,
+          "iat_va": "0x422880"
+        },
+        {
+          "dll": "api-ms-win-crt-stdio-l1-1-0.dll",
+          "name": "__p__commode",
+          "ordinal": null,
+          "iat_va": "0x422888"
+        },
+        {
+          "dll": "api-ms-win-crt-stdio-l1-1-0.dll",
+          "name": "__p__fmode",
+          "ordinal": null,
+          "iat_va": "0x422890"
+        },
+        {
+          "dll": "api-ms-win-crt-stdio-l1-1-0.dll",
+          "name": "__stdio_common_vfprintf",
+          "ordinal": null,
+          "iat_va": "0x422898"
+        },
+        {
+          "dll": "api-ms-win-crt-stdio-l1-1-0.dll",
+          "name": "__stdio_common_vfwprintf",
+          "ordinal": null,
+          "iat_va": "0x4228a0"
+        },
+        {
+          "dll": "api-ms-win-crt-stdio-l1-1-0.dll",
+          "name": "fwrite",
+          "ordinal": null,
+          "iat_va": "0x4228a8"
+        },
+        {
+          "dll": "api-ms-win-crt-string-l1-1-0.dll",
+          "name": "strlen",
+          "ordinal": null,
+          "iat_va": "0x4228b8"
+        },
+        {
+          "dll": "api-ms-win-crt-string-l1-1-0.dll",
+          "name": "strncmp",
+          "ordinal": null,
+          "iat_va": "0x4228c0"
+        },
+        {
+          "dll": "api-ms-win-crt-math-l1-1-0.dll",
+          "name": "__setusermatherr",
+          "ordinal": null,
+          "iat_va": "0x4228d0"
+        },
+        {
+          "dll": "api-ms-win-crt-environment-l1-1-0.dll",
+          "name": "__p__environ",
+          "ordinal": null,
+          "iat_va": "0x4228e0"
+        },
+        {
+          "dll": "api-ms-win-crt-environment-l1-1-0.dll",
+          "name": "__p__wenviron",
+          "ordinal": null,
+          "iat_va": "0x4228e8"
+        },
+        {
+          "dll": "api-ms-win-crt-time-l1-1-0.dll",
+          "name": "__daylight",
+          "ordinal": null,
+          "iat_va": "0x4228f8"
+        },
+        {
+          "dll": "api-ms-win-crt-time-l1-1-0.dll",
+          "name": "__timezone",
+          "ordinal": null,
+          "iat_va": "0x422900"
+        },
+        {
+          "dll": "api-ms-win-crt-time-l1-1-0.dll",
+          "name": "__tzname",
+          "ordinal": null,
+          "iat_va": "0x422908"
+        },
+        {
+          "dll": "api-ms-win-crt-time-l1-1-0.dll",
+          "name": "_tzset",
+          "ordinal": null,
+          "iat_va": "0x422910"
+        }
+      ],
+      "exports": [
+        {
+          "name": "read_fixture",
+          "rva": "0x1000"
+        }
+      ],
+      "marker_strings": [
+        {
+          "text": "fixture.txt",
+          "file_offset": "0x1de00"
+        },
+        {
+          "text": "TUAN_RE_READFILE_v1",
+          "file_offset": "0x1de10"
+        }
+      ],
+      "ascii_string_count": 632,
+      "missing_expected": {
+        "strings": [],
+        "imports": [],
+        "exported_functions": []
+      },
+      "passed": true
+    }
+  ]
+}
