@@ -3,6 +3,8 @@
 Thư mục nghiên cứu độc lập; không thay đổi D1–D9, JSON Schema hay contract D.0.
 Đây là mẫu nhỏ có source biết trước, không phải dataset phân loại malware.
 
+**Chí xem trước [HANDOFF_CHI.md](HANDOFF_CHI.md)** để đối chiếu 4 yêu cầu và kết quả bàn giao.
+
 ## Mẫu và nguồn
 
 | Mẫu | Hành vi viết trong source | Điểm đối chiếu |
@@ -63,9 +65,31 @@ functions (entry address), imports, strings (address) ra JSON kèm SHA-256 và v
 file offset trước khi so sánh. Không chỉ so tổng số functions vì CRT và cách phân tích
 có thể tạo thêm hàm. Sau đó thử build tối ưu hóa để xem hàm bị inline/chuỗi bị loại.
 
-Giai đoạn hiện tại chưa chạy Ghidra headless/REA. Không tìm thấy Java trong PATH hay
-Ghidra ở các thư mục cài đặt/tải về đã kiểm tra. Đây là blocker cho bước tùy chọn số 4;
-JSON Python hiện tại không phải D.0 ToolResult và chưa được đưa vào Orchestrator.
+## Chạy Ghidra headless (mục 4)
+
+Dùng Ghidra 12.2 và Temurin JDK 25.0.5+8. URL gốc, dung lượng và SHA-256 archive đã
+xác minh được lưu trong `results/tool-downloads.json`. Giải nén ở đường dẫn không dấu.
+Trên máy Tuấn, runtime đặt trong thư mục TEMP dưới đây; nếu TEMP bị dọn, cần giải nén lại.
+Có thể đổi sang thư mục công cụ không dấu khác trên máy Chí.
+
+```powershell
+& ./benchmarks/re/run_ghidra.ps1 `
+  -GhidraHome 'C:/Users/tuanp/AppData/Local/Temp/dacn-re-tools/ghidra_12.2_PUBLIC' `
+  -JavaHome 'C:/Users/tuanp/AppData/Local/Temp/dacn-re-tools/jdk-25.0.5+8'
+.\.venv\Scripts\python.exe benchmarks/re/check_ghidra.py
+```
+
+Runner xác minh binary hash, chép hello.exe và script vào staging không dấu, tạo project
+mới mỗi lần, giới hạn auto-analysis 180 giây/2 CPU. ExportEvidence.java xuất functions,
+external symbols và defined strings kèm địa chỉ, hash binary, version và trạng thái timeout.
+Runner dùng settings/cache riêng để tránh lỗi cache Apache Felix đã gặp trên máy này.
+Ghidra launcher còn ghi cấu hình Java trong AppData/Roaming; sandbox cần cho phép thao tác này.
+Project tạm được Ghidra xóa sau xử lý; staging/log giữ lại để kiểm tra.
+
+Kết quả mới nằm trong `build/ghidra/`; snapshot bàn giao nằm trong `results/`.
+Checker đối chiếu hàm bằng địa chỉ export PE, imports bằng tên, chuỗi bằng marker dự kiến.
+JSON Ghidra và JSON Python là hai nguồn khác nhau; cả hai **không phải D.0 ToolResult**.
+Chưa tích hợp REA/Orchestrator, chưa kiểm thử chất lượng mã giả decompiler.
 
 Rủi ro: ba mẫu quá đơn giản và có export/debug nên dễ hơn binary thực tế; ASCII scan
 có false positive; không có oracle cho toàn bộ hàm runtime. Không dùng kết quả này để
