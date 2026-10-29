@@ -39,10 +39,12 @@ Không commit toolchain/cache/binary lớn lên Git. JSON và log đã commit đ
 
 ## Commit và phạm vi review
 
-- `c705b2c`: source 3 mẫu, build script, baseline Python và nguồn ngoài (mục 1–3).
-- Commit bổ sung tiếp theo trên cùng nhánh: Ghidra headless, JSON/log thật, checker và tài liệu này.
-- Nhánh kế thừa commit D3/D7 trước đó `e71ef34`. Để xem riêng phần benchmark, dùng:
-  `git diff e71ef34..HEAD -- benchmarks/re`.
-  Nếu main chưa có D3/D7, khi mở PR cần chọn phạm vi/commit phù hợp, không gộp nhầm review cũ.
+- `f427ab1`: source 3 mẫu, build script, baseline Python và nguồn ngoài (mục 1–3).
+- `51a0deb`: Ghidra headless, JSON/log thật, checker và hướng dẫn (mục 4).
+- Nhánh benchmark đã tách từ `origin/main`, không chứa commit D3/D7 cũ.
+  Xem phạm vi PR bằng `git diff origin/main...HEAD`: chỉ có `benchmarks/re/`.
+- D3/D7 giữ nguyên ở nhánh `feat/d3-d7-validation`, commit `e71ef34`, để Chí review riêng.
+- Các hash cũ `c705b2c`, `c16814f` được thay bằng hash trên sau khi tách nhánh;
+  nội dung source và evidence được giữ nguyên. Bản dự phòng local: `backup/tuan-re-before-split`.
 - Blocker mục 4 đã xử lý. Chí chạy máy khác cần Ghidra/JDK ở đường dẫn không dấu;
   runtime trong TEMP trên máy Tuấn có thể bị hệ điều hành dọn, khi đó giải nén lại.
