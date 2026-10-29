@@ -53,3 +53,21 @@ python -m unittest discover -s research/ember_dataset -p "test_*.py" -v
 ```
 
 Handoff: run download/audit on an allowed machine and return archive bytes/SHA, audit JSON, environment versions, then validate matrix. No request to bypass proxy and no unverified mirror substituted.
+
+## Second review: integrity hardening
+
+The first draft did not connect expected feature version to verified extracted data and lacked duplicate detection. These gaps are now addressed:
+
+- `audit` reports `expected_feature_version=2` and `verified_feature_version=null`. Presence of feature fields is not proof of version.
+- New `verify` checks official archive SHA256 AND each of the seven extracted JSONL hashes against archive contents. It rejects extra train shards. This establishes release provenance, not equivalence of an arbitrary installed extractor.
+- `matrix` requires verification before importing dependencies. After vectorization it rechecks source hashes before writing COMPLETE.json.
+- Audit uses temporary SQLite to count duplicate hashes, train/test overlap, malformed hashes and declared feature versions. It does not silently deduplicate. Matrix rejects invalid hashes and cross-split overlap; within-split duplicates remain reported for review.
+- Non-finite JSON constants are rejected; label booleans are invalid rather than class 1/0.
+
+```powershell
+python research/ember_dataset/prepare.py verify --data D:\datasets\ember2018-v2
+```
+
+Seven synthetic unit tests now pass; log: results/unit_tests.txt. Includes checksum mismatch, tampered extracted JSON, duplicate leakage, non-finite values and matrix rejection before dependencies for an unverified source. Mocking the archive checksum in the synthetic test is ONLY a test fixture, never the production verification path.
+
+Remaining limitations: no real corpus read, no matrix end-to-end, no pinned/validated legacy runtime, no LightGBM training. The matrix path is prepared code, not a proven pipeline. Near-duplicate similarity and chronological validation remain downstream tasks. Fetch retries restart partial downloads; extraction refuses overwrites. Corpus immutable during processing is required; final hashes detect persistent modifications but are not a filesystem snapshot.

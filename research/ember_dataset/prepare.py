@@ -5,6 +5,9 @@ import hashlib
 import json
 from pathlib import Path
 import shutil
+import re
+import tempfile
+import sqlite3
 import tarfile
 import urllib.request
 
@@ -58,7 +61,7 @@ def rows(paths):
         with path.open(encoding='utf-8') as f:
             for line, text in enumerate(f, 1):
                 try:
-                    obj = json.loads(text)
+                    obj = json.loads(text, parse_constant=lambda value: (_ for _ in ()).throw(ValueError('Non-finite JSON: ' + value)))
                     if not isinstance(obj, dict):
                         raise ValueError('Record is not an object')
                     yield obj
@@ -67,27 +70,77 @@ def rows(paths):
 
 
 def audit(root):
-    report = {'dataset': 'EMBER2018 v2 candidate', 'feature_version': 2,
+    report = {'dataset': 'EMBER2018 v2 candidate', 'expected_feature_version': 2, 'verified_feature_version': None,
               'version_note': 'Expected source release; verify official archive digest separately. Field presence is not proof of extractor equivalence.', 'splits': {}}
+    with tempfile.TemporaryDirectory() as temp:
+        db = sqlite3.connect(str(Path(temp) / 'hashes.sqlite'))
+        db.execute('CREATE TABLE hashes (sha TEXT PRIMARY KEY, split TEXT)')
+        try:
+            _audit_splits(root, report, db)
+        finally:
+            db.close()
+    return report
+
+
+def _audit_splits(root, report, db):
     for split in ('train', 'test'):
         paths = sorted(root.glob('train_features_*.jsonl')) if split == 'train' else [root / 'test_features.jsonl']
         if not paths or any(not p.is_file() for p in paths):
             raise ValueError(f'Missing {split} JSONL')
         counts, missing, total = Counter(), Counter(), 0
+        invalid_hashes = duplicates = overlap = 0
+        declared = Counter()
         for r in rows(paths):
             total += 1
+            sha = r.get('sha256')
+            if not isinstance(sha, str) or not re.fullmatch('[a-fA-F0-9]{64}', sha):
+                invalid_hashes += 1
+            else:
+                sha = sha.lower()
+                previous = db.execute('SELECT split FROM hashes WHERE sha=?', (sha,)).fetchone()
+                if previous:
+                    duplicates += 1
+                    overlap += previous[0] != split
+                else:
+                    db.execute('INSERT INTO hashes VALUES (?,?)', (sha, split))
+            declared[str(r.get('feature_version', 'absent'))] += 1
             label = r.get('label')
             key = str(label) if type(label) is int and label in (-1, 0, 1) else ('missing_or_null' if label is None else 'invalid')
             counts[key] += 1
             for group in GROUPS:
                 if group not in r or r[group] is None:
                     missing[group] += 1
-        report['splits'][split] = {'rows': total, 'labels': dict(counts), 'missing_feature_groups': dict(missing),
+        report['splits'][split] = {'rows': total, 'invalid_sha256': invalid_hashes, 'duplicate_rows': duplicates, 'cross_split_overlap_rows': overlap, 'declared_feature_versions': dict(declared), 'labels': dict(counts), 'missing_feature_groups': dict(missing),
                                    'files': [{'name': p.name, 'bytes': p.stat().st_size, 'sha256': digest(p)} for p in paths]}
-    return report
+    db.commit()
+
+
+def verify(root):
+    archive = root / 'ember_dataset_2018_2.tar.bz2'
+    if digest(archive) != SHA:
+        raise ValueError('Official archive checksum mismatch')
+    matched = set()
+    with tarfile.open(archive, 'r:bz2') as tar:
+        for member in tar:
+            name = Path(member.name).name
+            if name not in {f'train_features_{i}.jsonl' for i in range(6)} | {'test_features.jsonl'}:
+                continue
+            if not member.isfile() or name in matched:
+                raise ValueError('Duplicate/non-file archive member')
+            h = hashlib.sha256()
+            with tar.extractfile(member) as source:
+                for block in iter(lambda: source.read(1024 * 1024), b''):
+                    h.update(block)
+            if h.hexdigest() != digest(root / name):
+                raise ValueError('Extracted JSONL mismatch: ' + name)
+            matched.add(name)
+    if len(matched) != 7 or len(list(root.glob('train_features_*.jsonl'))) != 6:
+        raise ValueError('Expected exactly six train shards and one test file')
+    return {'archive_sha256': SHA, 'archive_bytes': archive.stat().st_size, 'verified_feature_version': 2}
 
 
 def matrix(root, output):
+    provenance = verify(root)
     import numpy as np
     import ember
     import lief
@@ -95,6 +148,10 @@ def matrix(root, output):
     if extractor.dim != 2381:
         raise ValueError('Expected 2381 features')
     report = audit(root)
+    report.update(provenance)
+    for info in report["splits"].values():
+        if info["invalid_sha256"] or info["cross_split_overlap_rows"]:
+            raise ValueError("Invalid hash or cross-split leakage; inspect audit")
     output.mkdir(parents=True, exist_ok=False)
     for split, info in report['splits'].items():
         if info['missing_feature_groups'] or any(k not in ('-1', '0', '1') for k in info['labels']):
@@ -119,18 +176,24 @@ def matrix(root, output):
         if i != n:
             raise ValueError('Input changed during vectorization')
         X.flush(); y.flush()
+    for info in report['splits'].values():
+        for file in info['files']:
+            if digest(root / file['name']) != file['sha256']:
+                raise ValueError('Input changed during matrix creation')
     report['runtime'] = {'numpy': np.__version__, 'lief': lief.__version__, 'ember_module': ember.__file__}
     (output / 'COMPLETE.json').write_text(json.dumps(report, indent=2), encoding='utf-8')
 
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('command', choices=['download', 'audit', 'matrix'])
+    p.add_argument('command', choices=['download', 'verify', 'audit', 'matrix'])
     p.add_argument('--data', required=True, type=Path)
     p.add_argument('--output', type=Path)
     a = p.parse_args()
     if a.command == 'download':
         fetch(a.data)
+    elif a.command == 'verify':
+        print(json.dumps(verify(a.data), indent=2))
     elif a.command == 'audit':
         result = json.dumps(audit(a.data), indent=2)
         print(result)
