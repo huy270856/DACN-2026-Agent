@@ -1,9 +1,11 @@
-# Requirements re-audit — 29/10/2026
+# Requirements re-audit — local Windows 2026-10-30
 
-1. Sources/license/size/labels/split: official Git repos reviewed (pinned commits in README). EMBER2018 source checksum and code/data licenses confirmed. Size of downloaded archive unknown. EMBER2024 README sizes and temporal split recorded; HF dataset license still unverified.
-2. Compatibility: v2=2381 vs v3 full PE=2568 confirmed from source dimensions. D.0 fixture v2 observed; no claim that an extractor/model has already been installed or validated.
-3. Download/verify/read: BLOCKED. Repeated HEAD to https://ember.elastic.co/ember_dataset_2018_2.tar.bz2 and https://huggingface.co/datasets/joyce8/EMBER2024/raw/main/README.md both returned proxy CONNECT 403 at 2026-10-29 16:19 UTC. This is an environment access failure, not proof the upstream download link is dead. Earlier Python download also failed before dataset bytes were received. No bypass or alternate unverified mirror used.
-4. Real counts/labels/missing/version: NOT RUN on real data. Audit implementation tested on synthetic records only. Expected release counts are not measured results.
-5. Matrix script: IMPLEMENTED, not validated end-to-end with official data. Requires archive/JSONL integrity, official v2 extractor and compatible dependencies. Rejects nonfinite vectors, malformed labels and cross-split overlap; preserves metadata and excludes -1. COMPLETE.json only appears after checks.
+This supersedes the cloud-only 2026-10-29 report. The cloud ran seven synthetic tests but was blocked by proxy 403; this local run completed. See ../HANDOFF.md and local_windows/COMMANDS.md.
 
-Actual local execution: 7 tests pass, compile passes, diff whitespace check passes. No D1-D9 edits. Next needed evidence: run download/verify/audit on a permitted machine; share audit JSON and exact environment versions, then validate matrix on official corpus. Do not claim task fully completed until steps 3–5 have real outputs.
+1. Sources/license/size/labels/split: PASS. Official EMBER2018 data MIT/code AGPL-v3 verified. EMBER2024 code and HF card Apache-2.0 verified; all 13 ZIP links HEAD 200, 24,332,624,240 bytes total by API/Content-Length. No 2024 corpus downloaded; publisher counts are not local measurements.
+2. Compatibility: PASS. EMBER2018 v2 = 2381 dimensions selected. EMBER2024 full PE v3 = 2568, not interchangeable. Pinned official extractor installed and source hashes matched.
+3. Download/verify/read: PASS. 1,696,539,273-byte archive and seven JSONL verified. One million JSON records read. No raw PE download/execution.
+4. Real statistics/version: PASS. Train 800k (300k benign, 300k malicious, 200k unlabeled); test 200k (100k each class). Zero invalid/missing labels, missing required feature groups, invalid hashes, exact duplicates or cross-split overlap. Records omit feature_version; archive provenance establishes v2.
+5. Matrix/script/load: PASS. Separate environment validated, 140-row preflight passed. Matrix train 600000x2381 and test 200000x2381, float32 X/int8 binary y. Independent checker validated every value finite and all 800k metadata/label rows against source; 34 vectors recomputed exactly. Read-only loader passed. Matrix artifacts total 7,712,003,111 bytes. No model training.
+
+17 unit tests pass; pip check passes. Logs/manifests in local_windows. Dataset and matrices remain on D outside Git. No D1-D9 edits or main merge. No remaining blocker for preparation; near-duplicates, validation split, training/calibration/evaluation remain downstream work. Legacy Python/LIEF limitation and upstream LIEF warning are retained in the handoff.

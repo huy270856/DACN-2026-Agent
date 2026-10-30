@@ -10,6 +10,7 @@ import tempfile
 import sqlite3
 import tarfile
 import urllib.request
+import sys
 
 URL = 'https://ember.elastic.co/ember_dataset_2018_2.tar.bz2'
 SHA = 'b6052eb8d350a49a8d5a5396fbe7d16cf42848b86ff969b77464434cf2997812'
@@ -24,13 +25,37 @@ def digest(path):
     return h.hexdigest()
 
 
+def download_partial(partial):
+    """Resume only a validated byte range; the caller must verify the full digest."""
+    offset = partial.stat().st_size if partial.exists() else 0
+    request = urllib.request.Request(URL, headers={'Range': f'bytes={offset}-'} if offset else {})
+    with urllib.request.urlopen(request, timeout=60) as response:
+        if response.status == 206:
+            match = re.fullmatch(r'bytes (\d+)-(\d+)/(\d+)', response.headers.get('Content-Range', ''))
+            if not match or int(match[1]) != offset or int(match[2]) != int(match[3]) - 1:
+                raise ValueError('Unexpected Content-Range; partial retained')
+            expected = int(match[3])
+            mode = 'ab'
+        elif response.status == 200:
+            # Range ignored: start a complete response, never append it.
+            expected = int(response.headers['Content-Length']) if response.headers.get('Content-Length') else None
+            mode = 'wb'
+        else:
+            raise ValueError(f'Unexpected download status: {response.status}')
+        with partial.open(mode) as output:
+            shutil.copyfileobj(response, output, 1024 * 1024)
+    if expected is not None and partial.stat().st_size != expected:
+        raise ValueError('Incomplete download; partial retained for retry')
+
+
 def fetch(root):
     root.mkdir(parents=True, exist_ok=True)
     archive = root / 'ember_dataset_2018_2.tar.bz2'
     if not archive.exists():
         partial = archive.with_suffix('.part')
-        with urllib.request.urlopen(URL, timeout=60) as response, partial.open('wb') as f:
-            shutil.copyfileobj(response, f, 1024 * 1024)
+        # Also recover a completed download interrupted before the rename.
+        if not partial.exists() or digest(partial) != SHA:
+            download_partial(partial)
         if digest(partial) != SHA:
             raise ValueError('Archive SHA256 mismatch; partial retained for diagnosis')
         partial.rename(archive)
@@ -92,6 +117,8 @@ def _audit_splits(root, report, db):
         declared = Counter()
         for r in rows(paths):
             total += 1
+            if total % 100000 == 0:
+                print(f'audit {split}: {total} rows', file=sys.stderr, flush=True)
             sha = r.get('sha256')
             if not isinstance(sha, str) or not re.fullmatch('[a-fA-F0-9]{64}', sha):
                 invalid_hashes += 1
@@ -134,6 +161,7 @@ def verify(root):
             if h.hexdigest() != digest(root / name):
                 raise ValueError('Extracted JSONL mismatch: ' + name)
             matched.add(name)
+            print(f'verified {name}', file=sys.stderr, flush=True)
     if len(matched) != 7 or len(list(root.glob('train_features_*.jsonl'))) != 6:
         raise ValueError('Expected exactly six train shards and one test file')
     return {'archive_sha256': SHA, 'archive_bytes': archive.stat().st_size, 'verified_feature_version': 2}
@@ -173,6 +201,8 @@ def matrix(root, output):
                 X[i], y[i] = vector, r['label']
                 metadata.write(json.dumps({k: r.get(k) for k in ('sha256', 'appeared', 'label')}) + '\n')
                 i += 1
+                if i % 25000 == 0:
+                    print(f'matrix {split}: {i}/{n} rows', file=sys.stderr, flush=True)
         if i != n:
             raise ValueError('Input changed during vectorization')
         X.flush(); y.flush()

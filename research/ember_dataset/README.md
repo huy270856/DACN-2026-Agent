@@ -1,5 +1,11 @@
 # Huy — EMBER dataset preparation (29/10/2026)
 
+## Completed local run 30/10/2026
+
+See [HANDOFF.md](HANDOFF.md) for the current five-requirement handoff, [SOURCES.md](SOURCES.md) for the 2018/2024 comparison, and [dataset manifest](results/local_windows/dataset_manifest.json) for measured checksums/counts/paths. Local download, verification, audit, isolated legacy environment, full matrix and independent validation have completed. 17 unit tests pass. No LightGBM training or raw PE execution. The cloud blockers below are historical, not the current local status.
+
+Use `load_dataset.py --matrix D:\datasets\ember2018-matrix` with `D:\datasets\envs\ember-v2\Scripts\python.exe` to load completed matrices read-only. `check_matrix.py` validates shapes/dtypes/all finite values/all metadata links and optionally recomputes sampled vectors using `--check-vectors`. `preflight.py` tests a small real sample before full vectorization. The pinned environment is recorded in `requirements-research.txt` and `results/local_windows/pip-freeze.txt`.
+
 ## Choice and compatibility
 Select EMBER2018 feature v2 as technical baseline: 2381 dimensions. EMBER2024 uses v3 (2568 full PE dimensions) and is NOT a drop-in replacement. Self-collected recent PE remains necessary if the course requirement still applies. No D1–D9 changes.
 
@@ -11,13 +17,13 @@ Official sources:
 - https://huggingface.co/datasets/joyce8/EMBER2024
 - https://arxiv.org/abs/2506.05074
 
-EMBER2018 data MIT, code AGPL-v3. EMBER2024 code Apache-2.0; HF dataset license NOT verified here (network blocked). LightGBM MIT.
+EMBER2018 data MIT, code AGPL-v3. EMBER2024 code and HF dataset-card license Apache-2.0, checked locally on 30/10/2026 (see SOURCES.md). LightGBM MIT.
 
-EMBER2018: official total 1M records; expected train 800k (300k benign, 300k malicious, 200k unlabeled), test 200k (100k each class). These are expected counts, NOT measurements from this run. Labels 0/1/-1; never interpret -1 as benign. Keep official test separate and derive temporal validation from train (appeared). Audit reports actual counts when run.
+EMBER2018: local audit measured 1M records: train 800k (300k benign, 300k malicious, 200k unlabeled), test 200k (100k each class). These agree with the expected release counts. Labels 0/1/-1; never interpret -1 as benign. Keep official test separate and derive temporal validation from train (appeared). See results/local_windows/audit.json for measured counts and zero missing/invalid labels/feature groups/hash overlap.
 
 EMBER2024 official README: 2,626,000 train, 606,000 test, first 52 weeks vs last 12; 6315 additional malicious challenge records. Seven label/tag types: binary, family, behavior, file_property, packer, exploit, group. Challenge alone cannot measure FPR. Data is feature records, not a ready collection of raw executables.
 
-Size: EMBER2018 archive byte size NOT verified because HEAD/download blocked. Script reports exact downloaded bytes. EMBER2024 README reports feature/label sizes: Win32 train/test 23.7/4.9 GB, Win64 12.9/2.5 GB, .NET 1.8 GB/425 MB; these are author-reported sizes, not local measurements or guaranteed compressed transfer sizes. Keep extra disk space for extracted JSON and matrices.
+Measured EMBER2018 archive: 1,696,539,273 bytes; extracted JSONL: 9,946,142,816 bytes. EMBER2024's 13 ZIP files total 24,332,624,240 bytes by HEAD/API metadata; no 2024 corpus was downloaded. README subset feature/label sizes are publisher figures, not local measurements or ZIP transfer sizes. See SOURCES.md and the manifest for the distinction.
 
 ## Run (PowerShell, from repo root)
 
@@ -30,7 +36,7 @@ python research/ember_dataset/prepare.py audit --data D:\datasets\ember2018-v2 -
 
 Download reuses an existing archive only after checksum verification. Extracts only expected JSONL basenames, refuses overwrite. For failed extraction, inspect partial files before retrying in a fresh directory. Corpus is outside Git.
 
-Matrix requires a SEPARATE research environment with official `ember` from the reviewed commit, NumPy, scikit-learn and compatible LIEF. Upstream v2 used LIEF 0.9.0; README also discusses 0.10.1 on Windows/Linux. Do not blindly install legacy LIEF into orchestrator Python. This environment has not been validated here; dependency setup is an explicit blocker. Record `pip freeze` and extractor commit once validated.
+Matrix requires a SEPARATE research environment with official `ember` from the reviewed commit, NumPy, scikit-learn and compatible LIEF. Upstream v2 used LIEF 0.9.0; README also discusses 0.10.1 on Windows/Linux. The local Python 3.7.9/LIEF 0.10.1 environment passed real-data vectorization and matrix checks; its full versions and extractor source hashes are recorded under results/local_windows. Do not install these legacy dependencies into Orchestrator Python.
 
 ```powershell
 python research/ember_dataset/prepare.py matrix --data D:\datasets\ember2018-v2 --output D:\datasets\ember2018-matrix
@@ -40,7 +46,7 @@ Creates float32 X_train/X_test.npy, int8 y_train/y_test.npy, matching SHA256/app
 
 Before training: inspect actual label counts; check duplicate SHA256/near duplicates and chronology; split validation; freeze dataset and feature manifest; never tune on test. Matrix preparation does NOT yet perform deduplication, calibration or model training.
 
-## Actual execution and blockers
+## Historical cloud execution and blockers (29/10/2026)
 
 - Official EMBER Git repo accessible; feature dimensions/license reviewed.
 - HEAD and Python download attempt on official archive fail: proxy CONNECT tunnel 403 Forbidden. Dataset bytes downloaded: none. No archive checksum verified, no real sample count, missing-label statistics or feature matrix claimed.
@@ -68,6 +74,6 @@ The first draft did not connect expected feature version to verified extracted d
 python research/ember_dataset/prepare.py verify --data D:\datasets\ember2018-v2
 ```
 
-Seven synthetic unit tests now pass; log: results/unit_tests.txt. Includes checksum mismatch, tampered extracted JSON, duplicate leakage, non-finite values and matrix rejection before dependencies for an unverified source. Mocking the archive checksum in the synthetic test is ONLY a test fixture, never the production verification path.
+Seven synthetic unit tests passed at the cloud handoff (results/unit_tests.txt); the local extended suite now passes 17 (results/local_windows/research_tests.log). Coverage includes checksum mismatch, tampered extracted JSON, duplicate leakage, non-finite values, safe resume, matrix validation/loading and rejection before dependencies for an unverified source. Mocking the archive checksum is ONLY a synthetic-test fixture, never the production verification path.
 
-Remaining limitations: no real corpus read, no matrix end-to-end, no pinned/validated legacy runtime, no LightGBM training. The matrix path is prepared code, not a proven pipeline. Near-duplicate similarity and chronological validation remain downstream tasks. Fetch retries restart partial downloads; extraction refuses overwrites. Corpus immutable during processing is required; final hashes detect persistent modifications but are not a filesystem snapshot.
+At the cloud handoff, real corpus reading, matrix end-to-end and a validated legacy runtime were still missing. These three items are completed by the local run above; model training remains out of scope. Near-duplicate similarity and a validation split remain downstream tasks. Download retries now resume a partial response only after validating HTTP Content-Range; ignored Range requests restart rather than append. Full archive SHA-256 is always required. Extraction refuses overwrites. Corpus immutable during processing is required; final hashes detect persistent modifications but are not a filesystem snapshot.

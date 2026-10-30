@@ -10,7 +10,7 @@ class Tests(unittest.TestCase):
     def test_audit_distinguishes_unknown_missing_invalid(self):
         with tempfile.TemporaryDirectory() as t:
             root=Path(t)
-            records=[dict.fromkeys(m.GROUPS, {}) | {'label': x} for x in (0,1,-1,None,True)]
+            records=[dict(dict.fromkeys(m.GROUPS, {}), label=x) for x in (0,1,-1,None,True)]
             (root/'train_features_0.jsonl').write_text('\n'.join(map(json.dumps,records)))
             (root/'test_features.jsonl').write_text(json.dumps({'label':1}))
             result=m.audit(root)
@@ -29,6 +29,31 @@ class Tests(unittest.TestCase):
 if __name__=='__main__':unittest.main()
 
 class IntegrityTests(unittest.TestCase):
+    def test_resume_and_range_ignored(self):
+        import io
+        from unittest.mock import patch
+        for status, headers, body in [(206, {'Content-Range': 'bytes 3-5/6'}, b'def'),
+                                       (200, {'Content-Length': '6'}, b'abcdef')]:
+            with tempfile.TemporaryDirectory() as t:
+                path = Path(t) / 'download.part'; path.write_bytes(b'abc')
+                response = io.BytesIO(body); response.status = status; response.headers = headers
+                with patch.object(m.urllib.request, 'urlopen', return_value=response) as opened:
+                    m.download_partial(path)
+                    self.assertEqual(opened.call_args[0][0].get_header('Range'), 'bytes=3-')
+                self.assertEqual(path.read_bytes(), b'abcdef')
+
+    def test_bad_range_preserves_partial(self):
+        import io
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as t:
+            path = Path(t) / 'download.part'; path.write_bytes(b'abc')
+            response = io.BytesIO(b'def'); response.status = 206
+            response.headers = {'Content-Range': 'bytes 0-2/6'}
+            with patch.object(m.urllib.request, 'urlopen', return_value=response):
+                with self.assertRaisesRegex(ValueError, 'Content-Range'):
+                    m.download_partial(path)
+            self.assertEqual(path.read_bytes(), b'abc')
+
     def test_nonfinite_json_rejected(self):
         with tempfile.TemporaryDirectory() as t:
             p=Path(t)/'bad.jsonl'; p.write_text('{"label":NaN}')
@@ -38,7 +63,7 @@ class IntegrityTests(unittest.TestCase):
     def test_cross_split_duplicate(self):
         with tempfile.TemporaryDirectory() as t:
             root=Path(t)
-            row=dict.fromkeys(m.GROUPS,{}) | {'label':0,'sha256':'a'*64}
+            row=dict(dict.fromkeys(m.GROUPS,{}), label=0, sha256='a'*64)
             for name in ('train_features_0.jsonl','test_features.jsonl'):
                 (root/name).write_text(json.dumps(row))
             report=m.audit(root)
