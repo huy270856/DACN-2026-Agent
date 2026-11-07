@@ -20,6 +20,7 @@ from orchestrator.trust import (
     ApprovalService, ApprovalExpiredError, ApprovalMismatchError,
     AuthenticationError, DpapiKeyProvider, InMemoryKeyProvider, KeyCustodyError,
     LocalOsAuthenticator, MockSigner, StaticAuthenticator, TrustedSigner,
+    os_account_name,
 )
 
 
@@ -54,6 +55,24 @@ class SignerTests(unittest.TestCase):
 
     def test_mock_signer_is_flagged(self):
         self.assertTrue(getattr(MockSigner(), "is_mock", False))
+
+    @unittest.skipUnless(os.name == "nt", "Token-based identity is Windows-specific")
+    def test_analyst_identity_not_env_spoofable(self):
+        # Setting USERNAME must NOT change the authenticated subject on Windows,
+        # because the identity comes from the process token (GetUserNameW).
+        real = os_account_name()
+        old = os.environ.get("USERNAME")
+        try:
+            os.environ["USERNAME"] = "HACKER-SPOOF"
+            subject, method = LocalOsAuthenticator().authenticate()
+            self.assertNotEqual(subject, "HACKER-SPOOF")
+            self.assertEqual(subject, real)
+            self.assertEqual(method, "local_os_account")
+        finally:
+            if old is None:
+                os.environ.pop("USERNAME", None)
+            else:
+                os.environ["USERNAME"] = old
 
     @unittest.skipUnless(os.name == "nt", "DPAPI is Windows-only")
     def test_dpapi_key_provider_roundtrip(self):

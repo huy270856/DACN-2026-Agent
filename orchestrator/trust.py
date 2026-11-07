@@ -150,7 +150,7 @@ class DpapiKeyProvider:
         # Best-effort: grant only the current user, remove inheritance. Failure is
         # non-fatal (DPAPI still protects contents) but is surfaced by the caller.
         try:
-            user = os.environ.get("USERNAME") or getpass.getuser()
+            user = os_account_name()
             subprocess.run(["icacls", str(self._path), "/inheritance:r",
                             "/grant:r", f"{user}:F"],
                            check=False, capture_output=True, timeout=10)
@@ -226,13 +226,14 @@ class AnalystAuthenticator(Protocol):
 class LocalOsAuthenticator:
     """Returns the current local OS account as the analyst identity.
 
-    LIMITATION: asserts the process-owner identity; it does NOT re-verify a
-    credential or MFA. A production approval gate must perform real interactive
-    authentication in a trusted local service. The Agent can never supply this.
+    LIMITATION: asserts the process-owner identity (via the Windows token, not an
+    env var); it does NOT re-verify a credential or MFA. A production approval
+    gate must perform real interactive authentication in a trusted local service.
+    The Agent can never supply this.
     """
 
     def authenticate(self) -> Tuple[str, str]:
-        subject = os.environ.get("USERNAME") or getpass.getuser()
+        subject = os_account_name()
         if not subject:
             raise AuthenticationError("No local OS account identity available")
         return subject, "local_os_account"
@@ -254,6 +255,27 @@ class StaticAuthenticator:
 # =============================================================================
 def _now() -> datetime:
     return datetime.now(timezone.utc)
+
+
+def os_account_name() -> str:
+    """Return the current process-token account name.
+
+    On Windows this reads the actual thread/process token via ``GetUserNameW``
+    (advapi32), which is NOT overridable by the ``USERNAME``/``LOGNAME`` env vars
+    — unlike ``getpass.getuser()``. This removes trivial env-based spoofing of the
+    analyst identity. It still asserts the *process owner*, not a re-verified
+    interactive credential (see LocalOsAuthenticator limitations).
+    """
+    if os.name == "nt":
+        try:
+            size = ctypes.c_ulong(0)
+            ctypes.windll.advapi32.GetUserNameW(None, ctypes.byref(size))
+            buf = ctypes.create_unicode_buffer(size.value)
+            if ctypes.windll.advapi32.GetUserNameW(buf, ctypes.byref(size)) and buf.value:
+                return buf.value
+        except Exception:
+            pass
+    return getpass.getuser()
 
 
 class ApprovalService:

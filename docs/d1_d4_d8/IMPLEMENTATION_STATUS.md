@@ -48,9 +48,17 @@ Danh sách adversarial yêu cầu đều có: invalid request · unknown tool ·
 - Luồng e2e "trusted" dùng **D4 PolicyEngine thật + D8 TrustedSigner thật (khóa thật từ InMemoryKeyProvider) + ApprovalService thật**. `test_trusted_full_chain_uses_no_mock_d4_d8` assert signer KHÔNG phải mock.
 - Test-double còn lại chỉ là: analyzer lành tính (`ember_mock_adapter.py`) và `StaticAuthenticator` (thay cho đăng nhập OS tương tác). `MockSigner` tồn tại nhưng **không** dùng trong luồng trusted.
 
+## Rà soát bảo mật (kết quả)
+- **Analyst spoofing**: `LocalOsAuthenticator` đã chuyển sang đọc **Windows token (`GetUserNameW`)**, KHÔNG dùng `USERNAME` env ⇒ không spoof bằng biến môi trường (test `test_analyst_identity_not_env_spoofable`). Vẫn là *process-owner*, chưa re-verify credential/MFA (P1 còn lại).
+- **D4 không cho approval bypass VM**: kiểm foreign-code/mutate (bước 3, DENY) **trước** approval (bước 4). Tool `executes_foreign_code + requires_human_approval` ⇒ DENY `vm_required_unavailable` (test `test_approval_cannot_bypass_vm_requirement`).
+- **Env scrub cho analyzer**: D6 `clean_environment` chỉ truyền SystemRoot/WINDIR/TEMP/TMP ⇒ KHÔNG truyền khóa/secret vào subprocess analyzer.
+- **D9**: expected_revision dưới lock + ledger 2 pha + reconcile (Phase B), D1 dùng revision-aware commit.
+
 ## GIỚI HẠN (liệt kê rõ, không tuyên bố hoàn thành)
-1. **D8 key custody = DPAPI(user)+ACL**, KHÔNG phải HSM/TPM-sealed → không production-grade. Process cùng user có thể unprotect. ACL set best-effort qua `icacls`.
-2. **Analyst authentication**: `LocalOsAuthenticator` khẳng định danh tính process-owner, **không** re-verify credential/MFA. Gate production cần đăng nhập tương tác thật trong service tin cậy.
+1. **D8 key custody = DPAPI(user)+ACL**, KHÔNG phải HSM/TPM-sealed → không production-grade. **Analyzer subprocess chạy cùng user có thể đọc file khóa và `CryptUnprotectData`** (giới hạn nền tảng của DPAPI user-scope). Khắc phục thật cần chạy analyzer dưới token hạn chế / user riêng, hoặc tách signer sang process đặc quyền riêng. (P1)
+2. **Analyst authentication**: dùng Windows token (không env-spoof) nhưng **chỉ là process-owner, KHÔNG re-verify credential/MFA**. Gate production cần đăng nhập tương tác thật trong service tin cậy. (P1)
+3. **D1 concurrency — duplicate ĐỒNG THỜI**: idempotency chặn replay *tuần tự* (call_id+digest trong run-ledger) và concurrent commit bị chặn bởi revision-aware CAS (chỉ 1 commit thắng). Nhưng hai call_id **giống hệt chạy song song** có thể *thực thi* analyzer hai lần trước khi một bên commit (bên thua → CASE_REVISION_STALE, không double-commit). Cần reservation/lease trước execution để chặn double-execute. (P2)
+4. **run-ledger** ghi `flush` (chưa `fsync`) → crash hiếm gặp có thể mất record terminal cuối ⇒ có thể chạy lại. D9 ledger đã fsync. (P2)
 3. **Tool-call REQUIRE_APPROVAL**: D.0 không có schema wire cho approval của *tool call* (approval_request/event chỉ cho response action). D1 fail-closed → `WAITING_APPROVAL`, không execute; cần bước analyst out-of-band.
 4. **VM dynamic analysis CHƯA CÓ** → tool foreign-code bị DENY; không chạy malware trên host.
 5. **Ngoài phạm vi branch này**: LLM planning, EMBER extraction thật, LightGBM inference, RE integration. **Không** tuyên bố AI Agent hoặc malware detector hoàn chỉnh.

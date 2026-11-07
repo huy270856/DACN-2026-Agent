@@ -114,6 +114,20 @@ class PolicyEngineTests(unittest.TestCase):
         with self.assertRaises(PolicyError):
             self.engine.evaluate({"not": "a call"}, {"not": "a spec"}, self.case)
 
+    def test_approval_cannot_bypass_vm_requirement(self):
+        # A tool that both executes foreign code AND requests approval must be
+        # DENIED for the VM requirement; approval must NOT downgrade it to
+        # REQUIRE_APPROVAL (which could lead to host execution).
+        spec = copy.deepcopy(self.spec)
+        spec["effects"]["executes_foreign_code"] = True
+        spec["effects"]["requires_human_approval"] = True
+        engine = PolicyEngine(PolicyConfig(
+            tool_allowlist=frozenset({ALLOWED}),
+            approval_required_capabilities=frozenset({spec["capability"]})))
+        d = engine.evaluate(self.call, spec, self.case)
+        self.assertEqual(d["outcome"], "DENY")
+        self.assertEqual(d["reason_code"], "vm_required_unavailable")
+
 
 if __name__ == "__main__":
     unittest.main()
