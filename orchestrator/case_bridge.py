@@ -256,65 +256,70 @@ class CaseBridge:
         if not case_file.exists():
             raise CaseBridgeError(f"Case file not found: {case_file}")
 
-        # Read current case state
+        # Read current case state (only to decide auto-registration and to compute
+        # the expected revision for the final guarded write). The real optimistic-
+        # concurrency gate is enforced atomically INSIDE case_manager.apply_update
+        # via expected_revision, under the case lock - not by this pre-read.
         current_state = cm.read_json(case_file)
-        current_revision = current_state.get('revision', 1)
-
-        # Check expected revision precondition before locking/writing
-        if expected_revision is not None and current_revision != expected_revision:
-            raise StaleRevisionError(
-                f"Concurrent revision mismatch: expected revision {expected_revision}, "
-                f"current case revision is {current_revision}. Commit aborted to prevent overwrite."
-            )
-
-        # Ensure tool is registered in Node C case
-        legacy_tool_name = self.canonical_to_legacy_tool_name(tool_result['tool_id'])
-        available_tools = current_state.get('available_tools', {})
-        if legacy_tool_name not in available_tools:
-            desc = tool_description or f"Auto-registered for D.0 tool {tool_result['tool_id']}"
-            cm.apply_update(
-                case_file,
-                'register-tool',
-                {'name': legacy_tool_name, 'description': desc}
-            )
-            # Re-read case after registration
-            current_state = cm.read_json(case_file)
-
-        # Check expected revision again if auto-registration incremented it
-        if expected_revision is not None:
-            # Registration increments revision by 1, so adjust or ensure we track accurately
-            current_revision = current_state.get('revision', 1)
-
-        # Project payload for Node C
-        node_c_payload = self.project_tool_result_to_node_c(
-            tool_result, execution_receipt, current_state
-        )
-
-        # Sign payload using backend HMAC key (case_manager.sign_for_trusted_boundary)
         case_id = current_state['case_id']
-        proof = cm.sign_for_trusted_boundary(case_id, 'tool-result', node_c_payload, trusted_key)
+        legacy_tool_name = self.canonical_to_legacy_tool_name(tool_result['tool_id'])
+        audit_id = f"AUDIT-{uuid.uuid4().hex}"
 
-        # Apply update to Node C inside atomic file lock
-        commit_result = cm.apply_update(
-            case_file,
-            'tool-result',
-            node_c_payload,
-            authorization=proof,
-            trusted_keys={'tool': trusted_key}
-        )
+        # Phase 1 - write-ahead PENDING marker BEFORE touching Node C, fsync'd, so a
+        # crash between here and the commit is detectable by reconcile_ledger().
+        self._append_to_audit_ledger(
+            case_dir=case_file.parent, case_id=case_id, tool_result=tool_result,
+            execution_receipt=execution_receipt, projected_payload=None,
+            revision_committed=None, custom_ledger_path=audit_ledger_path,
+            phase='PENDING', audit_id=audit_id)
+
+        try:
+            tool_result_expected = expected_revision
+            # Auto-register the legacy tool if absent, guarding that write with the
+            # same expected_revision. Our own registration advances the revision by
+            # exactly one, so the tool-result write must then expect that new value;
+            # any third-party write in between makes the revisions disagree and the
+            # guarded tool-result aborts safely (no lost update).
+            if legacy_tool_name not in current_state.get('available_tools', {}):
+                desc = tool_description or f"Auto-registered for D.0 tool {tool_result['tool_id']}"
+                reg = cm.apply_update(
+                    case_file, 'register-tool',
+                    {'name': legacy_tool_name, 'description': desc},
+                    expected_revision=expected_revision)
+                if tool_result_expected is not None:
+                    tool_result_expected = reg['revision']
+                current_state = cm.read_json(case_file)
+
+            node_c_payload = self.project_tool_result_to_node_c(
+                tool_result, execution_receipt, current_state)
+            proof = cm.sign_for_trusted_boundary(case_id, 'tool-result', node_c_payload, trusted_key)
+            commit_result = cm.apply_update(
+                case_file, 'tool-result', node_c_payload,
+                authorization=proof, trusted_keys={'tool': trusted_key},
+                expected_revision=tool_result_expected)
+        except cm.StaleRevisionError as exc:
+            self._append_to_audit_ledger(
+                case_dir=case_file.parent, case_id=case_id, tool_result=tool_result,
+                execution_receipt=execution_receipt, projected_payload=None,
+                revision_committed=None, custom_ledger_path=audit_ledger_path,
+                phase='ABORTED', audit_id=audit_id, denial_reason=str(exc))
+            raise StaleRevisionError(str(exc)) from exc
+        except BaseException as exc:
+            self._append_to_audit_ledger(
+                case_dir=case_file.parent, case_id=case_id, tool_result=tool_result,
+                execution_receipt=execution_receipt, projected_payload=None,
+                revision_committed=None, custom_ledger_path=audit_ledger_path,
+                phase='ABORTED', audit_id=audit_id,
+                denial_reason=f'{type(exc).__name__}: {exc}')
+            raise
 
         new_revision = commit_result['revision']
-
-        # Append record to immutable audit ledger
+        # Phase 2 - durable COMMITTED record with full fidelity, after Node C accepted.
         audit_record = self._append_to_audit_ledger(
-            case_dir=case_file.parent,
-            case_id=case_id,
-            tool_result=tool_result,
-            execution_receipt=execution_receipt,
-            projected_payload=node_c_payload,
-            revision_committed=new_revision,
-            custom_ledger_path=audit_ledger_path
-        )
+            case_dir=case_file.parent, case_id=case_id, tool_result=tool_result,
+            execution_receipt=execution_receipt, projected_payload=node_c_payload,
+            revision_committed=new_revision, custom_ledger_path=audit_ledger_path,
+            phase='COMMITTED', audit_id=audit_id)
 
         return {
             'case_id': case_id,
@@ -323,7 +328,7 @@ class CaseBridge:
             'tool_run_id': tool_result['run_id'],
             'legacy_tool': legacy_tool_name,
             'canonical_tool_id': tool_result['tool_id'],
-            'audit_id': audit_record['audit_id'],
+            'audit_id': audit_id,
             'audit_path': str(audit_record['audit_path'])
         }
 
@@ -362,7 +367,7 @@ class CaseBridge:
         # Apply action note to Node C
         update_result = cm.apply_update(case_file, 'action', action_data)
 
-        # Append to audit ledger
+        # Append to audit ledger (DENIED is never a committed tool-result).
         audit_record = self._append_to_audit_ledger(
             case_dir=case_file.parent,
             case_id=state['case_id'],
@@ -371,7 +376,8 @@ class CaseBridge:
             projected_payload=None,
             revision_committed=update_result['revision'],
             custom_ledger_path=audit_ledger_path,
-            denial_reason=reason
+            denial_reason=reason,
+            phase='DENIED'
         )
 
         return {
@@ -381,6 +387,14 @@ class CaseBridge:
             'audit_id': audit_record['audit_id']
         }
 
+    def _ledger_file_for(self, case_dir: Path, case_id: str,
+                         custom_ledger_path: Optional[Path | str]) -> Path:
+        if custom_ledger_path:
+            return Path(custom_ledger_path)
+        if self.audit_ledger_root:
+            return self.audit_ledger_root / case_id / 'd0_audit_ledger.jsonl'
+        return case_dir / 'd0_audit_ledger.jsonl'
+
     def _append_to_audit_ledger(
         self,
         case_dir: Path,
@@ -388,23 +402,30 @@ class CaseBridge:
         tool_result: Dict[str, Any],
         execution_receipt: Dict[str, Any],
         projected_payload: Optional[Dict[str, Any]],
-        revision_committed: int,
+        revision_committed: Optional[int],
         custom_ledger_path: Optional[Path | str] = None,
-        denial_reason: Optional[str] = None
+        denial_reason: Optional[str] = None,
+        phase: str = 'COMMITTED',
+        audit_id: Optional[str] = None,
     ) -> Dict[str, Any]:
-        """Write an append-only JSON line into the audit ledger preserving full fidelity."""
-        if custom_ledger_path:
-            ledger_file = Path(custom_ledger_path)
-        elif self.audit_ledger_root:
-            ledger_file = self.audit_ledger_root / case_id / 'd0_audit_ledger.jsonl'
-        else:
-            ledger_file = case_dir / 'd0_audit_ledger.jsonl'
+        """Append one phase line to the append-only audit ledger (full fidelity).
 
+        The ledger is a SEPARATE file from Node C's CaseState; the two are NOT a
+        single atomic transaction and this code does not pretend they are.
+        Instead each commit writes a two-phase trail sharing one audit_id:
+          * PENDING   - written BEFORE the Node C commit is attempted;
+          * COMMITTED - written AFTER Node C durably accepted the update;
+          * ABORTED   - written if the Node C commit raised (no durable change);
+          * DENIED    - a policy-denied result recorded as a note, never committed.
+        A PENDING with no later COMMITTED/ABORTED marks a crash window that
+        reconcile_ledger() resolves against the actual CaseState.
+        """
+        ledger_file = self._ledger_file_for(case_dir, case_id, custom_ledger_path)
         ledger_file.parent.mkdir(parents=True, exist_ok=True)
-
-        audit_id = f"AUDIT-{uuid.uuid4().hex}"
+        audit_id = audit_id or f"AUDIT-{uuid.uuid4().hex}"
         entry = {
             'audit_id': audit_id,
+            'phase': phase,
             'recorded_at': datetime.now(timezone.utc).isoformat(),
             'case_id': case_id,
             'call_id': tool_result.get('call_id'),
@@ -417,11 +438,68 @@ class CaseBridge:
             'raw_tool_result': tool_result,
             'execution_receipt': execution_receipt,
             'projected_payload': projected_payload,
-            'denial_reason': denial_reason
+            'denial_reason': denial_reason,
         }
-
         line = json.dumps(entry, ensure_ascii=False, sort_keys=True) + '\n'
+        # Flush+fsync so a PENDING marker survives a crash before the Node C write.
         with open(ledger_file, 'a', encoding='utf-8') as f:
             f.write(line)
-
+            f.flush()
+            os.fsync(f.fileno())
         return {'audit_id': audit_id, 'audit_path': ledger_file}
+
+    def reconcile_ledger(
+        self,
+        case_path: Path | str,
+        audit_ledger_path: Optional[Path | str] = None,
+    ) -> Dict[str, Any]:
+        """Reconcile PENDING ledger entries against the actual CaseState.
+
+        For each audit_id whose latest phase is PENDING (i.e. a crash happened
+        between the write-ahead marker and the COMMITTED/ABORTED record), decide
+        the real outcome by checking whether the tool_run_id is present in the
+        case's tool_runs, then append a terminal RECONCILED_COMMITTED or
+        RECONCILED_ABORTED line. This never mutates CaseState; it only repairs the
+        audit trail to reflect what Node C actually did. Returns a summary.
+        """
+        case_file = Path(case_path)
+        ledger_file = self._ledger_file_for(
+            case_file.parent, cm.read_json(case_file)['case_id'], audit_ledger_path)
+        if not ledger_file.exists():
+            return {'scanned': 0, 'pending': 0, 'reconciled_committed': 0, 'reconciled_aborted': 0}
+        state = cm.read_json(case_file)
+        committed_runs = {r.get('tool_run_id') for r in state.get('tool_runs', [])}
+        latest_phase: Dict[str, Dict[str, Any]] = {}
+        order: List[str] = []
+        with open(ledger_file, 'r', encoding='utf-8') as f:
+            for raw in f:
+                raw = raw.strip()
+                if not raw:
+                    continue
+                rec = json.loads(raw)
+                aid = rec.get('audit_id')
+                if aid not in latest_phase:
+                    order.append(aid)
+                latest_phase[aid] = rec
+        pending = [aid for aid in order if latest_phase[aid].get('phase') == 'PENDING']
+        reconciled_committed = reconciled_aborted = 0
+        for aid in pending:
+            rec = latest_phase[aid]
+            run_id = rec.get('run_id')
+            terminal = 'RECONCILED_COMMITTED' if run_id in committed_runs else 'RECONCILED_ABORTED'
+            if terminal == 'RECONCILED_COMMITTED':
+                reconciled_committed += 1
+                revision = state.get('revision')
+            else:
+                reconciled_aborted += 1
+                revision = None
+            self._append_to_audit_ledger(
+                case_dir=case_file.parent, case_id=state['case_id'],
+                tool_result=rec.get('raw_tool_result') or {},
+                execution_receipt=rec.get('execution_receipt') or {},
+                projected_payload=None, revision_committed=revision,
+                custom_ledger_path=audit_ledger_path, phase=terminal, audit_id=aid,
+                denial_reason='reconciliation: inferred from CaseState tool_runs')
+        return {'scanned': len(order), 'pending': len(pending),
+                'reconciled_committed': reconciled_committed,
+                'reconciled_aborted': reconciled_aborted}

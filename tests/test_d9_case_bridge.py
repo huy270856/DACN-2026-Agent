@@ -194,8 +194,15 @@ class TestD9CaseBridge(unittest.TestCase):
         ledger_path = Path(result['audit_path'])
         self.assertTrue(ledger_path.exists())
         lines = [json.loads(line) for line in ledger_path.read_text(encoding='utf8').splitlines() if line.strip()]
-        self.assertEqual(len(lines), 1)
-        entry = lines[0]
+        # Two-phase audit trail: a write-ahead PENDING marker then a durable
+        # COMMITTED record, both sharing one audit_id (crash-recovery design).
+        self.assertEqual(len(lines), 2)
+        self.assertEqual([l['phase'] for l in lines], ['PENDING', 'COMMITTED'])
+        self.assertEqual(lines[0]['audit_id'], lines[1]['audit_id'])
+        self.assertEqual(lines[0]['audit_id'], result['audit_id'])
+        entry = lines[1]
+        self.assertEqual(entry['phase'], 'COMMITTED')
+        self.assertEqual(entry['revision_committed'], result['revision'])
         self.assertEqual(entry['canonical_tool_id'], 'static.ember_features')
         self.assertEqual(entry['receipt_sha256'], self.tool_result['receipt_sha256'])
         self.assertEqual(entry['raw_tool_result']['observations'][0]['trust_level'], 'UNTRUSTED_CONTENT')

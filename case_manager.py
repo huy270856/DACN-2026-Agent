@@ -28,6 +28,15 @@ STATUSES = {'SUCCESS', 'DEGRADED', 'FAILED', 'UNAVAILABLE'}
 LIFECYCLES = {'READY_FOR_INVESTIGATION', 'NEEDS_CONTEXT', 'INVESTIGATING', 'AWAITING_APPROVAL', 'CLOSED'}
 
 
+class StaleRevisionError(ValueError):
+    """Optimistic-concurrency failure: the case revision changed before this write.
+
+    Subclasses ValueError so existing callers that catch ValueError keep working.
+    Raised only when apply_update is given an expected_revision that does not
+    match the current revision, checked INSIDE the case lock.
+    """
+
+
 def now():
     return datetime.now(timezone.utc).isoformat()
 
@@ -473,11 +482,26 @@ OPERATIONS = {'collection': _append_collection, 'register-tool': _register_tool,
               'assessment': _assessment, 'response': _response}
 
 
-def apply_update(path, operation, payload, *, source_path=None, authorization=None, trusted_keys=None):
+def apply_update(path, operation, payload, *, source_path=None, authorization=None,
+                 trusted_keys=None, expected_revision=None):
+    """Apply one operation atomically under the case lock.
+
+    expected_revision (optional, backward-compatible): when provided, the current
+    on-disk revision is compared to it INSIDE the lock, before any mutation. A
+    mismatch raises StaleRevisionError and nothing is written. When None (the
+    default) no optimistic-concurrency check is performed, so existing callers
+    are unaffected.
+    """
     if operation not in OPERATIONS:
         raise ValueError('Unknown operation')
+    if expected_revision is not None and (type(expected_revision) is not int or expected_revision < 1):
+        raise ValueError('expected_revision must be a positive integer or None')
     with locked_case(path):
         state = validate_case(read_json(path))
+        if expected_revision is not None and state.get('revision', 1) != expected_revision:
+            raise StaleRevisionError(
+                f'Case revision is {state.get("revision", 1)}, expected {expected_revision}; '
+                f'write aborted under lock to prevent lost update')
         if state['lifecycle_status'] == 'CLOSED':
             raise ValueError('Case is closed and immutable')
         if operation in ('tool-result', 'response', 'resolve-conflict'):
