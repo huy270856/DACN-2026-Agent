@@ -33,6 +33,10 @@ def validate(name, value):
     if errors:
         e = errors[0]
         raise ContractError(f'{name} at {list(e.path)}: {e.message}')
+    if name == 'ember-output-v1':
+        import math
+        if not all(math.isfinite(x) for x in value['features']):
+            raise ContractError('EMBER feature vector must contain only finite numbers')
     if name == 'target_ref':
         if value['kind'] == 'FILE' and not isinstance(value['observed'].get('path'), str):
             raise ContractError('FILE requires observed.path')
