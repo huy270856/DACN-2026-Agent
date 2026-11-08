@@ -87,10 +87,15 @@ def metadata(path, info):
     }
 
 
-def pe_header(handle, file_size):
-    """Bounded reads of DOS/COFF/optional header, not full PE validation."""
-    handle.seek(0)
-    dos = handle.read(64)
+def pe_header(handle, file_size, dos=None):
+    """Bounded reads of DOS/COFF/optional header, not full PE validation.
+
+    `dos` may be the first 64 bytes already read by the caller (shared prefix read
+    for format detection); when None they are read here. No extra full-file read.
+    """
+    if dos is None:
+        handle.seek(0)
+        dos = handle.read(64)
     if dos[:2] != b"MZ":
         return facet({"is_pe": False})
     if len(dos) != 64:
@@ -121,6 +126,77 @@ def pe_header(handle, file_size):
         "executable_image_flag": bool(characteristics & 0x0002),
         "classification": "DLL" if characteristics & 0x2000 else "PE_IMAGE",
         "coverage_scope": "DOS_COFF_optional_header_minimum",
+    })
+
+
+# Known non-PE magic prefixes -> observed format name. Detection is magic/header
+# based ONLY; the file extension is never used. Being listed here does NOT mean
+# Ghidra/REA cannot analyze the format, only that it is recognized.
+_NON_PE_MAGICS = (
+    (b"\x7fELF", "ELF"),
+    (b"\xfe\xed\xfa\xce", "Mach-O"),
+    (b"\xfe\xed\xfa\xcf", "Mach-O"),
+    (b"\xce\xfa\xed\xfe", "Mach-O"),
+    (b"\xcf\xfa\xed\xfe", "Mach-O"),
+    (b"\xca\xfe\xba\xbe", "Mach-O-universal"),
+    (b"PK\x03\x04", "ZIP"),
+    (b"%PDF", "PDF"),
+    (b"\x1f\x8b", "GZIP"),
+    (b"MSCF", "CAB"),
+)
+
+# Formats the CURRENTLY CONFIGURED analyzer scope covers. Separate from observed
+# format: an UNSUPPORTED result is about this scope, not about Ghidra/REA.
+ANALYZER_SUPPORTED_FORMATS = frozenset({"PE"})
+
+
+def classify_format(prefix, file_size, pe_facet):
+    """Classify the observed binary format from magic bytes + the PE parse result.
+
+    The facet VALUE separates the OBSERVED format (`detected`) from the analyzer
+    SUPPORT status (`analyzer_supported`). States (`format`):
+      * ``PE``          minimum PE structure validated (analyzer-supported now).
+      * ``MALFORMED``   MZ / known-format signature but invalid or truncated
+                        structure.
+      * ``UNSUPPORTED`` a known format recognized but outside the configured
+                        analyzer scope - NOT a claim Ghidra/REA cannot handle it.
+      * ``UNKNOWN``     no known magic recognized.
+
+    Reuses the caller's already-read 64-byte prefix and the existing ``pe_header``
+    result; it performs no additional file reads and never loads the whole binary.
+    The file extension is never consulted.
+    """
+    pe_value = pe_facet.get("value") if isinstance(pe_facet, dict) else None
+    if prefix[:2] == b"MZ":
+        if pe_facet.get("status") == "SUCCESS" and pe_value and pe_value.get("is_pe"):
+            return facet({
+                "format": "PE", "detected": "PE", "analyzer_supported": True,
+                "structural_valid": True,
+                "architecture": pe_value.get("architecture"),
+                "pe_kind": pe_value.get("pe_kind"),
+                "is_dll": pe_value.get("is_dll"),
+                "detection": "magic_bytes_and_headers",
+            })
+        reason = pe_facet.get("reason", "invalid_pe_structure") if isinstance(pe_facet, dict) else "invalid_pe_structure"
+        return facet({
+            "format": "MALFORMED", "detected": "PE", "analyzer_supported": False,
+            "structural_valid": False, "architecture": None,
+            "detail": reason, "detection": "magic_bytes_and_headers",
+        })
+    for sig, name in _NON_PE_MAGICS:
+        if prefix.startswith(sig):
+            return facet({
+                "format": "UNSUPPORTED", "detected": name,
+                "analyzer_supported": name in ANALYZER_SUPPORTED_FORMATS,
+                "structural_valid": None, "architecture": None,
+                "detail": "recognized format outside the configured analyzer scope; "
+                          "not a claim that Ghidra/REA cannot analyze it",
+                "detection": "magic_bytes",
+            })
+    return facet({
+        "format": "UNKNOWN", "detected": None, "analyzer_supported": False,
+        "structural_valid": None, "architecture": None,
+        "detection": "magic_bytes",
     })
 
 
@@ -184,9 +260,14 @@ def collect_file_context(file_path, progress=False, hash_timeout=None):
                 return finish(context, started)
             context["facets"]["readable"] = facet(True)
             try:
-                context["facets"]["pe_header"] = pe_header(handle, before.st_size)
+                handle.seek(0)
+                prefix = handle.read(64)  # single shared bounded read for PE + format
+                pe = pe_header(handle, before.st_size, dos=prefix)
+                context["facets"]["pe_header"] = pe
+                context["facets"]["format"] = classify_format(prefix, before.st_size, pe)
             except OSError as exc:
                 context["facets"]["pe_header"] = facet(status="FAILED", reason=str(exc))
+                context["facets"]["format"] = facet(status="FAILED", reason=str(exc))
             try:
                 digest = hash_stream(handle, before.st_size, progress) if hash_timeout is None else hash_stream(handle, before.st_size, progress, hash_timeout)
                 after = os.fstat(handle.fileno())
@@ -202,6 +283,7 @@ def collect_file_context(file_path, progress=False, hash_timeout=None):
                 else:
                     context["facets"]["sha256"] = facet(status="UNAVAILABLE", reason="file_changed_during_collection")
                     context["facets"]["pe_header"] = facet(status="UNAVAILABLE", reason="file_changed_during_collection")
+                    context["facets"]["format"] = facet(status="UNAVAILABLE", reason="file_changed_during_collection")
                     context["limitations"].append("Metadata describes the initial observation; target changed during collection.")
             except HashTimeout:
                 context["facets"]["sha256"] = facet(status="UNAVAILABLE", reason="hash_timeout")
