@@ -1,4 +1,24 @@
 # DACN — Báo cáo tiến độ kỹ thuật gần đây
+## Tóm tắt tiến độ tuần
+
+Trong giai đoạn vừa qua, nhóm tập trung hoàn thiện hệ thống điều phối và bắt đầu triển khai AI Agent phục vụ điều tra mã độc trên Windows.
+
+### Công việc đã thực hiện
+
+| Hạng mục | Kết quả |
+|---|---|
+| **Node D (D1–D9)** | Hoàn thiện và tích hợp các module điều phối, kiểm tra chính sách, thực thi công cụ, xác thực kết quả và cập nhật CaseState. |
+| **Node B – Context Collector** | Bổ sung nhận diện định dạng binary, chuẩn bị đầu vào cho REA/Ghidra mà không thực thi file nghi vấn. |
+| **Unified Application** | Hợp nhất Node B, Node C và D1–D9 vào một ứng dụng CLI chung, đã có kiểm thử tích hợp. |
+| **REA/Ghidra** | Phân tích tĩnh thành công file PE lành tính trên Windows, thu được 327 functions, 84 strings và mã giả decompilation. |
+| **AI Agent** | Triển khai Qwen3.5-4B chạy local qua Ollama. Agent đã có khả năng đề xuất công cụ, đi qua D1–D9, nhận evidence và tiếp tục suy luận. Live E2E đạt 2/2 lượt với analyzer giả lập. |
+
+### Tiến độ hiện tại và công việc tiếp theo
+
+- **REA/Ghidra:** Đã hoạt động độc lập, đang nghiên cứu cơ chế cô lập phù hợp để tích hợp an toàn vào DACN.
+- **AI Agent:** Đã chạy với mô hình thật; tiếp tục cải thiện độ ổn định. Benchmark thinking OFF đạt 10/12 lượt theo rubric.
+- **Bước tiếp theo:** Kết nối các analyzer thật với Agent và đánh giá khả năng điều tra, phát hiện mã độc trên dữ liệu thử nghiệm.
+
 
 
 
