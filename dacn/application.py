@@ -256,3 +256,72 @@ def smoke(config: AppConfig) -> Dict[str, Any]:
         "signer": "InMemoryKeyProvider (explicit TEST key; not a production key store)",
         "note": "Benign mock analyzer only - NOT real EMBER/LightGBM, Ghidra or REA.",
     }
+
+
+# --------------------------------------------------------------------------- #
+# investigate (local Qwen agent over the real D1-D9 stack + benign mock tool)
+# --------------------------------------------------------------------------- #
+def build_investigation_backend(config: AppConfig):
+    """Assemble the real D2/D4/D8/D1 backend + one benign static tool for the agent.
+
+    Returns (registry, orchestrator). Windows-only (imports the D5 executor). The
+    only tool registered is the FIXED benign mock analyzer; the agent can propose
+    calling it but cannot inject any adapter/command/policy.
+    """
+    import sys
+    import hashlib
+    from orchestrator.registry import ToolRegistry
+    from orchestrator.policy_engine import PolicyEngine, PolicyConfig
+    from orchestrator.trust import TrustedSigner, InMemoryKeyProvider
+    from orchestrator.provider_install import ProviderInstallation
+    from orchestrator.case_bridge import CaseBridge
+    from orchestrator.core import Orchestrator
+    from orchestrator.executor import PinnedAdapter
+
+    config.ensure_dirs()
+    repo_root = Path(__file__).resolve().parents[1]
+    adapter_script = repo_root / "tests" / "fixtures" / "ember_mock_adapter.py"
+    interpreter = str(Path(getattr(sys, "_base_executable", sys.executable)).resolve())
+    script = str(adapter_script.resolve())
+    pins = [[p, hashlib.sha256(Path(p).read_bytes()).hexdigest()] for p in (interpreter, script)]
+    adapter = PinnedAdapter("ember_mock", "0.1.0", "ember_mock_adapter",
+                            (interpreter, "-I", script), tuple((p, s) for p, s in pins))
+    registry = ToolRegistry()
+    registry.register_tool(_smoke_tool_spec(adapter.provider()))
+    installation = ProviderInstallation()
+    installation.install(provider_id="ember_mock", version="0.1.0",
+                         adapter_id="ember_mock_adapter",
+                         command=(interpreter, "-I", script), pins=pins)
+    policy = PolicyEngine(PolicyConfig(
+        tool_allowlist=frozenset({("static.ember_features", "0.1.0", "ember_mock")}),
+        budget_caps={"timeout_ms": 30000, "max_output_bytes": 262144,
+                     "max_artifact_bytes": 1048576, "max_concurrency": 1}))
+    orch = Orchestrator(registry=registry, policy=policy,
+                        signer=TrustedSigner(InMemoryKeyProvider()),
+                        installation=installation, bridge=CaseBridge(audit_ledger_root=config.ledgers_dir),
+                        artifact_root=config.artifacts_dir, run_ledger_path=config.run_ledger_path)
+    return registry, orch
+
+
+def investigate(case_id: str, config: AppConfig, *, agent_config=None, planner=None) -> Dict[str, Any]:
+    """Run the local Qwen investigation agent on an existing case through D1-D9."""
+    if os.name != "nt":
+        return {"supported": False,
+                "reason": "The agent drives the Windows-only D5 executor; unsupported on this platform"}
+    from agent.config import AgentConfig
+    from agent.loop import run_investigation
+    try:
+        case_file = cm.case_path(config.cases_dir, case_id)
+    except ValueError as exc:
+        raise InvalidCaseIdError(f"Invalid case id: {exc}") from exc
+    if not case_file.exists():
+        raise CaseNotFoundError(f"Case not found: {case_id}")
+    acfg = agent_config or AgentConfig.from_env()
+    if planner is None:
+        from agent.planner import OllamaPlanner
+        planner = OllamaPlanner(acfg)
+    registry, orch = build_investigation_backend(config)
+    report = run_investigation(case_file, acfg, planner, registry, orch)
+    report["planner_kind"] = "MOCK_LLM" if getattr(planner, "is_mock", False) else "LOCAL_QWEN"
+    report["supported"] = True
+    return report

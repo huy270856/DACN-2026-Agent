@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from dataclasses import replace
 from typing import Any, Dict
 
 from .config import AppConfig
@@ -42,6 +43,11 @@ def build_parser() -> argparse.ArgumentParser:
     ps.add_argument("--case-id", required=True, help="Case id, e.g. CASE-<32 hex>")
 
     sub.add_parser("smoke", help="Initialize and exercise D1-D9 with a benign mock analyzer (Windows)")
+
+    pv = sub.add_parser("investigate", help="Run the local Qwen investigation agent over D1-D9 (Windows)")
+    pv.add_argument("--case-id", required=True, help="Case id to investigate")
+    pv.add_argument("--max-iters", type=int, default=None, help="Max investigation iterations")
+    pv.add_argument("--think", action="store_true", help="Enable Qwen thinking mode")
 
     return parser
 
@@ -80,6 +86,19 @@ def main(argv=None) -> int:
             if not result.get("supported", False):
                 return 3  # unsupported platform - explicit, not a fake pass
             return 0 if result.get("outcome") in ("SUCCESS", "PARTIAL") else 4
+
+        if args.command == "investigate":
+            from agent.config import AgentConfig
+            acfg = AgentConfig.from_env()
+            if args.max_iters is not None:
+                acfg = replace(acfg, max_iterations=args.max_iters)
+            if args.think:
+                acfg = replace(acfg, think=True)
+            result = app.investigate(args.case_id, config, agent_config=acfg)
+            _print(result)
+            if not result.get("supported", False):
+                return 3
+            return 0 if result.get("outcome") in ("FINISHED", "DYNAMIC_REQUESTED") else 4
 
     except app.ApplicationError as exc:
         print(f"dacn error: {exc}", file=sys.stderr)

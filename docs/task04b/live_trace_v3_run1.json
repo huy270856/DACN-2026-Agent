@@ -1,0 +1,143 @@
+{
+  "schema_version": "agent-report-v1",
+  "generated_at": "2026-11-08T08:32:10.381176+00:00",
+  "case_id": "CASE-1665539ae3094e538058f0fff9c0286a",
+  "case_revision": 3,
+  "target_type": "FILE",
+  "target_verified_sha256": "ee0964f1e88d9373833d8dee6a2be7911745665e73559fde4d5e96ce50cc017a",
+  "outcome": "FINISHED",
+  "stop_reason": null,
+  "verdict": "INSUFFICIENT_EVIDENCE",
+  "confidence": 0.0,
+  "rationale": "The only available static analysis tool (static.ember_features) returned mock/placeholder data with no meaningful features extracted. The trusted hash reputation is unavailable, and the residual unknowns explicitly state that malware assessment was not performed.",
+  "limitations": [
+    "Static analysis tool returned placeholder/mock data instead of actual feature extraction",
+    "Trusted hash reputation is UNAVAILABLE",
+    "No behavioral or dynamic evidence available",
+    "Insufficient data to distinguish between benign and malicious behavior",
+    "Local SLM (local Qwen) planner; reasoning quality is limited and must be reviewed.",
+    "No REA/Ghidra adapter, no LightGBM inference, no VM dynamic analysis in this build."
+  ],
+  "evidence_cited": [
+    "EV-93e6672d36c6427092b17ced4d5e1304",
+    "EV-59d35c84fd5446a68df014be92144c09",
+    "EV-6727904e2a2d4d518647e9e4c2cb7369"
+  ],
+  "tool_runs": [
+    {
+      "tool_run_id": null,
+      "tool": "context_collector",
+      "status": "SUCCESS"
+    },
+    {
+      "tool_run_id": "RUN-feda7655e59d47ccb95ca5f66dc1037a",
+      "tool": "static_ember_features",
+      "status": "SUCCESS"
+    }
+  ],
+  "iterations": 2,
+  "decision_log": [
+    {
+      "iteration": 1,
+      "inference": {
+        "model": "qwen3.5:4b",
+        "think": false,
+        "eval_count": 249,
+        "prompt_eval_count": 2076,
+        "done_reason": "stop",
+        "usage_tokens": 2325,
+        "charged_tokens": 11264,
+        "cumulative_charged_tokens": 11264,
+        "accounting": "conservative_reservation_or_higher_reported_usage"
+      },
+      "latency_s": 13.46
+    },
+    {
+      "iteration": 1,
+      "proposal": {
+        "action": "TOOL_CALL",
+        "case_id": "CASE-1665539ae3094e538058f0fff9c0286a",
+        "case_revision": 1,
+        "reason": "Static analysis has been performed but only basic PE header features were extracted; malware assessment is unknown. Need to extract full feature vector for deeper static analysis.",
+        "evidence_refs": [
+          "EV-6727904e2a2d4d518647e9e4c2cb7369",
+          "EV-87146dfaff7540869ff9e991cf50fd5a",
+          "EV-5bfc4aa676fb4ff6a59a0ef5514456c5"
+        ],
+        "unknowns_targeted": [
+          "malware_assessment"
+        ],
+        "tool_id": "static.ember_features"
+      },
+      "latency_s": 13.46,
+      "meta": {
+        "model": "qwen3.5:4b",
+        "think": false,
+        "eval_count": 249,
+        "prompt_eval_count": 2076,
+        "done_reason": "stop",
+        "usage_tokens": 2325,
+        "charged_tokens": 11264,
+        "cumulative_charged_tokens": 11264,
+        "accounting": "conservative_reservation_or_higher_reported_usage"
+      }
+    },
+    {
+      "iteration": 1,
+      "run_record": {
+        "action": "TOOL_CALL",
+        "tool_id": "static.ember_features",
+        "outcome": "SUCCESS",
+        "reason_code": null,
+        "run_id": "RUN-feda7655e59d47ccb95ca5f66dc1037a"
+      }
+    },
+    {
+      "iteration": 2,
+      "inference": {
+        "model": "qwen3.5:4b",
+        "think": false,
+        "eval_count": 349,
+        "prompt_eval_count": 2847,
+        "done_reason": "stop",
+        "usage_tokens": 3196,
+        "charged_tokens": 11264,
+        "cumulative_charged_tokens": 22528,
+        "accounting": "conservative_reservation_or_higher_reported_usage"
+      },
+      "latency_s": 16.98
+    },
+    {
+      "iteration": 2,
+      "proposal": {
+        "action": "FINISH",
+        "case_id": "CASE-1665539ae3094e538058f0fff9c0286a",
+        "case_revision": 3,
+        "reason": "Static analysis via MOCK-ember-placeholder yielded only placeholder data (0.0 values) and no actual malware features were extracted. The trusted hash reputation is UNAVAILABLE, and the residual unknowns indicate analysis was not performed. No further static tools are available to generate a verdict.",
+        "evidence_refs": [
+          "EV-93e6672d36c6427092b17ced4d5e1304",
+          "EV-59d35c84fd5446a68df014be92144c09",
+          "EV-6727904e2a2d4d518647e9e4c2cb7369"
+        ],
+        "unknowns_targeted": [
+          "malware_assessment"
+        ],
+        "verdict": "INSUFFICIENT_EVIDENCE"
+      },
+      "latency_s": 16.98,
+      "meta": {
+        "model": "qwen3.5:4b",
+        "think": false,
+        "eval_count": 349,
+        "prompt_eval_count": 2847,
+        "done_reason": "stop",
+        "usage_tokens": 3196,
+        "charged_tokens": 11264,
+        "cumulative_charged_tokens": 22528,
+        "accounting": "conservative_reservation_or_higher_reported_usage"
+      }
+    }
+  ],
+  "planner_kind": "LOCAL_QWEN",
+  "supported": true
+}
