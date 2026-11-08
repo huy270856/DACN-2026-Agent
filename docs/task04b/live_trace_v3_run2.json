@@ -1,0 +1,142 @@
+{
+  "schema_version": "agent-report-v1",
+  "generated_at": "2026-11-08T08:32:42.556218+00:00",
+  "case_id": "CASE-5d42676a254e4fcb93bb00826a895de0",
+  "case_revision": 3,
+  "target_type": "FILE",
+  "target_verified_sha256": "ee0964f1e88d9373833d8dee6a2be7911745665e73559fde4d5e96ce50cc017a",
+  "outcome": "FINISHED",
+  "stop_reason": null,
+  "verdict": "INSUFFICIENT_EVIDENCE",
+  "confidence": 0.0,
+  "rationale": "The only available static analysis tool (static.ember_features) returned a mock placeholder result indicating no real features were extracted. No trusted reputation data exists to support a verdict.",
+  "limitations": [
+    "Static analysis tool returned mock/placeholder data instead of actual feature extraction",
+    "No trusted hash reputation available to cross-reference",
+    "Insufficient evidence to determine if the PE file is malicious or benign",
+    "Local SLM (local Qwen) planner; reasoning quality is limited and must be reviewed.",
+    "No REA/Ghidra adapter, no LightGBM inference, no VM dynamic analysis in this build."
+  ],
+  "evidence_cited": [
+    "EV-f35d1974deaf442ca58c7e25b8105025",
+    "EV-0ec064ceb0354f90a8ced63aed29d858",
+    "EV-c3b5a5b214d04fd495968b584e968289"
+  ],
+  "tool_runs": [
+    {
+      "tool_run_id": null,
+      "tool": "context_collector",
+      "status": "SUCCESS"
+    },
+    {
+      "tool_run_id": "RUN-cbd8dcc0684d483e9e289bdce5fd0a1d",
+      "tool": "static_ember_features",
+      "status": "SUCCESS"
+    }
+  ],
+  "iterations": 2,
+  "decision_log": [
+    {
+      "iteration": 1,
+      "inference": {
+        "model": "qwen3.5:4b",
+        "think": false,
+        "eval_count": 228,
+        "prompt_eval_count": 2073,
+        "done_reason": "stop",
+        "usage_tokens": 2301,
+        "charged_tokens": 11264,
+        "cumulative_charged_tokens": 11264,
+        "accounting": "conservative_reservation_or_higher_reported_usage"
+      },
+      "latency_s": 5.71
+    },
+    {
+      "iteration": 1,
+      "proposal": {
+        "action": "TOOL_CALL",
+        "case_id": "CASE-5d42676a254e4fcb93bb00826a895de0",
+        "case_revision": 1,
+        "reason": "Static analysis of PE headers is insufficient to determine malware status; need feature vector extraction.",
+        "evidence_refs": [
+          "EV-c3b5a5b214d04fd495968b584e968289",
+          "EV-0ec064ceb0354f90a8ced63aed29d858",
+          "EV-97abc094d2154e3e9a22fa54ac6c5516"
+        ],
+        "unknowns_targeted": [
+          "malware_assessment"
+        ],
+        "tool_id": "static.ember_features"
+      },
+      "latency_s": 5.71,
+      "meta": {
+        "model": "qwen3.5:4b",
+        "think": false,
+        "eval_count": 228,
+        "prompt_eval_count": 2073,
+        "done_reason": "stop",
+        "usage_tokens": 2301,
+        "charged_tokens": 11264,
+        "cumulative_charged_tokens": 11264,
+        "accounting": "conservative_reservation_or_higher_reported_usage"
+      }
+    },
+    {
+      "iteration": 1,
+      "run_record": {
+        "action": "TOOL_CALL",
+        "tool_id": "static.ember_features",
+        "outcome": "SUCCESS",
+        "reason_code": null,
+        "run_id": "RUN-cbd8dcc0684d483e9e289bdce5fd0a1d"
+      }
+    },
+    {
+      "iteration": 2,
+      "inference": {
+        "model": "qwen3.5:4b",
+        "think": false,
+        "eval_count": 310,
+        "prompt_eval_count": 2842,
+        "done_reason": "stop",
+        "usage_tokens": 3152,
+        "charged_tokens": 11264,
+        "cumulative_charged_tokens": 22528,
+        "accounting": "conservative_reservation_or_higher_reported_usage"
+      },
+      "latency_s": 7.21
+    },
+    {
+      "iteration": 2,
+      "proposal": {
+        "action": "FINISH",
+        "case_id": "CASE-5d42676a254e4fcb93bb00826a895de0",
+        "case_revision": 3,
+        "reason": "Static analysis via ember_features was performed but returned a MOCK placeholder result (version 0.0.0-mock) with no actual feature data, leaving the malware assessment unknown.",
+        "evidence_refs": [
+          "EV-f35d1974deaf442ca58c7e25b8105025",
+          "EV-0ec064ceb0354f90a8ced63aed29d858",
+          "EV-c3b5a5b214d04fd495968b584e968289"
+        ],
+        "unknowns_targeted": [
+          "malware_assessment"
+        ],
+        "verdict": "INSUFFICIENT_EVIDENCE"
+      },
+      "latency_s": 7.21,
+      "meta": {
+        "model": "qwen3.5:4b",
+        "think": false,
+        "eval_count": 310,
+        "prompt_eval_count": 2842,
+        "done_reason": "stop",
+        "usage_tokens": 3152,
+        "charged_tokens": 11264,
+        "cumulative_charged_tokens": 22528,
+        "accounting": "conservative_reservation_or_higher_reported_usage"
+      }
+    }
+  ],
+  "planner_kind": "LOCAL_QWEN",
+  "supported": true
+}
