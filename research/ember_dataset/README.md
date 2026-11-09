@@ -2,7 +2,7 @@
 
 ## Completed local run 30/10/2026
 
-See [HANDOFF.md](HANDOFF.md) for the current five-requirement handoff, [SOURCES.md](SOURCES.md) for the 2018/2024 comparison, and [dataset manifest](results/local_windows/dataset_manifest.json) for measured checksums/counts/paths. Local download, verification, audit, isolated legacy environment, full matrix and independent validation have completed. 17 unit tests pass. No LightGBM training or raw PE execution. The cloud blockers below are historical, not the current local status.
+See [HANDOFF.md](HANDOFF.md) for the dataset handoff, [TRAINING_HANDOFF.md](TRAINING_HANDOFF.md) for the 10/11 LightGBM baseline and real benign-PE inference, [SOURCES.md](SOURCES.md) for the 2018/2024 comparison, and [dataset manifest](results/local_windows/dataset_manifest.json) for measured checksums/counts/paths. Local download, verification, audit, isolated legacy environment, full matrix and independent validation have completed. The research suite now passes 20 unit tests. The cloud blockers below are historical, not the current local status.
 
 Use `load_dataset.py --matrix D:\datasets\ember2018-matrix` with `D:\datasets\envs\ember-v2\Scripts\python.exe` to load completed matrices read-only. `check_matrix.py` validates shapes/dtypes/all finite values/all metadata links and optionally recomputes sampled vectors using `--check-vectors`. `preflight.py` tests a small real sample before full vectorization. The pinned environment is recorded in `requirements-research.txt` and `results/local_windows/pip-freeze.txt`.
 
@@ -44,7 +44,7 @@ python research/ember_dataset/prepare.py matrix --data D:\datasets\ember2018-v2 
 
 Creates float32 X_train/X_test.npy, int8 y_train/y_test.npy, matching SHA256/appeared metadata JSONL. Drops only label -1, rejects unknown/invalid labels and missing feature groups. Delegates vectorization to official v2 extractor; checks 2381 finite values. Input JSON has already extracted raw features: this stage does not parse or run PE files. Successful completion requires COMPLETE.json. On failure discard incomplete matrix directory before retrying. Read with `numpy.load(path, mmap_mode='r')`.
 
-Before training: inspect actual label counts; check duplicate SHA256/near duplicates and chronology; split validation; freeze dataset and feature manifest; never tune on test. Matrix preparation does NOT yet perform deduplication, calibration or model training.
+For training results and the chronology/threshold method, see [TRAINING_HANDOFF.md](TRAINING_HANDOFF.md). Matrix preparation itself does not deduplicate, calibrate or train. Exact duplicate hashes and chronology were checked; near-duplicate similarity remains untested.
 
 ## Historical cloud execution and blockers (29/10/2026)
 
@@ -74,6 +74,6 @@ The first draft did not connect expected feature version to verified extracted d
 python research/ember_dataset/prepare.py verify --data D:\datasets\ember2018-v2
 ```
 
-Seven synthetic unit tests passed at the cloud handoff (results/unit_tests.txt); the local extended suite now passes 17 (results/local_windows/research_tests.log). Coverage includes checksum mismatch, tampered extracted JSON, duplicate leakage, non-finite values, safe resume, matrix validation/loading and rejection before dependencies for an unverified source. Mocking the archive checksum is ONLY a synthetic-test fixture, never the production verification path.
+Seven synthetic unit tests passed at the cloud handoff (results/unit_tests.txt); the 30/10 local suite passed 17 (results/local_windows/research_tests.log), and the 10/11 suite passes 20 including training rule checks. Coverage includes checksum mismatch, tampered extracted JSON, duplicate leakage, non-finite values, safe resume, matrix validation/loading and rejection before dependencies for an unverified source. Mocking the archive checksum is ONLY a synthetic-test fixture, never the production verification path.
 
-At the cloud handoff, real corpus reading, matrix end-to-end and a validated legacy runtime were still missing. These three items are completed by the local run above; model training remains out of scope. Near-duplicate similarity and a validation split remain downstream tasks. Download retries now resume a partial response only after validating HTTP Content-Range; ignored Range requests restart rather than append. Full archive SHA-256 is always required. Extraction refuses overwrites. Corpus immutable during processing is required; final hashes detect persistent modifications but are not a filesystem snapshot.
+At the cloud handoff, real corpus reading, matrix end-to-end and a validated legacy runtime were still missing. These items were completed by the 30/10 local run; LightGBM training and a chronological validation split were completed 10/11 in the separate research scripts. Near-duplicate similarity remains downstream. Download retries now resume a partial response only after validating HTTP Content-Range; ignored Range requests restart rather than append. Full archive SHA-256 is always required. Extraction refuses overwrites. Corpus immutable during processing is required; final hashes detect persistent modifications but are not a filesystem snapshot.

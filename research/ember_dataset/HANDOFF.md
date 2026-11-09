@@ -1,6 +1,6 @@
 # Bàn giao dataset EMBER và matrix cho LightGBM
 
-Ngày kiểm chứng: 30/10/2026, Asia/Saigon. Hoàn thành chuẩn bị dataset; **chưa train LightGBM**. Chọn EMBER2018 feature v2, tương thích extractor 2.381 features. Không sửa D1–D9, không tải/thực thi PE nguyên bản, không đưa dataset/matrix vào Git.
+Ngày kiểm chứng dataset: 30/10/2026, Asia/Saigon. Bản ghi này chốt giai đoạn chuẩn bị dataset; **tại thời điểm đó chưa train LightGBM**. Kết quả train và inference mới ngày 10/11 nằm trong [TRAINING_HANDOFF.md](TRAINING_HANDOFF.md). Chọn EMBER2018 feature v2, tương thích extractor 2.381 features. Không sửa D1–D9, không tải/thực thi PE nguyên bản, không đưa dataset/matrix vào Git.
 
 ## Đối chiếu yêu cầu trưởng nhóm
 
