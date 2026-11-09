@@ -2,7 +2,7 @@
 
 ## Completed local run 30/10/2026
 
-See [HANDOFF.md](HANDOFF.md) for the dataset handoff, [TRAINING_HANDOFF.md](TRAINING_HANDOFF.md) for the 10/11 LightGBM baseline and real benign-PE inference, [SOURCES.md](SOURCES.md) for the 2018/2024 comparison, and [dataset manifest](results/local_windows/dataset_manifest.json) for measured checksums/counts/paths. Local download, verification, audit, isolated legacy environment, full matrix and independent validation have completed. The research suite now passes 20 unit tests. The cloud blockers below are historical, not the current local status.
+See [HANDOFF.md](HANDOFF.md) for the dataset handoff, [TRAINING_HANDOFF.md](TRAINING_HANDOFF.md) for the 10/11 LightGBM baseline, [INTEGRATION_HANDOFF.md](INTEGRATION_HANDOFF.md) for the real feature-extraction probe through D1–D9 and research model sidecar, [SOURCES.md](SOURCES.md) for the 2018/2024 comparison, and [dataset manifest](results/local_windows/dataset_manifest.json) for measured checksums/counts/paths. Local download, verification, audit, isolated legacy environment, full matrix and independent validation have completed. The research suite now passes 20 unit tests. The cloud blockers below are historical, not the current local status.
 
 Use `load_dataset.py --matrix D:\datasets\ember2018-matrix` with `D:\datasets\envs\ember-v2\Scripts\python.exe` to load completed matrices read-only. `check_matrix.py` validates shapes/dtypes/all finite values/all metadata links and optionally recomputes sampled vectors using `--check-vectors`. `preflight.py` tests a small real sample before full vectorization. The pinned environment is recorded in `requirements-research.txt` and `results/local_windows/pip-freeze.txt`.
 
