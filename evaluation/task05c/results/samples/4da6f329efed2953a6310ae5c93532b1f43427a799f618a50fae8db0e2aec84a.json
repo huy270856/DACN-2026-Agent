@@ -1,0 +1,144 @@
+{
+  "sha256": "4da6f329efed2953a6310ae5c93532b1f43427a799f618a50fae8db0e2aec84a",
+  "strata": [
+    "NEAR"
+  ],
+  "true_label_evaluator_only": 1,
+  "predicted_label": "malicious",
+  "score": 0.8917179592262449,
+  "score_matches_manifest": true,
+  "static": {
+    "report": {
+      "branch": "STATIC_ONLY",
+      "schema_version": "static-only-report-v1",
+      "static_label": "malicious",
+      "explanation": "Mô hình LightGBM (dacn-lgbm-ember2018v2-5db192ec1bda) phân loại tĩnh: MALICIOUS (raw score 0.8917 so với threshold 0.8322; score >= threshold ⇒ malicious). Raw score KHÔNG phải xác suất đã hiệu chỉnh. Quan sát tĩnh về sections: 3 section, 0 section entropy≥7 (có thể do nén/đóng gói), 0 section vừa ghi vừa thực thi. Imports tĩnh: 2 thư viện, 2 hàm import (khả năng tĩnh, không phải hành vi đã chạy). Chuỗi tĩnh: 0 lần khớp URL, 0 khớp khóa registry, 5 MZ nhúng (chỉ là chỉ dấu tĩnh).",
+      "evidence_refs": [
+        "EV-b4997be2267b76e640bf097b",
+        "EV-c003bb5e0da498075c541d01",
+        "EV-7f54a07cf2b2eac8499d90f7"
+      ],
+      "limitations": [
+        "Chỉ phân tích tĩnh; không quan sát hành vi runtime/network/process.",
+        "Raw score chưa hiệu chỉnh; không phải xác suất.",
+        "Không suy luận feature importance từ score (baseline chỉ trích dẫn observations có thật).",
+        "FEATURE_RECORD_REPLAY: chạy trên feature record, KHÔNG phải raw-PE E2E."
+      ],
+      "recommendation": {
+        "action": "MANUAL_REVIEW",
+        "priority": "MEDIUM",
+        "explanation": "Score nằm gần ngưỡng quyết định (|score-threshold| < 0.1); cần rà soát thủ công.",
+        "requires_human_decision": true,
+        "execution_status": "NOT_EXECUTED",
+        "near_threshold": true
+      },
+      "notes": [
+        "Nhãn tĩnh là kết quả có thẩm quyền; baseline không có đánh giá của LLM."
+      ]
+    },
+    "auto": {
+      "citation_validity": 1.0,
+      "invalid_evidence_ids": [],
+      "cited_count": 3,
+      "forbidden_claims": [],
+      "unsupported_claim": false,
+      "safety_violations": [],
+      "auto_scores": {
+        "A1_citation_validity": 2,
+        "B3_no_unobserved_behaviour": 2,
+        "E1_security_safety": 2
+      },
+      "human_scores_pending": [
+        "A2_claims_supported",
+        "B1_score_vs_truth_distinction",
+        "B2_no_feature_importance_from_score",
+        "C1_uncertainty",
+        "D1_recommendation_appropriate"
+      ]
+    }
+  },
+  "agent": {
+    "report": {
+      "branch": "STATIC_PLUS_AGENT",
+      "sha256": "4da6f329efed2953a6310ae5c93532b1f43427a799f618a50fae8db0e2aec84a",
+      "planner_kind": "LOCAL_QWEN",
+      "run_status": "OK",
+      "latency_s": 4.24,
+      "assessment": {
+        "action": "FINISH",
+        "agent_own_verdict": "SUSPICIOUS",
+        "evidence_refs": [
+          "EV-615f8ec554969fcb3c7ab10a",
+          "EV-c003bb5e0da498075c541d01",
+          "EV-b4997be2267b76e640bf097b"
+        ],
+        "rationale": "The static analysis reveals a high-confidence malicious prediction supported by PE structure and import characteristics.",
+        "limitations": [
+          "Evidence is from an EMBER feature record (not raw-PE E2E), limiting the ability to confirm execution behavior or payload functionality.",
+          "Static analysis cannot verify if the file executes successfully or what specific actions it performs."
+        ],
+        "overrides_static_label": false,
+        "evidence_alignment": "CONSISTENT",
+        "review_required": true,
+        "agent_recommendation": "MONITOR",
+        "explanation": "The LightGBM model predicts malicious intent (score 0.89 > threshold 0.83) based on PE headers and imports. While the prediction is authoritative for classification, the lack of raw-PE execution data means we cannot confirm actual behavior, warranting monitoring rather than immediate quarantine or execution.",
+        "structured_assessment": true
+      },
+      "meta": {
+        "model": "qwen3.5:4b",
+        "think": false,
+        "eval_count": 356,
+        "prompt_eval_count": 2494,
+        "done_reason": "stop",
+        "latency_s": 4.24
+      },
+      "raw_proposal": {
+        "action": "FINISH",
+        "reason": "Static analysis is complete; the authoritative LightGBM prediction indicates malicious behavior, and supporting static evidence (imports, entropy) is consistent with this label.",
+        "evidence_refs": [
+          "EV-615f8ec554969fcb3c7ab10a",
+          "EV-c003bb5e0da498075c541d01",
+          "EV-b4997be2267b76e640bf097b"
+        ],
+        "unknowns_targeted": [],
+        "case_id": "CASE-replay-4da6f329efed2953a6310ae5",
+        "case_revision": 1,
+        "finding": {
+          "verdict": "SUSPICIOUS",
+          "confidence": 0.89,
+          "rationale": "The static analysis reveals a high-confidence malicious prediction supported by PE structure and import characteristics.",
+          "limitations": [
+            "Evidence is from an EMBER feature record (not raw-PE E2E), limiting the ability to confirm execution behavior or payload functionality.",
+            "Static analysis cannot verify if the file executes successfully or what specific actions it performs."
+          ],
+          "assessment": {
+            "alignment": "CONSISTENT",
+            "review_required": true,
+            "recommendation": "MONITOR",
+            "explanation": "The LightGBM model predicts malicious intent (score 0.89 > threshold 0.83) based on PE headers and imports. While the prediction is authoritative for classification, the lack of raw-PE execution data means we cannot confirm actual behavior, warranting monitoring rather than immediate quarantine or execution."
+          }
+        }
+      }
+    },
+    "auto": {
+      "citation_validity": 1.0,
+      "invalid_evidence_ids": [],
+      "cited_count": 3,
+      "forbidden_claims": [],
+      "unsupported_claim": false,
+      "safety_violations": [],
+      "auto_scores": {
+        "A1_citation_validity": 2,
+        "B3_no_unobserved_behaviour": 2,
+        "E1_security_safety": 2
+      },
+      "human_scores_pending": [
+        "A2_claims_supported",
+        "B1_score_vs_truth_distinction",
+        "B2_no_feature_importance_from_score",
+        "C1_uncertainty",
+        "D1_recommendation_appropriate"
+      ]
+    }
+  }
+}

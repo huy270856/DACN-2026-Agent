@@ -1,0 +1,120 @@
+{
+  "task": "TASK 05A independent static ML",
+  "model_id": "dacn-lgbm-ember2018v2-5db192ec1bda",
+  "model_file": "model_lightgbm.txt",
+  "model_sha256": "5db192ec1bda850d0e1873af705b57d05aad414aa35e8520c8315ece1c509609",
+  "feature_version": 2,
+  "feature_count": 2381,
+  "extractor": {
+    "name": "dacn-independent-ember-v2",
+    "version": "0.1.0"
+  },
+  "dataset": {
+    "name": "EMBER2018 feature version 2",
+    "source_url": "https://ember.elastic.co/ember_dataset_2018_2.tar.bz2",
+    "archive_sha256": "b6052eb8d350a49a8d5a5396fbe7d16cf42848b86ff969b77464434cf2997812",
+    "label_semantics": {
+      "0": "benign",
+      "1": "malicious",
+      "-1": "unlabeled (excluded)"
+    }
+  },
+  "split": {
+    "method": "chronological by 'appeared'; latest val_frac held out as validation",
+    "val_frac": 0.15,
+    "n_train": 510000,
+    "n_val": 90000,
+    "train_val_sha256_overlap": 0,
+    "max_train_cap": null
+  },
+  "training": {
+    "library": "lightgbm",
+    "params": {
+      "objective": "binary",
+      "metric": [
+        "auc",
+        "binary_logloss"
+      ],
+      "num_leaves": 512,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.8,
+      "bagging_fraction": 0.8,
+      "bagging_freq": 5,
+      "min_child_samples": 50,
+      "num_threads": 0,
+      "seed": 42,
+      "deterministic": true,
+      "force_row_wise": true,
+      "verbosity": -1
+    },
+    "num_boost_round_requested": 600,
+    "best_iteration": 209,
+    "early_stopping_rounds": 60,
+    "seed": 42
+  },
+  "threshold_selection": {
+    "selected_on": "validation split (never on official test)",
+    "primary_threshold": 0.8321860386013389,
+    "threshold_at_val_fpr_1pct": 0.8321860386013389,
+    "threshold_at_val_fpr_0.1pct": 0.9894549512447304
+  },
+  "validation_metrics_at_1pct_fpr": {
+    "threshold": 0.8321860386013389,
+    "n": 90000,
+    "n_benign": 31470,
+    "n_malicious": 58530,
+    "confusion_matrix": {
+      "tn": 31155,
+      "fp": 315,
+      "fn": 6249,
+      "tp": 52281
+    },
+    "precision": 0.9940109514031485,
+    "recall_tpr": 0.8932342388518708,
+    "f1": 0.9409319151233735,
+    "false_positive_rate": 0.010009532888465206,
+    "roc_auc": 0.9880427162331262,
+    "average_precision": 0.9938409953588809
+  },
+  "validation_metrics_at_0.1pct_fpr": {
+    "threshold": 0.9894549512447304,
+    "n": 90000,
+    "n_benign": 31470,
+    "n_malicious": 58530,
+    "confusion_matrix": {
+      "tn": 31438,
+      "fp": 32,
+      "fn": 19241,
+      "tp": 39289
+    },
+    "precision": 0.9991861854988429,
+    "recall_tpr": 0.6712626003758756,
+    "f1": 0.8030372709527751,
+    "false_positive_rate": 0.0010168414362885288,
+    "roc_auc": 0.9880427162331262,
+    "average_precision": 0.9938409953588809
+  },
+  "calibration": "NONE \u2014 model outputs are raw LightGBM scores, not calibrated probabilities",
+  "environment": {
+    "generated_utc": "2026-11-14T09:05:26.997102+00:00",
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "packages": {
+      "numpy": "2.5.4",
+      "scikit_learn": "1.5.2",
+      "lightgbm": "4.5.0",
+      "lief": "0.15.1-"
+    }
+  },
+  "vectorization_stats": {
+    "records_seen": 800000,
+    "records_kept": 600000,
+    "records_other_label_skipped": 200000,
+    "records_extraction_failed": 0,
+    "keep_labels": [
+      0,
+      1
+    ],
+    "loaded_from_cache": true
+  }
+}

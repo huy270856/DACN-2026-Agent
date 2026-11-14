@@ -1,0 +1,159 @@
+{
+  "schema_version": "agreement-bias-v1",
+  "saved_analysis": {
+    "n": 120,
+    "alignment_distribution": {
+      "CONSISTENT": 120
+    },
+    "distinct_alignment_values": 1,
+    "explanations_referencing_static_label": 73,
+    "agent_own_verdict_distribution": {
+      "INSUFFICIENT_EVIDENCE": 54,
+      "SUSPICIOUS": 49,
+      "UNKNOWN": 17
+    },
+    "observation": "alignment is single-valued (CONSISTENT) across all strata; most explanations anchor explicitly on the static label/prediction."
+  },
+  "dev_probe": {
+    "probe_type": "DEV_ONLY_EXPLORATORY",
+    "selection": "fresh test records NOT in audit; |score-threshold|<0.10 (by score, not GT)",
+    "n": 16,
+    "production_prompt_alignment": {
+      "CONSISTENT": 16
+    },
+    "disconfirmation_prompt_alignment": {
+      "CONFLICT": 16
+    },
+    "samples": [
+      {
+        "sha256": "0c1637e3df82",
+        "score": 0.9266,
+        "predicted_label": "malicious",
+        "alignment_production_prompt": "CONSISTENT",
+        "alignment_disconfirmation_prompt": "CONFLICT",
+        "disconfirmation_strict_schema_ok": false
+      },
+      {
+        "sha256": "27d3e3c4936c",
+        "score": 0.9223,
+        "predicted_label": "malicious",
+        "alignment_production_prompt": "CONSISTENT",
+        "alignment_disconfirmation_prompt": "CONFLICT",
+        "disconfirmation_strict_schema_ok": false
+      },
+      {
+        "sha256": "b4c7df088ad1",
+        "score": 0.9158,
+        "predicted_label": "malicious",
+        "alignment_production_prompt": "CONSISTENT",
+        "alignment_disconfirmation_prompt": "CONFLICT",
+        "disconfirmation_strict_schema_ok": false
+      },
+      {
+        "sha256": "aab43bb6c947",
+        "score": 0.9141,
+        "predicted_label": "malicious",
+        "alignment_production_prompt": "CONSISTENT",
+        "alignment_disconfirmation_prompt": "CONFLICT",
+        "disconfirmation_strict_schema_ok": false
+      },
+      {
+        "sha256": "960a5bec3d7e",
+        "score": 0.8656,
+        "predicted_label": "malicious",
+        "alignment_production_prompt": "CONSISTENT",
+        "alignment_disconfirmation_prompt": "CONFLICT",
+        "disconfirmation_strict_schema_ok": false
+      },
+      {
+        "sha256": "24ea58b9c3a2",
+        "score": 0.9118,
+        "predicted_label": "malicious",
+        "alignment_production_prompt": "CONSISTENT",
+        "alignment_disconfirmation_prompt": "CONFLICT",
+        "disconfirmation_strict_schema_ok": false
+      },
+      {
+        "sha256": "6aa8300b1fcf",
+        "score": 0.8785,
+        "predicted_label": "malicious",
+        "alignment_production_prompt": "CONSISTENT",
+        "alignment_disconfirmation_prompt": "CONFLICT",
+        "disconfirmation_strict_schema_ok": false
+      },
+      {
+        "sha256": "72e557a2e861",
+        "score": 0.8894,
+        "predicted_label": "malicious",
+        "alignment_production_prompt": "CONSISTENT",
+        "alignment_disconfirmation_prompt": "CONFLICT",
+        "disconfirmation_strict_schema_ok": false
+      },
+      {
+        "sha256": "8f9a09c1822e",
+        "score": 0.8373,
+        "predicted_label": "malicious",
+        "alignment_production_prompt": "CONSISTENT",
+        "alignment_disconfirmation_prompt": "CONFLICT",
+        "disconfirmation_strict_schema_ok": false
+      },
+      {
+        "sha256": "141771551358",
+        "score": 0.8761,
+        "predicted_label": "malicious",
+        "alignment_production_prompt": "CONSISTENT",
+        "alignment_disconfirmation_prompt": "CONFLICT",
+        "disconfirmation_strict_schema_ok": false
+      },
+      {
+        "sha256": "a689f685eb5e",
+        "score": 0.9175,
+        "predicted_label": "malicious",
+        "alignment_production_prompt": "CONSISTENT",
+        "alignment_disconfirmation_prompt": "CONFLICT",
+        "disconfirmation_strict_schema_ok": false
+      },
+      {
+        "sha256": "47e0b42ea66b",
+        "score": 0.9124,
+        "predicted_label": "malicious",
+        "alignment_production_prompt": "CONSISTENT",
+        "alignment_disconfirmation_prompt": "CONFLICT",
+        "disconfirmation_strict_schema_ok": false
+      },
+      {
+        "sha256": "54ea420309ca",
+        "score": 0.8864,
+        "predicted_label": "malicious",
+        "alignment_production_prompt": "CONSISTENT",
+        "alignment_disconfirmation_prompt": "CONFLICT",
+        "disconfirmation_strict_schema_ok": false
+      },
+      {
+        "sha256": "3d092fbe01fe",
+        "score": 0.7738,
+        "predicted_label": "benign",
+        "alignment_production_prompt": "CONSISTENT",
+        "alignment_disconfirmation_prompt": "CONFLICT",
+        "disconfirmation_strict_schema_ok": false
+      },
+      {
+        "sha256": "5188fccaac16",
+        "score": 0.8529,
+        "predicted_label": "malicious",
+        "alignment_production_prompt": "CONSISTENT",
+        "alignment_disconfirmation_prompt": "CONFLICT",
+        "disconfirmation_strict_schema_ok": false
+      },
+      {
+        "sha256": "28c88d731929",
+        "score": 0.7564,
+        "predicted_label": "benign",
+        "alignment_production_prompt": "CONSISTENT",
+        "alignment_disconfirmation_prompt": "CONFLICT",
+        "disconfirmation_strict_schema_ok": false
+      }
+    ],
+    "caveat": "Exploratory only. NOT a benchmark, NOT tuned on audit FP/FN, does NOT change the baseline or the production prompt. A confirmatory benchmark on an unused labelled set is left as future work."
+  }
+}

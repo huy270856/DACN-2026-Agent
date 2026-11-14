@@ -1,0 +1,146 @@
+{
+  "sha256": "8a91283cc2d60374512e9389bd97312a38ee2470efe13058ef150781a07738bf",
+  "strata": [
+    "TN"
+  ],
+  "true_label_evaluator_only": 0,
+  "predicted_label": "benign",
+  "score": 0.06778173581063816,
+  "score_matches_manifest": true,
+  "static": {
+    "report": {
+      "branch": "STATIC_ONLY",
+      "schema_version": "static-only-report-v1",
+      "static_label": "benign",
+      "explanation": "Mô hình LightGBM (dacn-lgbm-ember2018v2-5db192ec1bda) phân loại tĩnh: BENIGN (raw score 0.0678 so với threshold 0.8322; score >= threshold ⇒ malicious). Raw score KHÔNG phải xác suất đã hiệu chỉnh. Quan sát tĩnh về sections: 5 section, 0 section entropy≥7 (có thể do nén/đóng gói), 0 section vừa ghi vừa thực thi. Imports tĩnh: 3 thư viện, 82 hàm import (khả năng tĩnh, không phải hành vi đã chạy). Chuỗi tĩnh: 0 lần khớp URL, 0 khớp khóa registry, 3 MZ nhúng (chỉ là chỉ dấu tĩnh).",
+      "evidence_refs": [
+        "EV-13ae9053fb4f131862a154d0",
+        "EV-9e5081eb8b6a29163d95047e",
+        "EV-1e9d6cd87f3d9eb7cfbe2b04"
+      ],
+      "limitations": [
+        "Chỉ phân tích tĩnh; không quan sát hành vi runtime/network/process.",
+        "Raw score chưa hiệu chỉnh; không phải xác suất.",
+        "Không suy luận feature importance từ score (baseline chỉ trích dẫn observations có thật).",
+        "FEATURE_RECORD_REPLAY: chạy trên feature record, KHÔNG phải raw-PE E2E."
+      ],
+      "recommendation": {
+        "action": "MONITOR",
+        "priority": "LOW",
+        "explanation": "Mô hình tĩnh phân loại BENIGN; theo dõi theo quy trình.",
+        "requires_human_decision": true,
+        "execution_status": "NOT_EXECUTED",
+        "near_threshold": false
+      },
+      "notes": [
+        "Nhãn tĩnh là kết quả có thẩm quyền; baseline không có đánh giá của LLM."
+      ]
+    },
+    "auto": {
+      "citation_validity": 1.0,
+      "invalid_evidence_ids": [],
+      "cited_count": 3,
+      "forbidden_claims": [],
+      "unsupported_claim": false,
+      "safety_violations": [],
+      "auto_scores": {
+        "A1_citation_validity": 2,
+        "B3_no_unobserved_behaviour": 2,
+        "E1_security_safety": 2
+      },
+      "human_scores_pending": [
+        "A2_claims_supported",
+        "B1_score_vs_truth_distinction",
+        "B2_no_feature_importance_from_score",
+        "C1_uncertainty",
+        "D1_recommendation_appropriate"
+      ]
+    }
+  },
+  "agent": {
+    "report": {
+      "branch": "STATIC_PLUS_AGENT",
+      "sha256": "8a91283cc2d60374512e9389bd97312a38ee2470efe13058ef150781a07738bf",
+      "planner_kind": "LOCAL_QWEN",
+      "run_status": "OK",
+      "latency_s": 4.9,
+      "assessment": {
+        "action": "FINISH",
+        "agent_own_verdict": "INSUFFICIENT_EVIDENCE",
+        "evidence_refs": [
+          "EV-a31b0a32660916dbe8d2a093",
+          "EV-9e5081eb8b6a29163d95047e",
+          "EV-13ae9053fb4f131862a154d0"
+        ],
+        "rationale": "The static analysis provides an authoritative benign prediction from a calibrated model (raw_score 0.067 < threshold 0.832), supported by consistent PE structure and import data. However, the verdict remains INSUFFICIENT_EVIDENCE because the evidence is derived from a replay feature record rather than raw PE bytes, and no trusted reputation exists to confirm safety.",
+        "limitations": [
+          "Evidence relies on FEATURE_RECORD_REPLAY model (not raw-PE E2E run),",
+          "No trusted hash reputation available to validate file integrity or origin,",
+          "Static analysis cannot rule out obfuscated malicious behavior masked as benign."
+        ],
+        "overrides_static_label": false,
+        "evidence_alignment": "CONSISTENT",
+        "review_required": true,
+        "agent_recommendation": "MONITOR",
+        "explanation": "The observable PE evidence (imports, sections) aligns with the static model's benign prediction. However, due to the replay nature of the feature record and lack of trusted reputation, a manual review or monitoring is recommended before considering the file safe for execution.",
+        "structured_assessment": true
+      },
+      "meta": {
+        "model": "qwen3.5:4b",
+        "think": false,
+        "eval_count": 420,
+        "prompt_eval_count": 2804,
+        "done_reason": "stop",
+        "latency_s": 4.9
+      },
+      "raw_proposal": {
+        "action": "FINISH",
+        "reason": "Static analysis is complete; the authoritative LightGBM prediction indicates benignity, and observable PE characteristics (imports, sections) are consistent with this label. No further tools or dynamic analysis are required.",
+        "evidence_refs": [
+          "EV-a31b0a32660916dbe8d2a093",
+          "EV-9e5081eb8b6a29163d95047e",
+          "EV-13ae9053fb4f131862a154d0"
+        ],
+        "unknowns_targeted": [],
+        "case_id": "CASE-replay-8a91283cc2d60374512e9389",
+        "case_revision": 1,
+        "finding": {
+          "verdict": "INSUFFICIENT_EVIDENCE",
+          "confidence": 0.85,
+          "rationale": "The static analysis provides an authoritative benign prediction from a calibrated model (raw_score 0.067 < threshold 0.832), supported by consistent PE structure and import data. However, the verdict remains INSUFFICIENT_EVIDENCE because the evidence is derived from a replay feature record rather than raw PE bytes, and no trusted reputation exists to confirm safety.",
+          "limitations": [
+            "Evidence relies on FEATURE_RECORD_REPLAY model (not raw-PE E2E run),",
+            "No trusted hash reputation available to validate file integrity or origin,",
+            "Static analysis cannot rule out obfuscated malicious behavior masked as benign."
+          ],
+          "assessment": {
+            "alignment": "CONSISTENT",
+            "review_required": true,
+            "recommendation": "MONITOR",
+            "explanation": "The observable PE evidence (imports, sections) aligns with the static model's benign prediction. However, due to the replay nature of the feature record and lack of trusted reputation, a manual review or monitoring is recommended before considering the file safe for execution."
+          }
+        }
+      }
+    },
+    "auto": {
+      "citation_validity": 1.0,
+      "invalid_evidence_ids": [],
+      "cited_count": 3,
+      "forbidden_claims": [],
+      "unsupported_claim": false,
+      "safety_violations": [],
+      "auto_scores": {
+        "A1_citation_validity": 2,
+        "B3_no_unobserved_behaviour": 2,
+        "E1_security_safety": 2
+      },
+      "human_scores_pending": [
+        "A2_claims_supported",
+        "B1_score_vs_truth_distinction",
+        "B2_no_feature_importance_from_score",
+        "C1_uncertainty",
+        "D1_recommendation_appropriate"
+      ]
+    }
+  }
+}

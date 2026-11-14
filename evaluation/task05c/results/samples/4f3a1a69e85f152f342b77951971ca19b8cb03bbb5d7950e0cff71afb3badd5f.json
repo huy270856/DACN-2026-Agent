@@ -1,0 +1,146 @@
+{
+  "sha256": "4f3a1a69e85f152f342b77951971ca19b8cb03bbb5d7950e0cff71afb3badd5f",
+  "strata": [
+    "FN"
+  ],
+  "true_label_evaluator_only": 1,
+  "predicted_label": "benign",
+  "score": 0.4666688788779223,
+  "score_matches_manifest": true,
+  "static": {
+    "report": {
+      "branch": "STATIC_ONLY",
+      "schema_version": "static-only-report-v1",
+      "static_label": "benign",
+      "explanation": "Mô hình LightGBM (dacn-lgbm-ember2018v2-5db192ec1bda) phân loại tĩnh: BENIGN (raw score 0.4667 so với threshold 0.8322; score >= threshold ⇒ malicious). Raw score KHÔNG phải xác suất đã hiệu chỉnh. Quan sát tĩnh về sections: 5 section, 0 section entropy≥7 (có thể do nén/đóng gói), 0 section vừa ghi vừa thực thi. Imports tĩnh: 4 thư viện, 99 hàm import (khả năng tĩnh, không phải hành vi đã chạy). Chuỗi tĩnh: 0 lần khớp URL, 0 khớp khóa registry, 3 MZ nhúng (chỉ là chỉ dấu tĩnh).",
+      "evidence_refs": [
+        "EV-74980075580d1e2e901b3731",
+        "EV-cf3a0f8ec84a0fc72a8a0eda",
+        "EV-47a1cd7a8c31ddf88fe66d6d"
+      ],
+      "limitations": [
+        "Chỉ phân tích tĩnh; không quan sát hành vi runtime/network/process.",
+        "Raw score chưa hiệu chỉnh; không phải xác suất.",
+        "Không suy luận feature importance từ score (baseline chỉ trích dẫn observations có thật).",
+        "FEATURE_RECORD_REPLAY: chạy trên feature record, KHÔNG phải raw-PE E2E."
+      ],
+      "recommendation": {
+        "action": "MONITOR",
+        "priority": "LOW",
+        "explanation": "Mô hình tĩnh phân loại BENIGN; theo dõi theo quy trình.",
+        "requires_human_decision": true,
+        "execution_status": "NOT_EXECUTED",
+        "near_threshold": false
+      },
+      "notes": [
+        "Nhãn tĩnh là kết quả có thẩm quyền; baseline không có đánh giá của LLM."
+      ]
+    },
+    "auto": {
+      "citation_validity": 1.0,
+      "invalid_evidence_ids": [],
+      "cited_count": 3,
+      "forbidden_claims": [],
+      "unsupported_claim": false,
+      "safety_violations": [],
+      "auto_scores": {
+        "A1_citation_validity": 2,
+        "B3_no_unobserved_behaviour": 2,
+        "E1_security_safety": 2
+      },
+      "human_scores_pending": [
+        "A2_claims_supported",
+        "B1_score_vs_truth_distinction",
+        "B2_no_feature_importance_from_score",
+        "C1_uncertainty",
+        "D1_recommendation_appropriate"
+      ]
+    }
+  },
+  "agent": {
+    "report": {
+      "branch": "STATIC_PLUS_AGENT",
+      "sha256": "4f3a1a69e85f152f342b77951971ca19b8cb03bbb5d7950e0cff71afb3badd5f",
+      "planner_kind": "LOCAL_QWEN",
+      "run_status": "OK",
+      "latency_s": 5.14,
+      "assessment": {
+        "action": "FINISH",
+        "agent_own_verdict": "INSUFFICIENT_EVIDENCE",
+        "evidence_refs": [
+          "EV-37e9e2bc8a6c6c7abed9e655",
+          "EV-1c2eb017263421fce70d3e34",
+          "EV-cf3a0f8ec84a0fc72a8a0eda"
+        ],
+        "rationale": "The static analysis provides an authoritative benign prediction (EV-37e9e2bc8a6c6c7abed9e655) with a raw score of 0.47 below the threshold of 0.83. While the file shows debug symbols and high entropy sections, these are consistent with legitimate development artifacts rather than malware indicators. No evidence contradicts the benign classification.",
+        "limitations": [
+          "Raw LightGBM score is not calibrated probability (EV-37e9e2bc8a6c6c7abed9e655)",
+          "Score computed from EMBER feature record, not raw PE bytes (EV-37e9e2bc8a6c6c7abed9e655)",
+          "No trusted hash reputation available to cross-reference"
+        ],
+        "overrides_static_label": false,
+        "evidence_alignment": "CONSISTENT",
+        "review_required": true,
+        "agent_recommendation": "MONITOR",
+        "explanation": "The observable PE evidence (debug flags, high entropy sections) is consistent with the benign label from the static model. However, due to the limitations of the raw score and lack of trusted reputation data, a manual review or continued monitoring is recommended to confirm behavior.",
+        "structured_assessment": true
+      },
+      "meta": {
+        "model": "qwen3.5:4b",
+        "think": false,
+        "eval_count": 448,
+        "prompt_eval_count": 2766,
+        "done_reason": "stop",
+        "latency_s": 5.14
+      },
+      "raw_proposal": {
+        "action": "FINISH",
+        "reason": "Static analysis is complete; the authoritative LightGBM prediction indicates benignity, and no conflicting high-confidence evidence exists to override it.",
+        "evidence_refs": [
+          "EV-37e9e2bc8a6c6c7abed9e655",
+          "EV-1c2eb017263421fce70d3e34",
+          "EV-cf3a0f8ec84a0fc72a8a0eda"
+        ],
+        "unknowns_targeted": [],
+        "case_id": "CASE-replay-4f3a1a69e85f152f342b7795",
+        "case_revision": 1,
+        "finding": {
+          "verdict": "INSUFFICIENT_EVIDENCE",
+          "confidence": 0.85,
+          "rationale": "The static analysis provides an authoritative benign prediction (EV-37e9e2bc8a6c6c7abed9e655) with a raw score of 0.47 below the threshold of 0.83. While the file shows debug symbols and high entropy sections, these are consistent with legitimate development artifacts rather than malware indicators. No evidence contradicts the benign classification.",
+          "limitations": [
+            "Raw LightGBM score is not calibrated probability (EV-37e9e2bc8a6c6c7abed9e655)",
+            "Score computed from EMBER feature record, not raw PE bytes (EV-37e9e2bc8a6c6c7abed9e655)",
+            "No trusted hash reputation available to cross-reference"
+          ],
+          "assessment": {
+            "alignment": "CONSISTENT",
+            "review_required": true,
+            "recommendation": "MONITOR",
+            "explanation": "The observable PE evidence (debug flags, high entropy sections) is consistent with the benign label from the static model. However, due to the limitations of the raw score and lack of trusted reputation data, a manual review or continued monitoring is recommended to confirm behavior."
+          }
+        }
+      }
+    },
+    "auto": {
+      "citation_validity": 1.0,
+      "invalid_evidence_ids": [],
+      "cited_count": 3,
+      "forbidden_claims": [],
+      "unsupported_claim": false,
+      "safety_violations": [],
+      "auto_scores": {
+        "A1_citation_validity": 2,
+        "B3_no_unobserved_behaviour": 2,
+        "E1_security_safety": 2
+      },
+      "human_scores_pending": [
+        "A2_claims_supported",
+        "B1_score_vs_truth_distinction",
+        "B2_no_feature_importance_from_score",
+        "C1_uncertainty",
+        "D1_recommendation_appropriate"
+      ]
+    }
+  }
+}

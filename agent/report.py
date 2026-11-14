@@ -30,9 +30,11 @@ def build_report(state: Mapping[str, Any], *, outcome: str,
         "verdict": verdict,
         "confidence": f.get("confidence", 0.0),
         "rationale": f.get("rationale", ""),
+        "agent_assessment": f.get("assessment"),   # TASK 05B alignment block (optional)
         "limitations": list(f.get("limitations", [])) + [
             "Local SLM (local Qwen) planner; reasoning quality is limited and must be reviewed.",
-            "No REA/Ghidra adapter, no LightGBM inference, no VM dynamic analysis in this build.",
+            "Static analysis only (no VM/dynamic behaviour). When a LightGBM prediction is "
+            "present, that committed static label is authoritative, not this SLM verdict.",
         ],
         "evidence_cited": list(f.get("evidence_refs", [])),
         "tool_runs": [{"tool_run_id": r.get("tool_run_id"), "tool": r.get("tool"),

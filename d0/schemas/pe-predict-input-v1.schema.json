@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/dacn/d0/pe-predict-input-v1.schema.json",
+  "title": "Static PE malware prediction input (ToolCall.arguments)",
+  "description": "Arguments for static.pe_malware_predict. TargetRef is supplied separately by ToolCall.target_ref; D5 revalidates target binding before opening the file. The model artifact and its expected digest are part of the TRUSTED installed provider, never taken from these arguments. Does not execute the target.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "feature_version"
+  ],
+  "properties": {
+    "feature_version": {
+      "const": 2
+    }
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "sha256": "4336026c987f6ffdd117067c037f8bded336dfff2046eeb5bf7f60a5d92cc1ac",
+  "strata": [
+    "TN"
+  ],
+  "true_label_evaluator_only": 0,
+  "predicted_label": "benign",
+  "score": 0.01596306325240598,
+  "score_matches_manifest": true,
+  "static": {
+    "report": {
+      "branch": "STATIC_ONLY",
+      "schema_version": "static-only-report-v1",
+      "static_label": "benign",
+      "explanation": "Mô hình LightGBM (dacn-lgbm-ember2018v2-5db192ec1bda) phân loại tĩnh: BENIGN (raw score 0.0160 so với threshold 0.8322; score >= threshold ⇒ malicious). Raw score KHÔNG phải xác suất đã hiệu chỉnh. Quan sát tĩnh về sections: 3 section, 0 section entropy≥7 (có thể do nén/đóng gói), 0 section vừa ghi vừa thực thi. Imports tĩnh: 1 thư viện, 63 hàm import (khả năng tĩnh, không phải hành vi đã chạy). Chuỗi tĩnh: 0 lần khớp URL, 0 khớp khóa registry, 1 MZ nhúng (chỉ là chỉ dấu tĩnh).",
+      "evidence_refs": [
+        "EV-3baf566d356541bc5be85869",
+        "EV-ee5b5e558d9bbfbdb8824c51",
+        "EV-6c4030deb661544a1fc13c7e"
+      ],
+      "limitations": [
+        "Chỉ phân tích tĩnh; không quan sát hành vi runtime/network/process.",
+        "Raw score chưa hiệu chỉnh; không phải xác suất.",
+        "Không suy luận feature importance từ score (baseline chỉ trích dẫn observations có thật).",
+        "FEATURE_RECORD_REPLAY: chạy trên feature record, KHÔNG phải raw-PE E2E."
+      ],
+      "recommendation": {
+        "action": "MONITOR",
+        "priority": "LOW",
+        "explanation": "Mô hình tĩnh phân loại BENIGN; theo dõi theo quy trình.",
+        "requires_human_decision": true,
+        "execution_status": "NOT_EXECUTED",
+        "near_threshold": false
+      },
+      "notes": [
+        "Nhãn tĩnh là kết quả có thẩm quyền; baseline không có đánh giá của LLM."
+      ]
+    },
+    "auto": {
+      "citation_validity": 1.0,
+      "invalid_evidence_ids": [],
+      "cited_count": 3,
+      "forbidden_claims": [],
+      "unsupported_claim": false,
+      "safety_violations": [],
+      "auto_scores": {
+        "A1_citation_validity": 2,
+        "B3_no_unobserved_behaviour": 2,
+        "E1_security_safety": 2
+      },
+      "human_scores_pending": [
+        "A2_claims_supported",
+        "B1_score_vs_truth_distinction",
+        "B2_no_feature_importance_from_score",
+        "C1_uncertainty",
+        "D1_recommendation_appropriate"
+      ]
+    }
+  },
+  "agent": {
+    "report": {
+      "branch": "STATIC_PLUS_AGENT",
+      "sha256": "4336026c987f6ffdd117067c037f8bded336dfff2046eeb5bf7f60a5d92cc1ac",
+      "planner_kind": "LOCAL_QWEN",
+      "run_status": "OK",
+      "latency_s": 4.42,
+      "assessment": {
+        "action": "FINISH",
+        "agent_own_verdict": "INSUFFICIENT_EVIDENCE",
+        "evidence_refs": [
+          "EV-2352862fbf81f0e53fd52d97",
+          "EV-ee5b5e558d9bbfbdb8824c51",
+          "EV-3baf566d356541bc5be85869"
+        ],
+        "rationale": "The static analysis provides a definitive benign classification from an authoritative model, but the evidence is derived from a replay record rather than raw PE bytes, preventing a higher-confidence ground-truth determination.",
+        "limitations": [
+          "Evidence source is a FEATURE_RECORD_REPLAY, not a raw-PE E2E run.",
+          "LightGBM score is uncalibrated and based on 2381 features.",
+          "No trusted hash reputation available to cross-validate."
+        ],
+        "overrides_static_label": false,
+        "evidence_alignment": "CONSISTENT",
+        "review_required": true,
+        "agent_recommendation": "MONITOR",
+        "explanation": "The observable PE characteristics (imports from MSVBVM60.DLL, standard section layout) align with the benign prediction. However, due to the replay nature of the evidence and lack of trusted reputation, a manual review is required to confirm behavior in an isolated environment.",
+        "structured_assessment": true
+      },
+      "meta": {
+        "model": "qwen3.5:4b",
+        "think": false,
+        "eval_count": 373,
+        "prompt_eval_count": 2829,
+        "done_reason": "stop",
+        "latency_s": 4.42
+      },
+      "raw_proposal": {
+        "action": "FINISH",
+        "reason": "Static analysis is complete; the authoritative LightGBM prediction indicates benignity, and supporting PE metadata (imports, sections) are consistent with this label.",
+        "evidence_refs": [
+          "EV-2352862fbf81f0e53fd52d97",
+          "EV-ee5b5e558d9bbfbdb8824c51",
+          "EV-3baf566d356541bc5be85869"
+        ],
+        "unknowns_targeted": [],
+        "case_id": "CASE-replay-4336026c987f6ffdd117067c",
+        "case_revision": 1,
+        "finding": {
+          "verdict": "INSUFFICIENT_EVIDENCE",
+          "confidence": 0.95,
+          "rationale": "The static analysis provides a definitive benign classification from an authoritative model, but the evidence is derived from a replay record rather than raw PE bytes, preventing a higher-confidence ground-truth determination.",
+          "limitations": [
+            "Evidence source is a FEATURE_RECORD_REPLAY, not a raw-PE E2E run.",
+            "LightGBM score is uncalibrated and based on 2381 features.",
+            "No trusted hash reputation available to cross-validate."
+          ],
+          "assessment": {
+            "alignment": "CONSISTENT",
+            "review_required": true,
+            "recommendation": "MONITOR",
+            "explanation": "The observable PE characteristics (imports from MSVBVM60.DLL, standard section layout) align with the benign prediction. However, due to the replay nature of the evidence and lack of trusted reputation, a manual review is required to confirm behavior in an isolated environment."
+          }
+        }
+      }
+    },
+    "auto": {
+      "citation_validity": 1.0,
+      "invalid_evidence_ids": [],
+      "cited_count": 3,
+      "forbidden_claims": [],
+      "unsupported_claim": false,
+      "safety_violations": [],
+      "auto_scores": {
+        "A1_citation_validity": 2,
+        "B3_no_unobserved_behaviour": 2,
+        "E1_security_safety": 2
+      },
+      "human_scores_pending": [
+        "A2_claims_supported",
+        "B1_score_vs_truth_distinction",
+        "B2_no_feature_importance_from_score",
+        "C1_uncertainty",
+        "D1_recommendation_appropriate"
+      ]
+    }
+  }
+}

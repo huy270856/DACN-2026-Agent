@@ -1,0 +1,144 @@
+{
+  "sha256": "4711e88a954e89859cc60f61fce287a6c602527395b224f546676d54206be976",
+  "strata": [
+    "FP"
+  ],
+  "true_label_evaluator_only": 0,
+  "predicted_label": "malicious",
+  "score": 0.8461733516833307,
+  "score_matches_manifest": true,
+  "static": {
+    "report": {
+      "branch": "STATIC_ONLY",
+      "schema_version": "static-only-report-v1",
+      "static_label": "malicious",
+      "explanation": "Mô hình LightGBM (dacn-lgbm-ember2018v2-5db192ec1bda) phân loại tĩnh: MALICIOUS (raw score 0.8462 so với threshold 0.8322; score >= threshold ⇒ malicious). Raw score KHÔNG phải xác suất đã hiệu chỉnh. Quan sát tĩnh về sections: 4 section, 0 section entropy≥7 (có thể do nén/đóng gói), 0 section vừa ghi vừa thực thi. Imports tĩnh: 6 thư viện, 173 hàm import (khả năng tĩnh, không phải hành vi đã chạy). Chuỗi tĩnh: 49 lần khớp URL, 10 khớp khóa registry, 25 MZ nhúng (chỉ là chỉ dấu tĩnh).",
+      "evidence_refs": [
+        "EV-88670acfbd1c0dea8f78f01d",
+        "EV-8ae67120b39d3538e8d1c9d9",
+        "EV-d420e7c2bf7b544948d1361a"
+      ],
+      "limitations": [
+        "Chỉ phân tích tĩnh; không quan sát hành vi runtime/network/process.",
+        "Raw score chưa hiệu chỉnh; không phải xác suất.",
+        "Không suy luận feature importance từ score (baseline chỉ trích dẫn observations có thật).",
+        "FEATURE_RECORD_REPLAY: chạy trên feature record, KHÔNG phải raw-PE E2E."
+      ],
+      "recommendation": {
+        "action": "MANUAL_REVIEW",
+        "priority": "MEDIUM",
+        "explanation": "Score nằm gần ngưỡng quyết định (|score-threshold| < 0.1); cần rà soát thủ công.",
+        "requires_human_decision": true,
+        "execution_status": "NOT_EXECUTED",
+        "near_threshold": true
+      },
+      "notes": [
+        "Nhãn tĩnh là kết quả có thẩm quyền; baseline không có đánh giá của LLM."
+      ]
+    },
+    "auto": {
+      "citation_validity": 1.0,
+      "invalid_evidence_ids": [],
+      "cited_count": 3,
+      "forbidden_claims": [],
+      "unsupported_claim": false,
+      "safety_violations": [],
+      "auto_scores": {
+        "A1_citation_validity": 2,
+        "B3_no_unobserved_behaviour": 2,
+        "E1_security_safety": 2
+      },
+      "human_scores_pending": [
+        "A2_claims_supported",
+        "B1_score_vs_truth_distinction",
+        "B2_no_feature_importance_from_score",
+        "C1_uncertainty",
+        "D1_recommendation_appropriate"
+      ]
+    }
+  },
+  "agent": {
+    "report": {
+      "branch": "STATIC_PLUS_AGENT",
+      "sha256": "4711e88a954e89859cc60f61fce287a6c602527395b224f546676d54206be976",
+      "planner_kind": "LOCAL_QWEN",
+      "run_status": "OK",
+      "latency_s": 4.06,
+      "assessment": {
+        "action": "FINISH",
+        "agent_own_verdict": "SUSPICIOUS",
+        "evidence_refs": [
+          "EV-1c515c690f9f782b009a0028",
+          "EV-8ae67120b39d3538e8d1c9d9",
+          "EV-88670acfbd1c0dea8f78f01d"
+        ],
+        "rationale": "The static LightGBM model predicts malicious behavior with a raw score of 0.846 (threshold 0.832). Supporting evidence includes high entropy sections and imports related to registry manipulation and service control.",
+        "limitations": [
+          "Raw LightGBM score is not a calibrated probability",
+          "Score computed from EMBER feature record, not raw PE bytes"
+        ],
+        "overrides_static_label": false,
+        "evidence_alignment": "CONSISTENT",
+        "review_required": true,
+        "agent_recommendation": "MANUAL_REVIEW",
+        "explanation": "The static prediction aligns with observable indicators (registry imports, high entropy). However, the model limitation regarding data source requires manual review to confirm malicious intent.",
+        "structured_assessment": true
+      },
+      "meta": {
+        "model": "qwen3.5:4b",
+        "think": false,
+        "eval_count": 339,
+        "prompt_eval_count": 2781,
+        "done_reason": "stop",
+        "latency_s": 4.06
+      },
+      "raw_proposal": {
+        "action": "FINISH",
+        "reason": "Static analysis is complete; the authoritative LightGBM prediction indicates malicious behavior, and supporting static evidence (imports, entropy) is consistent with this label.",
+        "evidence_refs": [
+          "EV-1c515c690f9f782b009a0028",
+          "EV-8ae67120b39d3538e8d1c9d9",
+          "EV-88670acfbd1c0dea8f78f01d"
+        ],
+        "unknowns_targeted": [],
+        "case_id": "CASE-replay-4711e88a954e89859cc60f61",
+        "case_revision": 1,
+        "finding": {
+          "verdict": "SUSPICIOUS",
+          "confidence": 0.85,
+          "rationale": "The static LightGBM model predicts malicious behavior with a raw score of 0.846 (threshold 0.832). Supporting evidence includes high entropy sections and imports related to registry manipulation and service control.",
+          "limitations": [
+            "Raw LightGBM score is not a calibrated probability",
+            "Score computed from EMBER feature record, not raw PE bytes"
+          ],
+          "assessment": {
+            "alignment": "CONSISTENT",
+            "review_required": true,
+            "recommendation": "MANUAL_REVIEW",
+            "explanation": "The static prediction aligns with observable indicators (registry imports, high entropy). However, the model limitation regarding data source requires manual review to confirm malicious intent."
+          }
+        }
+      }
+    },
+    "auto": {
+      "citation_validity": 1.0,
+      "invalid_evidence_ids": [],
+      "cited_count": 3,
+      "forbidden_claims": [],
+      "unsupported_claim": false,
+      "safety_violations": [],
+      "auto_scores": {
+        "A1_citation_validity": 2,
+        "B3_no_unobserved_behaviour": 2,
+        "E1_security_safety": 2
+      },
+      "human_scores_pending": [
+        "A2_claims_supported",
+        "B1_score_vs_truth_distinction",
+        "B2_no_feature_importance_from_score",
+        "C1_uncertainty",
+        "D1_recommendation_appropriate"
+      ]
+    }
+  }
+}

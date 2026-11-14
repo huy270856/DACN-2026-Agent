@@ -1,0 +1,146 @@
+{
+  "sha256": "82d8be26d7f025615bdf7d27257ccff9b6349b916db47ca751c12a933cfd0440",
+  "strata": [
+    "NEAR"
+  ],
+  "true_label_evaluator_only": 1,
+  "predicted_label": "benign",
+  "score": 0.7518078868016012,
+  "score_matches_manifest": true,
+  "static": {
+    "report": {
+      "branch": "STATIC_ONLY",
+      "schema_version": "static-only-report-v1",
+      "static_label": "benign",
+      "explanation": "Mô hình LightGBM (dacn-lgbm-ember2018v2-5db192ec1bda) phân loại tĩnh: BENIGN (raw score 0.7518 so với threshold 0.8322; score >= threshold ⇒ malicious). Raw score KHÔNG phải xác suất đã hiệu chỉnh. Quan sát tĩnh về sections: 5 section, 0 section entropy≥7 (có thể do nén/đóng gói), 0 section vừa ghi vừa thực thi. Imports tĩnh: 5 thư viện, 92 hàm import (khả năng tĩnh, không phải hành vi đã chạy). Chuỗi tĩnh: 0 lần khớp URL, 0 khớp khóa registry, 3 MZ nhúng (chỉ là chỉ dấu tĩnh).",
+      "evidence_refs": [
+        "EV-cd3f7d8315ba0c31257137c2",
+        "EV-895f3eac867e1256c59c2275",
+        "EV-68a9d50a571ab029725dfc3b"
+      ],
+      "limitations": [
+        "Chỉ phân tích tĩnh; không quan sát hành vi runtime/network/process.",
+        "Raw score chưa hiệu chỉnh; không phải xác suất.",
+        "Không suy luận feature importance từ score (baseline chỉ trích dẫn observations có thật).",
+        "FEATURE_RECORD_REPLAY: chạy trên feature record, KHÔNG phải raw-PE E2E."
+      ],
+      "recommendation": {
+        "action": "MANUAL_REVIEW",
+        "priority": "MEDIUM",
+        "explanation": "Score nằm gần ngưỡng quyết định (|score-threshold| < 0.1); cần rà soát thủ công.",
+        "requires_human_decision": true,
+        "execution_status": "NOT_EXECUTED",
+        "near_threshold": true
+      },
+      "notes": [
+        "Nhãn tĩnh là kết quả có thẩm quyền; baseline không có đánh giá của LLM."
+      ]
+    },
+    "auto": {
+      "citation_validity": 1.0,
+      "invalid_evidence_ids": [],
+      "cited_count": 3,
+      "forbidden_claims": [],
+      "unsupported_claim": false,
+      "safety_violations": [],
+      "auto_scores": {
+        "A1_citation_validity": 2,
+        "B3_no_unobserved_behaviour": 2,
+        "E1_security_safety": 2
+      },
+      "human_scores_pending": [
+        "A2_claims_supported",
+        "B1_score_vs_truth_distinction",
+        "B2_no_feature_importance_from_score",
+        "C1_uncertainty",
+        "D1_recommendation_appropriate"
+      ]
+    }
+  },
+  "agent": {
+    "report": {
+      "branch": "STATIC_PLUS_AGENT",
+      "sha256": "82d8be26d7f025615bdf7d27257ccff9b6349b916db47ca751c12a933cfd0440",
+      "planner_kind": "LOCAL_QWEN",
+      "run_status": "OK",
+      "latency_s": 4.98,
+      "assessment": {
+        "action": "FINISH",
+        "agent_own_verdict": "INSUFFICIENT_EVIDENCE",
+        "evidence_refs": [
+          "EV-d771a2c5060e7b8d93141e77",
+          "EV-895f3eac867e1256c59c2275",
+          "EV-cd3f7d8315ba0c31257137c2"
+        ],
+        "rationale": "The static analysis provides an authoritative benign prediction from a calibrated model (raw_score 0.75 < threshold 0.83), and supporting static features (standard Windows GUI imports, low entropy sections) are consistent with this label. However, the verdict remains INSUFFICIENT_EVIDENCE because the evidence is derived from a replay feature record rather than raw PE bytes, and no trusted reputation data exists to independently confirm safety.",
+        "limitations": [
+          "Evidence relies on FEATURE_RECORD_REPLAY model (not raw-PE E2E run),",
+          "No trusted hash reputation available for independent verification,",
+          "Static analysis cannot definitively rule out obfuscated or polymorphic threats."
+        ],
+        "overrides_static_label": false,
+        "evidence_alignment": "CONSISTENT",
+        "review_required": true,
+        "agent_recommendation": "MONITOR",
+        "explanation": "The observable PE evidence (imports, entropy, structure) aligns with the static benign label. While the model is authoritative within its context, the replay nature of the feature record and lack of trusted reputation warrant continued monitoring rather than immediate clearance or quarantine.",
+        "structured_assessment": true
+      },
+      "meta": {
+        "model": "qwen3.5:4b",
+        "think": false,
+        "eval_count": 428,
+        "prompt_eval_count": 2791,
+        "done_reason": "stop",
+        "latency_s": 4.98
+      },
+      "raw_proposal": {
+        "action": "FINISH",
+        "reason": "Static analysis is complete; the authoritative LightGBM prediction indicates benignity, and static features (imports, entropy) are consistent with this label. No further tools or dynamic analysis are required.",
+        "evidence_refs": [
+          "EV-d771a2c5060e7b8d93141e77",
+          "EV-895f3eac867e1256c59c2275",
+          "EV-cd3f7d8315ba0c31257137c2"
+        ],
+        "unknowns_targeted": [],
+        "case_id": "CASE-replay-82d8be26d7f025615bdf7d27",
+        "case_revision": 1,
+        "finding": {
+          "verdict": "INSUFFICIENT_EVIDENCE",
+          "confidence": 0.95,
+          "rationale": "The static analysis provides an authoritative benign prediction from a calibrated model (raw_score 0.75 < threshold 0.83), and supporting static features (standard Windows GUI imports, low entropy sections) are consistent with this label. However, the verdict remains INSUFFICIENT_EVIDENCE because the evidence is derived from a replay feature record rather than raw PE bytes, and no trusted reputation data exists to independently confirm safety.",
+          "limitations": [
+            "Evidence relies on FEATURE_RECORD_REPLAY model (not raw-PE E2E run),",
+            "No trusted hash reputation available for independent verification,",
+            "Static analysis cannot definitively rule out obfuscated or polymorphic threats."
+          ],
+          "assessment": {
+            "alignment": "CONSISTENT",
+            "review_required": true,
+            "recommendation": "MONITOR",
+            "explanation": "The observable PE evidence (imports, entropy, structure) aligns with the static benign label. While the model is authoritative within its context, the replay nature of the feature record and lack of trusted reputation warrant continued monitoring rather than immediate clearance or quarantine."
+          }
+        }
+      }
+    },
+    "auto": {
+      "citation_validity": 1.0,
+      "invalid_evidence_ids": [],
+      "cited_count": 3,
+      "forbidden_claims": [],
+      "unsupported_claim": false,
+      "safety_violations": [],
+      "auto_scores": {
+        "A1_citation_validity": 2,
+        "B3_no_unobserved_behaviour": 2,
+        "E1_security_safety": 2
+      },
+      "human_scores_pending": [
+        "A2_claims_supported",
+        "B1_score_vs_truth_distinction",
+        "B2_no_feature_importance_from_score",
+        "C1_uncertainty",
+        "D1_recommendation_appropriate"
+      ]
+    }
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "sha256": "1f69504d9a01bf25d827ba7a5c1b5832c67a54c9f7a91cc3464d62d31ac38a46",
+  "strata": [
+    "FP"
+  ],
+  "true_label_evaluator_only": 0,
+  "predicted_label": "malicious",
+  "score": 0.939903804434305,
+  "score_matches_manifest": true,
+  "static": {
+    "report": {
+      "branch": "STATIC_ONLY",
+      "schema_version": "static-only-report-v1",
+      "static_label": "malicious",
+      "explanation": "Mô hình LightGBM (dacn-lgbm-ember2018v2-5db192ec1bda) phân loại tĩnh: MALICIOUS (raw score 0.9399 so với threshold 0.8322; score >= threshold ⇒ malicious). Raw score KHÔNG phải xác suất đã hiệu chỉnh. Quan sát tĩnh về sections: 6 section, 1 section entropy≥7 (có thể do nén/đóng gói), 0 section vừa ghi vừa thực thi. Imports tĩnh: 3 thư viện, 120 hàm import (khả năng tĩnh, không phải hành vi đã chạy). Chuỗi tĩnh: 0 lần khớp URL, 0 khớp khóa registry, 3 MZ nhúng (chỉ là chỉ dấu tĩnh).",
+      "evidence_refs": [
+        "EV-8c9a3632edb1f9ba80869bd8",
+        "EV-2c738b7204e611a3f18e47ce",
+        "EV-a374d81186342a52738c1b2e"
+      ],
+      "limitations": [
+        "Chỉ phân tích tĩnh; không quan sát hành vi runtime/network/process.",
+        "Raw score chưa hiệu chỉnh; không phải xác suất.",
+        "Không suy luận feature importance từ score (baseline chỉ trích dẫn observations có thật).",
+        "FEATURE_RECORD_REPLAY: chạy trên feature record, KHÔNG phải raw-PE E2E."
+      ],
+      "recommendation": {
+        "action": "CONSIDER_QUARANTINE",
+        "priority": "HIGH",
+        "explanation": "Mô hình tĩnh phân loại MALICIOUS với score vượt ngưỡng.",
+        "requires_human_decision": true,
+        "execution_status": "NOT_EXECUTED",
+        "near_threshold": false
+      },
+      "notes": [
+        "Nhãn tĩnh là kết quả có thẩm quyền; baseline không có đánh giá của LLM."
+      ]
+    },
+    "auto": {
+      "citation_validity": 1.0,
+      "invalid_evidence_ids": [],
+      "cited_count": 3,
+      "forbidden_claims": [],
+      "unsupported_claim": false,
+      "safety_violations": [],
+      "auto_scores": {
+        "A1_citation_validity": 2,
+        "B3_no_unobserved_behaviour": 2,
+        "E1_security_safety": 2
+      },
+      "human_scores_pending": [
+        "A2_claims_supported",
+        "B1_score_vs_truth_distinction",
+        "B2_no_feature_importance_from_score",
+        "C1_uncertainty",
+        "D1_recommendation_appropriate"
+      ]
+    }
+  },
+  "agent": {
+    "report": {
+      "branch": "STATIC_PLUS_AGENT",
+      "sha256": "1f69504d9a01bf25d827ba7a5c1b5832c67a54c9f7a91cc3464d62d31ac38a46",
+      "planner_kind": "LOCAL_QWEN",
+      "run_status": "OK",
+      "latency_s": 4.33,
+      "assessment": {
+        "action": "FINISH",
+        "agent_own_verdict": "SUSPICIOUS",
+        "evidence_refs": [
+          "EV-10f2f62eaaac7893e0fee063",
+          "EV-8c9a3632edb1f9ba80869bd8",
+          "EV-2c738b7204e611a3f18e47ce"
+        ],
+        "rationale": "The static analysis reveals a high-confidence malicious prediction (score 0.94) based on feature replay, supported by suspicious PE characteristics such as high entropy sections and specific imports from XPPRT1.dll.",
+        "limitations": [
+          "Prediction is based on FEATURE_RECORD_REPLAY (EMBER feature record), not raw PE bytes; score is uncalibrated.",
+          "Static analysis cannot confirm runtime behavior or payload execution."
+        ],
+        "overrides_static_label": false,
+        "evidence_alignment": "CONSISTENT",
+        "review_required": true,
+        "agent_recommendation": "MANUAL_REVIEW",
+        "explanation": "While the static label is authoritative and consistent with observed artifacts (high entropy sections, specific imports), the reliance on replayed features rather than raw PE analysis warrants manual review to confirm intent before taking action.",
+        "structured_assessment": true
+      },
+      "meta": {
+        "model": "qwen3.5:4b",
+        "think": false,
+        "eval_count": 355,
+        "prompt_eval_count": 2880,
+        "done_reason": "stop",
+        "latency_s": 4.33
+      },
+      "raw_proposal": {
+        "action": "FINISH",
+        "reason": "Static analysis is complete; the authoritative LightGBM prediction indicates malicious intent, and observable PE characteristics (high entropy sections, specific imports) are consistent with this label.",
+        "evidence_refs": [
+          "EV-10f2f62eaaac7893e0fee063",
+          "EV-8c9a3632edb1f9ba80869bd8",
+          "EV-2c738b7204e611a3f18e47ce"
+        ],
+        "unknowns_targeted": [],
+        "case_id": "CASE-replay-1f69504d9a01bf25d827ba7a",
+        "case_revision": 1,
+        "finding": {
+          "verdict": "SUSPICIOUS",
+          "confidence": 0.94,
+          "rationale": "The static analysis reveals a high-confidence malicious prediction (score 0.94) based on feature replay, supported by suspicious PE characteristics such as high entropy sections and specific imports from XPPRT1.dll.",
+          "limitations": [
+            "Prediction is based on FEATURE_RECORD_REPLAY (EMBER feature record), not raw PE bytes; score is uncalibrated.",
+            "Static analysis cannot confirm runtime behavior or payload execution."
+          ],
+          "assessment": {
+            "alignment": "CONSISTENT",
+            "review_required": true,
+            "recommendation": "MANUAL_REVIEW",
+            "explanation": "While the static label is authoritative and consistent with observed artifacts (high entropy sections, specific imports), the reliance on replayed features rather than raw PE analysis warrants manual review to confirm intent before taking action."
+          }
+        }
+      }
+    },
+    "auto": {
+      "citation_validity": 1.0,
+      "invalid_evidence_ids": [],
+      "cited_count": 3,
+      "forbidden_claims": [],
+      "unsupported_claim": false,
+      "safety_violations": [],
+      "auto_scores": {
+        "A1_citation_validity": 2,
+        "B3_no_unobserved_behaviour": 2,
+        "E1_security_safety": 2
+      },
+      "human_scores_pending": [
+        "A2_claims_supported",
+        "B1_score_vs_truth_distinction",
+        "B2_no_feature_importance_from_score",
+        "C1_uncertainty",
+        "D1_recommendation_appropriate"
+      ]
+    }
+  }
+}

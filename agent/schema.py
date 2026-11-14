@@ -39,6 +39,22 @@ OLLAMA_FORMAT_SCHEMA: Dict[str, Any] = {
                 "confidence": {"type": "number"},
                 "rationale": {"type": "string"},
                 "limitations": {"type": "array", "items": {"type": "string"}},
+                # Optional (TASK 05B): the agent's alignment ASSESSMENT relative to the
+                # authoritative static LightGBM prediction. The agent never overrides the
+                # static label; this only records agreement + a suggested handling.
+                "assessment": {
+                    "type": "object",
+                    "properties": {
+                        "alignment": {"type": "string",
+                                      "enum": ["CONSISTENT", "CONFLICT", "INSUFFICIENT_EVIDENCE"]},
+                        "review_required": {"type": "boolean"},
+                        "recommendation": {"type": "string",
+                                           "enum": ["MANUAL_REVIEW", "MONITOR",
+                                                    "AVOID_EXECUTION", "CONSIDER_QUARANTINE"]},
+                        "explanation": {"type": "string"},
+                    },
+                    "additionalProperties": False,
+                },
             },
         },
     },

@@ -77,6 +77,11 @@ def build_context(state: Mapping[str, Any], available_tools: List[Mapping[str, A
                            "outcome": h.get("outcome"), "reason_code": h.get("reason_code")}
                           for h in (history or [])],
     }
+    has_real_prediction = any(
+        e.get("facet") == "static.pe_malware_prediction" and e.get("status") == "SUCCESS"
+        for e in state.get("evidence", []))
+    facts["real_static_prediction_present"] = has_real_prediction
+
     untrusted = json.dumps(facts, ensure_ascii=True, separators=(",", ":"))
     while len(untrusted) > cfg.max_context_chars:
         if facts["evidence"]:
@@ -89,10 +94,29 @@ def build_context(state: Mapping[str, Any], available_tools: List[Mapping[str, A
             raise ValueError("Context budget too small for trusted tool contracts")
         facts["context_truncated"] = True
         untrusted = json.dumps(facts, ensure_ascii=True, separators=(",", ":"))
+    if has_real_prediction:
+        tail = (
+            "A REAL static LightGBM prediction (facet static.pe_malware_prediction) is "
+            "present in evidence: it holds predicted_label, raw_score, threshold and model id. "
+            "That label is AUTHORITATIVE and you must NOT override it. Your job: FINISH and, in "
+            "finding.assessment, state evidence_alignment = CONSISTENT (the observable PE "
+            "evidence agrees with the static label), CONFLICT (it contradicts it), or "
+            "INSUFFICIENT_EVIDENCE; set review_required; pick a recommendation "
+            "(MANUAL_REVIEW/MONITOR/AVOID_EXECUTION/CONSIDER_QUARANTINE); and give a short "
+            "explanation grounded in the cited evidence. Keep finding.verdict as "
+            "INSUFFICIENT_EVIDENCE or UNKNOWN (the LightGBM label stands, not your own). "
+            "Cite the prediction evidence_id. Do not re-run a tool already listed in prior_actions."
+        )
+    else:
+        tail = (
+            "After mock static features, no classifier verdict exists: FINISH with "
+            "INSUFFICIENT_EVIDENCE and explicit limitations."
+        )
     user = (
         "Investigation context follows. Decide the single next action and output "
         "ONLY the JSON object.\n"
         f"{_FENCE}\n{untrusted}\n{_FENCE}\n"
-        "unknowns_targeted must contain only exact facet names from residual_unknowns (or be empty). Never repeat a tool listed in prior_actions with SUCCESS or DUPLICATE_TOOL_CALL. If the only available tool has already run, assess the available evidence and limitations. Trusted hash reputation may support a verdict with a sha256 evidence citation. Cite at most 3 relevant evidence IDs. Be concise. For TOOL_CALL include tool identity and arguments matching arguments_schema. After mock static features, no classifier verdict exists: FINISH with INSUFFICIENT_EVIDENCE and explicit limitations. Respond with the JSON action now."
+        "unknowns_targeted must contain only exact facet names from residual_unknowns (or be empty). Never repeat a tool listed in prior_actions with SUCCESS or DUPLICATE_TOOL_CALL. If the only available tool has already run, assess the available evidence and limitations. Trusted hash reputation may support a verdict with a sha256 evidence citation. Cite at most 3 relevant evidence IDs. Be concise. For TOOL_CALL include tool identity and arguments matching arguments_schema. "
+        + tail + " Respond with the JSON action now."
     )
     return {"system": _SYSTEM, "user": user, "facts": facts}
