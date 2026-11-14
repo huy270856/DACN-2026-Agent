@@ -1,0 +1,144 @@
+{
+  "sha256": "518e52a5f00a123248a16c17535d59d479443e7787bf4e39d6c139d39c6cda44",
+  "strata": [
+    "TN"
+  ],
+  "true_label_evaluator_only": 0,
+  "predicted_label": "benign",
+  "score": 0.21637664487954872,
+  "score_matches_manifest": true,
+  "static": {
+    "report": {
+      "branch": "STATIC_ONLY",
+      "schema_version": "static-only-report-v1",
+      "static_label": "benign",
+      "explanation": "Mô hình LightGBM (dacn-lgbm-ember2018v2-5db192ec1bda) phân loại tĩnh: BENIGN (raw score 0.2164 so với threshold 0.8322; score >= threshold ⇒ malicious). Raw score KHÔNG phải xác suất đã hiệu chỉnh. Quan sát tĩnh về sections: 5 section, 0 section entropy≥7 (có thể do nén/đóng gói), 0 section vừa ghi vừa thực thi. Imports tĩnh: 7 thư viện, 166 hàm import (khả năng tĩnh, không phải hành vi đã chạy). Chuỗi tĩnh: 40 lần khớp URL, 0 khớp khóa registry, 110 MZ nhúng (chỉ là chỉ dấu tĩnh).",
+      "evidence_refs": [
+        "EV-1d06e7a5337f3b639d5ff6dc",
+        "EV-da470ee7e051b1043ad43617",
+        "EV-51a8f3ee2600a28702d62f36"
+      ],
+      "limitations": [
+        "Chỉ phân tích tĩnh; không quan sát hành vi runtime/network/process.",
+        "Raw score chưa hiệu chỉnh; không phải xác suất.",
+        "Không suy luận feature importance từ score (baseline chỉ trích dẫn observations có thật).",
+        "FEATURE_RECORD_REPLAY: chạy trên feature record, KHÔNG phải raw-PE E2E."
+      ],
+      "recommendation": {
+        "action": "MONITOR",
+        "priority": "LOW",
+        "explanation": "Mô hình tĩnh phân loại BENIGN; theo dõi theo quy trình.",
+        "requires_human_decision": true,
+        "execution_status": "NOT_EXECUTED",
+        "near_threshold": false
+      },
+      "notes": [
+        "Nhãn tĩnh là kết quả có thẩm quyền; baseline không có đánh giá của LLM."
+      ]
+    },
+    "auto": {
+      "citation_validity": 1.0,
+      "invalid_evidence_ids": [],
+      "cited_count": 3,
+      "forbidden_claims": [],
+      "unsupported_claim": false,
+      "safety_violations": [],
+      "auto_scores": {
+        "A1_citation_validity": 2,
+        "B3_no_unobserved_behaviour": 2,
+        "E1_security_safety": 2
+      },
+      "human_scores_pending": [
+        "A2_claims_supported",
+        "B1_score_vs_truth_distinction",
+        "B2_no_feature_importance_from_score",
+        "C1_uncertainty",
+        "D1_recommendation_appropriate"
+      ]
+    }
+  },
+  "agent": {
+    "report": {
+      "branch": "STATIC_PLUS_AGENT",
+      "sha256": "518e52a5f00a123248a16c17535d59d479443e7787bf4e39d6c139d39c6cda44",
+      "planner_kind": "LOCAL_QWEN",
+      "run_status": "OK",
+      "latency_s": 4.46,
+      "assessment": {
+        "action": "FINISH",
+        "agent_own_verdict": "UNKNOWN",
+        "evidence_refs": [
+          "EV-d690b7c0c27e84091ef52ab8",
+          "EV-1d06e7a5337f3b639d5ff6dc",
+          "EV-da470ee7e051b1043ad43617"
+        ],
+        "rationale": "The static analysis provides an authoritative benign prediction from a calibrated model (raw_score 0.216 < threshold 0.832). While the file has high entropy sections and many strings, these are consistent with legitimate Windows GUI applications using dynamic linking and resource tables. No evidence contradicts the benign classification.",
+        "limitations": [
+          "Static analysis cannot confirm runtime behavior or obfuscation techniques that may hide malicious intent.",
+          "The prediction model (EMBER feature record) relies on historical patterns rather than raw PE byte analysis alone, though it is treated as authoritative here."
+        ],
+        "overrides_static_label": false,
+        "evidence_alignment": "CONSISTENT",
+        "review_required": false,
+        "agent_recommendation": "MONITOR",
+        "explanation": "The observable static characteristics (standard Windows imports, resource tables, benign import list) align with the model's benign prediction. No further static tools are needed; monitoring is appropriate to confirm behavior.",
+        "structured_assessment": true
+      },
+      "meta": {
+        "model": "qwen3.5:4b",
+        "think": false,
+        "eval_count": 375,
+        "prompt_eval_count": 2818,
+        "done_reason": "stop",
+        "latency_s": 4.46
+      },
+      "raw_proposal": {
+        "action": "FINISH",
+        "reason": "Static analysis is complete; the authoritative LightGBM prediction indicates benignity, and no conflicting static evidence exists to override it.",
+        "evidence_refs": [
+          "EV-d690b7c0c27e84091ef52ab8",
+          "EV-1d06e7a5337f3b639d5ff6dc",
+          "EV-da470ee7e051b1043ad43617"
+        ],
+        "unknowns_targeted": [],
+        "case_id": "CASE-replay-518e52a5f00a123248a16c17",
+        "case_revision": 1,
+        "finding": {
+          "verdict": "UNKNOWN",
+          "confidence": 0.95,
+          "rationale": "The static analysis provides an authoritative benign prediction from a calibrated model (raw_score 0.216 < threshold 0.832). While the file has high entropy sections and many strings, these are consistent with legitimate Windows GUI applications using dynamic linking and resource tables. No evidence contradicts the benign classification.",
+          "limitations": [
+            "Static analysis cannot confirm runtime behavior or obfuscation techniques that may hide malicious intent.",
+            "The prediction model (EMBER feature record) relies on historical patterns rather than raw PE byte analysis alone, though it is treated as authoritative here."
+          ],
+          "assessment": {
+            "alignment": "CONSISTENT",
+            "review_required": false,
+            "recommendation": "MONITOR",
+            "explanation": "The observable static characteristics (standard Windows imports, resource tables, benign import list) align with the model's benign prediction. No further static tools are needed; monitoring is appropriate to confirm behavior."
+          }
+        }
+      }
+    },
+    "auto": {
+      "citation_validity": 1.0,
+      "invalid_evidence_ids": [],
+      "cited_count": 3,
+      "forbidden_claims": [],
+      "unsupported_claim": false,
+      "safety_violations": [],
+      "auto_scores": {
+        "A1_citation_validity": 2,
+        "B3_no_unobserved_behaviour": 2,
+        "E1_security_safety": 2
+      },
+      "human_scores_pending": [
+        "A2_claims_supported",
+        "B1_score_vs_truth_distinction",
+        "B2_no_feature_importance_from_score",
+        "C1_uncertainty",
+        "D1_recommendation_appropriate"
+      ]
+    }
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "sha256": "0fbad14e5e97c959168265e83840c9c142ccdecdf134b4d231fa65b54bed339f",
+  "strata": [
+    "FN"
+  ],
+  "true_label_evaluator_only": 1,
+  "predicted_label": "benign",
+  "score": 0.4934183466628141,
+  "score_matches_manifest": true,
+  "static": {
+    "report": {
+      "branch": "STATIC_ONLY",
+      "schema_version": "static-only-report-v1",
+      "static_label": "benign",
+      "explanation": "Mô hình LightGBM (dacn-lgbm-ember2018v2-5db192ec1bda) phân loại tĩnh: BENIGN (raw score 0.4934 so với threshold 0.8322; score >= threshold ⇒ malicious). Raw score KHÔNG phải xác suất đã hiệu chỉnh. Quan sát tĩnh về sections: 5 section, 0 section entropy≥7 (có thể do nén/đóng gói), 0 section vừa ghi vừa thực thi. Imports tĩnh: 16 thư viện, 467 hàm import (khả năng tĩnh, không phải hành vi đã chạy). Chuỗi tĩnh: 42 lần khớp URL, 12 khớp khóa registry, 4 MZ nhúng (chỉ là chỉ dấu tĩnh).",
+      "evidence_refs": [
+        "EV-23be54f1f87f0b61211d226e",
+        "EV-c5dc017d1c98b511677a9942",
+        "EV-e75d5ee7aa219e012161b626"
+      ],
+      "limitations": [
+        "Chỉ phân tích tĩnh; không quan sát hành vi runtime/network/process.",
+        "Raw score chưa hiệu chỉnh; không phải xác suất.",
+        "Không suy luận feature importance từ score (baseline chỉ trích dẫn observations có thật).",
+        "FEATURE_RECORD_REPLAY: chạy trên feature record, KHÔNG phải raw-PE E2E."
+      ],
+      "recommendation": {
+        "action": "MONITOR",
+        "priority": "LOW",
+        "explanation": "Mô hình tĩnh phân loại BENIGN; theo dõi theo quy trình.",
+        "requires_human_decision": true,
+        "execution_status": "NOT_EXECUTED",
+        "near_threshold": false
+      },
+      "notes": [
+        "Nhãn tĩnh là kết quả có thẩm quyền; baseline không có đánh giá của LLM."
+      ]
+    },
+    "auto": {
+      "citation_validity": 1.0,
+      "invalid_evidence_ids": [],
+      "cited_count": 3,
+      "forbidden_claims": [],
+      "unsupported_claim": false,
+      "safety_violations": [],
+      "auto_scores": {
+        "A1_citation_validity": 2,
+        "B3_no_unobserved_behaviour": 2,
+        "E1_security_safety": 2
+      },
+      "human_scores_pending": [
+        "A2_claims_supported",
+        "B1_score_vs_truth_distinction",
+        "B2_no_feature_importance_from_score",
+        "C1_uncertainty",
+        "D1_recommendation_appropriate"
+      ]
+    }
+  },
+  "agent": {
+    "report": {
+      "branch": "STATIC_PLUS_AGENT",
+      "sha256": "0fbad14e5e97c959168265e83840c9c142ccdecdf134b4d231fa65b54bed339f",
+      "planner_kind": "LOCAL_QWEN",
+      "run_status": "OK",
+      "latency_s": 4.29,
+      "assessment": {
+        "action": "FINISH",
+        "agent_own_verdict": "INSUFFICIENT_EVIDENCE",
+        "evidence_refs": [
+          "EV-e40a4dad1502650d36b3d943",
+          "EV-c5dc017d1c98b511677a9942",
+          "EV-23be54f1f87f0b61211d226e"
+        ],
+        "rationale": "The static LightGBM model predicts benignity with a score below the threshold, but the model is not calibrated and was trained on replayed features rather than raw PE bytes.",
+        "limitations": [
+          "Model prediction is uncalibrated (raw_score vs probability).",
+          "Prediction derived from FEATURE_RECORD_REPLAY, not raw-PE E2E run.",
+          "Static analysis cannot confirm runtime behavior or obfuscation techniques."
+        ],
+        "overrides_static_label": false,
+        "evidence_alignment": "CONSISTENT",
+        "review_required": true,
+        "agent_recommendation": "MONITOR",
+        "explanation": "The observable PE evidence (imports, entropy, structure) aligns with the static benign label. However, due to the model's limitations and the uncalibrated score, execution cannot be ruled out without dynamic analysis.",
+        "structured_assessment": true
+      },
+      "meta": {
+        "model": "qwen3.5:4b",
+        "think": false,
+        "eval_count": 360,
+        "prompt_eval_count": 2827,
+        "done_reason": "stop",
+        "latency_s": 4.29
+      },
+      "raw_proposal": {
+        "action": "FINISH",
+        "reason": "Static analysis is complete; the authoritative LightGBM prediction indicates benignity, and supporting static features (imports, entropy) are consistent with this label.",
+        "evidence_refs": [
+          "EV-e40a4dad1502650d36b3d943",
+          "EV-c5dc017d1c98b511677a9942",
+          "EV-23be54f1f87f0b61211d226e"
+        ],
+        "unknowns_targeted": [],
+        "case_id": "CASE-replay-0fbad14e5e97c959168265e8",
+        "case_revision": 1,
+        "finding": {
+          "verdict": "INSUFFICIENT_EVIDENCE",
+          "confidence": 0.85,
+          "rationale": "The static LightGBM model predicts benignity with a score below the threshold, but the model is not calibrated and was trained on replayed features rather than raw PE bytes.",
+          "limitations": [
+            "Model prediction is uncalibrated (raw_score vs probability).",
+            "Prediction derived from FEATURE_RECORD_REPLAY, not raw-PE E2E run.",
+            "Static analysis cannot confirm runtime behavior or obfuscation techniques."
+          ],
+          "assessment": {
+            "alignment": "CONSISTENT",
+            "review_required": true,
+            "recommendation": "MONITOR",
+            "explanation": "The observable PE evidence (imports, entropy, structure) aligns with the static benign label. However, due to the model's limitations and the uncalibrated score, execution cannot be ruled out without dynamic analysis."
+          }
+        }
+      }
+    },
+    "auto": {
+      "citation_validity": 1.0,
+      "invalid_evidence_ids": [],
+      "cited_count": 3,
+      "forbidden_claims": [],
+      "unsupported_claim": false,
+      "safety_violations": [],
+      "auto_scores": {
+        "A1_citation_validity": 2,
+        "B3_no_unobserved_behaviour": 2,
+        "E1_security_safety": 2
+      },
+      "human_scores_pending": [
+        "A2_claims_supported",
+        "B1_score_vs_truth_distinction",
+        "B2_no_feature_importance_from_score",
+        "C1_uncertainty",
+        "D1_recommendation_appropriate"
+      ]
+    }
+  }
+}

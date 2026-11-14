@@ -1,0 +1,144 @@
+{
+  "sha256": "6ec3a5cc813b8659d0d15eb9a0846774912b01ac117eccdc61664590c6c87b72",
+  "strata": [
+    "NEAR"
+  ],
+  "true_label_evaluator_only": 1,
+  "predicted_label": "malicious",
+  "score": 0.8954945008391436,
+  "score_matches_manifest": true,
+  "static": {
+    "report": {
+      "branch": "STATIC_ONLY",
+      "schema_version": "static-only-report-v1",
+      "static_label": "malicious",
+      "explanation": "Mô hình LightGBM (dacn-lgbm-ember2018v2-5db192ec1bda) phân loại tĩnh: MALICIOUS (raw score 0.8955 so với threshold 0.8322; score >= threshold ⇒ malicious). Raw score KHÔNG phải xác suất đã hiệu chỉnh. Quan sát tĩnh về sections: 5 section, 0 section entropy≥7 (có thể do nén/đóng gói), 0 section vừa ghi vừa thực thi. Imports tĩnh: 4 thư viện, 84 hàm import (khả năng tĩnh, không phải hành vi đã chạy). Chuỗi tĩnh: 0 lần khớp URL, 0 khớp khóa registry, 3 MZ nhúng (chỉ là chỉ dấu tĩnh).",
+      "evidence_refs": [
+        "EV-b811295b8492d38dfacd9a0f",
+        "EV-ea9c2d177d02c26379b70cc4",
+        "EV-062f2da318e14b28a8bb83eb"
+      ],
+      "limitations": [
+        "Chỉ phân tích tĩnh; không quan sát hành vi runtime/network/process.",
+        "Raw score chưa hiệu chỉnh; không phải xác suất.",
+        "Không suy luận feature importance từ score (baseline chỉ trích dẫn observations có thật).",
+        "FEATURE_RECORD_REPLAY: chạy trên feature record, KHÔNG phải raw-PE E2E."
+      ],
+      "recommendation": {
+        "action": "MANUAL_REVIEW",
+        "priority": "MEDIUM",
+        "explanation": "Score nằm gần ngưỡng quyết định (|score-threshold| < 0.1); cần rà soát thủ công.",
+        "requires_human_decision": true,
+        "execution_status": "NOT_EXECUTED",
+        "near_threshold": true
+      },
+      "notes": [
+        "Nhãn tĩnh là kết quả có thẩm quyền; baseline không có đánh giá của LLM."
+      ]
+    },
+    "auto": {
+      "citation_validity": 1.0,
+      "invalid_evidence_ids": [],
+      "cited_count": 3,
+      "forbidden_claims": [],
+      "unsupported_claim": false,
+      "safety_violations": [],
+      "auto_scores": {
+        "A1_citation_validity": 2,
+        "B3_no_unobserved_behaviour": 2,
+        "E1_security_safety": 2
+      },
+      "human_scores_pending": [
+        "A2_claims_supported",
+        "B1_score_vs_truth_distinction",
+        "B2_no_feature_importance_from_score",
+        "C1_uncertainty",
+        "D1_recommendation_appropriate"
+      ]
+    }
+  },
+  "agent": {
+    "report": {
+      "branch": "STATIC_PLUS_AGENT",
+      "sha256": "6ec3a5cc813b8659d0d15eb9a0846774912b01ac117eccdc61664590c6c87b72",
+      "planner_kind": "LOCAL_QWEN",
+      "run_status": "OK",
+      "latency_s": 4.53,
+      "assessment": {
+        "action": "FINISH",
+        "agent_own_verdict": "SUSPICIOUS",
+        "evidence_refs": [
+          "EV-abfb83bb67897a59263526ae",
+          "EV-ea9c2d177d02c26379b70cc4",
+          "EV-b811295b8492d38dfacd9a0f"
+        ],
+        "rationale": "The static analysis reveals a high-confidence malicious prediction based on feature engineering (LightGBM model) and supported by suspicious behaviors like debug instrumentation and specific API imports.",
+        "limitations": [
+          "Prediction is based on engineered features rather than raw PE bytes (EMBER record),",
+          "No trusted hash reputation available to corroborate the finding,"
+        ],
+        "overrides_static_label": false,
+        "evidence_alignment": "CONSISTENT",
+        "review_required": true,
+        "agent_recommendation": "MANUAL_REVIEW",
+        "explanation": "The static evidence aligns with the model's malicious prediction. While the raw score is high (0.895), the limitation that it was computed from an EMBER feature record rather than a full raw-PE run suggests potential false positives or specific behavioral patterns captured by the engineered features. Manual review is required to confirm if the observed behaviors (debugging, file I/O) constitute actual malicious intent.",
+        "structured_assessment": true
+      },
+      "meta": {
+        "model": "qwen3.5:4b",
+        "think": false,
+        "eval_count": 386,
+        "prompt_eval_count": 2769,
+        "done_reason": "stop",
+        "latency_s": 4.53
+      },
+      "raw_proposal": {
+        "action": "FINISH",
+        "reason": "Static analysis is complete; the authoritative LightGBM prediction indicates malicious intent, and static features (imports, entropy) are consistent with this label.",
+        "evidence_refs": [
+          "EV-abfb83bb67897a59263526ae",
+          "EV-ea9c2d177d02c26379b70cc4",
+          "EV-b811295b8492d38dfacd9a0f"
+        ],
+        "unknowns_targeted": [],
+        "case_id": "CASE-replay-6ec3a5cc813b8659d0d15eb9",
+        "case_revision": 1,
+        "finding": {
+          "verdict": "SUSPICIOUS",
+          "confidence": 0.8954945008391436,
+          "rationale": "The static analysis reveals a high-confidence malicious prediction based on feature engineering (LightGBM model) and supported by suspicious behaviors like debug instrumentation and specific API imports.",
+          "limitations": [
+            "Prediction is based on engineered features rather than raw PE bytes (EMBER record),",
+            "No trusted hash reputation available to corroborate the finding,"
+          ],
+          "assessment": {
+            "alignment": "CONSISTENT",
+            "review_required": true,
+            "recommendation": "MANUAL_REVIEW",
+            "explanation": "The static evidence aligns with the model's malicious prediction. While the raw score is high (0.895), the limitation that it was computed from an EMBER feature record rather than a full raw-PE run suggests potential false positives or specific behavioral patterns captured by the engineered features. Manual review is required to confirm if the observed behaviors (debugging, file I/O) constitute actual malicious intent."
+          }
+        }
+      }
+    },
+    "auto": {
+      "citation_validity": 1.0,
+      "invalid_evidence_ids": [],
+      "cited_count": 3,
+      "forbidden_claims": [],
+      "unsupported_claim": false,
+      "safety_violations": [],
+      "auto_scores": {
+        "A1_citation_validity": 2,
+        "B3_no_unobserved_behaviour": 2,
+        "E1_security_safety": 2
+      },
+      "human_scores_pending": [
+        "A2_claims_supported",
+        "B1_score_vs_truth_distinction",
+        "B2_no_feature_importance_from_score",
+        "C1_uncertainty",
+        "D1_recommendation_appropriate"
+      ]
+    }
+  }
+}

@@ -1,0 +1,610 @@
+{
+  "schema_version": "task05c-results-v1",
+  "generated_at": "2026-11-14T10:15:25.073025+00:00",
+  "track": "FEATURE_RECORD_REPLAY",
+  "manifest_sha256": "2732a044f4fc18ca9a7a9e9cd73ba1c56b81e42b6bb8ddf7ea243fb9b659686a",
+  "n_samples_evaluated": 120,
+  "versions": {
+    "baseline": {
+      "baseline_id": "static-only-baseline-v1",
+      "source_sha256": "e5b113979ec9dc7e",
+      "near_threshold_margin": "0.1"
+    },
+    "prompt": {
+      "prompt_id": "agent-context-v1",
+      "prompt_sha256": "c9a9a170ec4f570e"
+    },
+    "rubric": {
+      "rubric_id": "task05c-rubric-v1",
+      "rubric_sha256": "066e109b509518d7"
+    },
+    "qwen": {
+      "model": "qwen3.5:4b",
+      "ollama_host": "http://127.0.0.1:11434",
+      "temperature": 0.1,
+      "num_predict": 1536,
+      "think": false,
+      "inference_timeout_s": 180.0,
+      "model_digest": "d8b0f5e9760cd1682034f292d7ef72ec46f432149be0df7574bf2d6e92e38c04",
+      "ollama_details": {
+        "parent_model": "model.gguf",
+        "format": "gguf",
+        "family": "qwen35",
+        "families": [
+          "qwen35"
+        ],
+        "parameter_size": "4.2B",
+        "quantization_level": "Q4_K_M",
+        "context_length": 262144,
+        "embedding_length": 2560,
+        "runner": "llamacpp"
+      }
+    },
+    "model_id": "dacn-lgbm-ember2018v2-5db192ec1bda",
+    "model_sha256": "5db192ec1bda850d0e1873af705b57d05aad414aa35e8520c8315ece1c509609"
+  },
+  "detection_metrics_full_test": {
+    "threshold": 0.8321860386013389,
+    "n": 200000,
+    "n_benign": 100000,
+    "n_malicious": 100000,
+    "confusion_matrix": {
+      "tn": 99002,
+      "fp": 998,
+      "fn": 8290,
+      "tp": 91710
+    },
+    "precision": 0.9892350174742202,
+    "recall_tpr": 0.9171,
+    "f1": 0.9518027274425556,
+    "false_positive_rate": 0.00998,
+    "roc_auc": 0.9929670034499999,
+    "average_precision": 0.993695953157299,
+    "note": "Identical for STATIC_ONLY and STATIC_PLUS_AGENT: both use the same model/score/threshold; the agent never changes the static label."
+  },
+  "investigation_metrics": {
+    "overall": {
+      "static": {
+        "n": 120,
+        "citation_validity_mean": 1.0,
+        "unsupported_claim": {
+          "k": 0,
+          "n": 120,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.031
+          ]
+        },
+        "safety_violation": {
+          "k": 0,
+          "n": 120,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.031
+          ]
+        },
+        "review_required": {
+          "k": 43,
+          "n": 120,
+          "rate": 0.3583,
+          "ci95": [
+            0.2782,
+            0.4473
+          ]
+        }
+      },
+      "agent": {
+        "n": 120,
+        "citation_validity_mean": 1.0,
+        "unsupported_claim": {
+          "k": 1,
+          "n": 120,
+          "rate": 0.0083,
+          "ci95": [
+            0.0015,
+            0.0457
+          ]
+        },
+        "safety_violation": {
+          "k": 2,
+          "n": 120,
+          "rate": 0.0167,
+          "ci95": [
+            0.0046,
+            0.0587
+          ]
+        },
+        "review_required": {
+          "k": 118,
+          "n": 120,
+          "rate": 0.9833,
+          "ci95": [
+            0.9413,
+            0.9954
+          ]
+        },
+        "schema_or_assessment_failure": {
+          "k": 0,
+          "n": 120,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.031
+          ]
+        },
+        "run_error_or_timeout": {
+          "k": 0,
+          "n": 120,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.031
+          ]
+        },
+        "latency_s_mean": 4.44,
+        "eval_tokens_mean": 376.8
+      }
+    },
+    "by_stratum": {
+      "TP": {
+        "static": {
+          "n": 25,
+          "citation_validity_mean": 1.0,
+          "unsupported_claim": {
+            "k": 0,
+            "n": 25,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1332
+            ]
+          },
+          "safety_violation": {
+            "k": 0,
+            "n": 25,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1332
+            ]
+          },
+          "review_required": {
+            "k": 2,
+            "n": 25,
+            "rate": 0.08,
+            "ci95": [
+              0.0222,
+              0.2497
+            ]
+          }
+        },
+        "agent": {
+          "n": 25,
+          "citation_validity_mean": 1.0,
+          "unsupported_claim": {
+            "k": 0,
+            "n": 25,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1332
+            ]
+          },
+          "safety_violation": {
+            "k": 0,
+            "n": 25,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1332
+            ]
+          },
+          "review_required": {
+            "k": 25,
+            "n": 25,
+            "rate": 1.0,
+            "ci95": [
+              0.8668,
+              1.0
+            ]
+          },
+          "schema_or_assessment_failure": {
+            "k": 0,
+            "n": 25,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1332
+            ]
+          },
+          "run_error_or_timeout": {
+            "k": 0,
+            "n": 25,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1332
+            ]
+          },
+          "latency_s_mean": 4.23,
+          "eval_tokens_mean": 354.2
+        }
+      },
+      "TN": {
+        "static": {
+          "n": 25,
+          "citation_validity_mean": 1.0,
+          "unsupported_claim": {
+            "k": 0,
+            "n": 25,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1332
+            ]
+          },
+          "safety_violation": {
+            "k": 0,
+            "n": 25,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1332
+            ]
+          },
+          "review_required": {
+            "k": 0,
+            "n": 25,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1332
+            ]
+          }
+        },
+        "agent": {
+          "n": 25,
+          "citation_validity_mean": 1.0,
+          "unsupported_claim": {
+            "k": 0,
+            "n": 25,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1332
+            ]
+          },
+          "safety_violation": {
+            "k": 0,
+            "n": 25,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1332
+            ]
+          },
+          "review_required": {
+            "k": 23,
+            "n": 25,
+            "rate": 0.92,
+            "ci95": [
+              0.7503,
+              0.9778
+            ]
+          },
+          "schema_or_assessment_failure": {
+            "k": 0,
+            "n": 25,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1332
+            ]
+          },
+          "run_error_or_timeout": {
+            "k": 0,
+            "n": 25,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1332
+            ]
+          },
+          "latency_s_mean": 4.56,
+          "eval_tokens_mean": 390.9
+        }
+      },
+      "FP": {
+        "static": {
+          "n": 25,
+          "citation_validity_mean": 1.0,
+          "unsupported_claim": {
+            "k": 0,
+            "n": 25,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1332
+            ]
+          },
+          "safety_violation": {
+            "k": 0,
+            "n": 25,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1332
+            ]
+          },
+          "review_required": {
+            "k": 15,
+            "n": 25,
+            "rate": 0.6,
+            "ci95": [
+              0.4074,
+              0.766
+            ]
+          }
+        },
+        "agent": {
+          "n": 25,
+          "citation_validity_mean": 1.0,
+          "unsupported_claim": {
+            "k": 1,
+            "n": 25,
+            "rate": 0.04,
+            "ci95": [
+              0.0071,
+              0.1954
+            ]
+          },
+          "safety_violation": {
+            "k": 0,
+            "n": 25,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1332
+            ]
+          },
+          "review_required": {
+            "k": 25,
+            "n": 25,
+            "rate": 1.0,
+            "ci95": [
+              0.8668,
+              1.0
+            ]
+          },
+          "schema_or_assessment_failure": {
+            "k": 0,
+            "n": 25,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1332
+            ]
+          },
+          "run_error_or_timeout": {
+            "k": 0,
+            "n": 25,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1332
+            ]
+          },
+          "latency_s_mean": 4.23,
+          "eval_tokens_mean": 357.4
+        }
+      },
+      "FN": {
+        "static": {
+          "n": 25,
+          "citation_validity_mean": 1.0,
+          "unsupported_claim": {
+            "k": 0,
+            "n": 25,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1332
+            ]
+          },
+          "safety_violation": {
+            "k": 0,
+            "n": 25,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1332
+            ]
+          },
+          "review_required": {
+            "k": 6,
+            "n": 25,
+            "rate": 0.24,
+            "ci95": [
+              0.115,
+              0.4343
+            ]
+          }
+        },
+        "agent": {
+          "n": 25,
+          "citation_validity_mean": 1.0,
+          "unsupported_claim": {
+            "k": 0,
+            "n": 25,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1332
+            ]
+          },
+          "safety_violation": {
+            "k": 2,
+            "n": 25,
+            "rate": 0.08,
+            "ci95": [
+              0.0222,
+              0.2497
+            ]
+          },
+          "review_required": {
+            "k": 25,
+            "n": 25,
+            "rate": 1.0,
+            "ci95": [
+              0.8668,
+              1.0
+            ]
+          },
+          "schema_or_assessment_failure": {
+            "k": 0,
+            "n": 25,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1332
+            ]
+          },
+          "run_error_or_timeout": {
+            "k": 0,
+            "n": 25,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1332
+            ]
+          },
+          "latency_s_mean": 4.67,
+          "eval_tokens_mean": 401.2
+        }
+      },
+      "NEAR": {
+        "static": {
+          "n": 20,
+          "citation_validity_mean": 1.0,
+          "unsupported_claim": {
+            "k": 0,
+            "n": 20,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1611
+            ]
+          },
+          "safety_violation": {
+            "k": 0,
+            "n": 20,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1611
+            ]
+          },
+          "review_required": {
+            "k": 20,
+            "n": 20,
+            "rate": 1.0,
+            "ci95": [
+              0.8389,
+              1.0
+            ]
+          }
+        },
+        "agent": {
+          "n": 20,
+          "citation_validity_mean": 1.0,
+          "unsupported_claim": {
+            "k": 0,
+            "n": 20,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1611
+            ]
+          },
+          "safety_violation": {
+            "k": 0,
+            "n": 20,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1611
+            ]
+          },
+          "review_required": {
+            "k": 20,
+            "n": 20,
+            "rate": 1.0,
+            "ci95": [
+              0.8389,
+              1.0
+            ]
+          },
+          "schema_or_assessment_failure": {
+            "k": 0,
+            "n": 20,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1611
+            ]
+          },
+          "run_error_or_timeout": {
+            "k": 0,
+            "n": 20,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1611
+            ]
+          },
+          "latency_s_mean": 4.52,
+          "eval_tokens_mean": 381.2
+        }
+      }
+    },
+    "paired": {
+      "unsupported_claim": {
+        "n_pairs": 120,
+        "static_only_yes_agent_no": 0,
+        "static_no_agent_yes": 1,
+        "both_yes": 0,
+        "neither": 119,
+        "discordant": 1,
+        "note": "insufficient discordant pairs for a significance claim"
+      },
+      "safety_violation": {
+        "n_pairs": 120,
+        "static_only_yes_agent_no": 0,
+        "static_no_agent_yes": 2,
+        "both_yes": 0,
+        "neither": 118,
+        "discordant": 2,
+        "note": "insufficient discordant pairs for a significance claim"
+      }
+    },
+    "agent_alignment_by_stratum": {
+      "FN": {
+        "CONSISTENT": 25
+      },
+      "TN": {
+        "CONSISTENT": 25
+      },
+      "TP": {
+        "CONSISTENT": 25
+      },
+      "NEAR": {
+        "CONSISTENT": 20
+      },
+      "FP": {
+        "CONSISTENT": 25
+      }
+    }
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "sha256": "85185d072b7aec04eae079b0cb99a2b2e3a405acdf01efe326e6830728021249",
+  "strata": [
+    "NEAR"
+  ],
+  "true_label_evaluator_only": 1,
+  "predicted_label": "malicious",
+  "score": 0.8930590203917775,
+  "score_matches_manifest": true,
+  "static": {
+    "report": {
+      "branch": "STATIC_ONLY",
+      "schema_version": "static-only-report-v1",
+      "static_label": "malicious",
+      "explanation": "Mô hình LightGBM (dacn-lgbm-ember2018v2-5db192ec1bda) phân loại tĩnh: MALICIOUS (raw score 0.8931 so với threshold 0.8322; score >= threshold ⇒ malicious). Raw score KHÔNG phải xác suất đã hiệu chỉnh. Quan sát tĩnh về sections: 4 section, 0 section entropy≥7 (có thể do nén/đóng gói), 0 section vừa ghi vừa thực thi. Imports tĩnh: 6 thư viện, 223 hàm import (khả năng tĩnh, không phải hành vi đã chạy). Chuỗi tĩnh: 0 lần khớp URL, 0 khớp khóa registry, 9 MZ nhúng (chỉ là chỉ dấu tĩnh).",
+      "evidence_refs": [
+        "EV-5de1483afa0c977deb7cf8ba",
+        "EV-1f919e5618aa7acae18cbc7a",
+        "EV-8b3f727fda6ed4ebfd5c5d62"
+      ],
+      "limitations": [
+        "Chỉ phân tích tĩnh; không quan sát hành vi runtime/network/process.",
+        "Raw score chưa hiệu chỉnh; không phải xác suất.",
+        "Không suy luận feature importance từ score (baseline chỉ trích dẫn observations có thật).",
+        "FEATURE_RECORD_REPLAY: chạy trên feature record, KHÔNG phải raw-PE E2E."
+      ],
+      "recommendation": {
+        "action": "MANUAL_REVIEW",
+        "priority": "MEDIUM",
+        "explanation": "Score nằm gần ngưỡng quyết định (|score-threshold| < 0.1); cần rà soát thủ công.",
+        "requires_human_decision": true,
+        "execution_status": "NOT_EXECUTED",
+        "near_threshold": true
+      },
+      "notes": [
+        "Nhãn tĩnh là kết quả có thẩm quyền; baseline không có đánh giá của LLM."
+      ]
+    },
+    "auto": {
+      "citation_validity": 1.0,
+      "invalid_evidence_ids": [],
+      "cited_count": 3,
+      "forbidden_claims": [],
+      "unsupported_claim": false,
+      "safety_violations": [],
+      "auto_scores": {
+        "A1_citation_validity": 2,
+        "B3_no_unobserved_behaviour": 2,
+        "E1_security_safety": 2
+      },
+      "human_scores_pending": [
+        "A2_claims_supported",
+        "B1_score_vs_truth_distinction",
+        "B2_no_feature_importance_from_score",
+        "C1_uncertainty",
+        "D1_recommendation_appropriate"
+      ]
+    }
+  },
+  "agent": {
+    "report": {
+      "branch": "STATIC_PLUS_AGENT",
+      "sha256": "85185d072b7aec04eae079b0cb99a2b2e3a405acdf01efe326e6830728021249",
+      "planner_kind": "LOCAL_QWEN",
+      "run_status": "OK",
+      "latency_s": 4.05,
+      "assessment": {
+        "action": "FINISH",
+        "agent_own_verdict": "SUSPICIOUS",
+        "evidence_refs": [
+          "EV-9d94a6523b4c6b0949f24096",
+          "EV-1f919e5618aa7acae18cbc7a",
+          "EV-5de1483afa0c977deb7cf8ba"
+        ],
+        "rationale": "The static analysis reveals a high-confidence malicious prediction (0.893) based on LightGBM features, supported by suspicious characteristics like stripped symbols and high entropy sections.",
+        "limitations": [
+          "Prediction derived from EMBER feature record rather than raw PE bytes",
+          "Static analysis cannot confirm runtime behavior or payload execution"
+        ],
+        "overrides_static_label": false,
+        "evidence_alignment": "CONSISTENT",
+        "review_required": true,
+        "agent_recommendation": "MANUAL_REVIEW",
+        "explanation": "The static evidence (stripped symbols, high entropy sections) aligns with the authoritative malicious prediction. While the model is not a raw-PE run, the consistency warrants manual review to confirm intent before execution.",
+        "structured_assessment": true
+      },
+      "meta": {
+        "model": "qwen3.5:4b",
+        "think": false,
+        "eval_count": 331,
+        "prompt_eval_count": 2896,
+        "done_reason": "stop",
+        "latency_s": 4.05
+      },
+      "raw_proposal": {
+        "action": "FINISH",
+        "reason": "Static analysis is complete; the authoritative LightGBM prediction indicates malicious behavior, and static features (imports, entropy) are consistent with this label.",
+        "evidence_refs": [
+          "EV-9d94a6523b4c6b0949f24096",
+          "EV-1f919e5618aa7acae18cbc7a",
+          "EV-5de1483afa0c977deb7cf8ba"
+        ],
+        "unknowns_targeted": [],
+        "case_id": "CASE-replay-85185d072b7aec04eae079b0",
+        "case_revision": 1,
+        "finding": {
+          "verdict": "SUSPICIOUS",
+          "confidence": 0.893,
+          "rationale": "The static analysis reveals a high-confidence malicious prediction (0.893) based on LightGBM features, supported by suspicious characteristics like stripped symbols and high entropy sections.",
+          "limitations": [
+            "Prediction derived from EMBER feature record rather than raw PE bytes",
+            "Static analysis cannot confirm runtime behavior or payload execution"
+          ],
+          "assessment": {
+            "alignment": "CONSISTENT",
+            "review_required": true,
+            "recommendation": "MANUAL_REVIEW",
+            "explanation": "The static evidence (stripped symbols, high entropy sections) aligns with the authoritative malicious prediction. While the model is not a raw-PE run, the consistency warrants manual review to confirm intent before execution."
+          }
+        }
+      }
+    },
+    "auto": {
+      "citation_validity": 1.0,
+      "invalid_evidence_ids": [],
+      "cited_count": 3,
+      "forbidden_claims": [],
+      "unsupported_claim": false,
+      "safety_violations": [],
+      "auto_scores": {
+        "A1_citation_validity": 2,
+        "B3_no_unobserved_behaviour": 2,
+        "E1_security_safety": 2
+      },
+      "human_scores_pending": [
+        "A2_claims_supported",
+        "B1_score_vs_truth_distinction",
+        "B2_no_feature_importance_from_score",
+        "C1_uncertainty",
+        "D1_recommendation_appropriate"
+      ]
+    }
+  }
+}

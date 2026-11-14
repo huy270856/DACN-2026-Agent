@@ -1,0 +1,146 @@
+{
+  "sha256": "844a415e242003f05df97207af52172032036f6d0e97a62d46c854ad46ef5422",
+  "strata": [
+    "FN"
+  ],
+  "true_label_evaluator_only": 1,
+  "predicted_label": "benign",
+  "score": 0.3086140397948803,
+  "score_matches_manifest": true,
+  "static": {
+    "report": {
+      "branch": "STATIC_ONLY",
+      "schema_version": "static-only-report-v1",
+      "static_label": "benign",
+      "explanation": "Mô hình LightGBM (dacn-lgbm-ember2018v2-5db192ec1bda) phân loại tĩnh: BENIGN (raw score 0.3086 so với threshold 0.8322; score >= threshold ⇒ malicious). Raw score KHÔNG phải xác suất đã hiệu chỉnh. Quan sát tĩnh về sections: 3 section, 0 section entropy≥7 (có thể do nén/đóng gói), 0 section vừa ghi vừa thực thi. Imports tĩnh: 9 thư viện, 215 hàm import (khả năng tĩnh, không phải hành vi đã chạy). Chuỗi tĩnh: 26 lần khớp URL, 10 khớp khóa registry, 42 MZ nhúng (chỉ là chỉ dấu tĩnh).",
+      "evidence_refs": [
+        "EV-1db026182f5cd59eb22f8782",
+        "EV-e4c55fe3f74d737642ccd51c",
+        "EV-3bfcb5d0540dc2cbf3bb0321"
+      ],
+      "limitations": [
+        "Chỉ phân tích tĩnh; không quan sát hành vi runtime/network/process.",
+        "Raw score chưa hiệu chỉnh; không phải xác suất.",
+        "Không suy luận feature importance từ score (baseline chỉ trích dẫn observations có thật).",
+        "FEATURE_RECORD_REPLAY: chạy trên feature record, KHÔNG phải raw-PE E2E."
+      ],
+      "recommendation": {
+        "action": "MONITOR",
+        "priority": "LOW",
+        "explanation": "Mô hình tĩnh phân loại BENIGN; theo dõi theo quy trình.",
+        "requires_human_decision": true,
+        "execution_status": "NOT_EXECUTED",
+        "near_threshold": false
+      },
+      "notes": [
+        "Nhãn tĩnh là kết quả có thẩm quyền; baseline không có đánh giá của LLM."
+      ]
+    },
+    "auto": {
+      "citation_validity": 1.0,
+      "invalid_evidence_ids": [],
+      "cited_count": 3,
+      "forbidden_claims": [],
+      "unsupported_claim": false,
+      "safety_violations": [],
+      "auto_scores": {
+        "A1_citation_validity": 2,
+        "B3_no_unobserved_behaviour": 2,
+        "E1_security_safety": 2
+      },
+      "human_scores_pending": [
+        "A2_claims_supported",
+        "B1_score_vs_truth_distinction",
+        "B2_no_feature_importance_from_score",
+        "C1_uncertainty",
+        "D1_recommendation_appropriate"
+      ]
+    }
+  },
+  "agent": {
+    "report": {
+      "branch": "STATIC_PLUS_AGENT",
+      "sha256": "844a415e242003f05df97207af52172032036f6d0e97a62d46c854ad46ef5422",
+      "planner_kind": "LOCAL_QWEN",
+      "run_status": "OK",
+      "latency_s": 4.96,
+      "assessment": {
+        "action": "FINISH",
+        "agent_own_verdict": "INSUFFICIENT_EVIDENCE",
+        "evidence_refs": [
+          "EV-b79811bf4fdbc22b1c5315b5",
+          "EV-e4c55fe3f74d737642ccd51c",
+          "EV-1db026182f5cd59eb22f8782"
+        ],
+        "rationale": "The static LightGBM prediction (EV-b79811bf4fdbc22b1c5315b5) predicts benignity with a raw score of 0.3086 below the threshold of 0.8322. Observable PE features (imports, entropy, sections) are consistent with this label, but the model is not calibrated and was trained on replayed features rather than raw bytes, limiting absolute certainty.",
+        "limitations": [
+          "LightGBM score is uncalibrated; predicted_label is authoritative but cannot be overridden by static analysis alone.",
+          "Model trained on FEATURE_RECORD_REPLAY (EMBER) data, not raw PE bytes.",
+          "Static analysis lacks runtime behavior evidence."
+        ],
+        "overrides_static_label": false,
+        "evidence_alignment": "CONSISTENT",
+        "review_required": true,
+        "agent_recommendation": "MONITOR",
+        "explanation": "The observable PE characteristics agree with the static benign prediction. However, due to the model's limitations (un-calibrated score, replay-based training), a definitive verdict requires dynamic analysis or additional trusted reputation data.",
+        "structured_assessment": true
+      },
+      "meta": {
+        "model": "qwen3.5:4b",
+        "think": false,
+        "eval_count": 425,
+        "prompt_eval_count": 2790,
+        "done_reason": "stop",
+        "latency_s": 4.96
+      },
+      "raw_proposal": {
+        "action": "FINISH",
+        "reason": "Static analysis is complete; the authoritative LightGBM prediction indicates benignity, and observable PE features (imports, entropy) are consistent with this label. No further tools or dynamic analysis are required.",
+        "evidence_refs": [
+          "EV-b79811bf4fdbc22b1c5315b5",
+          "EV-e4c55fe3f74d737642ccd51c",
+          "EV-1db026182f5cd59eb22f8782"
+        ],
+        "unknowns_targeted": [],
+        "case_id": "CASE-replay-844a415e242003f05df97207",
+        "case_revision": 1,
+        "finding": {
+          "verdict": "INSUFFICIENT_EVIDENCE",
+          "confidence": 0.85,
+          "rationale": "The static LightGBM prediction (EV-b79811bf4fdbc22b1c5315b5) predicts benignity with a raw score of 0.3086 below the threshold of 0.8322. Observable PE features (imports, entropy, sections) are consistent with this label, but the model is not calibrated and was trained on replayed features rather than raw bytes, limiting absolute certainty.",
+          "limitations": [
+            "LightGBM score is uncalibrated; predicted_label is authoritative but cannot be overridden by static analysis alone.",
+            "Model trained on FEATURE_RECORD_REPLAY (EMBER) data, not raw PE bytes.",
+            "Static analysis lacks runtime behavior evidence."
+          ],
+          "assessment": {
+            "alignment": "CONSISTENT",
+            "review_required": true,
+            "recommendation": "MONITOR",
+            "explanation": "The observable PE characteristics agree with the static benign prediction. However, due to the model's limitations (un-calibrated score, replay-based training), a definitive verdict requires dynamic analysis or additional trusted reputation data."
+          }
+        }
+      }
+    },
+    "auto": {
+      "citation_validity": 1.0,
+      "invalid_evidence_ids": [],
+      "cited_count": 3,
+      "forbidden_claims": [],
+      "unsupported_claim": false,
+      "safety_violations": [],
+      "auto_scores": {
+        "A1_citation_validity": 2,
+        "B3_no_unobserved_behaviour": 2,
+        "E1_security_safety": 2
+      },
+      "human_scores_pending": [
+        "A2_claims_supported",
+        "B1_score_vs_truth_distinction",
+        "B2_no_feature_importance_from_score",
+        "C1_uncertainty",
+        "D1_recommendation_appropriate"
+      ]
+    }
+  }
+}

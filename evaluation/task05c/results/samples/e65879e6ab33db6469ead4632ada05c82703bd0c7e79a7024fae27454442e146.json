@@ -1,0 +1,146 @@
+{
+  "sha256": "e65879e6ab33db6469ead4632ada05c82703bd0c7e79a7024fae27454442e146",
+  "strata": [
+    "NEAR"
+  ],
+  "true_label_evaluator_only": 1,
+  "predicted_label": "benign",
+  "score": 0.8103096833933352,
+  "score_matches_manifest": true,
+  "static": {
+    "report": {
+      "branch": "STATIC_ONLY",
+      "schema_version": "static-only-report-v1",
+      "static_label": "benign",
+      "explanation": "Mô hình LightGBM (dacn-lgbm-ember2018v2-5db192ec1bda) phân loại tĩnh: BENIGN (raw score 0.8103 so với threshold 0.8322; score >= threshold ⇒ malicious). Raw score KHÔNG phải xác suất đã hiệu chỉnh. Quan sát tĩnh về sections: 4 section, 0 section entropy≥7 (có thể do nén/đóng gói), 0 section vừa ghi vừa thực thi. Imports tĩnh: 6 thư viện, 223 hàm import (khả năng tĩnh, không phải hành vi đã chạy). Chuỗi tĩnh: 0 lần khớp URL, 0 khớp khóa registry, 9 MZ nhúng (chỉ là chỉ dấu tĩnh).",
+      "evidence_refs": [
+        "EV-2cc6ed0e1a99d75676416f72",
+        "EV-105367101e48e395e5bdb08f",
+        "EV-cbac345b98e986370502397c"
+      ],
+      "limitations": [
+        "Chỉ phân tích tĩnh; không quan sát hành vi runtime/network/process.",
+        "Raw score chưa hiệu chỉnh; không phải xác suất.",
+        "Không suy luận feature importance từ score (baseline chỉ trích dẫn observations có thật).",
+        "FEATURE_RECORD_REPLAY: chạy trên feature record, KHÔNG phải raw-PE E2E."
+      ],
+      "recommendation": {
+        "action": "MANUAL_REVIEW",
+        "priority": "MEDIUM",
+        "explanation": "Score nằm gần ngưỡng quyết định (|score-threshold| < 0.1); cần rà soát thủ công.",
+        "requires_human_decision": true,
+        "execution_status": "NOT_EXECUTED",
+        "near_threshold": true
+      },
+      "notes": [
+        "Nhãn tĩnh là kết quả có thẩm quyền; baseline không có đánh giá của LLM."
+      ]
+    },
+    "auto": {
+      "citation_validity": 1.0,
+      "invalid_evidence_ids": [],
+      "cited_count": 3,
+      "forbidden_claims": [],
+      "unsupported_claim": false,
+      "safety_violations": [],
+      "auto_scores": {
+        "A1_citation_validity": 2,
+        "B3_no_unobserved_behaviour": 2,
+        "E1_security_safety": 2
+      },
+      "human_scores_pending": [
+        "A2_claims_supported",
+        "B1_score_vs_truth_distinction",
+        "B2_no_feature_importance_from_score",
+        "C1_uncertainty",
+        "D1_recommendation_appropriate"
+      ]
+    }
+  },
+  "agent": {
+    "report": {
+      "branch": "STATIC_PLUS_AGENT",
+      "sha256": "e65879e6ab33db6469ead4632ada05c82703bd0c7e79a7024fae27454442e146",
+      "planner_kind": "LOCAL_QWEN",
+      "run_status": "OK",
+      "latency_s": 5.45,
+      "assessment": {
+        "action": "FINISH",
+        "agent_own_verdict": "INSUFFICIENT_EVIDENCE",
+        "evidence_refs": [
+          "EV-5bb695872f69d9784f9deefd",
+          "EV-105367101e48e395e5bdb08f",
+          "EV-2cc6ed0e1a99d75676416f72"
+        ],
+        "rationale": "The static analysis provides an authoritative benign prediction from a LightGBM model (EV-5bb695872f69d9784f9deefd) with a raw score of 0.81, which is below the threshold of 0.83. While the static features (imports, entropy, sections) are consistent with benign Windows GUI applications, the model explicitly states it was computed from an EMBER feature record rather than raw PE bytes, and the score is not calibrated. This limitation prevents a definitive conclusion despite the high confidence in the 'benign' label.",
+        "limitations": [
+          "LightGBM prediction derived from EMBER features, not raw PE bytes (EV-5bb695872f69d9784f9deefd)",
+          "Raw score is not a calibrated probability (EV-5bb695872f69d9784f9deefd)",
+          "Static analysis cannot confirm runtime behavior or obfuscation techniques"
+        ],
+        "overrides_static_label": false,
+        "evidence_alignment": "CONSISTENT",
+        "review_required": true,
+        "agent_recommendation": "MONITOR",
+        "explanation": "The observable PE evidence (imports, entropy, structure) aligns with the static benign label. However, due to the model's limitations regarding data source and calibration, a definitive verdict cannot be issued without dynamic analysis or trusted reputation data.",
+        "structured_assessment": true
+      },
+      "meta": {
+        "model": "qwen3.5:4b",
+        "think": false,
+        "eval_count": 479,
+        "prompt_eval_count": 2900,
+        "done_reason": "stop",
+        "latency_s": 5.45
+      },
+      "raw_proposal": {
+        "action": "FINISH",
+        "reason": "Static analysis is complete; the authoritative LightGBM prediction indicates benignity, and static features are consistent with this label.",
+        "evidence_refs": [
+          "EV-5bb695872f69d9784f9deefd",
+          "EV-105367101e48e395e5bdb08f",
+          "EV-2cc6ed0e1a99d75676416f72"
+        ],
+        "unknowns_targeted": [],
+        "case_id": "CASE-replay-e65879e6ab33db6469ead463",
+        "case_revision": 1,
+        "finding": {
+          "verdict": "INSUFFICIENT_EVIDENCE",
+          "confidence": 0.85,
+          "rationale": "The static analysis provides an authoritative benign prediction from a LightGBM model (EV-5bb695872f69d9784f9deefd) with a raw score of 0.81, which is below the threshold of 0.83. While the static features (imports, entropy, sections) are consistent with benign Windows GUI applications, the model explicitly states it was computed from an EMBER feature record rather than raw PE bytes, and the score is not calibrated. This limitation prevents a definitive conclusion despite the high confidence in the 'benign' label.",
+          "limitations": [
+            "LightGBM prediction derived from EMBER features, not raw PE bytes (EV-5bb695872f69d9784f9deefd)",
+            "Raw score is not a calibrated probability (EV-5bb695872f69d9784f9deefd)",
+            "Static analysis cannot confirm runtime behavior or obfuscation techniques"
+          ],
+          "assessment": {
+            "alignment": "CONSISTENT",
+            "review_required": true,
+            "recommendation": "MONITOR",
+            "explanation": "The observable PE evidence (imports, entropy, structure) aligns with the static benign label. However, due to the model's limitations regarding data source and calibration, a definitive verdict cannot be issued without dynamic analysis or trusted reputation data."
+          }
+        }
+      }
+    },
+    "auto": {
+      "citation_validity": 1.0,
+      "invalid_evidence_ids": [],
+      "cited_count": 3,
+      "forbidden_claims": [],
+      "unsupported_claim": false,
+      "safety_violations": [],
+      "auto_scores": {
+        "A1_citation_validity": 2,
+        "B3_no_unobserved_behaviour": 2,
+        "E1_security_safety": 2
+      },
+      "human_scores_pending": [
+        "A2_claims_supported",
+        "B1_score_vs_truth_distinction",
+        "B2_no_feature_importance_from_score",
+        "C1_uncertainty",
+        "D1_recommendation_appropriate"
+      ]
+    }
+  }
+}

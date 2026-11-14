@@ -1,0 +1,146 @@
+{
+  "sha256": "a56a23f58d600106db77f2d7d0a1d0c3091608b4809a9f196c086e1301c03410",
+  "strata": [
+    "TN"
+  ],
+  "true_label_evaluator_only": 0,
+  "predicted_label": "benign",
+  "score": 0.026438045819942694,
+  "score_matches_manifest": true,
+  "static": {
+    "report": {
+      "branch": "STATIC_ONLY",
+      "schema_version": "static-only-report-v1",
+      "static_label": "benign",
+      "explanation": "Mô hình LightGBM (dacn-lgbm-ember2018v2-5db192ec1bda) phân loại tĩnh: BENIGN (raw score 0.0264 so với threshold 0.8322; score >= threshold ⇒ malicious). Raw score KHÔNG phải xác suất đã hiệu chỉnh. Quan sát tĩnh về sections: 9 section, 0 section entropy≥7 (có thể do nén/đóng gói), 1 section vừa ghi vừa thực thi. Imports tĩnh: 4 thư viện, 85 hàm import (khả năng tĩnh, không phải hành vi đã chạy). Chuỗi tĩnh: 0 lần khớp URL, 0 khớp khóa registry, 4 MZ nhúng (chỉ là chỉ dấu tĩnh).",
+      "evidence_refs": [
+        "EV-64acea98beecfc2586dce5f9",
+        "EV-6709c0db4d0d5b4308a92104",
+        "EV-0048d90b86ebd1f29d7150dc"
+      ],
+      "limitations": [
+        "Chỉ phân tích tĩnh; không quan sát hành vi runtime/network/process.",
+        "Raw score chưa hiệu chỉnh; không phải xác suất.",
+        "Không suy luận feature importance từ score (baseline chỉ trích dẫn observations có thật).",
+        "FEATURE_RECORD_REPLAY: chạy trên feature record, KHÔNG phải raw-PE E2E."
+      ],
+      "recommendation": {
+        "action": "MONITOR",
+        "priority": "LOW",
+        "explanation": "Mô hình tĩnh phân loại BENIGN; theo dõi theo quy trình.",
+        "requires_human_decision": true,
+        "execution_status": "NOT_EXECUTED",
+        "near_threshold": false
+      },
+      "notes": [
+        "Nhãn tĩnh là kết quả có thẩm quyền; baseline không có đánh giá của LLM."
+      ]
+    },
+    "auto": {
+      "citation_validity": 1.0,
+      "invalid_evidence_ids": [],
+      "cited_count": 3,
+      "forbidden_claims": [],
+      "unsupported_claim": false,
+      "safety_violations": [],
+      "auto_scores": {
+        "A1_citation_validity": 2,
+        "B3_no_unobserved_behaviour": 2,
+        "E1_security_safety": 2
+      },
+      "human_scores_pending": [
+        "A2_claims_supported",
+        "B1_score_vs_truth_distinction",
+        "B2_no_feature_importance_from_score",
+        "C1_uncertainty",
+        "D1_recommendation_appropriate"
+      ]
+    }
+  },
+  "agent": {
+    "report": {
+      "branch": "STATIC_PLUS_AGENT",
+      "sha256": "a56a23f58d600106db77f2d7d0a1d0c3091608b4809a9f196c086e1301c03410",
+      "planner_kind": "LOCAL_QWEN",
+      "run_status": "OK",
+      "latency_s": 4.48,
+      "assessment": {
+        "action": "FINISH",
+        "agent_own_verdict": "INSUFFICIENT_EVIDENCE",
+        "evidence_refs": [
+          "EV-e14458354ea1dd9a27f4240d",
+          "EV-6709c0db4d0d5b4308a92104",
+          "EV-0048d90b86ebd1f29d7150dc"
+        ],
+        "rationale": "The static analysis provides an authoritative benign prediction from a calibrated LightGBM model, but the evidence is derived from potentially untrusted content and lacks independent verification (e.g., trusted hash reputation or dynamic execution).",
+        "limitations": [
+          "Evidence source marked as UNTRUSTED_CONTENT",
+          "No trusted hash reputation available for cross-verification",
+          "Static analysis cannot definitively rule out obfuscated benign code or false positives without dynamic confirmation"
+        ],
+        "overrides_static_label": false,
+        "evidence_alignment": "CONSISTENT",
+        "review_required": true,
+        "agent_recommendation": "MONITOR",
+        "explanation": "The observable PE characteristics (GUI imports, standard sections) align with the static benign prediction. However, due to the untrusted nature of the evidence and the absence of a trusted reputation check, we cannot confirm safety with high confidence. Monitoring is recommended to observe behavior in an isolated environment.",
+        "structured_assessment": true
+      },
+      "meta": {
+        "model": "qwen3.5:4b",
+        "think": false,
+        "eval_count": 376,
+        "prompt_eval_count": 2959,
+        "done_reason": "stop",
+        "latency_s": 4.48
+      },
+      "raw_proposal": {
+        "action": "FINISH",
+        "reason": "Static analysis is complete; the authoritative LightGBM prediction indicates benignity, and supporting PE metadata (imports, sections) are consistent with a benign GUI application.",
+        "evidence_refs": [
+          "EV-e14458354ea1dd9a27f4240d",
+          "EV-6709c0db4d0d5b4308a92104",
+          "EV-0048d90b86ebd1f29d7150dc"
+        ],
+        "unknowns_targeted": [],
+        "case_id": "CASE-replay-a56a23f58d600106db77f2d7",
+        "case_revision": 1,
+        "finding": {
+          "verdict": "INSUFFICIENT_EVIDENCE",
+          "confidence": 0.95,
+          "rationale": "The static analysis provides an authoritative benign prediction from a calibrated LightGBM model, but the evidence is derived from potentially untrusted content and lacks independent verification (e.g., trusted hash reputation or dynamic execution).",
+          "limitations": [
+            "Evidence source marked as UNTRUSTED_CONTENT",
+            "No trusted hash reputation available for cross-verification",
+            "Static analysis cannot definitively rule out obfuscated benign code or false positives without dynamic confirmation"
+          ],
+          "assessment": {
+            "alignment": "CONSISTENT",
+            "review_required": true,
+            "recommendation": "MONITOR",
+            "explanation": "The observable PE characteristics (GUI imports, standard sections) align with the static benign prediction. However, due to the untrusted nature of the evidence and the absence of a trusted reputation check, we cannot confirm safety with high confidence. Monitoring is recommended to observe behavior in an isolated environment."
+          }
+        }
+      }
+    },
+    "auto": {
+      "citation_validity": 1.0,
+      "invalid_evidence_ids": [],
+      "cited_count": 3,
+      "forbidden_claims": [],
+      "unsupported_claim": false,
+      "safety_violations": [],
+      "auto_scores": {
+        "A1_citation_validity": 2,
+        "B3_no_unobserved_behaviour": 2,
+        "E1_security_safety": 2
+      },
+      "human_scores_pending": [
+        "A2_claims_supported",
+        "B1_score_vs_truth_distinction",
+        "B2_no_feature_importance_from_score",
+        "C1_uncertainty",
+        "D1_recommendation_appropriate"
+      ]
+    }
+  }
+}
