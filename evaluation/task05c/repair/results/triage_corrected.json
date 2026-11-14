@@ -1,15 +1,42 @@
 {
-  "schema_version": "triage-corrected-v1",
-  "note": "Fair common human_review_required recomputed from saved data; original per-branch review metric retained as baseline in eval_results.json.",
+  "schema_version": "triage-corrected-v2",
+  "note": "Fair common human_review_required recomputed from saved data; original per-branch review metric retained as baseline in eval_results.json. Unknown/invalid actions are NOT coerced to False: strict metrics exclude them (with coverage reported) and the operational fallback requires review.",
   "review_mapping": {
     "MANUAL_REVIEW": true,
     "CONSIDER_QUARANTINE": true,
     "AVOID_EXECUTION": true,
     "MONITOR": false
   },
+  "valid_actions": [
+    "AVOID_EXECUTION",
+    "CONSIDER_QUARANTINE",
+    "MANUAL_REVIEW",
+    "MONITOR"
+  ],
   "n": 120,
+  "action_coverage": {
+    "static": {
+      "valid": 120,
+      "n": 120,
+      "unknown": 0
+    },
+    "agent": {
+      "valid": 120,
+      "n": 120,
+      "unknown": 0
+    }
+  },
   "overall": {
     "static_review_normalized": {
+      "k": 76,
+      "n": 120,
+      "rate": 0.6333,
+      "ci95": [
+        0.5442,
+        0.7142
+      ]
+    },
+    "static_review_operational": {
       "k": 76,
       "n": 120,
       "rate": 0.6333,
@@ -28,6 +55,15 @@
       ]
     },
     "agent_review_normalized": {
+      "k": 34,
+      "n": 120,
+      "rate": 0.2833,
+      "ci95": [
+        0.2104,
+        0.3697
+      ]
+    },
+    "agent_review_operational": {
       "k": 34,
       "n": 120,
       "rate": 0.2833,
@@ -198,14 +234,15 @@
       }
     }
   },
-  "paired_normalized_review": {
+  "paired_normalized_review_valid_only": {
     "n_pairs": 120,
     "static_only_yes_agent_no": 42,
     "static_no_agent_yes": 0,
     "both_yes": 34,
     "neither": 44,
     "discordant": 42,
-    "note": "report McNemar exact/continuity-corrected test externally if a claim is needed"
+    "note": "report McNemar exact/continuity-corrected test externally if a claim is needed",
+    "excluded_invalid_pairs": 0
   },
   "interpretation": "On FP (benign truly, model says malicious) a high review rate is GOOD (a human could catch the false alarm); on FN (malware the model missed) review is the only chance to recover, but the agent's near-constant review on FN also fires on everything else, so it does not *discriminate*. A higher review rate is not automatically better: indiscriminate review has low triage value. Compare review rates together with alignment (all CONSISTENT) and cost."
 }

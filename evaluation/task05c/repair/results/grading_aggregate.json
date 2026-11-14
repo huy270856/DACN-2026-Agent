@@ -1,7 +1,8 @@
 {
-  "schema_version": "grading-aggregate-v1",
+  "schema_version": "grading-aggregate-v2",
   "status": "CHƯA CHẤM",
-  "forms_total": 240,
+  "validation_errors": [],
+  "forms_total_label_slots": 240,
   "forms_fully_filled": 0,
   "per_branch": {
     "STATIC_ONLY": {
@@ -19,5 +20,5 @@
       "D1_recommendation_appropriate": "CHƯA CHẤM"
     }
   },
-  "note": "Semantic scores are HUMAN-entered; this tool only aggregates. No LLM-as-judge, no auto-fill."
+  "note": "Semantic scores are HUMAN-entered integers 0/1/2; this tool only validates and aggregates. No LLM-as-judge, no auto-fill. COMPLETE requires every X/Y slot filled with a valid score and a clean mapping."
 }

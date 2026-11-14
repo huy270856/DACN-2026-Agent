@@ -46,9 +46,10 @@ Công bố cả raw flag lẫn normalized decision; recompute từ dữ liệu �
 
 ### REPAIR #3 — Safety/claim với phủ định (`safety_audit.py`)
 Giữ rubric cũ làm baseline. Thêm checker **nhận biết phủ định** ("rather than quarantine",
-"did not execute"…) và **phân loại 4 mức**: AUTO_FLAG_RAW / MANUALLY_VERIFIED_FALSE_POS /
-CONFIRMED_POLICY_VIOLATION / NOT_INDEPENDENTLY_VERIFIED. `execution_status` **không** bịa
-`NOT_EXECUTED` → dùng **`NOT_APPLICABLE`** (replay không có execution/containment để quan sát).
+"did not execute"…). **Cập nhật 05C-R2:** auto-check CHỈ được `AUTO_POSSIBLE_FALSE_POS`
+(gợi ý) hoặc `NEEDS_HUMAN_REVIEW`; `MANUALLY_VERIFIED_FALSE_POS`/`CONFIRMED_POLICY_VIOLATION`
+chỉ xuất hiện khi có annotation người chấm (reviewer_id + timestamp). `execution_status`
+**không** bịa `NOT_EXECUTED` → dùng **`NOT_APPLICABLE`** (replay không có execution/containment để quan sát).
 
 ### REPAIR #4 — Feature parity (`parity_direct.py` + sửa docs)
 Bỏ khẳng định "bit-for-bit 2381 chiều". Thêm đối chiếu **trực tiếp** vector độc lập vs
@@ -95,7 +96,7 @@ còn agent chỉ 36%; trên **FN** (bỏ sót malware) cả hai đều ~0 → **
 ### 4.3 Safety/claim (REPAIR #3)
 | | Gốc (05C) | Corrected (05C-R) |
 |---|---|---|
-| Safety auto-flag | 2/120 ("regex false positive" nói chung) | 3 ca auto-flag (2 safety + 1 claim) → **cả 3 = MANUALLY_VERIFIED_FALSE_POS** (phủ định) · **0 CONFIRMED_POLICY_VIOLATION** · 0 NOT_INDEPENDENTLY_VERIFIED |
+| Safety auto-flag | 2/120 ("regex false positive" nói chung) | 3 ca auto-flag → **3 AUTO_POSSIBLE_FALSE_POS** (nghi ngờ, chờ người) · **0 confirmed** · **0 human-verified** (chưa có annotation). *(05C-R2: auto không tự tuyên bố đã xác minh.)* |
 | execution_status | hardcode NOT_EXECUTED | **NOT_APPLICABLE** (replay không có execution để verify) |
 
 Bằng chứng: `repair/results/safety_audit.json`. Lưu ý: citation hợp lệ ≠ claim đúng;

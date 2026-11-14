@@ -26,10 +26,25 @@ from evaluation.task05c import metrics
 
 REVIEW_MAP = {"MANUAL_REVIEW": True, "CONSIDER_QUARANTINE": True,
               "AVOID_EXECUTION": True, "MONITOR": False}
+VALID_ACTIONS = frozenset(REVIEW_MAP)
 
 
-def normalized_review(action) -> bool:
-    return bool(REVIEW_MAP.get(action, False))
+def normalized_review(action):
+    """True/False for a VALID action; None for an invalid/unknown/null action.
+
+    Unknown is NOT silently coerced to False. Strict metrics exclude None; the
+    paired test uses only pairs valid on both branches.
+    """
+    if action not in VALID_ACTIONS:
+        return None
+    return REVIEW_MAP[action]
+
+
+def operational_review(action) -> bool:
+    """Fail-safe operational decision: an unknown/invalid action REQUIRES review
+    (never treated as MONITOR). Only a valid MONITOR yields no-review."""
+    r = normalized_review(action)
+    return True if r is None else r
 
 
 def recompute(samples_dir: Path) -> Dict[str, Any]:
@@ -45,17 +60,26 @@ def recompute(samples_dir: Path) -> Dict[str, Any]:
             "sha256": r["sha256"], "strata": r["strata"],
             "predicted_label": r["predicted_label"],
             "static_action": static_action,
+            "static_action_valid": static_action in VALID_ACTIONS,
             "static_review_normalized": normalized_review(static_action),
+            "static_review_operational": operational_review(static_action),
             "static_review_raw_manual_only": static_action == "MANUAL_REVIEW",
             "agent_action": agent_action,
-            "agent_review_normalized": normalized_review(agent_action) if agent_action else None,
+            "agent_action_valid": agent_action in VALID_ACTIONS,
+            "agent_review_normalized": normalized_review(agent_action),
+            "agent_review_operational": operational_review(agent_action),
             "agent_review_raw_flag": bool(ass.get("review_required")),
         })
 
     def rate(key, pool):
+        # Strict: exclude None (unknown/invalid) from numerator and denominator.
         vals = [p[key] for p in pool if p[key] is not None]
         k = sum(1 for v in vals if v)
         return metrics.proportion(k, len(vals))
+
+    def coverage(valid_key, pool):
+        n_valid = sum(1 for p in pool if p[valid_key])
+        return {"valid": n_valid, "n": len(pool), "unknown": len(pool) - n_valid}
 
     strata = ("TP", "TN", "FP", "FN", "NEAR")
     by_stratum = {}
@@ -69,26 +93,39 @@ def recompute(samples_dir: Path) -> Dict[str, Any]:
                 "agent_review_raw_flag": rate("agent_review_raw_flag", pool),
             }
 
-    # Paired (same samples) normalized review decision.
-    s_norm = [p["static_review_normalized"] for p in per]
-    a_norm = [p["agent_review_normalized"] if p["agent_review_normalized"] is not None
-              else False for p in per]
-    paired = metrics.mcnemar_counts(s_norm, a_norm)
+    # Paired (same samples) NORMALIZED review decision: only pairs valid on BOTH
+    # branches; excluded pairs are reported, never defaulted to False.
+    valid_pairs = [p for p in per if p["static_review_normalized"] is not None
+                   and p["agent_review_normalized"] is not None]
+    excluded = len(per) - len(valid_pairs)
+    paired = metrics.mcnemar_counts(
+        [p["static_review_normalized"] for p in valid_pairs],
+        [p["agent_review_normalized"] for p in valid_pairs])
+    paired["excluded_invalid_pairs"] = excluded
 
     return {
-        "schema_version": "triage-corrected-v1",
-        "note": "Fair common human_review_required recomputed from saved data; "
-                "original per-branch review metric retained as baseline in eval_results.json.",
+        "schema_version": "triage-corrected-v2",
+        "note": "Fair common human_review_required recomputed from saved data; original "
+                "per-branch review metric retained as baseline in eval_results.json. Unknown/"
+                "invalid actions are NOT coerced to False: strict metrics exclude them (with "
+                "coverage reported) and the operational fallback requires review.",
         "review_mapping": REVIEW_MAP,
+        "valid_actions": sorted(VALID_ACTIONS),
         "n": len(per),
+        "action_coverage": {
+            "static": coverage("static_action_valid", per),
+            "agent": coverage("agent_action_valid", per),
+        },
         "overall": {
             "static_review_normalized": rate("static_review_normalized", per),
+            "static_review_operational": rate("static_review_operational", per),
             "static_review_raw_manual_only": rate("static_review_raw_manual_only", per),
             "agent_review_normalized": rate("agent_review_normalized", per),
+            "agent_review_operational": rate("agent_review_operational", per),
             "agent_review_raw_flag": rate("agent_review_raw_flag", per),
         },
         "by_stratum": by_stratum,
-        "paired_normalized_review": paired,
+        "paired_normalized_review_valid_only": paired,
         "interpretation": (
             "On FP (benign truly, model says malicious) a high review rate is GOOD "
             "(a human could catch the false alarm); on FN (malware the model missed) "
