@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/dacn/d0/static-prediction-v1.schema.json",
+  "title": "Static PE malware prediction output (provider payload)",
+  "description": "ADDITIVE prediction contract (TASK 05B). The provider payload before D7 wraps it in a D.0 ToolResult. Represents one successful LightGBM inference over EMBER v2 features extracted read-only from a PE. Failures use ToolResult.status/error instead. Does NOT replace the D0 ember-output-v1 feature contract; no feature vector is carried here. The raw model score is NOT a calibrated probability.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "feature_version",
+    "feature_count",
+    "extractor",
+    "target_sha256",
+    "model_id",
+    "model_sha256",
+    "threshold",
+    "raw_score",
+    "score_is_calibrated_probability",
+    "predicted_label",
+    "predicted_class",
+    "parser_status"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "static-prediction-v1"
+    },
+    "feature_version": {
+      "const": 2
+    },
+    "feature_count": {
+      "const": 2381
+    },
+    "extractor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "lief_version"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "version": {"type": "string", "minLength": 1},
+        "lief_version": {"type": "string", "minLength": 1}
+      }
+    },
+    "target_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "model_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "model_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "threshold": {
+      "type": "number"
+    },
+    "raw_score": {
+      "type": "number"
+    },
+    "score_is_calibrated_probability": {
+      "const": false
+    },
+    "predicted_label": {
+      "type": "string",
+      "enum": ["benign", "malicious"]
+    },
+    "predicted_class": {
+      "type": "integer",
+      "enum": [0, 1]
+    },
+    "parser_status": {
+      "type": "string",
+      "enum": ["OK", "PARSED_NULL", "MALFORMED", "ERROR"]
+    },
+    "limitations": {
+      "type": "array",
+      "items": {"type": "string"},
+      "default": []
+    }
+  }
+}

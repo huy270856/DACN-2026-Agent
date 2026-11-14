@@ -303,6 +303,88 @@ def build_investigation_backend(config: AppConfig):
     return registry, orch
 
 
+def investigate_real(config: AppConfig, *, file: Optional[str] = None,
+                     case_id: Optional[str] = None, agent_config=None, planner=None,
+                     run_agent: bool = True) -> Dict[str, Any]:
+    """TASK 05B: real detector -> Node C -> Qwen -> Vietnamese investigation report.
+
+    PE -> Node B -> D1-D9 -> real EMBER v2 + LightGBM -> Node C evidence ->
+    Qwen3.5-4B assessment -> phiếu điều tra (JSON + Markdown). No mock analyzer.
+    Fails closed to a BLOCKED report if the TASK 05A model artifact is invalid.
+    """
+    if os.name != "nt":
+        return {"supported": False,
+                "reason": "The detector drives the Windows-only D5 executor; unsupported here"}
+    from dacn import investigation as inv
+
+    # 1. Verify the TASK 05A detector artifact up front (no mock fallback).
+    try:
+        manifest = inv.load_model_manifest()
+    except inv.DetectorUnavailableError as exc:
+        return {"supported": True, "overall_status": "BLOCKED_DETECTOR",
+                "error": str(exc),
+                "note": "Real model artifact invalid/missing; refusing to substitute a mock."}
+
+    # 2. Intake a new file into a case, or use an existing case.
+    if file is not None:
+        intake = intake_file(file, config)
+        if intake.get("collection_status") == "FAILED":
+            return {"supported": True, "overall_status": "BLOCKED_INTAKE",
+                    "error": "Node B collection failed for the target", "intake": intake}
+        case_id = intake["case_id"]
+    if case_id is None:
+        raise ApplicationError("investigate_real requires --file or --case-id")
+    try:
+        case_file = cm.case_path(config.cases_dir, case_id)
+    except ValueError as exc:
+        raise InvalidCaseIdError(f"Invalid case id: {exc}") from exc
+    if not case_file.exists():
+        raise CaseNotFoundError(f"Case not found: {case_id}")
+
+    registry, orch = inv.build_detector_backend(config, manifest)
+    state = cm.validate_case(cm.read_json(case_file))
+
+    # 3. Deterministic real static prediction through D1-D9 -> Node C.
+    prediction_record = inv.run_static_prediction(config, orch, case_file, state)
+    state = cm.validate_case(cm.read_json(case_file))
+    prediction_ev = inv.read_prediction_evidence(state)
+
+    # 4. Local Qwen assessment over the committed evidence (only if prediction exists).
+    agent_report = None
+    if prediction_ev is not None and run_agent:
+        from agent.config import AgentConfig
+        from agent.loop import run_investigation
+        acfg = agent_config or AgentConfig.from_env()
+        if planner is None:
+            from agent.planner import OllamaPlanner
+            planner = OllamaPlanner(acfg)
+        try:
+            agent_report = run_investigation(case_file, acfg, planner, registry, orch)
+            agent_report["planner_kind"] = "MOCK_LLM" if getattr(planner, "is_mock", False) else "LOCAL_QWEN"
+        except Exception as exc:  # agent/transport failure must not fake a benign result
+            agent_report = {"outcome": "ERROR", "verdict": "INSUFFICIENT_EVIDENCE",
+                            "rationale": f"agent unavailable: {type(exc).__name__}",
+                            "limitations": [f"agent error: {type(exc).__name__}: {exc}"],
+                            "evidence_cited": [], "planner_kind": "UNAVAILABLE"}
+        state = cm.validate_case(cm.read_json(case_file))
+
+    # 5. Build + persist the investigation report.
+    report = inv.build_investigation_report(
+        state, prediction_ev=prediction_ev, prediction_record=prediction_record,
+        agent_report=agent_report, model_manifest=manifest)
+    paths = inv.write_reports(report, config)
+    return {
+        "supported": True,
+        "overall_status": report["overall_status"],
+        "case_id": case_id,
+        "prediction_outcome": prediction_record.outcome,
+        "prediction_run_id": prediction_record.run_id,
+        "prediction_reason_code": prediction_record.reason_code,
+        "report_paths": paths,
+        "report": report,
+    }
+
+
 def investigate(case_id: str, config: AppConfig, *, agent_config=None, planner=None) -> Dict[str, Any]:
     """Run the local Qwen investigation agent on an existing case through D1-D9."""
     if os.name != "nt":

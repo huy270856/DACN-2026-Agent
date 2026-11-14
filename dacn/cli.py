@@ -44,10 +44,15 @@ def build_parser() -> argparse.ArgumentParser:
 
     sub.add_parser("smoke", help="Initialize and exercise D1-D9 with a benign mock analyzer (Windows)")
 
-    pv = sub.add_parser("investigate", help="Run the local Qwen investigation agent over D1-D9 (Windows)")
-    pv.add_argument("--case-id", required=True, help="Case id to investigate")
+    pv = sub.add_parser("investigate",
+                        help="Real EMBER/LightGBM prediction + Qwen assessment + report (Windows)")
+    pvt = pv.add_mutually_exclusive_group(required=True)
+    pvt.add_argument("--file", help="Path to a PE file to investigate (read-only; never executed)")
+    pvt.add_argument("--case-id", help="Investigate an existing case id instead of a new file")
     pv.add_argument("--max-iters", type=int, default=None, help="Max investigation iterations")
     pv.add_argument("--think", action="store_true", help="Enable Qwen thinking mode")
+    pv.add_argument("--no-agent", action="store_true",
+                    help="Run detector + report only, skip the SLM assessment")
 
     return parser
 
@@ -94,11 +99,14 @@ def main(argv=None) -> int:
                 acfg = replace(acfg, max_iterations=args.max_iters)
             if args.think:
                 acfg = replace(acfg, think=True)
-            result = app.investigate(args.case_id, config, agent_config=acfg)
-            _print(result)
+            result = app.investigate_real(config, file=args.file, case_id=args.case_id,
+                                          agent_config=acfg, run_agent=not args.no_agent)
+            # Avoid dumping the full nested report object twice; print a summary + paths.
+            summary = {k: v for k, v in result.items() if k != "report"}
+            _print(summary)
             if not result.get("supported", False):
                 return 3
-            return 0 if result.get("outcome") in ("FINISHED", "DYNAMIC_REQUESTED") else 4
+            return 0 if result.get("overall_status") == "COMPLETED" else 4
 
     except app.ApplicationError as exc:
         print(f"dacn error: {exc}", file=sys.stderr)
