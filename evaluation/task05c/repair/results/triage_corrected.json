@@ -1,0 +1,211 @@
+{
+  "schema_version": "triage-corrected-v1",
+  "note": "Fair common human_review_required recomputed from saved data; original per-branch review metric retained as baseline in eval_results.json.",
+  "review_mapping": {
+    "MANUAL_REVIEW": true,
+    "CONSIDER_QUARANTINE": true,
+    "AVOID_EXECUTION": true,
+    "MONITOR": false
+  },
+  "n": 120,
+  "overall": {
+    "static_review_normalized": {
+      "k": 76,
+      "n": 120,
+      "rate": 0.6333,
+      "ci95": [
+        0.5442,
+        0.7142
+      ]
+    },
+    "static_review_raw_manual_only": {
+      "k": 43,
+      "n": 120,
+      "rate": 0.3583,
+      "ci95": [
+        0.2782,
+        0.4473
+      ]
+    },
+    "agent_review_normalized": {
+      "k": 34,
+      "n": 120,
+      "rate": 0.2833,
+      "ci95": [
+        0.2104,
+        0.3697
+      ]
+    },
+    "agent_review_raw_flag": {
+      "k": 118,
+      "n": 120,
+      "rate": 0.9833,
+      "ci95": [
+        0.9413,
+        0.9954
+      ]
+    }
+  },
+  "by_stratum": {
+    "TP": {
+      "n": 25,
+      "static_review_normalized": {
+        "k": 25,
+        "n": 25,
+        "rate": 1.0,
+        "ci95": [
+          0.8668,
+          1.0
+        ]
+      },
+      "agent_review_normalized": {
+        "k": 16,
+        "n": 25,
+        "rate": 0.64,
+        "ci95": [
+          0.4452,
+          0.7975
+        ]
+      },
+      "agent_review_raw_flag": {
+        "k": 25,
+        "n": 25,
+        "rate": 1.0,
+        "ci95": [
+          0.8668,
+          1.0
+        ]
+      }
+    },
+    "TN": {
+      "n": 25,
+      "static_review_normalized": {
+        "k": 0,
+        "n": 25,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.1332
+        ]
+      },
+      "agent_review_normalized": {
+        "k": 0,
+        "n": 25,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.1332
+        ]
+      },
+      "agent_review_raw_flag": {
+        "k": 23,
+        "n": 25,
+        "rate": 0.92,
+        "ci95": [
+          0.7503,
+          0.9778
+        ]
+      }
+    },
+    "FP": {
+      "n": 25,
+      "static_review_normalized": {
+        "k": 25,
+        "n": 25,
+        "rate": 1.0,
+        "ci95": [
+          0.8668,
+          1.0
+        ]
+      },
+      "agent_review_normalized": {
+        "k": 9,
+        "n": 25,
+        "rate": 0.36,
+        "ci95": [
+          0.2025,
+          0.5548
+        ]
+      },
+      "agent_review_raw_flag": {
+        "k": 25,
+        "n": 25,
+        "rate": 1.0,
+        "ci95": [
+          0.8668,
+          1.0
+        ]
+      }
+    },
+    "FN": {
+      "n": 25,
+      "static_review_normalized": {
+        "k": 6,
+        "n": 25,
+        "rate": 0.24,
+        "ci95": [
+          0.115,
+          0.4343
+        ]
+      },
+      "agent_review_normalized": {
+        "k": 0,
+        "n": 25,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.1332
+        ]
+      },
+      "agent_review_raw_flag": {
+        "k": 25,
+        "n": 25,
+        "rate": 1.0,
+        "ci95": [
+          0.8668,
+          1.0
+        ]
+      }
+    },
+    "NEAR": {
+      "n": 20,
+      "static_review_normalized": {
+        "k": 20,
+        "n": 20,
+        "rate": 1.0,
+        "ci95": [
+          0.8389,
+          1.0
+        ]
+      },
+      "agent_review_normalized": {
+        "k": 9,
+        "n": 20,
+        "rate": 0.45,
+        "ci95": [
+          0.2582,
+          0.6579
+        ]
+      },
+      "agent_review_raw_flag": {
+        "k": 20,
+        "n": 20,
+        "rate": 1.0,
+        "ci95": [
+          0.8389,
+          1.0
+        ]
+      }
+    }
+  },
+  "paired_normalized_review": {
+    "n_pairs": 120,
+    "static_only_yes_agent_no": 42,
+    "static_no_agent_yes": 0,
+    "both_yes": 34,
+    "neither": 44,
+    "discordant": 42,
+    "note": "report McNemar exact/continuity-corrected test externally if a claim is needed"
+  },
+  "interpretation": "On FP (benign truly, model says malicious) a high review rate is GOOD (a human could catch the false alarm); on FN (malware the model missed) review is the only chance to recover, but the agent's near-constant review on FN also fires on everything else, so it does not *discriminate*. A higher review rate is not automatically better: indiscriminate review has low triage value. Compare review rates together with alignment (all CONSISTENT) and cost."
+}

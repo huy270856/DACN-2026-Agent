@@ -1,0 +1,80 @@
+{
+  "schema_version": "parity-direct-v1",
+  "purpose": "Direct bit-level comparison of the independent vectorizer vs UNMODIFIED upstream ember/features.py on the same records.",
+  "upstream_commit": "d97a0b523de02f3fe5ea6089d080abacab6ee931",
+  "upstream_url": "https://raw.githubusercontent.com/elastic/ember/d97a0b523de02f3fe5ea6089d080abacab6ee931/ember/features.py",
+  "upstream_features_sha256": "db0d93bb1e1d4b28558e373c77194a82c3cae09d7a1aeb44eea5dd68e84f3ffd",
+  "numpy": "2.5.4",
+  "records_compared": 120,
+  "directly_compared_groups": [
+    "histogram",
+    "byteentropy",
+    "strings",
+    "general",
+    "header",
+    "imports",
+    "exports",
+    "datadirectories"
+  ],
+  "directly_compared_dims": 2126,
+  "per_group": {
+    "histogram": {
+      "compared": 120,
+      "exact_match": 120,
+      "max_abs_diff": 0.0,
+      "mismatch_examples": []
+    },
+    "byteentropy": {
+      "compared": 120,
+      "exact_match": 120,
+      "max_abs_diff": 0.0,
+      "mismatch_examples": []
+    },
+    "strings": {
+      "compared": 120,
+      "exact_match": 120,
+      "max_abs_diff": 0.0,
+      "mismatch_examples": []
+    },
+    "general": {
+      "compared": 120,
+      "exact_match": 120,
+      "max_abs_diff": 0.0,
+      "mismatch_examples": []
+    },
+    "header": {
+      "compared": 120,
+      "exact_match": 120,
+      "max_abs_diff": 0.0,
+      "mismatch_examples": []
+    },
+    "imports": {
+      "compared": 120,
+      "exact_match": 120,
+      "max_abs_diff": 0.0,
+      "mismatch_examples": []
+    },
+    "exports": {
+      "compared": 120,
+      "exact_match": 120,
+      "max_abs_diff": 0.0,
+      "mismatch_examples": []
+    },
+    "datadirectories": {
+      "compared": 120,
+      "exact_match": 120,
+      "max_abs_diff": 0.0,
+      "mismatch_examples": []
+    }
+  },
+  "all_directly_compared_groups_bit_exact": true,
+  "section_group": {
+    "status": "ENV_BLOCKED_UNDER_UPSTREAM",
+    "dims": 255,
+    "reason": "upstream SectionInfo uses FeatureHasher.transform([<str>]); rejected by scikit-learn 1.5.x (single-string sample). Affects upstream identically; not a difference in our code.",
+    "upstream_succeeded": 0,
+    "upstream_failed": 120,
+    "independent_impl_note": "our impl uses list(entry) to reproduce the original character tokenisation; covered by unit tests (dims/order/determinism)."
+  },
+  "conclusion": "Bit-exact vs upstream on 2126/2381 dims (8 groups). The remaining 255 dims (section) could not be cross-checked against upstream in this environment (sklearn API); claim scoped accordingly."
+}

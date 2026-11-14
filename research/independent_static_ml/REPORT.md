@@ -73,10 +73,21 @@ Vector sinh bởi extractor **độc lập** + model **chính thức** `ember_mo
 |---|---|
 | 20,000 | **0.997312** |
 
-AUC ~0.997 (so với ~0.999 công bố của EMBER trên full test) xác nhận không gian
-feature được tái lập đúng tới mức bit-for-bit cho đường JSONL→vector; sai thứ
-tự/giá trị sẽ làm AUC rơi về ~0.5. **Model chính thức chỉ là oracle kiểm parity,
-không phải model deliverable.**
+AUC ~0.997 (so với ~0.999 công bố của EMBER trên full test) là bằng chứng tương
+thích **ở cấp mô hình** cho đường JSONL→vector; sai thứ tự/giá trị feature sẽ làm
+AUC rơi về ~0.5. **Model chính thức chỉ là oracle kiểm parity, không phải model
+deliverable.**
+
+> **Hiệu chỉnh (TASK 05C-R):** AUC-level **không** đủ để khẳng định "bit-for-bit".
+> Đã bổ sung đối chiếu **trực tiếp** vector độc lập vs `ember/features.py` upstream
+> (commit `d97a0b5`, **không sửa**) trên 120 record audit:
+> **bit-exact 2126/2381 chiều (8/9 nhóm), 120/120 record, 0 sai khác.** Nhóm
+> `section` (255 chiều) **không chạy được** dưới upstream trên scikit-learn 1.5.x
+> (API `FeatureHasher.transform([<str>])`), nên đối chiếu trực tiếp nhóm này là
+> `ENV_BLOCKED_UNDER_UPSTREAM`; impl độc lập dùng shim `list(entry)` tái lập đúng
+> hành vi cũ, kiểm bằng unit test. Chi tiết: `evaluation/task05c/repair/results/parity_direct.json`.
+> Vì vậy **không** còn khẳng định "bit-for-bit toàn bộ 2381 chiều"; chỉ nêu kết
+> quả đã đo ở trên.
 
 ## 4. Huấn luyện LightGBM từ đầu (`model_manifest.json`)
 

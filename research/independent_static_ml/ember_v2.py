@@ -12,8 +12,14 @@ Why a reimplementation and not the upstream package:
     sklearn.feature_extraction.FeatureHasher (a deterministic murmurhash3). It
     does not touch LIEF, so this reimplementation produces vectors that are
     numerically identical to the official extractor for the same input record.
-    That parity is an empirically testable claim (see tests + the official-model
-    cross-check), not an assumption.
+    That parity is an empirically tested claim: 8 of the 9 groups (2126 of 2381
+    dims) are verified BIT-EXACT against the unmodified upstream features.py over
+    the audit records (see evaluation/task05c/repair/parity_direct.py); the
+    `section` group cannot run under upstream on modern scikit-learn, so it is
+    verified by reproduction + unit tests rather than a direct upstream diff.
+    The whole-vector result is additionally cross-checked at the model level
+    (AUC ~0.997 feeding the official model). "Bit-for-bit over all 2381 dims" is
+    therefore NOT claimed; the scoped, measured result above is.
 
 Feature groups and the exact concatenation order (official v2):
     histogram        256
@@ -145,8 +151,11 @@ def _section(raw):
     section_vsize_hashed = _hasher(50, "pair").transform([section_vsize]).toarray()[0]
     # NOTE: upstream passes the entry *string* directly to FeatureHasher, so old
     # sklearn iterated its individual characters as tokens. Modern sklearn rejects
-    # a bare string, so we pass list(entry) to reproduce the exact same character
-    # tokenisation -> bit-for-bit parity with the official v2 vectors.
+    # a bare string, so we pass list(entry) to reproduce the same character
+    # tokenisation. (Under modern sklearn the UNMODIFIED upstream SectionInfo
+    # cannot run, so this one group is not directly cross-checked against upstream;
+    # the other 8 groups are verified bit-exact vs upstream in
+    # evaluation/task05c/repair/parity_direct.py.)
     entry_name_hashed = _hasher(50, "string").transform([list(entry)]).toarray()[0]
     characteristics = [p for s in sections for p in s["props"] if s["name"] == entry]
     characteristics_hashed = _hasher(50, "string").transform([characteristics]).toarray()[0]
