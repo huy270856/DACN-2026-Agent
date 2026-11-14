@@ -1,0 +1,13 @@
+# Large / regenerable artifacts are kept OUT of Git (TASK 05A requirement).
+# Their provenance lives in the committed JSON reports (model_manifest.json
+# records the model SHA-256; dataset_audit.json records the dataset checksum).
+
+# Trained model binary (12 MB) — regenerate with train_lightgbm.py
+artifacts/model_lightgbm.txt
+
+# Run logs
+artifacts/*.log
+
+# Any cached feature matrices / numpy arrays if placed under the package
+artifacts/*.npy
+*.npy

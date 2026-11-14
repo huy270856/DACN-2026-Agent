@@ -1,0 +1,79 @@
+{
+  "model_id": "dacn-lgbm-ember2018v2-5db192ec1bda",
+  "model_sha256": "5db192ec1bda850d0e1873af705b57d05aad414aa35e8520c8315ece1c509609",
+  "model_sha256_matches_manifest": true,
+  "feature_version": 2,
+  "threshold_source": "model manifest (selected on validation, not test)",
+  "threshold": 0.8321860386013389,
+  "test_set": {
+    "files": [
+      "test_features.jsonl"
+    ],
+    "n": 200000,
+    "n_benign": 100000,
+    "n_malicious": 100000
+  },
+  "metrics": {
+    "threshold": 0.8321860386013389,
+    "n": 200000,
+    "n_benign": 100000,
+    "n_malicious": 100000,
+    "confusion_matrix": {
+      "tn": 99002,
+      "fp": 998,
+      "fn": 8290,
+      "tp": 91710
+    },
+    "precision": 0.9892350174742202,
+    "recall_tpr": 0.9171,
+    "f1": 0.9518027274425556,
+    "false_positive_rate": 0.00998,
+    "roc_auc": 0.9929670034499999,
+    "average_precision": 0.993695953157299
+  },
+  "error_analysis": {
+    "false_positives": 998,
+    "false_negatives": 8290,
+    "fp_example_sha256": [
+      "692a3025d0d00f3270873d0b353d1cd55db9994598b37e748bf21620dfa0b68f",
+      "15ee2d898e93af0ea32e9498b926b13efb9653fb772d37ad01e979c22e66c2a3",
+      "95f152a419bbcafd7e6490fc35c0070983dc3f67902ceb787ab93c31810fef5e",
+      "1c5c3769ce38d3d4d7e980d1a27d36551ad56fcb6942ce95fc1efe2bd56e8615",
+      "87876cf1c08a9f1bbf400cb6768499295d2a97bdf93e2949b77acb3c62b0ebaa",
+      "08bfbd56904853a1ff8f9766998ac2aa301fe0a5321ed8715bdc6c11d287d4a5",
+      "0970af57543d23dae632992afa719009c2603f4e04d367da9df97de90948c3aa",
+      "15fa9de523c0b077032aa36943350fad2c0f886d00e65f2495a096c360336102",
+      "f251066bebe83acf7cad845eee281a55b6be214fd3600ba8e2c1953726f22898",
+      "e25090a5f28c7b2ebb3f5f032be41e7e42eb8a01f926c7d69295dfd57141bc09"
+    ],
+    "fn_example_sha256": [
+      "0bae47e265cc29da6130bcfbb3b8b4ce982ea7a15837e9eccc8e109299f56a87",
+      "f3eb689447d6a0107302f340d6dcfe624ebe386ccd902a2420176269f7ae2deb",
+      "f915ac945d12f3b38a7b97525a3489facb66d92e6ca1d5ff25aa53d1b40a6e50",
+      "3d092fbe01fe64af0e8e0fe2fa65b82b3d024db5d9aaceb2f7bd5645ed559bd3",
+      "17822b4474f63456cf484f431d57f61b1e4e015738362f0840d55277cdb70e6b",
+      "03609d877e7b1d434c149f5e6dcfe49abcd1a9e4f31fc0bb2e6ba0b727ba6082",
+      "7ff03283e57360a074d6df2c175657396f1b2ce8d47e6081103c9818ca971b01",
+      "28c88d73192903361b302d460acdc09eed00820cedc018d970c95fec0d913c9e",
+      "3d4590aac72407ec9d5ad8235dbd2aa49ba327f44adb6e38861ba94162fa0f83",
+      "2aa4dd72b64a05ef2d305f71bba6a53e055ab43b17f93f05fab45ccb6fc81327"
+    ]
+  },
+  "latency": {
+    "batch_predict_total_sec": 1.173,
+    "batch_predict_per_sample_ms": 0.0059,
+    "single_row_predict_per_sample_ms": 0.2192
+  },
+  "note": "Scores are raw LightGBM outputs (uncalibrated).",
+  "environment": {
+    "generated_utc": "2026-11-14T09:06:00.550440+00:00",
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "packages": {
+      "numpy": "2.5.4",
+      "scikit_learn": "1.5.2",
+      "lightgbm": "4.5.0",
+      "lief": "0.15.1-"
+    }
+  }
+}
