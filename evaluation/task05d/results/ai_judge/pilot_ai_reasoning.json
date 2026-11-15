@@ -1,0 +1,1270 @@
+{
+  "judge_model": "claude-opus-4-8",
+  "judge_method": "rubric-encoded deterministic scoring (transparent/auditable; not an opaque LLM call)",
+  "judge_version": "ai-judge-v1.1",
+  "rubric_version": "task05c-rubric-v1",
+  "timestamp": "2026-11-15T07:47:18.141971+00:00",
+  "source_manifest_hash": "8bf30d09dc5f91fa1b481e22f34a9befdf9ca8472d2076d86ab8a643ac4a2c38",
+  "source_forms": "annotation_forms_blind_v2.json",
+  "evaluation_type": "AI_JUDGE_PROVISIONAL",
+  "human_verified": false,
+  "note": "Provisional AI grading. NOT human grading. Does not overwrite human annotations; human grading remains PENDING.",
+  "samples": [
+    {
+      "sample_id": "S-0e0755348d",
+      "forms": [
+        {
+          "report_label": "X",
+          "reasons": {
+            "A2_claims_supported": "claims reference concrete static evidence; all cited ids present in the sheet",
+            "B1_score_vs_truth_distinction": "explicitly notes the score is raw/uncalibrated (not a calibrated probability)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 4 explicit limitation(s)",
+            "D1_recommendation_appropriate": "benign prediction with proportionate recommendation (MONITOR)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-7e55370d5bd5ede12ccc2f85",
+              "EV-5418e9f90a1ad8ddec5e84cb",
+              "EV-0cd480dbc8b3386557525b19"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        },
+        {
+          "report_label": "Y",
+          "reasons": {
+            "A2_claims_supported": "grounded, most cited ids valid; 1 cited id not in the provided evidence sheet (likely the prediction observation the package omits) -> unverifiable, human to confirm",
+            "B1_score_vs_truth_distinction": "explicitly notes the score is raw/uncalibrated (not a calibrated probability)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 3 explicit limitation(s) and in-text uncertainty",
+            "D1_recommendation_appropriate": "benign prediction with proportionate recommendation (MONITOR)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-3f46604dc56080929fffca21",
+              "EV-5418e9f90a1ad8ddec5e84cb",
+              "EV-eb84646a81a2ba6d8119dfb7"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        }
+      ]
+    },
+    {
+      "sample_id": "S-7c2ea2e8f0",
+      "forms": [
+        {
+          "report_label": "X",
+          "reasons": {
+            "A2_claims_supported": "claims reference concrete static evidence; all cited ids present in the sheet",
+            "B1_score_vs_truth_distinction": "explicitly notes the score is raw/uncalibrated (not a calibrated probability)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 4 explicit limitation(s)",
+            "D1_recommendation_appropriate": "benign prediction with proportionate recommendation (MONITOR)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-bb8ab3db2a8da629c94f62be",
+              "EV-8009782ab9838c4afba4a483",
+              "EV-8b40faac05ea0beec668af14"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        },
+        {
+          "report_label": "Y",
+          "reasons": {
+            "A2_claims_supported": "grounded, most cited ids valid; 1 cited id not in the provided evidence sheet (likely the prediction observation the package omits) -> unverifiable, human to confirm",
+            "B1_score_vs_truth_distinction": "mentions score/threshold but does not state it is uncalibrated",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 2 explicit limitation(s) and in-text uncertainty",
+            "D1_recommendation_appropriate": "benign prediction with proportionate recommendation (MONITOR)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-b7e980479f390f403d6adb4c",
+              "EV-8b40faac05ea0beec668af14",
+              "EV-b9b700fa1680a010a68b9fc7"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        }
+      ]
+    },
+    {
+      "sample_id": "S-3fca093630",
+      "forms": [
+        {
+          "report_label": "Y",
+          "reasons": {
+            "A2_claims_supported": "claims reference concrete static evidence; all cited ids present in the sheet",
+            "B1_score_vs_truth_distinction": "explicitly notes the score is raw/uncalibrated (not a calibrated probability)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 4 explicit limitation(s)",
+            "D1_recommendation_appropriate": "benign prediction with proportionate recommendation (MONITOR)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-56d9ab0bd80593251b5d9e7f",
+              "EV-239d9fbb79af2ee4d2e09c55"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        },
+        {
+          "report_label": "X",
+          "reasons": {
+            "A2_claims_supported": "explanation is generic; weak explicit grounding",
+            "B1_score_vs_truth_distinction": "does not engage with the raw score's nature (omission, not mischaracterisation)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 3 explicit limitation(s) and in-text uncertainty",
+            "D1_recommendation_appropriate": "benign prediction with proportionate recommendation (MONITOR)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-74e29225ca3ac692301c8d01",
+              "EV-c7f8864b91eea38204d8f1b9",
+              "EV-a6d7bee78229294a5af93deb"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        }
+      ]
+    },
+    {
+      "sample_id": "S-37cfb6694f",
+      "forms": [
+        {
+          "report_label": "X",
+          "reasons": {
+            "A2_claims_supported": "claims reference concrete static evidence; all cited ids present in the sheet",
+            "B1_score_vs_truth_distinction": "explicitly notes the score is raw/uncalibrated (not a calibrated probability)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 4 explicit limitation(s)",
+            "D1_recommendation_appropriate": "malicious prediction with proportionate recommendation (CONSIDER_QUARANTINE)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-5a87aa81488e5e3591e1760b",
+              "EV-6643d9a47f12bfa27060604b",
+              "EV-94404ea5b06329bb5913ae9e"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        },
+        {
+          "report_label": "Y",
+          "reasons": {
+            "A2_claims_supported": "grounded, most cited ids valid; 1 cited id not in the provided evidence sheet (likely the prediction observation the package omits) -> unverifiable, human to confirm",
+            "B1_score_vs_truth_distinction": "does not engage with the raw score's nature (omission, not mischaracterisation)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 2 explicit limitation(s) and in-text uncertainty",
+            "D1_recommendation_appropriate": "malicious prediction with proportionate recommendation (MANUAL_REVIEW)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-d4cbed76f6d8a2bed611368a",
+              "EV-5a87aa81488e5e3591e1760b",
+              "EV-6643d9a47f12bfa27060604b"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        }
+      ]
+    },
+    {
+      "sample_id": "S-61d5f9a581",
+      "forms": [
+        {
+          "report_label": "Y",
+          "reasons": {
+            "A2_claims_supported": "claims reference concrete static evidence; all cited ids present in the sheet",
+            "B1_score_vs_truth_distinction": "explicitly notes the score is raw/uncalibrated (not a calibrated probability)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 4 explicit limitation(s)",
+            "D1_recommendation_appropriate": "malicious prediction with proportionate recommendation (CONSIDER_QUARANTINE)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-d1f27bbc7a6719a6623309df",
+              "EV-9242a029a6b0232d80da9da4",
+              "EV-c6ca7672c9e4928dfcf6d030"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        },
+        {
+          "report_label": "X",
+          "reasons": {
+            "A2_claims_supported": "grounded, most cited ids valid; 1 cited id not in the provided evidence sheet (likely the prediction observation the package omits) -> unverifiable, human to confirm",
+            "B1_score_vs_truth_distinction": "does not engage with the raw score's nature (omission, not mischaracterisation)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 3 explicit limitation(s) and in-text uncertainty",
+            "D1_recommendation_appropriate": "malicious prediction but under-cautious recommendation (MONITOR)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-4ba7d763fbef776f24036433",
+              "EV-7025eda3c9d9df4ec453ddfe",
+              "EV-d1f27bbc7a6719a6623309df"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        }
+      ]
+    },
+    {
+      "sample_id": "S-a0d702616c",
+      "forms": [
+        {
+          "report_label": "Y",
+          "reasons": {
+            "A2_claims_supported": "claims reference concrete static evidence; all cited ids present in the sheet",
+            "B1_score_vs_truth_distinction": "explicitly notes the score is raw/uncalibrated (not a calibrated probability)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 4 explicit limitation(s)",
+            "D1_recommendation_appropriate": "near-threshold case correctly routed to MANUAL_REVIEW"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-53fd9aa8cb3a8306d0aa1de6",
+              "EV-f8816dec02db93c0b11c0715",
+              "EV-c9a1ba116eac3f6b9691cf07"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        },
+        {
+          "report_label": "X",
+          "reasons": {
+            "A2_claims_supported": "explanation is generic; weak explicit grounding",
+            "B1_score_vs_truth_distinction": "does not engage with the raw score's nature (omission, not mischaracterisation)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 3 explicit limitation(s) and in-text uncertainty",
+            "D1_recommendation_appropriate": "benign prediction with proportionate recommendation (MONITOR)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-e4136b3e943c41b7415e5111",
+              "EV-04dee80bc771ec313d496458",
+              "EV-f8816dec02db93c0b11c0715"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        }
+      ]
+    },
+    {
+      "sample_id": "S-45c506c451",
+      "forms": [
+        {
+          "report_label": "Y",
+          "reasons": {
+            "A2_claims_supported": "claims reference concrete static evidence; all cited ids present in the sheet",
+            "B1_score_vs_truth_distinction": "explicitly notes the score is raw/uncalibrated (not a calibrated probability)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 4 explicit limitation(s)",
+            "D1_recommendation_appropriate": "malicious prediction with proportionate recommendation (CONSIDER_QUARANTINE)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-3f4f4df84670e4593bb92373",
+              "EV-2d2c82f9adec89f32d0ddaed",
+              "EV-1ce3c384984704996639457d"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        },
+        {
+          "report_label": "X",
+          "reasons": {
+            "A2_claims_supported": "grounded, most cited ids valid; 1 cited id not in the provided evidence sheet (likely the prediction observation the package omits) -> unverifiable, human to confirm",
+            "B1_score_vs_truth_distinction": "does not engage with the raw score's nature (omission, not mischaracterisation)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 2 explicit limitation(s)",
+            "D1_recommendation_appropriate": "malicious prediction with proportionate recommendation (MANUAL_REVIEW)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-2d2c82f9adec89f32d0ddaed",
+              "EV-1ce3c384984704996639457d",
+              "EV-2ccc0097f2e39f496e8079d8"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        }
+      ]
+    },
+    {
+      "sample_id": "S-d4da6e170f",
+      "forms": [
+        {
+          "report_label": "X",
+          "reasons": {
+            "A2_claims_supported": "claims reference concrete static evidence; all cited ids present in the sheet",
+            "B1_score_vs_truth_distinction": "explicitly notes the score is raw/uncalibrated (not a calibrated probability)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 4 explicit limitation(s)",
+            "D1_recommendation_appropriate": "malicious prediction with proportionate recommendation (CONSIDER_QUARANTINE)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-d55018994feb5d80fba8b2d2",
+              "EV-d1fd41282af6f72a48549cf4",
+              "EV-1a52b5dd614b36e11405ec13"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        },
+        {
+          "report_label": "Y",
+          "reasons": {
+            "A2_claims_supported": "grounded, most cited ids valid; 1 cited id not in the provided evidence sheet (likely the prediction observation the package omits) -> unverifiable, human to confirm",
+            "B1_score_vs_truth_distinction": "mentions score/threshold but does not state it is uncalibrated",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 2 explicit limitation(s) and in-text uncertainty",
+            "D1_recommendation_appropriate": "malicious prediction but under-cautious recommendation (MONITOR)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-cde57337ea845f9f3a0cf81d",
+              "EV-d55018994feb5d80fba8b2d2",
+              "EV-1a52b5dd614b36e11405ec13"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        }
+      ]
+    },
+    {
+      "sample_id": "S-ef5a0a4bf1",
+      "forms": [
+        {
+          "report_label": "X",
+          "reasons": {
+            "A2_claims_supported": "claims reference concrete static evidence; all cited ids present in the sheet",
+            "B1_score_vs_truth_distinction": "explicitly notes the score is raw/uncalibrated (not a calibrated probability)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 4 explicit limitation(s)",
+            "D1_recommendation_appropriate": "near-threshold case correctly routed to MANUAL_REVIEW"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-ff229bb2f91706a1021bff09",
+              "EV-c8767e13fdd8c4e47210ea18",
+              "EV-317df321cfa749ef27ed88c5"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        },
+        {
+          "report_label": "Y",
+          "reasons": {
+            "A2_claims_supported": "grounded, most cited ids valid; 1 cited id not in the provided evidence sheet (likely the prediction observation the package omits) -> unverifiable, human to confirm",
+            "B1_score_vs_truth_distinction": "mentions score/threshold but does not state it is uncalibrated",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 2 explicit limitation(s) and in-text uncertainty",
+            "D1_recommendation_appropriate": "near-threshold case correctly routed to MANUAL_REVIEW"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-e49e39491ed35f2dc388b5eb",
+              "EV-c8767e13fdd8c4e47210ea18",
+              "EV-ff229bb2f91706a1021bff09"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        }
+      ]
+    },
+    {
+      "sample_id": "S-65a766fc1c",
+      "forms": [
+        {
+          "report_label": "Y",
+          "reasons": {
+            "A2_claims_supported": "claims reference concrete static evidence; all cited ids present in the sheet",
+            "B1_score_vs_truth_distinction": "explicitly notes the score is raw/uncalibrated (not a calibrated probability)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 4 explicit limitation(s)",
+            "D1_recommendation_appropriate": "malicious prediction with proportionate recommendation (CONSIDER_QUARANTINE)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-eadcd7a36f13647103d559d5",
+              "EV-c5ffbef8c01417943e6a0506",
+              "EV-699655005e11331d56bdabfa"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        },
+        {
+          "report_label": "X",
+          "reasons": {
+            "A2_claims_supported": "explanation is generic; weak explicit grounding",
+            "B1_score_vs_truth_distinction": "treats the score/verdict as a calibrated probability or certainty (active error)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 2 explicit limitation(s)",
+            "D1_recommendation_appropriate": "malicious prediction but under-cautious recommendation (MONITOR)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-2a8eab0ebc6c8080c88e1d3a",
+              "EV-c5ffbef8c01417943e6a0506",
+              "EV-eadcd7a36f13647103d559d5"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        }
+      ]
+    },
+    {
+      "sample_id": "S-4b0925781a",
+      "forms": [
+        {
+          "report_label": "X",
+          "reasons": {
+            "A2_claims_supported": "claims reference concrete static evidence; all cited ids present in the sheet",
+            "B1_score_vs_truth_distinction": "explicitly notes the score is raw/uncalibrated (not a calibrated probability)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 4 explicit limitation(s)",
+            "D1_recommendation_appropriate": "benign prediction with proportionate recommendation (MONITOR)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-23be54f1f87f0b61211d226e",
+              "EV-c5dc017d1c98b511677a9942",
+              "EV-e75d5ee7aa219e012161b626"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        },
+        {
+          "report_label": "Y",
+          "reasons": {
+            "A2_claims_supported": "grounded, most cited ids valid; 1 cited id not in the provided evidence sheet (likely the prediction observation the package omits) -> unverifiable, human to confirm",
+            "B1_score_vs_truth_distinction": "explicitly notes the score is raw/uncalibrated (not a calibrated probability)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 3 explicit limitation(s) and in-text uncertainty",
+            "D1_recommendation_appropriate": "benign prediction with proportionate recommendation (MONITOR)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-e40a4dad1502650d36b3d943",
+              "EV-c5dc017d1c98b511677a9942",
+              "EV-23be54f1f87f0b61211d226e"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        }
+      ]
+    },
+    {
+      "sample_id": "S-8042ae7321",
+      "forms": [
+        {
+          "report_label": "X",
+          "reasons": {
+            "A2_claims_supported": "claims reference concrete static evidence; all cited ids present in the sheet",
+            "B1_score_vs_truth_distinction": "explicitly notes the score is raw/uncalibrated (not a calibrated probability)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 4 explicit limitation(s)",
+            "D1_recommendation_appropriate": "near-threshold case correctly routed to MANUAL_REVIEW"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-dddc91cb421e6477817b3c29",
+              "EV-821bb1d5bb6418237dd5f3d7"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        },
+        {
+          "report_label": "Y",
+          "reasons": {
+            "A2_claims_supported": "explanation is generic; weak explicit grounding",
+            "B1_score_vs_truth_distinction": "treats the score/verdict as a calibrated probability or certainty (active error)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 3 explicit limitation(s)",
+            "D1_recommendation_appropriate": "malicious prediction but under-cautious recommendation (MONITOR)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-1cd13ca0d9471388a7b2c3a0",
+              "EV-dddc91cb421e6477817b3c29",
+              "EV-ab21ad19486face01cb8b5c6"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        }
+      ]
+    },
+    {
+      "sample_id": "S-76652dc274",
+      "forms": [
+        {
+          "report_label": "Y",
+          "reasons": {
+            "A2_claims_supported": "claims reference concrete static evidence; all cited ids present in the sheet",
+            "B1_score_vs_truth_distinction": "explicitly notes the score is raw/uncalibrated (not a calibrated probability)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 4 explicit limitation(s)",
+            "D1_recommendation_appropriate": "benign prediction with proportionate recommendation (MONITOR)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-a7c3fabdbbff20c719a0deac",
+              "EV-074fcb3b083899662462cd34"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        },
+        {
+          "report_label": "X",
+          "reasons": {
+            "A2_claims_supported": "grounded, most cited ids valid; 1 cited id not in the provided evidence sheet (likely the prediction observation the package omits) -> unverifiable, human to confirm",
+            "B1_score_vs_truth_distinction": "does not engage with the raw score's nature (omission, not mischaracterisation)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 3 explicit limitation(s) and in-text uncertainty",
+            "D1_recommendation_appropriate": "benign prediction with proportionate recommendation (MONITOR)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-8228d097c830e1c0cc34425b",
+              "EV-a7c3fabdbbff20c719a0deac",
+              "EV-0b15d85eeac9813036bc48d0"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        }
+      ]
+    },
+    {
+      "sample_id": "S-c83bba7c01",
+      "forms": [
+        {
+          "report_label": "X",
+          "reasons": {
+            "A2_claims_supported": "claims reference concrete static evidence; all cited ids present in the sheet",
+            "B1_score_vs_truth_distinction": "explicitly notes the score is raw/uncalibrated (not a calibrated probability)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 4 explicit limitation(s)",
+            "D1_recommendation_appropriate": "malicious prediction with proportionate recommendation (CONSIDER_QUARANTINE)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-8c9a3632edb1f9ba80869bd8",
+              "EV-2c738b7204e611a3f18e47ce",
+              "EV-a374d81186342a52738c1b2e"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        },
+        {
+          "report_label": "Y",
+          "reasons": {
+            "A2_claims_supported": "grounded, most cited ids valid; 1 cited id not in the provided evidence sheet (likely the prediction observation the package omits) -> unverifiable, human to confirm",
+            "B1_score_vs_truth_distinction": "does not engage with the raw score's nature (omission, not mischaracterisation)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 2 explicit limitation(s)",
+            "D1_recommendation_appropriate": "malicious prediction with proportionate recommendation (MANUAL_REVIEW)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-10f2f62eaaac7893e0fee063",
+              "EV-8c9a3632edb1f9ba80869bd8",
+              "EV-2c738b7204e611a3f18e47ce"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        }
+      ]
+    },
+    {
+      "sample_id": "S-bf43ef03ff",
+      "forms": [
+        {
+          "report_label": "X",
+          "reasons": {
+            "A2_claims_supported": "claims reference concrete static evidence; all cited ids present in the sheet",
+            "B1_score_vs_truth_distinction": "explicitly notes the score is raw/uncalibrated (not a calibrated probability)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 4 explicit limitation(s)",
+            "D1_recommendation_appropriate": "near-threshold case correctly routed to MANUAL_REVIEW"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-c29b15dfe35ddac5edb78cc4",
+              "EV-3ccdac8a4719f2f6dea5fce1",
+              "EV-d6b12d72c79b37352a1185e3"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        },
+        {
+          "report_label": "Y",
+          "reasons": {
+            "A2_claims_supported": "grounded, most cited ids valid; 1 cited id not in the provided evidence sheet (likely the prediction observation the package omits) -> unverifiable, human to confirm",
+            "B1_score_vs_truth_distinction": "does not engage with the raw score's nature (omission, not mischaracterisation)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 3 explicit limitation(s) and in-text uncertainty",
+            "D1_recommendation_appropriate": "malicious prediction but under-cautious recommendation (MONITOR)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-6bfe46de21921545e4e4968e",
+              "EV-ccfde6d1ee72740316f7feb9",
+              "EV-3ccdac8a4719f2f6dea5fce1"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        }
+      ]
+    },
+    {
+      "sample_id": "S-5327b8b93a",
+      "forms": [
+        {
+          "report_label": "Y",
+          "reasons": {
+            "A2_claims_supported": "claims reference concrete static evidence; all cited ids present in the sheet",
+            "B1_score_vs_truth_distinction": "explicitly notes the score is raw/uncalibrated (not a calibrated probability)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 4 explicit limitation(s)",
+            "D1_recommendation_appropriate": "near-threshold case correctly routed to MANUAL_REVIEW"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-cbe25576211f009e7ab82ed6",
+              "EV-f110257a85d7e384df86a5ba",
+              "EV-48c73c725b47750310cc8aa9"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        },
+        {
+          "report_label": "X",
+          "reasons": {
+            "A2_claims_supported": "grounded, most cited ids valid; 1 cited id not in the provided evidence sheet (likely the prediction observation the package omits) -> unverifiable, human to confirm",
+            "B1_score_vs_truth_distinction": "explicitly notes the score is raw/uncalibrated (not a calibrated probability)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 2 explicit limitation(s) and in-text uncertainty",
+            "D1_recommendation_appropriate": "near-threshold case correctly routed to MANUAL_REVIEW"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-32287558ce69742a7e735218",
+              "EV-f52a158cd2d20b2b81cee82b",
+              "EV-cbe25576211f009e7ab82ed6"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        }
+      ]
+    },
+    {
+      "sample_id": "S-4e2828d151",
+      "forms": [
+        {
+          "report_label": "Y",
+          "reasons": {
+            "A2_claims_supported": "claims reference concrete static evidence; all cited ids present in the sheet",
+            "B1_score_vs_truth_distinction": "explicitly notes the score is raw/uncalibrated (not a calibrated probability)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 4 explicit limitation(s)",
+            "D1_recommendation_appropriate": "benign prediction with proportionate recommendation (MONITOR)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-08273476b113e2d5b6484689",
+              "EV-0a2ab64c97ae318512f15aad"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        },
+        {
+          "report_label": "X",
+          "reasons": {
+            "A2_claims_supported": "grounded, most cited ids valid; 1 cited id not in the provided evidence sheet (likely the prediction observation the package omits) -> unverifiable, human to confirm",
+            "B1_score_vs_truth_distinction": "does not engage with the raw score's nature (omission, not mischaracterisation)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 3 explicit limitation(s) and in-text uncertainty",
+            "D1_recommendation_appropriate": "benign prediction with proportionate recommendation (MONITOR)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-2183219928d53ac58abd8074",
+              "EV-b2255481053dfe0459d11d98",
+              "EV-0a2ab64c97ae318512f15aad"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        }
+      ]
+    },
+    {
+      "sample_id": "S-bebc135112",
+      "forms": [
+        {
+          "report_label": "Y",
+          "reasons": {
+            "A2_claims_supported": "claims reference concrete static evidence; all cited ids present in the sheet",
+            "B1_score_vs_truth_distinction": "explicitly notes the score is raw/uncalibrated (not a calibrated probability)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 4 explicit limitation(s)",
+            "D1_recommendation_appropriate": "benign prediction with proportionate recommendation (MONITOR)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-01d5d72a5bd178dc6c340bb0",
+              "EV-a40df9c59945d2c8ba0b4fb2",
+              "EV-5b4dc25ecc4844468cafcb4f"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        },
+        {
+          "report_label": "X",
+          "reasons": {
+            "A2_claims_supported": "grounded, most cited ids valid; 1 cited id not in the provided evidence sheet (likely the prediction observation the package omits) -> unverifiable, human to confirm",
+            "B1_score_vs_truth_distinction": "explicitly notes the score is raw/uncalibrated (not a calibrated probability)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 3 explicit limitation(s) and in-text uncertainty",
+            "D1_recommendation_appropriate": "benign prediction with proportionate recommendation (MONITOR)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-5ec29aa78c6193544cc9328f",
+              "EV-a40df9c59945d2c8ba0b4fb2",
+              "EV-01d5d72a5bd178dc6c340bb0"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        }
+      ]
+    },
+    {
+      "sample_id": "S-08261f2a73",
+      "forms": [
+        {
+          "report_label": "Y",
+          "reasons": {
+            "A2_claims_supported": "claims reference concrete static evidence; all cited ids present in the sheet",
+            "B1_score_vs_truth_distinction": "explicitly notes the score is raw/uncalibrated (not a calibrated probability)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 4 explicit limitation(s)",
+            "D1_recommendation_appropriate": "near-threshold case correctly routed to MANUAL_REVIEW"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-21620f7a311bcd924130892c",
+              "EV-6bf68f03542fd029a78a0c1d",
+              "EV-fa5ebfd173398c8ce5d93d81"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        },
+        {
+          "report_label": "X",
+          "reasons": {
+            "A2_claims_supported": "grounded, most cited ids valid; 1 cited id not in the provided evidence sheet (likely the prediction observation the package omits) -> unverifiable, human to confirm",
+            "B1_score_vs_truth_distinction": "explicitly notes the score is raw/uncalibrated (not a calibrated probability)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 3 explicit limitation(s) and in-text uncertainty",
+            "D1_recommendation_appropriate": "benign prediction with proportionate recommendation (MONITOR)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-991835e7b08f9a912869cc3f",
+              "EV-6bf68f03542fd029a78a0c1d",
+              "EV-21620f7a311bcd924130892c"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        }
+      ]
+    },
+    {
+      "sample_id": "S-9e0d3076c0",
+      "forms": [
+        {
+          "report_label": "X",
+          "reasons": {
+            "A2_claims_supported": "claims reference concrete static evidence; all cited ids present in the sheet",
+            "B1_score_vs_truth_distinction": "explicitly notes the score is raw/uncalibrated (not a calibrated probability)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 4 explicit limitation(s)",
+            "D1_recommendation_appropriate": "benign prediction with proportionate recommendation (MONITOR)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-971841021e2bc55a1cbf2c60",
+              "EV-24eb1035daeab13885bc93b5",
+              "EV-f88463495b8c1f64b4d9bc8d"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        },
+        {
+          "report_label": "Y",
+          "reasons": {
+            "A2_claims_supported": "grounded, most cited ids valid; 1 cited id not in the provided evidence sheet (likely the prediction observation the package omits) -> unverifiable, human to confirm",
+            "B1_score_vs_truth_distinction": "does not engage with the raw score's nature (omission, not mischaracterisation)",
+            "B2_no_feature_importance_from_score": "does not invent LightGBM feature-importance from the score",
+            "C1_uncertainty": "states 3 explicit limitation(s) and in-text uncertainty",
+            "D1_recommendation_appropriate": "benign prediction with proportionate recommendation (MONITOR)"
+          },
+          "evidence_refs": {
+            "A2_claims_supported": [
+              "EV-9b09e552c088c0a06f12ab4f",
+              "EV-24eb1035daeab13885bc93b5",
+              "EV-c45721591d4b3f19ce9d5c8a"
+            ],
+            "B1_score_vs_truth_distinction": [
+              "(static_prediction.raw_score/threshold)"
+            ],
+            "B2_no_feature_importance_from_score": [],
+            "C1_uncertainty": [
+              "(limitations)"
+            ],
+            "D1_recommendation_appropriate": [
+              "(static_prediction.predicted_label)",
+              "(recommendation)"
+            ]
+          },
+          "insufficient_basis": []
+        }
+      ]
+    }
+  ]
+}
