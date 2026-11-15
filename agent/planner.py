@@ -31,6 +31,14 @@ class PlanResult:
         self.meta = meta or {}
 
 
+class _RejectRedirects(urllib.request.HTTPRedirectHandler):
+    """Schema-aware evaluation calls never follow an endpoint redirect."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        # Refuse before urllib can construct a request to the redirect target.
+        raise PlannerError("Ollama redirects are forbidden")
+
+
 class OllamaPlanner:
     """Local local Qwen via Ollama /api/chat with JSON-schema-constrained output."""
 
@@ -40,16 +48,36 @@ class OllamaPlanner:
         self._cfg = cfg
 
     def decide(self, context: Mapping[str, Any]) -> PlanResult:
+        # Frozen v1 request contract and transport behaviour remain the default.
+        return self._decide(context, OLLAMA_FORMAT_SCHEMA)
+
+    def decide_with_schema(self, context: Mapping[str, Any], format_schema: Mapping[str, Any]) -> PlanResult:
+        """Explicit schema transport for v2; fail closed before any HTTP object/IO.
+
+        Check the actual config again at the send boundary, including configs
+        constructed without __post_init__ or mutated after planner construction.
+        Use the trusted implementation, not a caller-supplied validator override.
+        """
+        try:
+            local = AgentConfig.is_local_loopback(self._cfg)
+        except (ValueError, TypeError, AttributeError):
+            local = False
+        if not local:
+            raise PlannerError("Ollama host must be a local loopback address")
+        return self._decide(context, format_schema, reject_redirects=True)
+
+    def _decide(self, context: Mapping[str, Any], format_schema: Mapping[str, Any],
+                *, reject_redirects: bool = False) -> PlanResult:
         cfg = self._cfg
         body = {
             "model": cfg.model,
             "messages": [
-                {"role": "system", "content": context["system"] + "\nRequired output contract: " + json.dumps(OLLAMA_FORMAT_SCHEMA)},
+                {"role": "system", "content": context["system"] + "\nRequired output contract: " + json.dumps(format_schema)},
                 {"role": "user", "content": context["user"]},
             ],
             "stream": False,
             "think": cfg.think,
-            "format": OLLAMA_FORMAT_SCHEMA,   # constrained decoding when supported
+            "format": format_schema,   # constrained decoding when supported
             "options": {"temperature": cfg.temperature, "seed": 42, "num_predict": min(cfg.num_predict, context.get("output_token_limit", cfg.num_predict)), "num_ctx": 8192},
         }
         req = urllib.request.Request(
@@ -58,7 +86,10 @@ class OllamaPlanner:
             headers={"Content-Type": "application/json"})
         t0 = time.time()
         try:
-            with urllib.request.build_opener(urllib.request.ProxyHandler({})).open(req, timeout=min(cfg.inference_timeout_s, context.get("remaining_s", cfg.inference_timeout_s))) as resp:
+            handlers = [urllib.request.ProxyHandler({})]
+            if reject_redirects:
+                handlers.append(_RejectRedirects())
+            with urllib.request.build_opener(*handlers).open(req, timeout=min(cfg.inference_timeout_s, context.get("remaining_s", cfg.inference_timeout_s))) as resp:
                 payload = json.loads(resp.read().decode("utf-8"))
         except Exception as exc:  # transport/timeout/http
             raise PlannerError(f"Ollama inference failed: {type(exc).__name__}: {exc}") from exc

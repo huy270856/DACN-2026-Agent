@@ -136,8 +136,11 @@ def test_exact_same_facts_in_both_arms():
 
 
 def test_frozen_baseline_unchanged():
-    subprocess.run(["git", "diff", "--exit-code", "edd0a25", "--", "agent", "evaluation/task05c", "evaluation/task05d"],
-                   cwd=ROOT, check=True, capture_output=True)
+    # 06A-R explicitly refactors only planner transport; its default wire contract
+    # is compared against the frozen source in test_reviewer_repair.py.
+    subprocess.run(
+        ["git", "diff", "--exit-code", "edd0a25", "--", "agent", "evaluation/task05c", "evaluation/task05d",
+         ":(exclude)agent/planner.py"], cwd=ROOT, check=True, capture_output=True)
 
 
 def test_saved_v1_monitor_on_malicious_regression():

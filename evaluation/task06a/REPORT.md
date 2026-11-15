@@ -335,3 +335,128 @@ Không chạy prepare/summarize đè `dev_v2_1`; writer dùng exclusive create. 
 resume, bao gồm giữ nguyên failures, từ chối drift source/model/data. Paths model /
 dataset local hiện tại được ghi trong code/manifest; model binary không nằm trong
 Git. Xem commit chứa báo cáo này bằng `git log -1 -- evaluation/task06a/REPORT.md`.
+
+## 12. TASK 06A-R — reviewer repair tại mốc f913786
+
+Technical review: prototype acceptable, yêu cầu sửa transport/provenance/guardrail
+regression trước merge. Lượt repair này có phạm vi hẹp, không triển khai 06B, không
+chạy lại DEV và không gán các kết quả DEV đã lưu cho source sau repair.
+**06A-R engineering repair: PASS theo các tests dưới đây; kết luận nghiên cứu 06A
+vẫn PARTIAL.** Các phát biểu “source production không đổi” ở phần lịch sử bên trên
+áp dụng đến commit `f913786`; repair có ngoại lệ rõ ràng cho `agent/planner.py`.
+
+### 12.1. Loopback invariant và dùng chung transport
+
+- `_decide_v2()` kiểm loopback bằng implementation tin cậy
+  `AgentConfig.is_local_loopback(cfg)` **trước** dựng Request/opener hoặc gọi planner.
+  Không chỉ tin constructor, một validator do caller override hay config được tạo
+  bằng cách bỏ qua `__post_init__`. Host remote/public/LAN/wildcard, hostname giả
+  localhost, URL có credentials/path/query và malformed IPv6 bị từ chối bằng
+  `PlannerError`; không có fallback sang endpoint/model khác.
+- Xóa HTTP implementation trùng trong assessor. `OllamaPlanner` có API additive
+  `decide_with_schema(context, format_schema)`; v2 dùng API này với **schema v2.1
+  nguyên trạng**. API kiểm lại config tại ranh giới gửi request. Schema-aware path
+  từ chối **mọi redirect**, kể cả sang loopback khác, trước khi urllib tạo follow-up
+  request. Proxy environment không được dùng.
+- `decide()` mặc định vẫn dùng schema v1, payload/options, timeout, response/error
+  handling và redirect behavior v1. Cả hai API dùng chung phần dựng/gửi/đọc response;
+  không monkeypatch global schema. Test so request bytes/URL/headers/timeout và
+  response/error với chính source production được pin tại `f913786` bằng HTTP test
+  doubles. Đây là bằng chứng compatibility ở mức contract; không phải rerun model.
+- V2 nay tôn trọng cả remaining timeout/output-token limit của transport chung.
+  Ngân sách của lượt DEV cũ không bị sửa; schema/prompt hash v2.1 vẫn khớp freeze.
+  Không migration CaseState/D0, không thay policy D4/D8, không thay production prompt.
+
+### 12.2. Evaluator-only không có nghĩa là access control hoặc blind holdout
+
+`manifest_EVALUATOR_ONLY.json` có `true_label`, `correctness`, score và generic local
+path `D:\datasets\ember2018-v2\train_features_1.jsonl`. Audit source `run()` và test
+instrumented xác nhận inference stage chỉ parse `inputs.json`/resume responses;
+không parse hoặc dùng true_label/correctness từ manifest. **Có đọc bytes manifest
+để kiểm SHA-256** trong `validate_freeze()`; vì vậy không tuyên bố file chưa từng
+được đọc ở mức IO. Ground truth không được chuyển thành model input. Kiểm tra 48
+saved contexts không có ground-truth fields vẫn pass.
+
+Tập DEV và labels đã công khai trong Git, được xem khi phân tích/tune; tên file
+EVALUATOR_ONLY chỉ là quy ước. **Manifest/tập này không được dùng làm blinded
+confirmatory holdout.** Disjoint SHA với test không làm nó trở thành blind holdout
+hay độc lập với detector training/validation.
+
+Không thấy token/credential, nội dung PE, model binary hoặc PII của khách hàng trong
+manifest này: labels/hash/date là metadata EMBER public. Local absolute path là
+deployment metadata không cần thiết cho public benchmark tương lai. Một số test
+logs lịch sử cũng chứa local paths/hostname; không coi chúng là bộ artifacts đã
+ẩn danh hoàn toàn. Không xóa/redact/rewrite lịch sử sau freeze để “làm sạch” bằng
+cách phá hashes. Không có dữ liệu nhạy cảm mới cần công bố trong repair.
+
+Phương án confirmatory tương lai (đề xuất, chưa triển khai ở 06A-R):
+
+1. Tạo Agent bundle riêng chỉ có inputs/provenance đã allowlist; dùng dataset ID,
+   shard/record identifier hoặc đường dẫn tương đối thay absolute local path. Không
+   chứa true labels/correctness/strata hay evaluator notes, kể cả trong filename.
+2. Label manifest giữ ngoài repository/bundle Agent và ngoài runtime tool allowlist,
+   trong storage evaluator có quyền đọc riêng. Không dựa vào suffix EVALUATOR_ONLY
+   hoặc `.gitignore` như một security boundary. Kiểm cả lịch sử xuất bản của tập;
+   tập đã lộ nhãn không được tái gắn nhãn “blinded”.
+3. Freeze inputs/config/model/tool availability và commitment của evaluator manifest
+   trước inference. Evaluator riêng chỉ join predictions/review flags với labels
+   sau khi outputs đã được khóa; lưu quyền truy cập và provenance tách khỏi Agent.
+4. Human/LLM grading bundle không kèm nhãn/strata/branch mapping. Chấm xong mới mở
+   evaluator mapping; nếu cần public reproducibility, phát hành labels sau khi
+   đánh giá hoàn tất và không dùng lại tập ấy như blind holdout cho lần sau.
+
+### 12.3. Decision guardrail và heuristic status
+
+Thêm regression test chính xác `INSUFFICIENT_EVIDENCE + review_required=false +
+MONITOR`: raw JSON trong attempts và assessment không đổi sau verification;
+`insufficient_evidence_without_review` được ghi; effective action là MANUAL_REVIEW,
+review_required=true, requires_human_decision=true, execution_status=NOT_EXECUTED.
+Test đặt child-process execution thành lỗi nếu bị gọi; không containment được chạy.
+Không cần đổi logic guardrail hiện có vì nó đã xử lý ca này, phần thiếu là test đầy
+đủ từ raw output qua effective recommendation.
+
+Grounding vẫn là **suspected/unverified screening**. Test dùng câu phủ định “No
+command-and-control activity was observed” để giữ rõ false-positive đã biết của
+regex; output vẫn `NOT_ESTABLISHED_RULE_SCREEN_ONLY`, không nâng cờ thành confirmed
+hallucination. Không đổi heuristic hoặc chấm lại kết quả DEV để làm đẹp chỉ số.
+
+### 12.4. Test evidence và bảo toàn artifacts
+
+- 06A toàn bộ: **72 passed** (44 cũ + 28 ca repair),
+  `results/task06a_r/unit.xml`. Negative tests khẳng định không dựng Request, không
+  dựng opener và không gửi IO khi endpoint bị từ chối. Positive loopback tests
+  127.0.0.1/localhost/IPv6, redirect handler, timeout/no fallback và v1 wire parity
+  dùng test doubles, **không được gọi là inference thật**.
+- Regression Node B/C, D0/D1–D9, Agent, DACN, 05A/05B/05C/R2/05D/06A:
+  **543 passed, 4 skipped, 79 subtests passed**, 18,64s;
+  `results/task06a_r/regression.xml`. Chạy trong môi trường Windows có DPAPI khả dụng.
+  Bốn skip: hai gated live Qwen tests, symlink privilege test, optional 512-MiB test.
+- Không bật live inference, không gọi lại DEV, không sửa Qwen responses hay benchmark
+  metrics. Live legacy failure ở mục 9 vẫn là finding mở, không được đổi thành pass.
+- Quét trước commit trên 10 files thay đổi/thêm mới: không phát hiện credential theo
+  các mẫu kiểm tra hoặc binary/dataset mới. Ba matches URL credential được đối chiếu
+  là cùng dummy fixture trong negative test và hai JUnit outputs, không phải secret
+  thật. Không dùng kết quả scanner như một bảo đảm tuyệt đối không có secret.
+- `integrity_before.json` và `integrity_after.json` xác nhận **317 protected paths
+  không đổi byte**, gồm artifacts 06A cũ, 05C/05D, source/artifacts 05A, model binary
+  local và root README. Inputs/manifest/model digest khớp freeze cũ.
+- `python -m evaluation.task06a.analysis.repair_integrity` kiểm source lịch sử:
+  **245/245** paths từ freeze tìm lại được trong Git tại `f913786`, xét đúng biến
+  thể LF/CRLF của Windows. Current source drift dự kiến chỉ `agent/planner.py` và
+  `evaluation/task06a/assessor_v2.py`. Không cập nhật bất cứ hash cũ nào để che drift.
+  Script ghi output mới bằng exclusive create, không overwrite audit artifacts.
+- `validate_freeze(dev_v2_1)` với source hiện tại **phải reject** source drift; có
+  regression test cho điều này. Muốn tái lập code lịch sử phải dùng checkout/worktree
+  riêng của commit đã review; muốn chạy repair phải tạo experiment directory mới.
+  Không được resume/relabel experiment cũ bằng transport mới.
+
+### 12.5. Limitations còn mở sau repair
+
+Không có claim mới về investigation value/generalization, semantic grading hay
+detection gain. DEV vẫn có abstention cao, heuristic false positives/negatives và
+projection truncation; human grading PENDING, confirmatory NOT_RUN. Đường v1 default
+vẫn giữ transport behavior lịch sử (gồm redirect handling); redirect hardening của
+API schema-aware không được suy thành hardening cho mọi đường v1. Live legacy
+STATIC_FIRST/planning failure và multi-step readiness vẫn cần phạm vi tiếp theo.
+Không merge main; source/artifacts repair được commit và push lên cùng branch 06A
+để reviewer kiểm tra, không tự triển khai 06B.

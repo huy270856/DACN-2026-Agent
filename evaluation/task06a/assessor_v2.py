@@ -24,7 +24,8 @@ import time
 from typing import Any, Dict, List, Mapping, Optional
 
 from agent import context as agent_context
-from agent.planner import PlannerError
+from agent.config import AgentConfig
+from agent.planner import OllamaPlanner, PlannerError
 from . import schema_v2
 
 PROMPT_ID = "task06a-assessor-v2.1"
@@ -137,41 +138,19 @@ def assess_once_v2(state: Mapping[str, Any], cfg, planner, *, max_attempts: int 
 
 
 def _decide_v2(planner, ctx, cfg) -> Dict[str, Any]:
-    """Call the planner with the v2 format schema.
+    """Use the shared production transport with the unchanged v2.1 schema.
 
-    For OllamaPlanner we re-issue the request with the v2 constrained-decoding
-    schema. For MockPlanner (tests) we just read its scripted raw output.
+    Check the explicit cfg even for test doubles; do not rely on a planner's
+    constructor or a caller-overridden validator to enforce the invariant.
     """
+    try:
+        local = AgentConfig.is_local_loopback(cfg)
+    except (ValueError, TypeError, AttributeError):
+        local = False
+    if not local:
+        raise PlannerError("Ollama host must be a local loopback address")
     if getattr(planner, "is_mock", False):
         pr = planner.decide(ctx)
         return {"raw": pr.raw, "meta": pr.meta}
-    # Real local Qwen via Ollama, constrained to the v2 schema.
-    import urllib.request
-    body = {
-        "model": cfg.model,
-        "messages": [
-            {"role": "system", "content": ctx["system"]
-             + "\nRequired output contract: " + json.dumps(schema_v2.OLLAMA_FORMAT_SCHEMA_V2)},
-            {"role": "user", "content": ctx["user"]},
-        ],
-        "stream": False, "think": cfg.think,
-        "format": schema_v2.OLLAMA_FORMAT_SCHEMA_V2,
-        "options": {"temperature": cfg.temperature, "seed": 42,
-                    "num_predict": cfg.num_predict, "num_ctx": 8192},
-    }
-    req = urllib.request.Request(cfg.ollama_host.rstrip("/") + "/api/chat",
-                                data=json.dumps(body).encode("utf-8"),
-                                headers={"Content-Type": "application/json"})
-    try:
-        with urllib.request.build_opener(urllib.request.ProxyHandler({})).open(
-                req, timeout=cfg.inference_timeout_s) as resp:
-            payload = json.loads(resp.read().decode("utf-8"))
-    except Exception as exc:
-        raise PlannerError(f"Ollama v2 inference failed: {type(exc).__name__}: {exc}") from exc
-    content = (payload.get("message") or {}).get("content")
-    if not isinstance(content, str) or not content.strip():
-        raise PlannerError("Ollama returned empty content (v2)")
-    return {"raw": content, "meta": {"model": cfg.model, "think": cfg.think,
-            "eval_count": payload.get("eval_count"),
-            "prompt_eval_count": payload.get("prompt_eval_count"),
-            "done_reason": payload.get("done_reason")}}
+    result = OllamaPlanner(cfg).decide_with_schema(ctx, schema_v2.OLLAMA_FORMAT_SCHEMA_V2)
+    return {"raw": result.raw, "meta": result.meta}
