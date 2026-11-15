@@ -1,12 +1,12 @@
-# TASK 05D-J — AI grading (PROVISIONAL) — tóm tắt
+# TASK 05D-J — RULE-BASED checker (KHÔNG phải LLM, KHÔNG phải human) — tóm tắt
 
-- **evaluation_type:** AI_JUDGE_PROVISIONAL · **human_verified:** False
-- judge_model: `claude-opus-4-8` · method: rubric-encoded deterministic scoring (transparent/auditable; not an opaque LLM call)
-- judge_version: ai-judge-v1.1 · rubric: task05c-rubric-v1
-- source_manifest_hash: `8bf30d09dc5f91fa…` · 2026-11-15T07:47:18.141971+00:00
+- **evaluation_type:** RULE_BASED_HEURISTIC_PROVISIONAL · **is_llm_as_judge:** False · **human_verified:** False
+- judge_model: `none (deterministic rule-based checker; NO LLM inference)` · method: deterministic Python keyword/regex rules; reproducible; NOT an LLM, NOT human grading
+- judge_version: rule-checker-v1.1 · rubric: task05c-rubric-v1
+- source_manifest_hash: `8bf30d09dc5f91fa…` · 2026-11-15T07:59:39.567820+00:00
 - **Phiếu đã chấm:** 40 · **Flag cần người review:** 7
 
-> ĐÂY KHÔNG PHẢI human grading. Human grading của TASK 05D vẫn **PENDING**. Điểm AI là tạm thời, để chuyển sang TASK 06; người đánh giá kiểm tra lại sau.
+> Đây là CHECKER THEO QUY TẮC (keyword/regex), KHÔNG phải LLM-as-judge, KHÔNG phải human grading. Human grading vẫn **PENDING**. Thiên vị đã biết: thưởng câu chữ của template cố định (static-only luôn 2.0). Lượt LLM thật: xem `claude_judge.py`.
 
 ## Phân bố điểm theo tiêu chí (blind, 40 phiếu)
 | Tiêu chí | 0 | 1 | 2 | null |

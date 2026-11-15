@@ -1,16 +1,20 @@
-"""TASK 05D-J — PROVISIONAL AI grading of the blind pilot forms.
+"""TASK 05D-J — RULE-BASED heuristic checker over the blind pilot forms.
 
-This is an AI_JUDGE_PROVISIONAL pass, NOT human grading. It never overwrites human
-annotations, never claims human verification (human_verified=false), and the human
-grading workflow stays PENDING. The judge reads ONLY the blind forms (no branch
-mapping, no ground truth, no strata) and scores each of the 5 rubric criteria 0/1/2
-with a short reason + evidence references. Scoring is a transparent, rubric-encoded
-function (auditable by a human), applied identically to X and Y — it cannot favour
-either branch because it does not know which is which. Branch mapping is used ONLY
-afterwards, for aggregation.
+HONEST LABEL (corrected after audit): this is NOT an LLM-as-judge and NOT human
+grading. Every score is produced by DETERMINISTIC Python keyword/regex rules in
+judge_form() — no LLM inference is involved. `judge_model` is therefore "none".
+It is a transparent, reproducible RULE_BASED_HEURISTIC_PROVISIONAL baseline; a human
+(or a genuine LLM pass, see claude_judge.py) must still verify it. It never overwrites
+human annotations (human grading stays PENDING).
 
-If a form lacks the basis to judge a criterion, the score is null and the case is
-queued for human review; no score is invented.
+Known bias of this checker: it rewards surface phrasing. The static-only reports are a
+FIXED TEMPLATE written to contain exactly the phrases the rules look for (e.g. "Raw
+score KHÔNG phải xác suất", an explicit limitations list), so the template scores a
+mechanical 2.0 everywhere. This measures keyword presence, not semantic quality.
+
+Scoring is applied identically to X and Y (blind; no branch mapping during scoring);
+mapping is used ONLY afterwards for aggregation. If a criterion lacks basis, the score
+is null and the case is queued; no score is invented.
 """
 from __future__ import annotations
 
@@ -24,9 +28,10 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from evaluation.task05c import rubric as r05c
 
-JUDGE_MODEL = "claude-opus-4-8"
-JUDGE_METHOD = "rubric-encoded deterministic scoring (transparent/auditable; not an opaque LLM call)"
-JUDGE_VERSION = "ai-judge-v1.1"
+JUDGE_MODEL = "none (deterministic rule-based checker; NO LLM inference)"
+JUDGE_METHOD = "deterministic Python keyword/regex rules; reproducible; NOT an LLM, NOT human grading"
+JUDGE_VERSION = "rule-checker-v1.1"
+IS_LLM_AS_JUDGE = False
 # v1.1 applies ONE consistent, blind, symmetric principle found by inspecting the
 # data structure (not the branch outcome): a score of 0 is reserved for an ACTIVE
 # error, never for an omission or an unverifiable item. Concretely:
@@ -202,14 +207,16 @@ def run(forms_path: Path, out_dir: Path, mapping_path: Optional[Path] = None):
     rubric_version = data.get("rubric_version", "task05c-rubric-v1")
     meta = {
         "judge_model": JUDGE_MODEL, "judge_method": JUDGE_METHOD, "judge_version": JUDGE_VERSION,
+        "is_llm_as_judge": IS_LLM_AS_JUDGE, "method_family": "deterministic_rule_based",
         "rubric_version": rubric_version,
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "source_manifest_hash": hashlib.sha256(raw).hexdigest(),
         "source_forms": forms_path.name,
-        "evaluation_type": "AI_JUDGE_PROVISIONAL",
+        "evaluation_type": "RULE_BASED_HEURISTIC_PROVISIONAL",
         "human_verified": False,
-        "note": "Provisional AI grading. NOT human grading. Does not overwrite human "
-                "annotations; human grading remains PENDING.",
+        "note": "Rule-based heuristic scoring (keyword/regex), NOT an LLM and NOT human "
+                "grading. Reproducible baseline only; does not overwrite human annotations; "
+                "human grading remains PENDING. Known bias: rewards the fixed template's phrasing.",
     }
 
     scores_doc = {**meta, "samples": []}
@@ -282,15 +289,16 @@ def aggregate(scores_doc, mapping_path: Path) -> Dict[str, Any]:
 
 
 def _summary(path, scores_doc, review_queue, agg, graded_forms, meta):
-    L = ["# TASK 05D-J — AI grading (PROVISIONAL) — tóm tắt", "",
-         f"- **evaluation_type:** {meta['evaluation_type']} · **human_verified:** {meta['human_verified']}",
+    L = ["# TASK 05D-J — RULE-BASED checker (KHÔNG phải LLM, KHÔNG phải human) — tóm tắt", "",
+         f"- **evaluation_type:** {meta['evaluation_type']} · **is_llm_as_judge:** {meta['is_llm_as_judge']} · **human_verified:** {meta['human_verified']}",
          f"- judge_model: `{meta['judge_model']}` · method: {JUDGE_METHOD}",
          f"- judge_version: {meta['judge_version']} · rubric: {meta['rubric_version']}",
          f"- source_manifest_hash: `{meta['source_manifest_hash'][:16]}…` · {meta['timestamp']}",
          f"- **Phiếu đã chấm:** {graded_forms} · **Flag cần người review:** {len(review_queue['flags'])}",
          "",
-         "> ĐÂY KHÔNG PHẢI human grading. Human grading của TASK 05D vẫn **PENDING**. "
-         "Điểm AI là tạm thời, để chuyển sang TASK 06; người đánh giá kiểm tra lại sau.", ""]
+         "> Đây là CHECKER THEO QUY TẮC (keyword/regex), KHÔNG phải LLM-as-judge, KHÔNG phải "
+         "human grading. Human grading vẫn **PENDING**. Thiên vị đã biết: thưởng câu chữ của "
+         "template cố định (static-only luôn 2.0). Lượt LLM thật: xem `claude_judge.py`.", ""]
     # per-criterion distribution overall (blind, both labels)
     dist = {c: {0: 0, 1: 0, 2: 0, "null": 0} for c in CRIT}
     for s in scores_doc["samples"]:

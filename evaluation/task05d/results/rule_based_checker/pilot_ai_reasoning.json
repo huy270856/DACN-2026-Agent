@@ -1,14 +1,16 @@
 {
-  "judge_model": "claude-opus-4-8",
-  "judge_method": "rubric-encoded deterministic scoring (transparent/auditable; not an opaque LLM call)",
-  "judge_version": "ai-judge-v1.1",
+  "judge_model": "none (deterministic rule-based checker; NO LLM inference)",
+  "judge_method": "deterministic Python keyword/regex rules; reproducible; NOT an LLM, NOT human grading",
+  "judge_version": "rule-checker-v1.1",
+  "is_llm_as_judge": false,
+  "method_family": "deterministic_rule_based",
   "rubric_version": "task05c-rubric-v1",
-  "timestamp": "2026-11-15T07:47:18.141971+00:00",
+  "timestamp": "2026-11-15T07:59:39.567820+00:00",
   "source_manifest_hash": "8bf30d09dc5f91fa1b481e22f34a9befdf9ca8472d2076d86ab8a643ac4a2c38",
   "source_forms": "annotation_forms_blind_v2.json",
-  "evaluation_type": "AI_JUDGE_PROVISIONAL",
+  "evaluation_type": "RULE_BASED_HEURISTIC_PROVISIONAL",
   "human_verified": false,
-  "note": "Provisional AI grading. NOT human grading. Does not overwrite human annotations; human grading remains PENDING.",
+  "note": "Rule-based heuristic scoring (keyword/regex), NOT an LLM and NOT human grading. Reproducible baseline only; does not overwrite human annotations; human grading remains PENDING. Known bias: rewards the fixed template's phrasing.",
   "samples": [
     {
       "sample_id": "S-0e0755348d",

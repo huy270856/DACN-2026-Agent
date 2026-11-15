@@ -1,4 +1,4 @@
-"""Tests for the PROVISIONAL AI judge (TASK 05D-J).
+"""Tests for the RULE-BASED heuristic checker (TASK 05D-J); NOT an LLM, NOT human grading.
 
 Verifies: scores are only 0/1/2/null, blind (no mapping/GT needed to score), symmetric
 across X/Y (no branch favouritism), the rubric-fidelity rules (unverifiable ref != 0,
@@ -14,7 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT))
 
-from evaluation.task05d import ai_judge as J
+from evaluation.task05d import rule_checker as J
 
 CRIT = J.CRIT
 
@@ -115,7 +115,7 @@ class EndToEndTests(unittest.TestCase):
                          "pilot_ai_summary.md", "human_review_queue.json"):
                 self.assertTrue((out / name).exists())
             scores = json.loads((out / "pilot_ai_scores.json").read_text(encoding="utf-8"))
-            self.assertEqual(scores["evaluation_type"], "AI_JUDGE_PROVISIONAL")
+            self.assertEqual(scores["evaluation_type"], "RULE_BASED_HEURISTIC_PROVISIONAL")
             self.assertFalse(scores["human_verified"])
             for k in ("judge_model", "judge_version", "rubric_version", "timestamp",
                       "source_manifest_hash"):
@@ -129,7 +129,7 @@ class EndToEndTests(unittest.TestCase):
             fp, mp = self._pkg(d)
             res = J.run(fp, Path(d) / "aij", mp)
             self.assertFalse(res["meta"]["human_verified"])
-            self.assertEqual(res["meta"]["evaluation_type"], "AI_JUDGE_PROVISIONAL")
+            self.assertEqual(res["meta"]["evaluation_type"], "RULE_BASED_HEURISTIC_PROVISIONAL")
 
 
 if __name__ == "__main__":

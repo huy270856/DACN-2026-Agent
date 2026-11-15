@@ -1,14 +1,17 @@
 {
   "judge_model": "claude-opus-4-8",
-  "judge_method": "rubric-encoded deterministic scoring (transparent/auditable; not an opaque LLM call)",
-  "judge_version": "ai-judge-v1.1",
+  "judge_method": "direct semantic reasoning by the LLM (Claude) reading each form in an interactive human-directed session; blind to branch mapping/ground truth; NOT deterministic and NOT a reproducible scripted API call",
+  "is_llm_as_judge": true,
+  "reproducible": false,
+  "method_family": "llm_semantic",
+  "judge_version": "claude-judge-v1",
   "rubric_version": "task05c-rubric-v1",
-  "timestamp": "2026-11-15T07:47:18.141971+00:00",
+  "timestamp": "2026-11-15T08:01:58.153631+00:00",
   "source_manifest_hash": "8bf30d09dc5f91fa1b481e22f34a9befdf9ca8472d2076d86ab8a643ac4a2c38",
   "source_forms": "annotation_forms_blind_v2.json",
-  "evaluation_type": "AI_JUDGE_PROVISIONAL",
+  "evaluation_type": "AI_LLM_JUDGE_PROVISIONAL",
   "human_verified": false,
-  "note": "Provisional AI grading. NOT human grading. Does not overwrite human annotations; human grading remains PENDING.",
+  "note": "Real LLM (Claude) semantic judgment, provisional. NOT human grading; human grading remains PENDING. Not deterministic/reproducible. Blind to branch mapping.",
   "samples": [
     {
       "sample_id": "S-0e0755348d",
@@ -26,7 +29,7 @@
         {
           "report_label": "Y",
           "scores": {
-            "A2_claims_supported": 1,
+            "A2_claims_supported": 2,
             "B1_score_vs_truth_distinction": 2,
             "B2_no_feature_importance_from_score": 2,
             "C1_uncertainty": 2,
@@ -52,7 +55,7 @@
           "report_label": "Y",
           "scores": {
             "A2_claims_supported": 1,
-            "B1_score_vs_truth_distinction": 1,
+            "B1_score_vs_truth_distinction": 2,
             "B2_no_feature_importance_from_score": 2,
             "C1_uncertainty": 2,
             "D1_recommendation_appropriate": 2
@@ -76,8 +79,8 @@
         {
           "report_label": "X",
           "scores": {
-            "A2_claims_supported": 1,
-            "B1_score_vs_truth_distinction": 1,
+            "A2_claims_supported": 2,
+            "B1_score_vs_truth_distinction": 2,
             "B2_no_feature_importance_from_score": 2,
             "C1_uncertainty": 2,
             "D1_recommendation_appropriate": 2
@@ -102,7 +105,7 @@
           "report_label": "Y",
           "scores": {
             "A2_claims_supported": 1,
-            "B1_score_vs_truth_distinction": 1,
+            "B1_score_vs_truth_distinction": 2,
             "B2_no_feature_importance_from_score": 2,
             "C1_uncertainty": 2,
             "D1_recommendation_appropriate": 2
@@ -126,8 +129,8 @@
         {
           "report_label": "X",
           "scores": {
-            "A2_claims_supported": 1,
-            "B1_score_vs_truth_distinction": 1,
+            "A2_claims_supported": 2,
+            "B1_score_vs_truth_distinction": 2,
             "B2_no_feature_importance_from_score": 2,
             "C1_uncertainty": 2,
             "D1_recommendation_appropriate": 1
@@ -151,11 +154,11 @@
         {
           "report_label": "X",
           "scores": {
-            "A2_claims_supported": 1,
-            "B1_score_vs_truth_distinction": 1,
+            "A2_claims_supported": 2,
+            "B1_score_vs_truth_distinction": 2,
             "B2_no_feature_importance_from_score": 2,
             "C1_uncertainty": 2,
-            "D1_recommendation_appropriate": 2
+            "D1_recommendation_appropriate": 1
           }
         }
       ]
@@ -176,8 +179,8 @@
         {
           "report_label": "X",
           "scores": {
-            "A2_claims_supported": 1,
-            "B1_score_vs_truth_distinction": 1,
+            "A2_claims_supported": 2,
+            "B1_score_vs_truth_distinction": 2,
             "B2_no_feature_importance_from_score": 2,
             "C1_uncertainty": 2,
             "D1_recommendation_appropriate": 2
@@ -201,8 +204,8 @@
         {
           "report_label": "Y",
           "scores": {
-            "A2_claims_supported": 1,
-            "B1_score_vs_truth_distinction": 1,
+            "A2_claims_supported": 2,
+            "B1_score_vs_truth_distinction": 2,
             "B2_no_feature_importance_from_score": 2,
             "C1_uncertainty": 2,
             "D1_recommendation_appropriate": 1
@@ -226,8 +229,8 @@
         {
           "report_label": "Y",
           "scores": {
-            "A2_claims_supported": 1,
-            "B1_score_vs_truth_distinction": 1,
+            "A2_claims_supported": 2,
+            "B1_score_vs_truth_distinction": 2,
             "B2_no_feature_importance_from_score": 2,
             "C1_uncertainty": 2,
             "D1_recommendation_appropriate": 2
@@ -251,8 +254,8 @@
         {
           "report_label": "X",
           "scores": {
-            "A2_claims_supported": 1,
-            "B1_score_vs_truth_distinction": 0,
+            "A2_claims_supported": 2,
+            "B1_score_vs_truth_distinction": 2,
             "B2_no_feature_importance_from_score": 2,
             "C1_uncertainty": 2,
             "D1_recommendation_appropriate": 1
@@ -276,7 +279,7 @@
         {
           "report_label": "Y",
           "scores": {
-            "A2_claims_supported": 1,
+            "A2_claims_supported": 2,
             "B1_score_vs_truth_distinction": 2,
             "B2_no_feature_importance_from_score": 2,
             "C1_uncertainty": 2,
@@ -301,8 +304,8 @@
         {
           "report_label": "Y",
           "scores": {
-            "A2_claims_supported": 1,
-            "B1_score_vs_truth_distinction": 0,
+            "A2_claims_supported": 2,
+            "B1_score_vs_truth_distinction": 2,
             "B2_no_feature_importance_from_score": 2,
             "C1_uncertainty": 2,
             "D1_recommendation_appropriate": 1
@@ -326,8 +329,8 @@
         {
           "report_label": "X",
           "scores": {
-            "A2_claims_supported": 1,
-            "B1_score_vs_truth_distinction": 1,
+            "A2_claims_supported": 2,
+            "B1_score_vs_truth_distinction": 2,
             "B2_no_feature_importance_from_score": 2,
             "C1_uncertainty": 2,
             "D1_recommendation_appropriate": 2
@@ -351,8 +354,8 @@
         {
           "report_label": "Y",
           "scores": {
-            "A2_claims_supported": 1,
-            "B1_score_vs_truth_distinction": 1,
+            "A2_claims_supported": 2,
+            "B1_score_vs_truth_distinction": 2,
             "B2_no_feature_importance_from_score": 2,
             "C1_uncertainty": 2,
             "D1_recommendation_appropriate": 2
@@ -377,7 +380,7 @@
           "report_label": "Y",
           "scores": {
             "A2_claims_supported": 1,
-            "B1_score_vs_truth_distinction": 1,
+            "B1_score_vs_truth_distinction": 2,
             "B2_no_feature_importance_from_score": 2,
             "C1_uncertainty": 2,
             "D1_recommendation_appropriate": 1
@@ -426,8 +429,8 @@
         {
           "report_label": "X",
           "scores": {
-            "A2_claims_supported": 1,
-            "B1_score_vs_truth_distinction": 1,
+            "A2_claims_supported": 2,
+            "B1_score_vs_truth_distinction": 2,
             "B2_no_feature_importance_from_score": 2,
             "C1_uncertainty": 2,
             "D1_recommendation_appropriate": 2
@@ -451,7 +454,7 @@
         {
           "report_label": "X",
           "scores": {
-            "A2_claims_supported": 1,
+            "A2_claims_supported": 2,
             "B1_score_vs_truth_distinction": 2,
             "B2_no_feature_importance_from_score": 2,
             "C1_uncertainty": 2,
@@ -476,11 +479,11 @@
         {
           "report_label": "X",
           "scores": {
-            "A2_claims_supported": 1,
+            "A2_claims_supported": 2,
             "B1_score_vs_truth_distinction": 2,
             "B2_no_feature_importance_from_score": 2,
             "C1_uncertainty": 2,
-            "D1_recommendation_appropriate": 2
+            "D1_recommendation_appropriate": 1
           }
         }
       ]
@@ -501,8 +504,8 @@
         {
           "report_label": "Y",
           "scores": {
-            "A2_claims_supported": 1,
-            "B1_score_vs_truth_distinction": 1,
+            "A2_claims_supported": 2,
+            "B1_score_vs_truth_distinction": 2,
             "B2_no_feature_importance_from_score": 2,
             "C1_uncertainty": 2,
             "D1_recommendation_appropriate": 2
