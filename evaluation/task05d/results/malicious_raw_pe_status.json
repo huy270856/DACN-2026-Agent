@@ -1,0 +1,13 @@
+{
+  "schema_version": "task05d-malicious-status-v1",
+  "status": "BLOCKED_NO_APPROVED_SAMPLES",
+  "track": "RAW_PE_E2E (malicious)",
+  "reason": "No approved malicious raw-PE samples are available in this environment.",
+  "rules_followed": [
+    "No malware downloaded, executed, or copied from unapproved locations.",
+    "EMBER feature records are NOT used to fake raw-PE malicious evidence.",
+    "EICAR is NOT used as PE-malware detection evidence (not a real malicious PE)."
+  ],
+  "to_unblock": "Provide a set of approved malicious raw PE files in an isolated analysis environment; then run validation_runner on that manifest (track stays RAW_PE_E2E).",
+  "note": "This blocker is independent of the benign RAW_PE_E2E validation, which PASSED (35/35)."
+}
