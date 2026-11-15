@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DACN — Blind Grading (TASK 05D)</title>
+<style>
+  :root{--bg:#0f1115;--card:#1a1e26;--fg:#e8eaed;--mut:#9aa4b2;--acc:#5b9bd5;--ok:#3fb950;--warn:#d29922;--line:#2a2f3a}
+  @media (prefers-color-scheme: light){:root:not([data-theme="dark"]){--bg:#f6f7f9;--card:#fff;--fg:#1a1e26;--mut:#5a6473;--acc:#2563eb;--line:#e2e5ea}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.5 system-ui,Segoe UI,Roboto,sans-serif}
+  header{padding:12px 16px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  header h1{font-size:16px;margin:0 12px 0 0}
+  main{max-width:1200px;margin:0 auto;padding:16px}
+  .row{display:flex;gap:16px;flex-wrap:wrap}
+  .form{flex:1 1 440px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px}
+  .form h2{margin:0 0 8px;font-size:15px}
+  .chip{display:inline-block;background:var(--acc);color:#fff;border-radius:6px;padding:1px 8px;font-size:12px;font-weight:600}
+  .kv{color:var(--mut);font-size:13px}
+  .ev{max-height:220px;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:8px;background:rgba(127,127,127,.06);font-size:12.5px}
+  .ev code{color:var(--acc)}
+  .crit{margin:8px 0;padding:8px;border:1px solid var(--line);border-radius:8px}
+  .crit .d{color:var(--mut);font-size:12px;margin:2px 0 6px}
+  .opts label{margin-right:12px;cursor:pointer;user-select:none}
+  textarea{width:100%;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:6px;min-height:46px}
+  input,select,button{background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:6px 8px}
+  button{cursor:pointer}
+  button.primary{background:var(--acc);color:#fff;border-color:var(--acc)}
+  .muted{color:var(--mut)} .ok{color:var(--ok)} .warn{color:var(--warn)}
+  .bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;flex:1 1 200px;min-width:160px}
+  .bar>i{display:block;height:100%;background:var(--ok);width:0}
+  .pill{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+  .expl{white-space:pre-wrap;background:rgba(127,127,127,.06);border:1px solid var(--line);border-radius:8px;padding:8px;font-size:13px}
+  .hide{display:none}
+  ul{margin:4px 0;padding-left:18px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Chấm điểm blind — TASK 05D</h1>
+  <label class="kv">Reviewer ID <input id="reviewer" placeholder="vd: owner / grader1" size="12"></label>
+  <label class="kv">Phiếu <input type="file" id="file" accept="application/json"></label>
+  <div class="bar"><i id="prog"></i></div>
+  <span class="pill" id="count">0/0</span>
+  <button id="prev">←</button><button id="next">→</button>
+  <button class="primary" id="export">Xuất JSON</button>
+  <span class="pill muted" id="saved">chưa lưu</span>
+</header>
+<main>
+  <p class="muted" id="intro">Nạp file <code>annotation_forms_blind_v2.json</code> (hoặc gói pilot). Mọi dữ liệu ở LOCAL trình duyệt; không gửi đi đâu. Phiếu ẩn nhánh/ground-truth/strata. Chấm 5 tiêu chí theo thang 0/1/2.</p>
+  <div id="sampleWrap" class="hide">
+    <h3 style="margin:4px 0">Mẫu <span id="sid" class="chip"></span> <span class="muted" id="track"></span></h3>
+    <div class="row" id="forms"></div>
+  </div>
+</main>
+<script>
+const CRIT = ["A2_claims_supported","B1_score_vs_truth_distinction","B2_no_feature_importance_from_score","C1_uncertainty","D1_recommendation_appropriate"];
+let DATA=null, GUIDE={}, RUBRIC_VER="unknown", IDX=0, STORE={};
+const $=s=>document.querySelector(s);
+
+function storeKey(){return "dacn05d:"+(($("#reviewer").value||"anon"))+":"+(DATA?DATA.__name:"none");}
+function save(){ try{localStorage.setItem(storeKey(), JSON.stringify(STORE)); $("#saved").textContent="đã lưu "+new Date().toLocaleTimeString(); $("#saved").className="pill ok";}catch(e){$("#saved").textContent="lưu lỗi";} }
+function load(){ try{const r=localStorage.getItem(storeKey()); STORE=r?JSON.parse(r):{};}catch(e){STORE={};} }
+
+function esc(s){return (s==null?"":String(s)).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function evSheet(f){
+  const obs=(f.evidence_sheet||[]).map(o=>`<div><code>${esc(o.evidence_id)}</code> · <b>${esc(o.facet)}</b><br>${esc(JSON.stringify(o.value))}</div>`).join("<hr style='border:none;border-top:1px solid var(--line)'>");
+  return `<div class="ev">${obs||'(trống)'}</div>`;
+}
+function renderForm(sid, f){
+  const sp=f.static_prediction||{};
+  const scoreKey=sid+"|"+f.report_label;
+  const sc=STORE[scoreKey]||{scores:{},notes:""};
+  const crit=CRIT.map(c=>{
+    const g=GUIDE[c]||{};
+    const chosen=sc.scores[c];
+    const opts=[0,1,2].map(v=>`<label><input type="radio" name="${scoreKey}:${c}" value="${v}" ${chosen===v?'checked':''}> ${v}</label>`).join("");
+    const gtxt=[0,1,2].map(v=>`<div><b>${v}</b>: ${esc(g[v])}</div>`).join("");
+    return `<div class="crit"><b>${c}</b><div class="d">${gtxt}</div><div class="opts" data-c="${c}" data-k="${esc(scoreKey)}">${opts}</div></div>`;
+  }).join("");
+  return `<div class="form">
+    <h2>Phiếu <span class="chip">${esc(f.report_label)}</span></h2>
+    <div class="kv">Static prediction: <b>${esc(sp.predicted_label)}</b> · score ${esc(sp.raw_score)} · threshold ${esc(sp.threshold)} · calibrated=${esc(sp.score_is_calibrated_probability)}</div>
+    <div class="kv">Evidence sheet:</div>${evSheet(f)}
+    <div class="kv" style="margin-top:6px">Cited evidence refs: ${(f.cited_evidence_refs||[]).map(x=>`<code>${esc(x)}</code>`).join(" ")||'(không)'}</div>
+    <div class="kv" style="margin-top:6px">Giải thích:</div><div class="expl">${esc(f.explanation)||'(trống)'}</div>
+    <div class="kv" style="margin-top:6px">Limitations:</div><ul>${(f.limitations||[]).map(x=>`<li>${esc(x)}</li>`).join("")||'<li>(không)</li>'}</ul>
+    <div class="kv">Recommendation: <b>${esc(f.recommendation)}</b> · priority ${esc(f.priority)} · human_decision=${esc(f.requires_human_decision)}</div>
+    <h3 style="margin:10px 0 4px">Chấm (0/1/2)</h3>${crit}
+    <div class="kv">Ghi chú:</div><textarea data-notes="${esc(scoreKey)}">${esc(sc.notes)}</textarea>
+  </div>`;
+}
+function render(){
+  if(!DATA){return;}
+  const forms=DATA.forms; IDX=Math.max(0,Math.min(IDX,forms.length-1));
+  const s=forms[IDX];
+  $("#sampleWrap").classList.remove("hide"); $("#intro").classList.add("hide");
+  $("#sid").textContent=s.sample_id; $("#track").textContent="FEATURE_RECORD_REPLAY · ẩn nhánh";
+  $("#forms").innerHTML=s.forms.map(f=>renderForm(s.sample_id,f)).join("");
+  $("#count").textContent=(IDX+1)+"/"+forms.length;
+  // wire radios + notes
+  $("#forms").querySelectorAll(".opts").forEach(div=>{
+    div.querySelectorAll("input").forEach(r=>r.addEventListener("change",e=>{
+      const k=div.getAttribute("data-k"), c=div.getAttribute("data-c");
+      STORE[k]=STORE[k]||{scores:{},notes:""}; STORE[k].scores[c]=parseInt(e.target.value,10); save(); updateProgress();
+    }));
+  });
+  $("#forms").querySelectorAll("textarea[data-notes]").forEach(t=>t.addEventListener("input",e=>{
+    const k=t.getAttribute("data-notes"); STORE[k]=STORE[k]||{scores:{},notes:""}; STORE[k].notes=e.target.value; save();
+  }));
+  updateProgress();
+}
+function updateProgress(){
+  if(!DATA)return; let total=0,done=0;
+  DATA.forms.forEach(s=>s.forms.forEach(f=>{
+    total++; const k=s.sample_id+"|"+f.report_label; const sc=STORE[k]&&STORE[k].scores||{};
+    if(CRIT.every(c=>[0,1,2].includes(sc[c]))) done++;
+  }));
+  $("#prog").style.width=(total?100*done/total:0)+"%";
+}
+$("#file").addEventListener("change",async e=>{
+  const file=e.target.files[0]; if(!file)return;
+  const j=JSON.parse(await file.text());
+  GUIDE=j.scoring_guidance||{}; DATA={forms:j.forms||[], __name:file.name};
+  RUBRIC_VER=j.rubric_version||"task05c-rubric-v1";
+  IDX=0; load(); render();
+});
+$("#next").onclick=()=>{IDX++;render();}; $("#prev").onclick=()=>{IDX--;render();};
+$("#reviewer").addEventListener("change",()=>{load();render();});
+$("#export").onclick=()=>{
+  if(!DATA){alert("Chưa nạp phiếu");return;}
+  const rid=($("#reviewer").value||"").trim(); if(!rid){alert("Nhập Reviewer ID");return;}
+  const anns=[];
+  DATA.forms.forEach(s=>s.forms.forEach(f=>{
+    const k=s.sample_id+"|"+f.report_label; const sc=(STORE[k]||{});
+    anns.push({sample_id:s.sample_id, blind_label:f.report_label, scores:sc.scores||{}, notes:sc.notes||""});
+  }));
+  const out={schema_version:"task05d-annotations-v1", reviewer_id:rid, rubric_version:RUBRIC_VER,
+    exported_at:new Date().toISOString(), source_forms:DATA.__name, annotations:anns};
+  const blob=new Blob([JSON.stringify(out,null,2)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+  a.download="annotations_"+rid+"_"+Date.now()+".json"; a.click();
+};
+</script>
+</body>
+</html>
