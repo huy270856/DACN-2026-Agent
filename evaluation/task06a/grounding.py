@@ -72,7 +72,7 @@ def build_evidence_index(projection: Mapping[str, Any]) -> Dict[str, Any]:
     import_funcs: Set[str] = set()
     libraries: Set[str] = set()
     section_names: Set[str] = set()
-    high_entropy_count = 0
+    high_entropy_count = None  # missing/truncated is UNKNOWN, never zero
     wx_count = 0
     url_count = registry_count = mz_count = 0
     evidence_ids: Set[str] = set()
@@ -96,7 +96,8 @@ def build_evidence_index(projection: Mapping[str, Any]) -> Dict[str, Any]:
             for s in val.get("sections", []) or []:
                 if s.get("name"):
                     section_names.add(str(s["name"]).lower())
-            high_entropy_count = int(val.get("high_entropy_section_count_ge7", 0) or 0)
+            count = val.get("high_entropy_section_count_ge7")
+            high_entropy_count = int(count) if count is not None else None
             wx_count = int(val.get("writable_and_executable_section_count", 0) or 0)
         elif facet == "static.strings_summary":
             url_count = int(val.get("url_occurrences", 0) or 0)

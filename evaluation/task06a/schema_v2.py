@@ -32,7 +32,7 @@ ALIGNMENTS = ("CONSISTENT", "CONFLICT", "INSUFFICIENT_EVIDENCE")
 RECOMMENDATIONS = ("MANUAL_REVIEW", "MONITOR", "AVOID_EXECUTION", "CONSIDER_QUARANTINE")
 CONF_LEVELS = ("LOW", "MEDIUM", "HIGH")
 
-SCHEMA_ID = "task06a-assessment-v2"
+SCHEMA_ID = "task06a-assessment-v2.1"
 
 # JSON schema handed to Ollama for constrained decoding (best-effort; re-validated here).
 OLLAMA_FORMAT_SCHEMA_V2: Dict[str, Any] = {
@@ -47,7 +47,7 @@ OLLAMA_FORMAT_SCHEMA_V2: Dict[str, Any] = {
             "additionalProperties": False,
             "required": ["alignment", "supporting_evidence_ids", "contradicting_evidence_ids",
                          "uncertainty_notes", "review_required", "recommendation",
-                         "confidence_in_assessment", "explanation"],
+                         "confidence_in_assessment", "explanation", "claims"],
             "properties": {
                 "alignment": {"type": "string", "enum": list(ALIGNMENTS)},
                 "supporting_evidence_ids": {"type": "array", "items": {"type": "string"},
@@ -60,6 +60,14 @@ OLLAMA_FORMAT_SCHEMA_V2: Dict[str, Any] = {
                 # Qualitative confidence in the ASSESSMENT reasoning — never the raw score.
                 "confidence_in_assessment": {"type": "string", "enum": list(CONF_LEVELS)},
                 "explanation": {"type": "string", "minLength": 1},
+                "claims": {"type": "array", "maxItems": 4, "items": {
+                    "type": "object", "additionalProperties": False,
+                    "required": ["kind", "text", "evidence_ids"],
+                    "properties": {
+                        "kind": {"type": "string", "enum": ["OBSERVED", "HYPOTHESIS", "LIMITATION", "NEXT_VERIFICATION"]},
+                        "text": {"type": "string", "minLength": 1},
+                        "evidence_ids": {"type": "array", "maxItems": 4, "items": {"type": "string"}},
+                    }}},
             },
         },
     },

@@ -20,6 +20,7 @@ as such. The checker never changes the static label and never auto-executes.
 from __future__ import annotations
 
 from typing import Any, Dict, List, Mapping, Optional
+import math
 
 # Raw-score proximity band around the threshold. The score is NOT a probability;
 # this is only "the detector was near its own decision boundary".
@@ -33,7 +34,7 @@ def is_near_threshold(raw_score: Optional[float], threshold: float,
     if raw_score is None:
         return False
     try:
-        return abs(float(raw_score) - float(threshold)) < margin
+        return math.isfinite(float(raw_score)) and abs(float(raw_score) - float(threshold)) < margin
     except (TypeError, ValueError):
         return False
 
@@ -59,9 +60,9 @@ def safe_recommendation(static_label: str, alignment: Optional[str],
         action, priority = "MANUAL_REVIEW", "MEDIUM"
         reasons.append("near-threshold (raw score) -> escalate MONITOR to MANUAL_REVIEW")
     # Insufficient evidence on a non-benign label should see a human.
-    if alignment == "INSUFFICIENT_EVIDENCE" and label != "benign" and action == "MONITOR":
+    if alignment not in {"CONSISTENT", "CONFLICT"}:
         action, priority = "MANUAL_REVIEW", "MEDIUM"
-        reasons.append("insufficient evidence on non-benign label -> MANUAL_REVIEW")
+        reasons.append("insufficient/unknown evidence assessment -> MANUAL_REVIEW")
     return {
         "action": action, "priority": priority,
         "requires_human_decision": True, "execution_status": "NOT_EXECUTED",
@@ -86,6 +87,20 @@ def check_consistency(assessment: Mapping[str, Any], *, static_label: str,
 
     near = is_near_threshold(raw_score, threshold)
     flags: List[str] = []
+    try:
+        valid_score = (not isinstance(raw_score, bool) and raw_score is not None
+                       and math.isfinite(float(raw_score)) and math.isfinite(float(threshold))
+                       and 0 <= float(raw_score) <= 1 and 0 <= float(threshold) <= 1)
+    except (ValueError, TypeError):
+        valid_score = False
+    if not valid_score:
+        flags.append("invalid_or_missing_score")
+    elif static_label not in {"benign", "malicious"} or (float(raw_score) >= float(threshold)) != (static_label == "malicious"):
+        flags.append("label_score_threshold_mismatch")
+    if alignment not in {"CONSISTENT", "CONFLICT", "INSUFFICIENT_EVIDENCE"}:
+        flags.append("invalid_or_missing_alignment")
+    if type(review_required) is not bool:
+        flags.append("invalid_or_missing_review_flag")
 
     # --- structural alignment coherence (v2 has the lists; v1 cannot be checked here) ---
     has_structure = ("supporting_evidence_ids" in assessment
@@ -110,6 +125,8 @@ def check_consistency(assessment: Mapping[str, Any], *, static_label: str,
 
     # --- review_required coherence ---
     if review_required is False:
+        if alignment == "INSUFFICIENT_EVIDENCE":
+            flags.append("insufficient_evidence_without_review")
         if alignment == "CONFLICT":
             flags.append("conflict_without_review")
         if (static_label or "").lower() == "malicious":
@@ -120,6 +137,10 @@ def check_consistency(assessment: Mapping[str, Any], *, static_label: str,
         flags.append("manual_review_recommended_but_review_required_false")
 
     safe = safe_recommendation(static_label, alignment, near)
+    if flags:
+        safe.update(action="MANUAL_REVIEW", priority="HIGH")
+        safe["derivation"].append("validation flags -> human review; preserve raw suggestion")
+    safe["review_required"] = safe["action"] != "MONITOR"
     agent_matches_safe = (recommendation == safe["action"])
 
     return {

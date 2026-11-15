@@ -104,7 +104,7 @@ def test_consistency_monitor_on_malicious_flagged_and_escalated():
     a = _assess(recommendation="MONITOR")
     r = consistency.check_consistency(a, static_label="malicious", raw_score=0.95, threshold=0.83)
     assert "under_cautious_monitor_on_malicious" in r["flags"]
-    assert r["safe_recommendation"]["action"] == "CONSIDER_QUARANTINE"
+    assert r["safe_recommendation"]["action"] == "MANUAL_REVIEW"
     assert r["consistent"] is False
 
 
@@ -135,7 +135,7 @@ def test_consistency_invalid_recommendation_failsafe():
     r = consistency.check_consistency(a, static_label="malicious", raw_score=0.99, threshold=0.83)
     assert "invalid_or_missing_recommendation" in r["flags"]
     # Fail-safe never becomes a silent MONITOR for a malicious label.
-    assert r["safe_recommendation"]["action"] == "CONSIDER_QUARANTINE"
+    assert r["safe_recommendation"]["action"] == "MANUAL_REVIEW"
 
 
 def test_consistency_clean_benign_case_passes():
@@ -160,6 +160,7 @@ def _valid_v2():
                            "uncertainty_notes": ["static features too thin"],
                            "review_required": True, "recommendation": "MANUAL_REVIEW",
                            "confidence_in_assessment": "LOW",
+                           "claims": [],
                            "explanation": "Static features are insufficient to judge."}}
 
 
@@ -225,7 +226,9 @@ def test_v2_pipeline_parses_valid_mock():
     from agent.config import AgentConfig
     cfg = AgentConfig()
     state = _state_for_pipeline()
-    planner = _MockV2(json.dumps(_valid_v2()))
+    valid = _valid_v2()
+    valid["case_id"] = state["case_id"]
+    planner = _MockV2(json.dumps(valid))
     res = assessor_v2.assess_once_v2(state, cfg, planner)
     assert res["status"] == "OK"
     assert res["assessment"]["alignment"] == "INSUFFICIENT_EVIDENCE"

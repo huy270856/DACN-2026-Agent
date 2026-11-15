@@ -1,0 +1,79 @@
+{
+  "kind": "SOURCE_ARTIFACT_REAUDIT_NO_INFERENCE_NO_GRADING",
+  "records_cache_sha256": "f1fd7e5c6a87f3c57a663b02e6c35a3fefc4461e4e7e7487bb77380b1d543ccc",
+  "forms_sha256": "8bf30d09dc5f91fa1b481e22f34a9befdf9ca8472d2076d86ab8a643ac4a2c38",
+  "analysis_source_sha256": "49cd59c17d32359ca938c6d9b8063a628866d24ca75b67cb43e5d00bf70ef47e",
+  "findings": [
+    {
+      "sample_id": "S-7c2ea2e8f0",
+      "sha256": "05c55a9af4c85f42771c1e0173e51bcd0206d86be38333f217ecc92994b82423",
+      "explanation": "While the static evidence strongly suggests benignity (low malware score, standard CRM imports/exports), a final decision requires runtime verification to rule out behavioral anomalies or obfuscation that static analysis cannot detect.",
+      "name_presence": {
+        "crm": {
+          "original_import_record": true,
+          "evidence_sheet": true,
+          "reconstructed_prompt_value": true
+        }
+      },
+      "entropy_ge7_count": 0,
+      "sheet_missing_cited_ids": [
+        "EV-b7e980479f390f403d6adb4c"
+      ],
+      "state_missing_cited_ids": [],
+      "note": "Reconstructed current frozen v1 context, not a saved historical HTTP payload; no semantic grade assigned"
+    },
+    {
+      "sample_id": "S-37cfb6694f",
+      "sha256": "062a293f9bd48d30c4e690667b95245d6a1091cb0a5eb50be72a5fadd5d8ff3c",
+      "explanation": "The static prediction is authoritative and consistent with observable artifacts (high entropy sections, MFC imports). However, due to the replay nature of the model and lack of runtime data, a manual review or dynamic analysis is required to confirm actual malicious behavior.",
+      "name_presence": {
+        "mfc": {
+          "original_import_record": true,
+          "evidence_sheet": true,
+          "reconstructed_prompt_value": true
+        }
+      },
+      "entropy_ge7_count": 1,
+      "sheet_missing_cited_ids": [
+        "EV-d4cbed76f6d8a2bed611368a"
+      ],
+      "state_missing_cited_ids": [],
+      "note": "Reconstructed current frozen v1 context, not a saved historical HTTP payload; no semantic grade assigned"
+    },
+    {
+      "sample_id": "S-bf43ef03ff",
+      "sha256": "229388251cb623071b22a27e4f257525862b8c606e25daf3d91e10a819c7fae3",
+      "explanation": "The static evidence strongly suggests malicious intent (high entropy strings, specific imports like ExitProcess/MoveFileA, and a high-confidence malware prediction). However, because the prediction model relies on feature records rather than raw PE analysis, and static analysis cannot verify runtime behavior, execution is not definitively confirmed. Monitoring is recommended to observe actual behavior.",
+      "name_presence": {
+        "exitprocess": {
+          "original_import_record": true,
+          "evidence_sheet": true,
+          "reconstructed_prompt_value": true
+        },
+        "movefilea": {
+          "original_import_record": true,
+          "evidence_sheet": true,
+          "reconstructed_prompt_value": true
+        }
+      },
+      "entropy_ge7_count": 0,
+      "sheet_missing_cited_ids": [
+        "EV-6bfe46de21921545e4e4968e"
+      ],
+      "state_missing_cited_ids": [],
+      "note": "Reconstructed current frozen v1 context, not a saved historical HTTP payload; no semantic grade assigned"
+    },
+    {
+      "sample_id": "S-5327b8b93a",
+      "sha256": "269a1a3318ddfe38b7a83a6894a9fbd5860adad5f21f304afdfd2533eeffde2e",
+      "explanation": "The observable PE evidence (stripped symbols, high entropy sections) aligns with the static LightGBM prediction of malicious intent. However, due to the limitation that the score is not a calibrated probability and was computed from an EMBER feature record rather than raw bytes, manual review is required to confirm the threat.",
+      "name_presence": {},
+      "entropy_ge7_count": 0,
+      "sheet_missing_cited_ids": [
+        "EV-32287558ce69742a7e735218"
+      ],
+      "state_missing_cited_ids": [],
+      "note": "Reconstructed current frozen v1 context, not a saved historical HTTP payload; no semantic grade assigned"
+    }
+  ]
+}

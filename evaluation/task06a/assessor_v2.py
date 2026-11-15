@@ -27,13 +27,14 @@ from agent import context as agent_context
 from agent.planner import PlannerError
 from . import schema_v2
 
-PROMPT_ID = "task06a-assessor-v2"
+PROMPT_ID = "task06a-assessor-v2.1"
 
 _FENCE = agent_context._FENCE  # reuse the same untrusted-content fence as production
 
 _SYSTEM_V2 = (
     "You are a malware-investigation evidence reviewer. A static LightGBM detector has "
-    "already produced an AUTHORITATIVE label for this file; you do NOT change that label. "
+    "produced a fallible prediction for this file. Preserve that recorded detector output; "
+    "it is an observation, never independent corroboration of itself. "
     "Your single job is to judge, from the observable static evidence, whether that "
     "observable evidence actually SUPPORTS the label, CONTRADICTS it, or is too thin to "
     "tell.\n"
@@ -50,6 +51,12 @@ _SYSTEM_V2 = (
     "  - INSUFFICIENT_EVIDENCE: the static features are too thin to support EITHER side. "
     "Absence of contradicting evidence is NOT the same as support - if you cannot cite "
     "positive supporting evidence, choose INSUFFICIENT_EVIDENCE, not CONSISTENT.\n"
+    "Do not use the prediction evidence ID as supporting or contradicting evidence. "
+    "Write at most four claims, each with kind OBSERVED, HYPOTHESIS, LIMITATION or "
+    "NEXT_VERIFICATION, text and evidence_ids. OBSERVED claims require visible source IDs; "
+    "hypotheses must explicitly state uncertainty; next verification is a proposal for a human, "
+    "never a tool execution. A citation existing does not make its claim supported. "
+    "If information is absent, failed or truncated, state that limitation; absence is not contradiction. "
     "Hard rules: never infer malicious merely because an indicator (import, high entropy, "
     "URL count) is present; never infer benign merely because indicators are absent. "
     "Never name an import, library, section or entropy value that is not in the evidence. "
@@ -63,19 +70,8 @@ _SYSTEM_V2 = (
 
 def build_context_v2(state: Mapping[str, Any], cfg) -> Dict[str, Any]:
     """Render the SAME projection the v1 branch sees, with a neutral v2 instruction."""
-    facts = {
-        "case_id": state["case_id"],
-        "case_revision": state.get("revision", 1),
-        "target_verified_sha256": (state.get("target_ref", {}).get("verified_digest") or {}).get("value"),
-        # Reuse production truncation so v1 and v2 see identical evidence budgets.
-        "evidence": agent_context._summarize_evidence(state, cfg),
-    }
+    facts = agent_context.build_context(state, [], cfg, history=[])["facts"]
     blob = json.dumps(facts, ensure_ascii=True, separators=(",", ":"))
-    # Mirror the production context-budget trim.
-    while len(blob) > cfg.max_context_chars and facts["evidence"]:
-        facts["evidence"].pop()
-        facts["context_truncated"] = True
-        blob = json.dumps(facts, ensure_ascii=True, separators=(",", ":"))
 
     user = (
         "Investigation evidence follows. The static prediction is the evidence with "
@@ -107,6 +103,7 @@ def _assert_no_ground_truth(text: str) -> None:
 def assess_once_v2(state: Mapping[str, Any], cfg, planner, *, max_attempts: int = 2) -> Dict[str, Any]:
     """One structured v2 assessment. Returns a result dict; errors are explicit."""
     attempts: List[Dict[str, Any]] = []
+    started = time.monotonic()
     ctx = build_context_v2(state, cfg)
     # v2 constrains output to the v2 schema (not the v1 action schema).
     ctx = dict(ctx)
@@ -122,16 +119,21 @@ def assess_once_v2(state: Mapping[str, Any], cfg, planner, *, max_attempts: int 
             return {"status": "AGENT_ERROR", "error": str(exc), "attempts": attempts,
                     "latency_s": round(time.time() - t0, 2)}
         latency = round(time.time() - t0, 2)
+        attempts.append({"attempt": attempt, "raw": result["raw"],
+                         "meta": result.get("meta", {}), "latency_s": latency})
         try:
             obj = schema_v2.parse_and_validate_v2(result["raw"])
+            if obj["case_id"] != state["case_id"] or obj["case_revision"] != state.get("revision", 1):
+                raise schema_v2.AssessmentErrorV2("case identity/revision mismatch")
         except schema_v2.AssessmentErrorV2 as exc:
-            attempts.append({"attempt": attempt, "parse_error": str(exc), "raw": result["raw"][:300]})
+            attempts[-1]["parse_error"] = str(exc)
             continue
         meta = dict(result.get("meta") or {})
         meta["latency_s"] = latency
         return {"status": "OK", "assessment": obj["assessment"], "meta": meta,
-                "attempts": attempts, "latency_s": latency}
-    return {"status": "AGENT_INVALID_OUTPUT", "attempts": attempts}
+                "attempts": attempts, "latency_s": round(time.monotonic() - started, 3)}
+    return {"status": "AGENT_INVALID_OUTPUT", "attempts": attempts,
+            "latency_s": round(time.monotonic() - started, 3)}
 
 
 def _decide_v2(planner, ctx, cfg) -> Dict[str, Any]:
@@ -171,4 +173,5 @@ def _decide_v2(planner, ctx, cfg) -> Dict[str, Any]:
         raise PlannerError("Ollama returned empty content (v2)")
     return {"raw": content, "meta": {"model": cfg.model, "think": cfg.think,
             "eval_count": payload.get("eval_count"),
-            "prompt_eval_count": payload.get("prompt_eval_count")}}
+            "prompt_eval_count": payload.get("prompt_eval_count"),
+            "done_reason": payload.get("done_reason")}}
