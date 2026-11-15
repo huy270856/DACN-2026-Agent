@@ -1,0 +1,39 @@
+{
+  "method": "STATIC_TEMPLATE_06B_V1",
+  "model_prediction": {
+    "schema_version": "static-prediction-v1",
+    "feature_version": 2,
+    "feature_count": 2381,
+    "extractor": {
+      "name": "dacn-independent-ember-v2",
+      "version": "0.1.0",
+      "lief_version": "0.15.1-"
+    },
+    "target_sha256": "ef37663b44ac66920c6f33694deea01acb78ae3f3012884819373fa04c3eb5f0",
+    "model_id": "dacn-lgbm-ember2018v2-5db192ec1bda",
+    "model_sha256": "5db192ec1bda850d0e1873af705b57d05aad414aa35e8520c8315ece1c509609",
+    "threshold": 0.8321860386013389,
+    "raw_score": 0.001562802531832656,
+    "score_is_calibrated_probability": false,
+    "predicted_label": "benign",
+    "predicted_class": 0,
+    "parser_status": "OK",
+    "limitations": [
+      "Raw LightGBM score; NOT a calibrated probability.",
+      "Static analysis only; no runtime/dynamic behaviour observed.",
+      "Inference uses LIEF 0.15.1 while EMBER2018 training records used LIEF 0.9.0; feature parity for the raw-PE path is not asserted."
+    ]
+  },
+  "explanation": "Static model prediction only. Raw score is uncalibrated. Concrete imports were not collected; do not infer runtime capabilities or behaviour.",
+  "recommendation": {
+    "action": "MONITOR",
+    "priority": "LOW",
+    "explanation": "Mô hình tĩnh phân loại BENIGN. Đề xuất theo dõi; phân tích chỉ dựa trên đặc trưng tĩnh, không quan sát hành vi runtime.",
+    "requires_human_decision": true,
+    "execution_status": "NOT_EXECUTED",
+    "note": "Đây chỉ là ĐỀ XUẤT. Hệ thống không tự cách ly/xoá/kill tiến trình."
+  },
+  "latency_s": 1.2340000000003783,
+  "prompt_tokens": 0,
+  "output_tokens": 0
+}

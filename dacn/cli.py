@@ -53,6 +53,8 @@ def build_parser() -> argparse.ArgumentParser:
     pv.add_argument("--think", action="store_true", help="Enable Qwen thinking mode")
     pv.add_argument("--no-agent", action="store_true",
                     help="Run detector + report only, skip the SLM assessment")
+    pv.add_argument("--agent-mode", choices=("v1", "multistep"), default="v1",
+                    help="Opt in to versioned imports-driven multi-step investigation")
 
     return parser
 
@@ -99,8 +101,13 @@ def main(argv=None) -> int:
                 acfg = replace(acfg, max_iterations=args.max_iters)
             if args.think:
                 acfg = replace(acfg, think=True)
-            result = app.investigate_real(config, file=args.file, case_id=args.case_id,
-                                          agent_config=acfg, run_agent=not args.no_agent)
+            if args.agent_mode == "multistep" and not args.no_agent:
+                from investigation_v3.application import investigate
+                acfg = replace(acfg, max_iterations=args.max_iters or 3, max_context_chars=24000)
+                result = investigate(config, file=args.file, case_id=args.case_id, agent_config=acfg)
+            else:
+                result = app.investigate_real(config, file=args.file, case_id=args.case_id,
+                                              agent_config=acfg, run_agent=not args.no_agent)
             # Avoid dumping the full nested report object twice; print a summary + paths.
             summary = {k: v for k, v in result.items() if k != "report"}
             _print(summary)
