@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/dacn/d0/pe-imports-output-v1.schema.json",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "target_sha256", "parser", "library_count", "total_entries", "returned_entries", "truncated", "entries", "limitations"],
+  "properties": {
+    "schema_version": {"const": "pe-imports-output-v1"},
+    "target_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "parser": {"type": "string", "minLength": 1, "maxLength": 64},
+    "library_count": {"type": "integer", "minimum": 0, "maximum": 4096},
+    "total_entries": {"type": "integer", "minimum": 0, "maximum": 100000},
+    "returned_entries": {"type": "integer", "minimum": 0, "maximum": 64},
+    "truncated": {"type": "boolean"},
+    "entries": {"type": "array", "maxItems": 64, "items": {
+      "type": "object", "additionalProperties": false,
+      "required": ["library", "symbol", "ordinal", "delay"],
+      "properties": {
+        "library": {"type": "string", "minLength": 1, "maxLength": 128},
+        "symbol": {"type": ["string", "null"], "minLength": 1, "maxLength": 160},
+        "ordinal": {"type": ["integer", "null"], "minimum": 0, "maximum": 65535},
+        "delay": {"type": "boolean"}
+      }
+    }},
+    "limitations": {"type": "array", "maxItems": 8, "items": {"type": "string", "maxLength": 300}}
+  }
+}

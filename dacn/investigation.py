@@ -86,7 +86,7 @@ def _tool_spec(provider: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def build_detector_backend(config: AppConfig, manifest: Optional[Dict[str, Any]] = None):
+def build_detector_backend(config: AppConfig, manifest: Optional[Dict[str, Any]] = None, *, include_imports=False):
     """Assemble D2/D3/D4/D5/D7/D8/D9 with the REAL detector as the only tool.
 
     Windows-only (imports the D5 executor). The model artifact, its digest, id and
@@ -125,8 +125,16 @@ def build_detector_backend(config: AppConfig, manifest: Optional[Dict[str, Any]]
     installation = ProviderInstallation()
     installation.install(provider_id=PROVIDER_ID, version=TOOL_VERSION,
                          adapter_id=ADAPTER_ID, command=command, pins=pins)
+    identities = {(TOOL_ID, TOOL_VERSION, PROVIDER_ID)}
+    adapters = {TOOL_ID: partial(pe_prediction_result_from_execution,
+                                expected_model_id=model_id, expected_model_sha256=model_sha)}
+    if include_imports:
+        from investigation_v3 import imports_tool
+        extra_spec = imports_tool.install(registry, installation)
+        identities.add((extra_spec["tool_id"], extra_spec["tool_version"], extra_spec["provider"]["id"]))
+        adapters[extra_spec["tool_id"]] = imports_tool.from_execution
     policy = PolicyEngine(PolicyConfig(
-        tool_allowlist=frozenset({(TOOL_ID, TOOL_VERSION, PROVIDER_ID)}),
+        tool_allowlist=frozenset(identities),
         budget_caps={"timeout_ms": 120000, "max_output_bytes": 262144,
                      "max_artifact_bytes": 1048576, "max_concurrency": 1}))
     normalizer = partial(pe_prediction_result_from_execution,
@@ -136,7 +144,7 @@ def build_detector_backend(config: AppConfig, manifest: Optional[Dict[str, Any]]
                         installation=installation,
                         bridge=CaseBridge(audit_ledger_root=config.ledgers_dir),
                         artifact_root=config.artifacts_dir, run_ledger_path=config.run_ledger_path,
-                        result_adapters={TOOL_ID: normalizer})
+                        result_adapters=adapters)
     return registry, orch
 
 

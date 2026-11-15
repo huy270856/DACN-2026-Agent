@@ -1,132 +1,230 @@
-# DACN — Báo cáo tiến độ kỹ thuật gần đây
-## Tóm tắt tiến độ tuần
+# DACN-2026 — Phát hiện và hỗ trợ điều tra mã độc Windows PE bằng AI Agent
 
-Trong giai đoạn vừa qua, nhóm tập trung hoàn thiện hệ thống điều phối và bắt đầu triển khai AI Agent phục vụ điều tra mã độc trên Windows.
+## Tổng quan dự án
 
-### Công việc đã thực hiện
+**Mục tiêu.** Xây dựng một hệ thống hỗ trợ **phát hiện, phân tích và điều tra** tệp thực thi
+Windows PE, kết hợp một bộ phân loại học máy tĩnh (LightGBM) với một **AI Agent** (Qwen chạy
+local) hoạt động bên trong một **lớp điều phối tin cậy D1–D9**. Câu hỏi nghiên cứu chính của
+tuần: *Agent có thể chủ động thu thập và sử dụng bằng chứng mới để tạo giá trị điều tra bổ sung
+so với báo cáo chỉ-dựa-trên-phân-loại-tĩnh hay không?*
 
-| Hạng mục | Kết quả |
-|---|---|
-| **Node D (D1–D9)** | Hoàn thiện và tích hợp các module điều phối, kiểm tra chính sách, thực thi công cụ, xác thực kết quả và cập nhật CaseState. |
-| **Node B – Context Collector** | Bổ sung nhận diện định dạng binary, chuẩn bị đầu vào cho REA/Ghidra mà không thực thi file nghi vấn. |
-| **Unified Application** | Hợp nhất Node B, Node C và D1–D9 vào một ứng dụng CLI chung, đã có kiểm thử tích hợp. |
-| **REA/Ghidra** | Phân tích tĩnh thành công file PE lành tính trên Windows, thu được 327 functions, 84 strings và mã giả decompilation. |
-| **AI Agent** | Triển khai Qwen3.5-4B chạy local qua Ollama. Agent đã có khả năng đề xuất công cụ, đi qua D1–D9, nhận evidence và tiếp tục suy luận. Live E2E đạt 2/2 lượt với analyzer giả lập. |
-
-### Tiến độ hiện tại và công việc tiếp theo
-
-- **REA/Ghidra:** Đã hoạt động độc lập, đang nghiên cứu cơ chế cô lập phù hợp để tích hợp an toàn vào DACN.
-- **AI Agent:** Đã chạy với mô hình thật; tiếp tục cải thiện độ ổn định. Benchmark thinking OFF đạt 10/12 lượt theo rubric.
-- **Bước tiếp theo:** Kết nối các analyzer thật với Agent và đánh giá khả năng điều tra, phát hiện mã độc trên dữ liệu thử nghiệm.
-
-
-
-
-## 1. Tổng quan kiến trúc hiện tại
+Agent **không** thay thế bộ phát hiện và **không** tự thực hiện containment; nó đọc bằng chứng,
+đề xuất công cụ phân tích và viết nhận định có trích dẫn, mọi hành động đều qua lớp tin cậy.
 
 ```mermaid
 flowchart LR
-    B[Node B: Context Collector] --> C[Node C: CaseState]
-    C --> W[WorkflowEngine và Agent Controller]
-    W <--> Q[Qwen local qua Ollama]
-    W --> D[D1–D9: trusted execution]
-    D --> M[Analyzer MOCK đã tích hợp]
-    M --> C
-    D -. Chưa tích hợp .-> R[REA / Ghidra]
-    D -. Chưa xác nhận inference .-> L[EMBER / LightGBM]
-    D -. Chưa triển khai .-> V[Sandbox VM]
+    PE[Windows PE] --> B[Node B: Context Collector]
+    B --> C[Node C: CaseState / Evidence / Revision]
+    C --> W[WorkflowEngine + Agent Controller]
+    W <--> Q[Qwen3.5:4B local qua Ollama]
+    W --> D[D1–D9: Trusted Orchestrator]
+    D --> L[LightGBM / EMBER2018 v2]
+    D --> I[Analyzer imports read-only]
+    L --> C
+    I --> C
+    D -. chưa tích hợp .-> R[REA / Ghidra]
+    D -. chưa triển khai .-> V[Sandbox VM]
 ```
 
-Node B thu quan sát từ file hoặc PID; Node C lưu evidence, nguồn gốc, unknowns và revision. WorkflowEngine giữ các cổng quyết định xác định; Agent đề xuất bước tiếp theo từ CaseState. Controller kiểm đề xuất trước khi chuyển ToolCall sang D1–D9. Kết quả hợp lệ được ghi vào Node C cho vòng điều tra kế tiếp.
-
-Đường chạy đã kiểm chứng dùng **analyzer MOCK lành tính**. REA, ML và sandbox trong sơ đồ là điểm kết nối dự kiến, chưa phải analyzer hoạt động trong DACN. Agent không trực tiếp gọi shell hoặc thực thi binary đích; thiếu evidence có thể dẫn đến `INSUFFICIENT_EVIDENCE`. Thu thập hay chạy tool thành công chỉ phản ánh trạng thái thao tác, không chứng minh target an toàn.
-
-## 2. Hoàn thiện Trusted Orchestrator D1–D9
-
-PR #6 hợp nhất registry, validation, executor, execution control và case bridge; bổ sung binding D2→D5, adapter D5→D7, xử lý revision race và khôi phục ledger. Khi đó integration còn dùng admission D4/D8 giả lập. PR #7 bổ sung D1, D4, D8 thật và kiểm thử chuỗi tin cậy. Các nhãn “MISSING/MOCK” trong báo cáo integration ban đầu là trạng thái lịch sử, không mô tả toàn bộ code hiện tại.
-
-| Module | Trách nhiệm | Trạng thái đã đối chiếu |
+| Thành phần | Vai trò | Trạng thái |
 |---|---|---|
-| D1 | Điều phối lifecycle, workflow, idempotency, commit | Đã nối D2–D9; có test chuỗi đầy đủ |
-| D2 | Registry tool/version/provider và khả dụng | Đã tích hợp; không tự fallback provider |
-| D3 | Kiểm schema, arguments, target binding, revision | Đã tích hợp trước admission |
-| D4 | Policy xác định, mặc định từ chối, kiểm effects/budgets | Engine thật; approval không bỏ qua yêu cầu VM |
-| D5 | Đọc target, revalidation, staging, chạy adapter đã pin | Đã chạy Windows với FILE; chưa có REA adapter |
-| D6 | Job Object, timeout/cancel, giới hạn output, cleanup | Đã kiểm thử; không phải malware sandbox |
-| D7 | Kiểm receipt/result/artifact, chuẩn hóa observation | Đã tích hợp; không tự tạo verdict malware |
-| D8 | Ký kết quả, quản lý khóa, approval, analyst identity | Có signer, DPAPI/ACL; còn giới hạn cách ly |
-| D9 | Ghi Node C, kiểm revision, ledger/reconcile | Đã tích hợp; chống stale commit và replay |
+| **Node B — Context Collector** | Thu thập identity, SHA-256, metadata PE, nhận diện format (không thực thi file) | Đã có |
+| **Node C — CaseState** | Lưu evidence, provenance, unknowns, revision, lịch sử tool-run | Đã có |
+| **D1–D9 — Trusted Orchestrator** | Contract, registry, policy (mặc định từ chối), target binding, thực thi adapter đã pin, validate, ký, commit evidence | Đã có |
+| **LightGBM / EMBER2018 v2** | Phân loại tĩnh PE (2381 feature); điểm số đưa vào CaseState | Đã tích hợp, inference thật |
+| **Analyzer imports** (`static.pe_imports_detail`) | Đọc bảng import DLL/API/ordinal, read-only, chạy qua D1–D9 | Đã có (1 analyzer) |
+| **AI Agent (Qwen)** | Đọc evidence, đề xuất tool, viết assessment có trích dẫn | Đã có, chạy local thật |
+| REA/Ghidra, Sandbox VM | Phân tích sâu / động | **Chưa tích hợp** vào DACN |
 
-[Báo cáo integration](docs/integration/TEST_REPORT.md) ghi **9/9 integration test PASS**: subprocess D5/D6 chạy thật, admission D4/D8 còn MOCK. [Báo cáo D1/D4/D8](docs/d1_d4_d8/IMPLEMENTATION_STATUS.md) ghi **46 test mới PASS**, gồm sáu test chuỗi đầy đủ dùng PolicyEngine và TrustedSigner thật. Analyzer vẫn là fixture lành tính. Các kết quả thuộc những mốc khác nhau, không cộng thành số test hiện tại.
+**Khả năng đã có:** pipeline PE → dự đoán LightGBM → Agent điều tra nhiều bước qua D1–D9 với một
+analyzer imports thật, có bằng chứng được commit và Agent đọc lại ở vòng sau.
+**Giới hạn hiện tại:** Agent **chưa** được chứng minh là nâng cao độ chính xác phát hiện; đánh giá
+semantic/grounding vẫn cần người chấm độc lập; chưa có holdout xác nhận.
 
-Giới hạn được ghi nhận gồm: DPAPI theo user chưa cách ly khóa khỏi analyzer cùng user; analyst identity mới xác định process-owner; idempotency tuần tự chưa ngăn mọi double-execute đồng thời. Ledger và CaseState cần reconcile, không phải một transaction filesystem duy nhất. Vì vậy, hoàn thiện tích hợp chức năng chưa đồng nghĩa bảo đảm triển khai production.
+**Trạng thái phát triển:** nguyên mẫu nghiên cứu chạy được, **chưa** phải sản phẩm production.
+Chi tiết kỹ thuật tuần này: [`evaluation/TASK06_FINAL_REPORT.md`](evaluation/TASK06_FINAL_REPORT.md).
 
-## 3. Cải tiến Node B để chuẩn bị cho REA/Ghidra
+---
 
-Thay đổi mới là nhận diện format bằng magic/header tại commit `0cfdc13`, `5523c55`, cùng [tài liệu REA boundary](docs/node_b/REA_BOUNDARY.md). Facet `format` được bổ sung theo hướng additive, giữ tương thích với PE header và luồng evidence hiện có.
+## Tiến độ thực hiện tuần này
 
-| Format | Ý nghĩa quan sát |
-|---|---|
-| `PE` | Cấu trúc PE tối thiểu hợp lệ |
-| `UNKNOWN` | Chưa nhận diện được magic |
-| `UNSUPPORTED` | Format đã biết nhưng ngoài phạm vi analyzer cấu hình |
-| `MALFORMED` | Có dấu hiệu format nhưng header lỗi hoặc bị cắt |
+Tuần này tập trung vào **chuỗi phát triển AI Agent**: từ dựng Agent Qwen, tích hợp bộ phát hiện
+mã độc, thực nghiệm đánh giá, đến điều tra nhiều bước và cải thiện độ tin cậy của khâu kết luận.
 
-Code tách `detected` khỏi `analyzer_supported`, không dùng đuôi file để kết luận. `UNSUPPORTED` không có nghĩa Ghidra không đọc được format đó. Khi file thay đổi trong lúc thu thập, format và digest liên quan không được giữ như quan sát ổn định.
+### 1. Xây dựng AI Agent
+- Tích hợp **Qwen3.5:4B chạy local qua Ollama** (loopback, không gọi API LLM bên ngoài), thinking
+  OFF mặc định, temperature 0.1, seed cố định.
+- Agent nhận context/evidence từ CaseState và sinh **structured assessment** (alignment, bằng
+  chứng ủng hộ/mâu thuẫn, claims, khuyến nghị, độ tin cậy), dữ liệu target được đánh dấu
+  `UNTRUSTED_CONTENT`.
+- Agent kết nối với **Controller** và **workflow D1–D9**: mọi ToolCall được Controller kiểm
+  (schema, evidence IDs, case/revision, identity) trước khi chuyển sang lớp tin cậy.
 
-Binary I/O chỉ đọc, SHA-256 streaming chunk 1 MiB, file identity và TargetRef là nền tảng có từ trước, được đối chiếu lại cho ranh giới tích hợp; **không tính là toàn bộ thành tựu mới của tuần**. TargetRef mang snapshot và verified digest khi đủ điều kiện. D5/analyzer vẫn phải mở lại handle, kiểm identity, hash bytes đã stage và từ chối target thay đổi. Timeout hashing là best effort; hash backing file không chứng minh nội dung bộ nhớ process. Node B chưa chạy REA hoặc decompile; cải tiến này chuẩn bị đầu vào có provenance cho bước sau.
+### 2. Tích hợp mô hình phát hiện mã độc (LightGBM / EMBER2018 v2)
+- Bộ phân loại **LightGBM** độc lập trên không gian feature **EMBER2018 v2 (2381 chiều)**, đánh giá
+  trên tập test có nhãn (200.000 mẫu, không dùng để tuning):
 
-## 4. Unified Application
+  | Chỉ số (test 200k) | Giá trị |
+  |---|---|
+  | ROC AUC | **0.9930** |
+  | Recall / TPR | 0.9171 |
+  | F1 | 0.9518 |
+  | False Positive Rate | **0.00998** (≈1%, khớp mục tiêu val-FPR) |
+  | Threshold (khóa) | 0.83219 |
 
-PR #9 đưa vào entry point `python -m dacn`, nối API B→C→D qua `dacn/application.py`. CLI không sao chép logic từng node. `--home` đặt trước subcommand để chọn vùng lưu trữ; các lệnh đã đối chiếu với parser:
+- Dự đoán được tích hợp vào pipeline xử lý PE và ghi vào **CaseState** để Agent sử dụng (model
+  SHA-256 `5db192ec…c509609`, đóng băng — không train lại, không đổi threshold).
+- **Lưu ý trung thực:** raw score **không phải** xác suất đã hiệu chỉnh; AUC 0.993 là mức tái lập
+  nghiên cứu, không nhằm vượt SOTA; không suy rộng sang FPR thực tế ngoài tập test.
+
+### 3. Kiểm thử và đánh giá Agent
+- **Đánh giá có kiểm soát (TASK 05C, track `FEATURE_RECORD_REPLAY`):** 120 mẫu EMBER có nhãn
+  (TP 25 · TN 25 · FP 25 · FN 25 · NEAR 20), so sánh **Static-only** vs **Static + Agent** trên
+  *cùng* điểm số/evidence. Phát hiện quan trọng: Agent cho alignment **CONSISTENT 100%** ở mọi
+  strata, kể cả **50 ca nhãn LightGBM sai (25 FP + 25 FN)** — **0 ca CONFLICT**. ⇒ Trong cấu hình
+  này Agent **không** bắt lỗi detector và **không** cải thiện phát hiện; giá trị gia tăng chủ yếu
+  là phần giải thích. Agent gần như luôn đòi review (98,3%).
+- **Kiểm thử real benign PE (TASK 05D, track `RAW_PE_E2E`):** pipeline thật chạy trọn vẹn trên
+  **35 PE hệ thống Windows ký hợp lệ** (0 lỗi, 0 false positive **trên tập này**). Nhãn benign dựa
+  **provenance** (OS + chữ ký Microsoft), không chứng minh vô hại tuyệt đối.
+- **Phân biệt rõ:** `FEATURE_RECORD_REPLAY` (chạy model trên feature records) **khác** `RAW_PE_E2E`
+  (chạy từ tệp PE thật). Malicious raw-PE E2E = **BLOCKED** (chưa có mẫu được cấp phép).
+- **Hạn chế đánh giá:** các tiêu chí semantic của rubric cần **người chấm độc lập** (không dùng LLM,
+  không tự chấm); đã xuất gói chấm blind nhưng **human grading vẫn PENDING**.
+
+### 4. Phát triển Agent điều tra nhiều bước (TASK 06B)
+Bổ sung **đúng một analyzer** read-only `static.pe_imports_detail` và chứng minh **live** với Qwen thật:
+Agent chủ động đề xuất tool → Controller kiểm → **D4 ALLOW** → D5/D6 thực thi adapter đã pin →
+**D7** validate → **D9** commit evidence vào CaseState → revision tăng → Agent **đọc evidence mới**
+ở vòng sau. Đây là **live demonstration** của workflow điều tra nhiều bước, **chưa** phải sản phẩm
+hoàn chỉnh (trên DEV v2 ban đầu chỉ 1/4 final tool-enabled hợp lệ).
+
+### 5. Cải thiện độ tin cậy khâu kết luận
+- **Structured evidence/claims (TASK 06A):** schema assessment v2.1 (claims có kind/text/nguồn),
+  **grounding** + **consistency** verifier xác định, giảm decision-inconsistency (DEV 24 ca: 5 → 1).
+- **Bounded retrieval + fail-safe (TASK 06B-R, contract v3.3):** đọc có giới hạn phần import đã
+  commit; tách stage chọn-hành-động và viết-final; một lần repair; fallback **MANUAL_REVIEW** minh
+  bạch. DEV 3 PE: analyzer 3/3, D9 3/3 nhưng **accepted final 0/3**, retrieval **0/3**.
+- **Finalization contract v3.4 — evidence-native claims (TASK 06B-R2):** mỗi claim tự mang
+  `import_refs` bên trong, **bỏ** mảng binding cấp cao và `claim_index`, **bỏ** ràng buộc literal
+  phải lặp trong prose; lớp tin cậy chỉ **resolve** entry để hiển thị, không tự tạo nhận định. Nhờ
+  đó **loại bỏ lớp lỗi liên kết claim/source/entry từ thiết kế**.
+
+  **Kết quả v3.4 (DEBUG, đúng 3 file phát triển — KHÔNG confirmatory):** final hợp lệ **về cấu trúc
+  3/3 ngay lượt đầu, 0 repair** (so với 0/3 ở v3.3) và **lần đầu có live retrieval 1/3**; **nhưng
+  cả 3 là `FINISHED_FLAGGED → MANUAL_REVIEW`** (clean-grounded **0/3**) vì Qwen-4B đưa chính
+  prediction vào bằng chứng ủng hộ (self-corroboration được screen bắt đúng). **Semantic evaluation
+  vẫn PENDING.** Chi tiết: [`evaluation/task06b/R2_REPORT.md`](evaluation/task06b/R2_REPORT.md).
+
+---
+
+## Kết quả đạt được
+
+Các thành phần đã hoạt động (có artifacts xác minh):
+- **Pipeline phân tích PE + dự đoán LightGBM** (test AUC 0.993, FPR ≈1%).
+- **AI Agent dùng Qwen local** sinh assessment có cấu trúc, trích dẫn 100% hợp lệ, 0 lỗi schema/timeout (05C).
+- **Trusted orchestration D1–D9** với evidence provenance, ký và commit theo revision.
+- **Analyzer imports read-only** chạy qua D1–D9 (1 analyzer).
+- **Workflow điều tra nhiều bước** có live demonstration (06B): tool → D1–D9 → commit → đọc lại.
+- **Bộ test/thí nghiệm:** v3.4 — `test_v34.py` 26 passed; full regression **649 passed, 4 skipped,
+  81 subtests**; 05C 120 mẫu; 05D 35 PE E2E (0 lỗi); 06A DEV 24 ca; 06B-R DEV 3 PE.
+
+---
+
+## Hạn chế và hướng phát triển
+
+- **Semantic grounding chưa được xác nhận độc lập** — rule-based screen không phải semantic judge.
+- Agent **đôi khi dùng prediction làm bằng chứng cho chính prediction** (self-corroboration), được
+  fail-safe định tuyến sang MANUAL_REVIEW.
+- **Chưa có confirmatory holdout**; các lượt DEBUG dùng lại file phát triển nên không suy rộng.
+- **Human grading chưa hoàn tất** (gói chấm blind đã sẵn sàng).
+- Cần đánh giá thêm chất lượng suy luận và khả năng tổng quát hóa; **chưa** có bằng chứng Agent nâng
+  cao độ chính xác phát hiện mã độc.
+
+Hướng tiếp theo (sau khi báo cáo): human grading độc lập theo rubric; holdout mù tách nhãn khỏi
+prompt/repo; khảo sát prompt chống self-corroboration đo được; chưa mở TASK 06C.
+
+---
+
+## Hướng dẫn chạy
+
+Yêu cầu: Windows, Python 3.12, **Ollama** với model `qwen3.5:4b` (loopback). Model/dataset LightGBM
+đặt ngoài Git (đường dẫn theo manifest).
 
 ```powershell
+# Thu thập context + tạo case (Node B → Node C)
 python -m dacn --home .\dacn_data intake --file C:\samples\benign.exe
-python -m dacn --home .\dacn_data intake --pid 1234 --include-backing-file
-python -m dacn --home .\dacn_data inspect --case-id CASE_ID
-python -m dacn --home .\dacn_data smoke
+
+# Xem CaseState đã lưu
+python -m dacn --home .\dacn_data inspect --case-id CASE-<...>
+
+# Điều tra một PE bằng Agent mặc định (v1) qua D1–D9 thật
+python -m dacn --home .\dacn_data investigate --file C:\samples\benign.exe
+
+# Các chế độ Agent:
+#   --no-agent                 : chỉ static (LightGBM + template cố định), không gọi Qwen
+#   --agent-mode v1            : Agent một-lượt (mặc định)
+#   --agent-mode multistep     : điều tra nhiều bước (06B)
+#   --agent-mode multistep-repair : nhiều bước + bounded repair (06B-R, contract v3.3)
+python -m dacn --home .\dacn_data investigate --file C:\samples\benign.exe --agent-mode multistep-repair
 ```
 
-`intake` gọi Node B rồi tạo hoặc cập nhật case Node C, trả collection status, định danh và đường dẫn lưu. `inspect` đọc CaseState đã persist để xem evidence, unknowns, format và revision. `smoke` trên Windows lắp D1–D9 thật, chạy benign mock analyzer, kiểm D7 và commit D9; CLI không nhận executable hoặc adapter command tùy ý.
+> Hợp đồng **v3.4 (06B-R2)** là module thực nghiệm, hiện chạy qua harness đánh giá
+> `python -m evaluation.task06b.r2_debug run --out <dir>` và bộ test, **chưa** gắn vào CLI production.
 
-[Báo cáo Unified Application](docs/dacn/TEST_REPORT.md) liệt kê 20 test mới cho intake/inspect/config/CLI/smoke, gồm missing file, target mismatch và DENY không chạy tool. Smoke dùng khóa TEST từ `InMemoryKeyProvider`, không phải production key store. Analyzer trả placeholder, không phải EMBER, LightGBM hay REA thật. Lệnh `investigate --case-id CASE_ID` nằm trong working tree TASK 04B, chưa thuộc commit merge PR #9.
+---
 
-## 5. Kiểm chứng REA/Ghidra
+## Nền tảng hệ thống (các giai đoạn trước)
 
-Theo **báo cáo của nhóm được cung cấp khi biên soạn**, REA **6.7.0**, Ghidra **12.1.4**, JDK **21** đã phân tích tĩnh PE lành tính độc lập: **327 functions, 84 strings và pseudocode thật**; có MCP session và xuất evidence bundle. Nhóm cũng báo cáo đã thử containment PoC Low-integrity. Chưa tìm thấy bundle, log session hoặc báo cáo PoC tương ứng trong repository hiện tại, nên các chi tiết này chưa được kiểm chứng trực tiếp từ artifacts tại đây.
+Phần này tóm tắt nền tảng đã xây trước tuần này; chi tiết ở các báo cáo được liên kết.
 
-Repository có bằng chứng độc lập khác: [benchmark RE](benchmarks/re/README.md) và [ghidra-check.json](benchmarks/re/results/ghidra-check.json) dùng **Ghidra 12.2/JDK 25.0.5**, ghi **525 functions, 49 external symbols, 80 defined strings** của `hello.exe`. Checker xác nhận marker, imports và địa chỉ `emit_message` khớp baseline; JSON ghi `target_executed=false`, không timeout. Đây là hai môi trường/lần chạy khác nhau; snapshot này không xác nhận con số 327/84 của REA.
+### Trusted Orchestrator D1–D9
+Hợp nhất registry, validation, executor, execution control, case bridge; D1, D4, D8 thật và kiểm
+thử chuỗi tin cậy.
 
-Kết quả Ghidra trong repository là phân tích thật trên binary tự build, nhưng chỉ kiểm các điểm đối chiếu đã biết, chưa đánh giá toàn bộ functions hoặc decompiler. JSON xuất ra chưa phải D.0 ToolResult. **REA adapter vào DACN chưa hoàn tất** do ranh giới containment/policy cần giải quyết. Low-integrity PoC, REA ngoài repository và integration D1–D9 là ba mức bằng chứng riêng; chưa có cơ sở tuyên bố REA đã chạy trong workflow DACN.
+| Module | Trách nhiệm |
+|---|---|
+| D1 | Điều phối lifecycle, workflow, idempotency, commit |
+| D2 | Registry tool/version/provider |
+| D3 | Kiểm schema, arguments, target binding, revision |
+| D4 | Policy xác định, mặc định từ chối, kiểm effects/budgets |
+| D5 | Đọc target, revalidation, staging, chạy adapter đã pin |
+| D6 | Job Object, timeout/cancel, giới hạn output, cleanup |
+| D7 | Kiểm receipt/result/artifact, chuẩn hóa observation |
+| D8 | Ký kết quả, quản lý khóa, approval, analyst identity |
+| D9 | Ghi Node C, kiểm revision, ledger/reconcile |
 
-## 6. Local AI Investigation Agent
+Báo cáo: [integration](docs/integration/TEST_REPORT.md) (9/9 PASS), [D1/D4/D8](docs/d1_d4_d8/IMPLEMENTATION_STATUS.md)
+(46 test). Giới hạn đã ghi: DPAPI theo user chưa cách ly khóa khỏi analyzer cùng user; analyst
+identity mới ở mức process-owner; reconcile ledger/CaseState không phải một transaction duy nhất.
 
-Working tree TASK 04B dùng **Qwen3.5-4B Q4_K_M qua Ollama 0.40.15**, local loopback, không gọi external LLM API. Model sinh structured proposal `TOOL_CALL`, `FINISH` hoặc `REQUEST_DYNAMIC_ANALYSIS`. Controller kiểm schema theo action, evidence IDs tồn tại, residual unknown facets, case/revision, identity D2 và arguments D3. Workflow giữ static-first; mọi ToolCall tiếp tục qua D1–D9.
+### Node B — chuẩn bị cho REA/Ghidra
+Nhận diện format bằng magic/header (facet `format`: `PE`/`UNKNOWN`/`UNSUPPORTED`/`MALFORMED`), tách
+`detected` khỏi `analyzer_supported`, SHA-256 streaming. Tài liệu: [REA boundary](docs/node_b/REA_BOUNDARY.md).
 
-Context được giới hạn kích thước; dữ liệu target được đánh dấu `UNTRUSTED_CONTENT`. Agent có giới hạn iteration, tool calls, token và thời gian; duplicate/invalid proposals được xử lý hữu hạn. DENY không được đổi arguments để retry cùng tool. Sau D9 commit, loop đọc lại CaseState rồi yêu cầu model đề xuất tiếp; report giữ citations và limitations.
+### Unified Application (CLI)
+Entry point `python -m dacn` nối B→C→D qua `dacn/application.py` (intake/inspect/smoke/investigate).
+Báo cáo: [Unified Application](docs/dacn/TEST_REPORT.md).
 
-Theo [Recovery report](docs/task04b/RECOVERY_REPORT.md), [benchmark summary](docs/task04b/benchmark_summary.json) và live traces:
+### Kiểm chứng REA/Ghidra (độc lập, chưa tích hợp)
+Có benchmark RE độc lập ([ghidra-check.json](benchmarks/re/results/ghidra-check.json)) phân tích thật
+`hello.exe` (`target_executed=false`). **REA adapter vào DACN chưa hoàn tất** do ranh giới
+containment/policy. Báo cáo của nhóm về REA 6.7.0/Ghidra chưa có bundle tương ứng trong repo nên
+chưa kiểm chứng trực tiếp tại đây.
 
-| Nhóm kiểm thử | Kết quả gần nhất | Cách hiểu |
-|---|---|---|
-| Agent unit | 27 PASS | Validation, budgets, timeout, duplicate, DENY |
-| MockPlanner E2E | PASS | Planner giả lập; Node C/D1–D9 thật |
-| Live Qwen thinking OFF | 2/2 PASS | Model thật, analyzer MOCK |
-| Benchmark thinking OFF | 10/12 đạt rubric | JSON/schema/controller hợp lệ 12/12 |
-| Benchmark thinking ON | 0/12 đạt | Timeout ở cap 15 giây/proposal |
-| Regression D/application | 239 test, OK; 1 SKIP | Live mặc định không bật |
-| Regression B/C/application | 129 test, OK; 2 SKIP | Symlink và bài file lớn có điều kiện |
+### Agent MVP (TASK 04B)
+Qwen3.5-4B qua Ollama, structured proposal, Controller kiểm theo action; 27 unit PASS, 2/2 live Qwen
+E2E với analyzer MOCK. Báo cáo: [Recovery report](docs/task04b/RECOVERY_REPORT.md). **TASK 04B PARTIAL.**
 
-Không cộng các suite thành tổng vì có thể trùng phạm vi. Số liệu regression ghi trong report; artifacts trực tiếp đối chiếu thêm được hai trace `FINISHED`, revision **3**, verdict **`INSUFFICIENT_EVIDENCE`**. [Trace lượt 1](docs/task04b/live_trace.json) và [lượt 2](docs/task04b/live_trace_v3_run2.json) cho thấy tool run thành công rồi model đánh giá evidence mới. Đây là thành công của điều phối, không phải phát hiện malware thật.
+---
 
-Benchmark gồm sáu scenario, mỗi scenario hai lượt cho mỗi thinking mode: known-benign, thiếu evidence, conflict, DENY, cần dynamic và prompt injection. Tổng 24 **proposal probes** dùng fixture tổng hợp trên intake benign, không phải 24 investigation E2E. OFF có latency trung bình **4,288 giây**, ON **15,033 giây** tính cả chờ timeout. Hai lỗi OFF thuộc known-benign assessment. ON thiếu usage cả 12 lượt; token báo cáo bằng 0 không có nghĩa không tiêu thụ tài nguyên. Model 1.7B không còn local khi đo nên chưa có so sánh cùng cấu hình.
+## Tài liệu chi tiết
 
-**TASK 04B vẫn PARTIAL.** Token accounting ghi usage runtime và dùng reservation bảo thủ; không bảo đảm đếm chính xác mọi thinking token. Socket timeout không chứng minh GPU đã dừng; cleanup/commit có thể vượt deadline. Reputation dựa snapshot do operator duy trì, chưa có provider cập nhật độ mới. Chưa có bằng chứng miễn nhiễm mọi prompt injection hoặc độ chính xác phân loại malware.
-
-## 7. Tổng kết tiến độ và bước tiếp theo
-
-**Đã thực hiện trong giai đoạn báo cáo:** hợp nhất và hoàn thiện chuỗi D1–D9; bổ sung format facet và boundary Node B→REA; hợp nhất CLI; kiểm chứng Ghidra độc lập qua artifacts và ghi nhận báo cáo REA của nhóm; xây dựng Agent MVP có hai lượt live Qwen E2E thành công với analyzer MOCK.
-
-**Chưa hoàn tất:** benchmark Agent chưa ổn định ở mọi scenario/thinking mode; REA chưa tích hợp DACN; EMBER/LightGBM inference thực chưa xác nhận; sandbox VM chưa triển khai. Các test PASS không thay thế đánh giá hiệu quả phát hiện malware hoặc bảo đảm cách ly production.
-
-**Bước tiếp theo:** hoàn thiện độ ổn định và rubric Agent, mở rộng scenario thành full E2E lặp lại; giải quyết security boundary trước khi tích hợp REA; sau đó kết nối EMBER/LightGBM và benchmark dữ liệu phù hợp. Báo cáo giữ riêng phần đã đo, phần nhóm báo cáo và phần chưa triển khai để giảng viên theo dõi tiến độ thực tế.
+- **Tổng kết tuần (TASK 06):** [`evaluation/TASK06_FINAL_REPORT.md`](evaluation/TASK06_FINAL_REPORT.md)
+- Phát hiện mã độc (05A): [`research/independent_static_ml/REPORT.md`](research/independent_static_ml/REPORT.md)
+- Đánh giá có kiểm soát (05C): [`evaluation/task05c/REPORT.md`](evaluation/task05c/REPORT.md)
+- Real-PE + human grading (05D): [`evaluation/task05d/REPORT.md`](evaluation/task05d/REPORT.md)
+- Agent v2 structured (06A): [`evaluation/task06a/REPORT.md`](evaluation/task06a/REPORT.md)
+- Điều tra nhiều bước (06B): [`evaluation/task06b/REPORT.md`](evaluation/task06b/REPORT.md)
+- Retrieval + repair (06B-R): [`evaluation/task06b/REPAIR_REPORT.md`](evaluation/task06b/REPAIR_REPORT.md)
+- Evidence-native v3.4 (06B-R2): [`evaluation/task06b/R2_REPORT.md`](evaluation/task06b/R2_REPORT.md)

@@ -1,0 +1,598 @@
+{
+  "schema_version": "casestate-v1",
+  "case_id": "CASE-62d34324325d4a29971074752c2c2e7d",
+  "created_at": "2026-11-15T10:15:17.603800+00:00",
+  "lifecycle_status": "READY_FOR_INVESTIGATION",
+  "target_type": "FILE",
+  "target": {
+    "path": "C:\\Windows\\System32\\wevtutil.exe"
+  },
+  "target_ref": {
+    "schema_version": "target-ref-v1",
+    "kind": "FILE",
+    "observed": {
+      "path": "C:\\Windows\\System32\\wevtutil.exe"
+    },
+    "identity_strength": "STRONG",
+    "verified_digest": {
+      "algorithm": "sha256",
+      "value": "e69300fcac94898e315b384dd7291935b5a10813af746bbb0fe5308490983f7e"
+    },
+    "snapshot": {
+      "device": 1936109683822646347,
+      "inode": 562949953511259,
+      "size_bytes": 335872,
+      "mtime_ns": 1792931410431804600
+    },
+    "revalidation_required": true
+  },
+  "contract_version": "bc-compat-v1.2",
+  "collection_status": "SUCCESS",
+  "collection_ids": [
+    "COL-fe79a0957ed04310b52203ef398c6c46"
+  ],
+  "source_context_path": "C:\\src\\DACN-2026-Agent\\evaluation\\task06b\\runtime\\dev_v1\\2\\collections\\COL-fe79a0957ed04310b52203ef398c6c46\\context.json",
+  "evidence": [
+    {
+      "evidence_id": "EV-df06acc8def94d2abd451b48680fe764",
+      "collection_id": "COL-fe79a0957ed04310b52203ef398c6c46",
+      "source_tool": "context_collector",
+      "target_type": "FILE",
+      "target": {
+        "path": "C:\\Windows\\System32\\wevtutil.exe"
+      },
+      "facet": "metadata",
+      "status": "SUCCESS",
+      "value": {
+        "path": "C:\\Windows\\System32\\wevtutil.exe",
+        "name": "wevtutil.exe",
+        "extension": ".exe",
+        "size_bytes": 335872,
+        "modified_at": "2026-10-25T12:30:10.431805+00:00",
+        "created_at": "2026-10-25T12:30:10.403768+00:00",
+        "created_at_status": "SUCCESS"
+      },
+      "reason": null,
+      "observed_at": "2026-11-15T10:15:17.602409+00:00",
+      "coverage": "limited",
+      "parent_collection_id": null,
+      "artifact_ref": null,
+      "evidence_schema_version": "evidence-v2",
+      "target_ref": {
+        "schema_version": "target-ref-v1",
+        "kind": "FILE",
+        "observed": {
+          "path": "C:\\Windows\\System32\\wevtutil.exe"
+        },
+        "identity_strength": "STRONG",
+        "verified_digest": {
+          "algorithm": "sha256",
+          "value": "e69300fcac94898e315b384dd7291935b5a10813af746bbb0fe5308490983f7e"
+        },
+        "snapshot": {
+          "device": 1936109683822646347,
+          "inode": 562949953511259,
+          "size_bytes": 335872,
+          "mtime_ns": 1792931410431804600
+        },
+        "revalidation_required": true
+      },
+      "source": {
+        "kind": "collector",
+        "id": "context_collector",
+        "version": "1.2.0"
+      },
+      "provider": null,
+      "limitations": [
+        "PE detection checks minimum headers only; it is not full validation or a Win10/11 compatibility test.",
+        "Target is not executed; no signature trust, imports, entropy, malware score or verdict is collected.",
+        "Change checks are best effort, not an immutable filesystem snapshot."
+      ],
+      "trust_level": "UNTRUSTED_CONTENT",
+      "content_origin": "analysis_target",
+      "parent_evidence_ids": [],
+      "analysis_profile": null
+    },
+    {
+      "evidence_id": "EV-4a33fd17671e4d82b27190b067e2932a",
+      "collection_id": "COL-fe79a0957ed04310b52203ef398c6c46",
+      "source_tool": "context_collector",
+      "target_type": "FILE",
+      "target": {
+        "path": "C:\\Windows\\System32\\wevtutil.exe"
+      },
+      "facet": "file_identity",
+      "status": "SUCCESS",
+      "value": {
+        "device": 1936109683822646347,
+        "inode": 562949953511259,
+        "size_bytes": 335872,
+        "mtime_ns": 1792931410431804600
+      },
+      "reason": null,
+      "observed_at": "2026-11-15T10:15:17.602409+00:00",
+      "coverage": "limited",
+      "parent_collection_id": null,
+      "artifact_ref": null,
+      "evidence_schema_version": "evidence-v2",
+      "target_ref": {
+        "schema_version": "target-ref-v1",
+        "kind": "FILE",
+        "observed": {
+          "path": "C:\\Windows\\System32\\wevtutil.exe"
+        },
+        "identity_strength": "STRONG",
+        "verified_digest": {
+          "algorithm": "sha256",
+          "value": "e69300fcac94898e315b384dd7291935b5a10813af746bbb0fe5308490983f7e"
+        },
+        "snapshot": {
+          "device": 1936109683822646347,
+          "inode": 562949953511259,
+          "size_bytes": 335872,
+          "mtime_ns": 1792931410431804600
+        },
+        "revalidation_required": true
+      },
+      "source": {
+        "kind": "collector",
+        "id": "context_collector",
+        "version": "1.2.0"
+      },
+      "provider": null,
+      "limitations": [
+        "PE detection checks minimum headers only; it is not full validation or a Win10/11 compatibility test.",
+        "Target is not executed; no signature trust, imports, entropy, malware score or verdict is collected.",
+        "Change checks are best effort, not an immutable filesystem snapshot."
+      ],
+      "trust_level": "UNTRUSTED_CONTENT",
+      "content_origin": "analysis_target",
+      "parent_evidence_ids": [],
+      "analysis_profile": null
+    },
+    {
+      "evidence_id": "EV-087ca1ddda4647e99062fcda90609bbf",
+      "collection_id": "COL-fe79a0957ed04310b52203ef398c6c46",
+      "source_tool": "context_collector",
+      "target_type": "FILE",
+      "target": {
+        "path": "C:\\Windows\\System32\\wevtutil.exe"
+      },
+      "facet": "readable",
+      "status": "SUCCESS",
+      "value": true,
+      "reason": null,
+      "observed_at": "2026-11-15T10:15:17.602409+00:00",
+      "coverage": "limited",
+      "parent_collection_id": null,
+      "artifact_ref": null,
+      "evidence_schema_version": "evidence-v2",
+      "target_ref": {
+        "schema_version": "target-ref-v1",
+        "kind": "FILE",
+        "observed": {
+          "path": "C:\\Windows\\System32\\wevtutil.exe"
+        },
+        "identity_strength": "STRONG",
+        "verified_digest": {
+          "algorithm": "sha256",
+          "value": "e69300fcac94898e315b384dd7291935b5a10813af746bbb0fe5308490983f7e"
+        },
+        "snapshot": {
+          "device": 1936109683822646347,
+          "inode": 562949953511259,
+          "size_bytes": 335872,
+          "mtime_ns": 1792931410431804600
+        },
+        "revalidation_required": true
+      },
+      "source": {
+        "kind": "collector",
+        "id": "context_collector",
+        "version": "1.2.0"
+      },
+      "provider": null,
+      "limitations": [
+        "PE detection checks minimum headers only; it is not full validation or a Win10/11 compatibility test.",
+        "Target is not executed; no signature trust, imports, entropy, malware score or verdict is collected.",
+        "Change checks are best effort, not an immutable filesystem snapshot."
+      ],
+      "trust_level": "UNTRUSTED_CONTENT",
+      "content_origin": "analysis_target",
+      "parent_evidence_ids": [],
+      "analysis_profile": null
+    },
+    {
+      "evidence_id": "EV-09b870d977024ad49f53b5232c1e9bf9",
+      "collection_id": "COL-fe79a0957ed04310b52203ef398c6c46",
+      "source_tool": "context_collector",
+      "target_type": "FILE",
+      "target": {
+        "path": "C:\\Windows\\System32\\wevtutil.exe"
+      },
+      "facet": "pe_header",
+      "status": "SUCCESS",
+      "value": {
+        "is_pe": true,
+        "pe_kind": "PE32+",
+        "architecture": "x64",
+        "machine_code": 34404,
+        "is_dll": false,
+        "executable_image_flag": true,
+        "classification": "PE_IMAGE",
+        "coverage_scope": "DOS_COFF_optional_header_minimum"
+      },
+      "reason": null,
+      "observed_at": "2026-11-15T10:15:17.602409+00:00",
+      "coverage": "limited",
+      "parent_collection_id": null,
+      "artifact_ref": null,
+      "evidence_schema_version": "evidence-v2",
+      "target_ref": {
+        "schema_version": "target-ref-v1",
+        "kind": "FILE",
+        "observed": {
+          "path": "C:\\Windows\\System32\\wevtutil.exe"
+        },
+        "identity_strength": "STRONG",
+        "verified_digest": {
+          "algorithm": "sha256",
+          "value": "e69300fcac94898e315b384dd7291935b5a10813af746bbb0fe5308490983f7e"
+        },
+        "snapshot": {
+          "device": 1936109683822646347,
+          "inode": 562949953511259,
+          "size_bytes": 335872,
+          "mtime_ns": 1792931410431804600
+        },
+        "revalidation_required": true
+      },
+      "source": {
+        "kind": "collector",
+        "id": "context_collector",
+        "version": "1.2.0"
+      },
+      "provider": null,
+      "limitations": [
+        "PE detection checks minimum headers only; it is not full validation or a Win10/11 compatibility test.",
+        "Target is not executed; no signature trust, imports, entropy, malware score or verdict is collected.",
+        "Change checks are best effort, not an immutable filesystem snapshot."
+      ],
+      "trust_level": "UNTRUSTED_CONTENT",
+      "content_origin": "analysis_target",
+      "parent_evidence_ids": [],
+      "analysis_profile": null
+    },
+    {
+      "evidence_id": "EV-91a801b86dd64e1ea41f214b267fed2a",
+      "collection_id": "COL-fe79a0957ed04310b52203ef398c6c46",
+      "source_tool": "context_collector",
+      "target_type": "FILE",
+      "target": {
+        "path": "C:\\Windows\\System32\\wevtutil.exe"
+      },
+      "facet": "format",
+      "status": "SUCCESS",
+      "value": {
+        "format": "PE",
+        "detected": "PE",
+        "analyzer_supported": true,
+        "structural_valid": true,
+        "architecture": "x64",
+        "pe_kind": "PE32+",
+        "is_dll": false,
+        "detection": "magic_bytes_and_headers"
+      },
+      "reason": null,
+      "observed_at": "2026-11-15T10:15:17.602409+00:00",
+      "coverage": "limited",
+      "parent_collection_id": null,
+      "artifact_ref": null,
+      "evidence_schema_version": "evidence-v2",
+      "target_ref": {
+        "schema_version": "target-ref-v1",
+        "kind": "FILE",
+        "observed": {
+          "path": "C:\\Windows\\System32\\wevtutil.exe"
+        },
+        "identity_strength": "STRONG",
+        "verified_digest": {
+          "algorithm": "sha256",
+          "value": "e69300fcac94898e315b384dd7291935b5a10813af746bbb0fe5308490983f7e"
+        },
+        "snapshot": {
+          "device": 1936109683822646347,
+          "inode": 562949953511259,
+          "size_bytes": 335872,
+          "mtime_ns": 1792931410431804600
+        },
+        "revalidation_required": true
+      },
+      "source": {
+        "kind": "collector",
+        "id": "context_collector",
+        "version": "1.2.0"
+      },
+      "provider": null,
+      "limitations": [
+        "PE detection checks minimum headers only; it is not full validation or a Win10/11 compatibility test.",
+        "Target is not executed; no signature trust, imports, entropy, malware score or verdict is collected.",
+        "Change checks are best effort, not an immutable filesystem snapshot."
+      ],
+      "trust_level": "UNTRUSTED_CONTENT",
+      "content_origin": "analysis_target",
+      "parent_evidence_ids": [],
+      "analysis_profile": null
+    },
+    {
+      "evidence_id": "EV-0f63578d8caf49abb66048d568524a1e",
+      "collection_id": "COL-fe79a0957ed04310b52203ef398c6c46",
+      "source_tool": "context_collector",
+      "target_type": "FILE",
+      "target": {
+        "path": "C:\\Windows\\System32\\wevtutil.exe"
+      },
+      "facet": "file_unchanged_during_collection",
+      "status": "SUCCESS",
+      "value": true,
+      "reason": null,
+      "observed_at": "2026-11-15T10:15:17.602409+00:00",
+      "coverage": "limited",
+      "parent_collection_id": null,
+      "artifact_ref": null,
+      "evidence_schema_version": "evidence-v2",
+      "target_ref": {
+        "schema_version": "target-ref-v1",
+        "kind": "FILE",
+        "observed": {
+          "path": "C:\\Windows\\System32\\wevtutil.exe"
+        },
+        "identity_strength": "STRONG",
+        "verified_digest": {
+          "algorithm": "sha256",
+          "value": "e69300fcac94898e315b384dd7291935b5a10813af746bbb0fe5308490983f7e"
+        },
+        "snapshot": {
+          "device": 1936109683822646347,
+          "inode": 562949953511259,
+          "size_bytes": 335872,
+          "mtime_ns": 1792931410431804600
+        },
+        "revalidation_required": true
+      },
+      "source": {
+        "kind": "collector",
+        "id": "context_collector",
+        "version": "1.2.0"
+      },
+      "provider": null,
+      "limitations": [
+        "PE detection checks minimum headers only; it is not full validation or a Win10/11 compatibility test.",
+        "Target is not executed; no signature trust, imports, entropy, malware score or verdict is collected.",
+        "Change checks are best effort, not an immutable filesystem snapshot."
+      ],
+      "trust_level": "UNTRUSTED_CONTENT",
+      "content_origin": "analysis_target",
+      "parent_evidence_ids": [],
+      "analysis_profile": null
+    },
+    {
+      "evidence_id": "EV-ee297724b3ea49d6bacf065983806bb7",
+      "collection_id": "COL-fe79a0957ed04310b52203ef398c6c46",
+      "source_tool": "context_collector",
+      "target_type": "FILE",
+      "target": {
+        "path": "C:\\Windows\\System32\\wevtutil.exe"
+      },
+      "facet": "sha256",
+      "status": "SUCCESS",
+      "value": "e69300fcac94898e315b384dd7291935b5a10813af746bbb0fe5308490983f7e",
+      "reason": null,
+      "observed_at": "2026-11-15T10:15:17.602409+00:00",
+      "coverage": "limited",
+      "parent_collection_id": null,
+      "artifact_ref": null,
+      "evidence_schema_version": "evidence-v2",
+      "target_ref": {
+        "schema_version": "target-ref-v1",
+        "kind": "FILE",
+        "observed": {
+          "path": "C:\\Windows\\System32\\wevtutil.exe"
+        },
+        "identity_strength": "STRONG",
+        "verified_digest": {
+          "algorithm": "sha256",
+          "value": "e69300fcac94898e315b384dd7291935b5a10813af746bbb0fe5308490983f7e"
+        },
+        "snapshot": {
+          "device": 1936109683822646347,
+          "inode": 562949953511259,
+          "size_bytes": 335872,
+          "mtime_ns": 1792931410431804600
+        },
+        "revalidation_required": true
+      },
+      "source": {
+        "kind": "collector",
+        "id": "context_collector",
+        "version": "1.2.0"
+      },
+      "provider": null,
+      "limitations": [
+        "PE detection checks minimum headers only; it is not full validation or a Win10/11 compatibility test.",
+        "Target is not executed; no signature trust, imports, entropy, malware score or verdict is collected.",
+        "Change checks are best effort, not an immutable filesystem snapshot."
+      ],
+      "trust_level": "UNTRUSTED_CONTENT",
+      "content_origin": "analysis_target",
+      "parent_evidence_ids": [],
+      "analysis_profile": null
+    },
+    {
+      "evidence_id": "EV-c6123dc80a4c486cae0924680537db27",
+      "collection_id": null,
+      "tool_run_id": "RUN-6b6085e202d7491c937cf2373e67ea76",
+      "source_tool": "static_pe_malware_predict",
+      "target_type": "FILE",
+      "target": {
+        "path": "C:\\Windows\\System32\\wevtutil.exe"
+      },
+      "facet": "static.pe_malware_prediction",
+      "status": "SUCCESS",
+      "value": {
+        "schema_version": "static-prediction-v1",
+        "feature_version": 2,
+        "feature_count": 2381,
+        "extractor": {
+          "name": "dacn-independent-ember-v2",
+          "version": "0.1.0",
+          "lief_version": "0.15.1-"
+        },
+        "target_sha256": "e69300fcac94898e315b384dd7291935b5a10813af746bbb0fe5308490983f7e",
+        "model_id": "dacn-lgbm-ember2018v2-5db192ec1bda",
+        "model_sha256": "5db192ec1bda850d0e1873af705b57d05aad414aa35e8520c8315ece1c509609",
+        "threshold": 0.8321860386013389,
+        "raw_score": 0.000764059219744879,
+        "score_is_calibrated_probability": false,
+        "predicted_label": "benign",
+        "predicted_class": 0,
+        "parser_status": "OK",
+        "limitations": [
+          "Raw LightGBM score; NOT a calibrated probability.",
+          "Static analysis only; no runtime/dynamic behaviour observed.",
+          "Inference uses LIEF 0.15.1 while EMBER2018 training records used LIEF 0.9.0; feature parity for the raw-PE path is not asserted."
+        ]
+      },
+      "reason": null,
+      "observed_at": "2026-11-15T10:15:18.795258+00:00",
+      "coverage": "COMPLETE",
+      "artifact_ref": null,
+      "parent_collection_id": null,
+      "evidence_schema_version": "evidence-v2",
+      "target_ref": {
+        "schema_version": "target-ref-v1",
+        "kind": "FILE",
+        "observed": {
+          "path": "C:\\Windows\\System32\\wevtutil.exe"
+        },
+        "identity_strength": "STRONG",
+        "verified_digest": {
+          "algorithm": "sha256",
+          "value": "e69300fcac94898e315b384dd7291935b5a10813af746bbb0fe5308490983f7e"
+        },
+        "snapshot": {
+          "device": 1936109683822646347,
+          "inode": 562949953511259,
+          "size_bytes": 335872,
+          "mtime_ns": 1792931410431804600
+        },
+        "revalidation_required": true
+      },
+      "source": {
+        "kind": "tool",
+        "id": "static_pe_malware_predict",
+        "version": "0.1.0"
+      },
+      "provider": {
+        "id": "dacn_lightgbm",
+        "version": "0.1.0",
+        "adapter": "dacn_lightgbm_adapter",
+        "runtime": "subprocess"
+      },
+      "limitations": [
+        "Raw LightGBM score; NOT a calibrated probability.",
+        "Static analysis only; no runtime/dynamic behaviour observed.",
+        "Inference uses LIEF 0.15.1 while EMBER2018 training records used LIEF 0.9.0; feature parity for the raw-PE path is not asserted."
+      ],
+      "trust_level": "UNTRUSTED_CONTENT",
+      "content_origin": "provider_output",
+      "parent_evidence_ids": [],
+      "analysis_profile": null
+    }
+  ],
+  "residual_unknowns": [
+    {
+      "collection_id": "COL-fe79a0957ed04310b52203ef398c6c46",
+      "target_type": "FILE",
+      "target": {
+        "path": "C:\\Windows\\System32\\wevtutil.exe"
+      },
+      "target_ref": {
+        "schema_version": "target-ref-v1",
+        "kind": "FILE",
+        "observed": {
+          "path": "C:\\Windows\\System32\\wevtutil.exe"
+        },
+        "identity_strength": "STRONG",
+        "verified_digest": {
+          "algorithm": "sha256",
+          "value": "e69300fcac94898e315b384dd7291935b5a10813af746bbb0fe5308490983f7e"
+        },
+        "snapshot": {
+          "device": 1936109683822646347,
+          "inode": 562949953511259,
+          "size_bytes": 335872,
+          "mtime_ns": 1792931410431804600
+        },
+        "revalidation_required": true
+      },
+      "scope": "case",
+      "facet": "malware_assessment",
+      "reason": "analysis_not_performed",
+      "state": "NOT_COLLECTED"
+    }
+  ],
+  "collection_errors": [],
+  "collection_limitations": [
+    {
+      "collection_id": "COL-fe79a0957ed04310b52203ef398c6c46",
+      "message": "PE detection checks minimum headers only; it is not full validation or a Win10/11 compatibility test."
+    },
+    {
+      "collection_id": "COL-fe79a0957ed04310b52203ef398c6c46",
+      "message": "Target is not executed; no signature trust, imports, entropy, malware score or verdict is collected."
+    },
+    {
+      "collection_id": "COL-fe79a0957ed04310b52203ef398c6c46",
+      "message": "Change checks are best effort, not an immutable filesystem snapshot."
+    }
+  ],
+  "tool_runs": [
+    {
+      "tool": "context_collector",
+      "collection_id": "COL-fe79a0957ed04310b52203ef398c6c46",
+      "status": "SUCCESS"
+    },
+    {
+      "tool_run_id": "RUN-6b6085e202d7491c937cf2373e67ea76",
+      "tool": "static_pe_malware_predict",
+      "status": "SUCCESS",
+      "recorded_at": "2026-11-15T10:15:18.854225+00:00",
+      "error": null
+    }
+  ],
+  "evidence_conflicts": [],
+  "used_authorization_nonces": [
+    "740431a6252e760a3b421d1c4cace944"
+  ],
+  "authorization_audit": [
+    {
+      "role": "tool",
+      "nonce": "740431a6252e760a3b421d1c4cace944",
+      "verified_at": "2026-11-15T10:15:18.854225+00:00"
+    }
+  ],
+  "available_tools": {
+    "static_pe_malware_predict": {
+      "description": "Auto-registered for D.0 tool static.pe_malware_predict",
+      "registered_at": "2026-11-15T10:15:18.850217+00:00",
+      "enabled": true
+    }
+  },
+  "action_history": [],
+  "assessment": null,
+  "response_history": [],
+  "resolved_unknowns": [],
+  "revision": 3,
+  "updated_at": "2026-11-15T10:15:18.854225+00:00"
+}
