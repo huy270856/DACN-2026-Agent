@@ -35,14 +35,18 @@ def prepare(config, *, file=None, case_id=None):
     return path, registry, orch, policy, events
 
 
-def investigate(config, *, file=None, case_id=None, agent_config=None, planner=None):
+def investigate(config, *, file=None, case_id=None, agent_config=None, planner=None, repair=False):
     try:
         path, registry, orch, policy, events = prepare(config, file=file, case_id=case_id)
     except inv.DetectorUnavailableError as exc:
         return {"supported": True, "overall_status": "BLOCKED_DETECTOR", "error": str(exc),
                 "report_paths": {}, "report": None}
     cfg = agent_config or AgentConfig(max_iterations=3, max_context_chars=24000)
-    report = workflow.run(path, cfg, registry, orch, policy, planner=planner, events=events)
+    if repair:
+        from . import repair_workflow
+        report = repair_workflow.run(path, cfg, registry, orch, policy, planner=planner, events=events)
+    else:
+        report = workflow.run(path, cfg, registry, orch, policy, planner=planner, events=events)
     folder = config.home / "reports"
     folder.mkdir(exist_ok=True)
     target = folder / (report["case_id"] + "-" + uuid.uuid4().hex[:8])
@@ -55,6 +59,11 @@ def investigate(config, *, file=None, case_id=None, agent_config=None, planner=N
                   + "\n```\n\nTrusted verification / recommendation (chưa thực thi):\n\n```json\n"
                   + json.dumps(report.get("verification"), ensure_ascii=False, indent=2) + "\n```\n", encoding="utf-8")
     with mp.open("a", encoding="utf-8") as stream:
+        if repair:
+            stream.write("\nTrusted provenance (metadata only; semantic review pending):\n\n```json\n"
+                         + json.dumps(report.get("trusted_metadata"), ensure_ascii=False, indent=2) + "\n```\n")
+            if report.get("final") is None:
+                stream.write("\nINVESTIGATION_INCOMPLETE / MANUAL_REVIEW: no accepted Agent final.\n")
         stream.write("\nEffective recommendation (trusted, không containment):\n\n```json\n"
                      + json.dumps(report["effective_recommendation"], ensure_ascii=False, indent=2) + "\n```\n")
     return {"supported": True, "overall_status": "COMPLETED" if report["status"] == "FINISHED" else report["status"],

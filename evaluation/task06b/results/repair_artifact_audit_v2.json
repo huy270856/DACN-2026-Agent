@@ -1,0 +1,1185 @@
+{
+  "method": "POST_HOC_DETERMINISTIC_AUDIT_NO_MODEL_NO_SEMANTIC_GRADING",
+  "auditor_sha256": "c8b1283d6502444374f02c25368d8445431e8f9772ce780729dad5aafb2fb2ab",
+  "protected_unchanged": 317,
+  "versions": {
+    "dev_v1": {
+      "source_snapshot_files": 79,
+      "initial_hashes_verified": 14,
+      "arms": {},
+      "cases": []
+    },
+    "dev_v2": {
+      "source_snapshot_files": 79,
+      "initial_hashes_verified": 14,
+      "arms": {},
+      "cases": []
+    },
+    "repair_dev_v2": {
+      "source_snapshot_files": 161,
+      "initial_hashes_verified": 12,
+      "arms": {
+        "A": {
+          "latency_s": [
+            1.7809999999990396,
+            1.735000000000582,
+            1.7820000000028813
+          ],
+          "mean_latency_s": 1.7660000000008342
+        },
+        "B": {
+          "n": 3,
+          "finals": 3,
+          "status_FINISHED_count": 0,
+          "tools": 0,
+          "D9_commits": 0,
+          "reads": 0,
+          "repairs": 0,
+          "first_pass_finals": 3,
+          "literal_bound_claims": 0,
+          "tokens_prompt": 10233,
+          "tokens_output": 2598,
+          "latency_s": [
+            15.515999999999622,
+            11.812000000001717,
+            11.515999999999622
+          ],
+          "end_to_end_s": [
+            17.29699999999866,
+            13.5470000000023,
+            13.298000000002503
+          ],
+          "calls": 3,
+          "effective_review": 3,
+          "literal_new_fact_uses": 0,
+          "raw_binding_attempts": 0,
+          "raw_binding_literal_matches": 0,
+          "mean_latency_s": 12.94800000000032,
+          "mean_end_to_end_s": 14.714000000001155
+        },
+        "C": {
+          "n": 3,
+          "finals": 3,
+          "status_FINISHED_count": 3,
+          "tools": 3,
+          "D9_commits": 3,
+          "reads": 0,
+          "repairs": 0,
+          "first_pass_finals": 3,
+          "literal_bound_claims": 0,
+          "tokens_prompt": 28710,
+          "tokens_output": 4661,
+          "latency_s": [
+            22.68800000000192,
+            22.48400000000038,
+            25.59400000000096
+          ],
+          "end_to_end_s": [
+            24.46900000000096,
+            24.21900000000096,
+            27.37600000000384
+          ],
+          "calls": 6,
+          "effective_review": 3,
+          "literal_new_fact_uses": 9,
+          "raw_binding_attempts": 0,
+          "raw_binding_literal_matches": 0,
+          "mean_latency_s": 23.588666666667752,
+          "mean_end_to_end_s": 25.35466666666859
+        },
+        "D": {
+          "n": 3,
+          "finals": 3,
+          "status_FINISHED_count": 1,
+          "tools": 0,
+          "D9_commits": 0,
+          "reads": 0,
+          "repairs": 1,
+          "first_pass_finals": 2,
+          "literal_bound_claims": 0,
+          "tokens_prompt": 14929,
+          "tokens_output": 3059,
+          "latency_s": [
+            11.234000000000378,
+            20.437000000001717,
+            11.375
+          ],
+          "end_to_end_s": [
+            13.014999999999418,
+            22.1720000000023,
+            13.157000000002881
+          ],
+          "calls": 4,
+          "effective_review": 3,
+          "literal_new_fact_uses": 0,
+          "raw_binding_attempts": 0,
+          "raw_binding_literal_matches": 0,
+          "mean_latency_s": 14.348666666667365,
+          "mean_end_to_end_s": 16.1146666666682
+        }
+      },
+      "cases": [
+        {
+          "index": 0,
+          "B": {
+            "status": "FINISHED_FLAGGED",
+            "failure": null,
+            "tools": 0,
+            "D9_commits": 0,
+            "reads": 0,
+            "repairs": 0,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [],
+            "errors": []
+          },
+          "C": {
+            "status": "FINISHED",
+            "failure": null,
+            "tools": 1,
+            "D9_commits": 1,
+            "reads": 0,
+            "repairs": 0,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [],
+            "errors": []
+          },
+          "D": {
+            "status": "FINISHED_FLAGGED",
+            "failure": null,
+            "tools": 0,
+            "D9_commits": 0,
+            "reads": 0,
+            "repairs": 0,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [],
+            "errors": []
+          }
+        },
+        {
+          "index": 1,
+          "B": {
+            "status": "FINISHED_FLAGGED",
+            "failure": null,
+            "tools": 0,
+            "D9_commits": 0,
+            "reads": 0,
+            "repairs": 0,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [],
+            "errors": []
+          },
+          "C": {
+            "status": "FINISHED",
+            "failure": null,
+            "tools": 1,
+            "D9_commits": 1,
+            "reads": 0,
+            "repairs": 0,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [],
+            "errors": []
+          },
+          "D": {
+            "status": "FINISHED",
+            "failure": null,
+            "tools": 0,
+            "D9_commits": 0,
+            "reads": 0,
+            "repairs": 1,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [],
+            "errors": [
+              "OBSERVED_WITHOUT_SOURCE"
+            ]
+          }
+        },
+        {
+          "index": 2,
+          "B": {
+            "status": "FINISHED_FLAGGED",
+            "failure": null,
+            "tools": 0,
+            "D9_commits": 0,
+            "reads": 0,
+            "repairs": 0,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [],
+            "errors": []
+          },
+          "C": {
+            "status": "FINISHED",
+            "failure": null,
+            "tools": 1,
+            "D9_commits": 1,
+            "reads": 0,
+            "repairs": 0,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [],
+            "errors": []
+          },
+          "D": {
+            "status": "FINISHED_FLAGGED",
+            "failure": null,
+            "tools": 0,
+            "D9_commits": 0,
+            "reads": 0,
+            "repairs": 0,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [],
+            "errors": []
+          }
+        }
+      ]
+    },
+    "repair_dev_v3": {
+      "source_snapshot_files": 161,
+      "initial_hashes_verified": 12,
+      "arms": {
+        "A": {
+          "latency_s": [
+            1.6570000000028813,
+            1.6869999999980791,
+            1.764999999999418
+          ],
+          "mean_latency_s": 1.7030000000001262
+        },
+        "B": {
+          "n": 3,
+          "finals": 0,
+          "status_FINISHED_count": 0,
+          "tools": 0,
+          "D9_commits": 0,
+          "reads": 0,
+          "repairs": 0,
+          "first_pass_finals": 0,
+          "literal_bound_claims": 0,
+          "tokens_prompt": 8568,
+          "tokens_output": 897,
+          "latency_s": [
+            4.577999999997701,
+            5.09400000000096,
+            4.375
+          ],
+          "end_to_end_s": [
+            6.235000000000582,
+            6.78099999999904,
+            6.139999999999418
+          ],
+          "calls": 3,
+          "effective_review": 3,
+          "literal_new_fact_uses": 0,
+          "raw_binding_attempts": 0,
+          "raw_binding_literal_matches": 0,
+          "mean_latency_s": 4.682333333332887,
+          "mean_end_to_end_s": 6.385333333333013
+        },
+        "C": {
+          "n": 3,
+          "finals": 2,
+          "status_FINISHED_count": 2,
+          "tools": 2,
+          "D9_commits": 2,
+          "reads": 0,
+          "repairs": 0,
+          "first_pass_finals": 2,
+          "literal_bound_claims": 0,
+          "tokens_prompt": 23442,
+          "tokens_output": 3337,
+          "latency_s": [
+            4.952999999997701,
+            23.15599999999904,
+            22.420999999998457
+          ],
+          "end_to_end_s": [
+            6.610000000000582,
+            24.84299999999712,
+            24.185999999997875
+          ],
+          "calls": 5,
+          "effective_review": 3,
+          "literal_new_fact_uses": 6,
+          "raw_binding_attempts": 0,
+          "raw_binding_literal_matches": 0,
+          "mean_latency_s": 16.84333333333173,
+          "mean_end_to_end_s": 18.54633333333186
+        },
+        "D": {
+          "n": 3,
+          "finals": 0,
+          "status_FINISHED_count": 0,
+          "tools": 3,
+          "D9_commits": 3,
+          "reads": 0,
+          "repairs": 3,
+          "first_pass_finals": 0,
+          "literal_bound_claims": 0,
+          "tokens_prompt": 48746,
+          "tokens_output": 5318,
+          "latency_s": [
+            26.46900000000096,
+            28.68800000000192,
+            29.70300000000134
+          ],
+          "end_to_end_s": [
+            28.12600000000384,
+            30.375,
+            31.468000000000757
+          ],
+          "calls": 12,
+          "effective_review": 3,
+          "literal_new_fact_uses": 0,
+          "raw_binding_attempts": 8,
+          "raw_binding_literal_matches": 1,
+          "mean_latency_s": 28.286666666668072,
+          "mean_end_to_end_s": 29.9896666666682
+        },
+        "resume": {
+          "n": 3,
+          "finals": 0,
+          "status_FINISHED_count": 0,
+          "tools": 0,
+          "D9_commits": 0,
+          "reads": 0,
+          "repairs": 3,
+          "first_pass_finals": 0,
+          "literal_bound_claims": 0,
+          "tokens_prompt": 33434,
+          "tokens_output": 3508,
+          "latency_s": [
+            24.15599999999904,
+            23.01599999999962,
+            8.84400000000096
+          ],
+          "end_to_end_s": [],
+          "calls": 8,
+          "effective_review": 3,
+          "literal_new_fact_uses": 0,
+          "raw_binding_attempts": 6,
+          "raw_binding_literal_matches": 0,
+          "mean_latency_s": 18.671999999999873
+        }
+      },
+      "cases": [
+        {
+          "index": 0,
+          "B": {
+            "status": "INVESTIGATION_INCOMPLETE",
+            "failure": "MODEL_REQUESTED_MORE_EVIDENCE",
+            "tools": 0,
+            "D9_commits": 0,
+            "reads": 0,
+            "repairs": 0,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [],
+            "errors": []
+          },
+          "C": {
+            "status": "REJECTED_OR_MODEL_ERROR",
+            "failure": null,
+            "tools": 0,
+            "D9_commits": 0,
+            "reads": 0,
+            "repairs": 0,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [],
+            "errors": [
+              "EVIDENCE_NOT_VISIBLE: Citation was not present in model evidence projection"
+            ]
+          },
+          "D": {
+            "status": "INVESTIGATION_INCOMPLETE",
+            "failure": "VALIDATION_REPAIR_EXHAUSTED",
+            "tools": 1,
+            "D9_commits": 1,
+            "reads": 0,
+            "repairs": 1,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [
+              {
+                "turn": 4,
+                "claim_index": 0,
+                "evidence_id": "EV-0ec25ca393314464842dc03bea97d907",
+                "entry_index": 0,
+                "literal_match": false
+              },
+              {
+                "turn": 4,
+                "claim_index": 1,
+                "evidence_id": "EV-b2f23539d0a74a04a926752b655241d0",
+                "entry_index": 0,
+                "literal_match": false
+              }
+            ],
+            "errors": [
+              "['EV-0ec25ca393314464842dc03bea97d907', 'EV-b2f23539d0a74a04a926752b655241d0', 'EV-68e478373d6e4a6b93fc61bf09e33e8d', 'EV-d0e47b96bfd44ca4b76eb579149571b2'] is too long",
+              "CLAIM_LITERAL_MISMATCH: selected entry is not stated in claim"
+            ]
+          },
+          "resume": {
+            "status": "INVESTIGATION_INCOMPLETE",
+            "failure": "VALIDATION_REPAIR_EXHAUSTED",
+            "tools": 0,
+            "D9_commits": 0,
+            "reads": 0,
+            "repairs": 1,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [
+              {
+                "turn": 3,
+                "claim_index": 0,
+                "evidence_id": "EV-0ec25ca393314464842dc03bea97d907",
+                "entry_index": 0,
+                "literal_match": false
+              },
+              {
+                "turn": 3,
+                "claim_index": 1,
+                "evidence_id": "EV-b2f23539d0a74a04a926752b655241d0",
+                "entry_index": 0,
+                "literal_match": false
+              },
+              {
+                "turn": 3,
+                "claim_index": 2,
+                "evidence_id": "EV-0ec25ca393314464842dc03bea97d907",
+                "entry_index": 15,
+                "literal_match": false
+              }
+            ],
+            "errors": [
+              "['EV-0ec25ca393314464842dc03bea97d907', 'EV-b2f23539d0a74a04a926752b655241d0', 'EV-68e478373d6e4a6b93fc61bf09e33e8d', 'EV-d0e47b96bfd44ca4b76eb579149571b2'] is too long",
+              "['EV-0ec25ca393314464842dc03bea97d907', 'EV-b2f23539d0a74a04a926752b655241d0', 'EV-68e478373d6e4a6b93fc61bf09e33e8d', 'EV-d0e47b96bfd44ca4b76eb579149571b2'] is too long"
+            ]
+          }
+        },
+        {
+          "index": 1,
+          "B": {
+            "status": "INVESTIGATION_INCOMPLETE",
+            "failure": "MODEL_REQUESTED_MORE_EVIDENCE",
+            "tools": 0,
+            "D9_commits": 0,
+            "reads": 0,
+            "repairs": 0,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [],
+            "errors": []
+          },
+          "C": {
+            "status": "FINISHED",
+            "failure": null,
+            "tools": 1,
+            "D9_commits": 1,
+            "reads": 0,
+            "repairs": 0,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [],
+            "errors": []
+          },
+          "D": {
+            "status": "INVESTIGATION_INCOMPLETE",
+            "failure": "VALIDATION_REPAIR_EXHAUSTED",
+            "tools": 1,
+            "D9_commits": 1,
+            "reads": 0,
+            "repairs": 1,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [
+              {
+                "turn": 4,
+                "claim_index": 0,
+                "evidence_id": "EV-a47c0f05814d41c78574e8334f363b9b",
+                "entry_index": 4,
+                "literal_match": true
+              },
+              {
+                "turn": 4,
+                "claim_index": 1,
+                "evidence_id": "EV-a47c0f05814d41c78574e8334f363b9b",
+                "entry_index": 15,
+                "literal_match": false
+              },
+              {
+                "turn": 4,
+                "claim_index": 2,
+                "evidence_id": "EV-f0b7c506d0704b24bf1734f88c6cc96d",
+                "entry_index": 0,
+                "literal_match": false
+              }
+            ],
+            "errors": [
+              "['EV-a47c0f05814d41c78574e8334f363b9b', 'EV-f0b7c506d0704b24bf1734f88c6cc96d', 'EV-e9595b6ce1a14aaebab51f456e627ae8', 'EV-53cadd714135451d94d01ac466c5fbca'] is too long",
+              "['EV-a47c0f05814d41c78574e8334f363b9b', 'EV-f0b7c506d0704b24bf1734f88c6cc96d', 'EV-e9595b6ce1a14aaebab51f456e627ae8', 'EV-53cadd714135451d94d01ac466c5fbca'] is too long"
+            ]
+          },
+          "resume": {
+            "status": "INVESTIGATION_INCOMPLETE",
+            "failure": "VALIDATION_REPAIR_EXHAUSTED",
+            "tools": 0,
+            "D9_commits": 0,
+            "reads": 0,
+            "repairs": 1,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [
+              {
+                "turn": 3,
+                "claim_index": 0,
+                "evidence_id": "EV-a47c0f05814d41c78574e8334f363b9b",
+                "entry_index": 0,
+                "literal_match": false
+              },
+              {
+                "turn": 3,
+                "claim_index": 1,
+                "evidence_id": "EV-a47c0f05814d41c78574e8334f363b9b",
+                "entry_index": 4,
+                "literal_match": false
+              },
+              {
+                "turn": 3,
+                "claim_index": 2,
+                "evidence_id": "EV-f0b7c506d0704b24bf1734f88c6cc96d",
+                "entry_index": 0,
+                "literal_match": false
+              }
+            ],
+            "errors": [
+              "['EV-a47c0f05814d41c78574e8334f363b9b', 'EV-f0b7c506d0704b24bf1734f88c6cc96d', 'EV-e9595b6ce1a14aaebab51f456e627ae8', 'EV-53cadd714135451d94d01ac466c5fbca'] is too long",
+              "['EV-a47c0f05814d41c78574e8334f363b9b', 'EV-f0b7c506d0704b24bf1734f88c6cc96d', 'EV-e9595b6ce1a14aaebab51f456e627ae8', 'EV-53cadd714135451d94d01ac466c5fbca'] is too long"
+            ]
+          }
+        },
+        {
+          "index": 2,
+          "B": {
+            "status": "INVESTIGATION_INCOMPLETE",
+            "failure": "MODEL_REQUESTED_MORE_EVIDENCE",
+            "tools": 0,
+            "D9_commits": 0,
+            "reads": 0,
+            "repairs": 0,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [],
+            "errors": []
+          },
+          "C": {
+            "status": "FINISHED",
+            "failure": null,
+            "tools": 1,
+            "D9_commits": 1,
+            "reads": 0,
+            "repairs": 0,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [],
+            "errors": []
+          },
+          "D": {
+            "status": "INVESTIGATION_INCOMPLETE",
+            "failure": "VALIDATION_REPAIR_EXHAUSTED",
+            "tools": 1,
+            "D9_commits": 1,
+            "reads": 0,
+            "repairs": 1,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [
+              {
+                "turn": 4,
+                "claim_index": 0,
+                "evidence_id": "EV-e75e6393235948ac9595bb4700510136",
+                "entry_index": 0,
+                "literal_match": false
+              },
+              {
+                "turn": 4,
+                "claim_index": 1,
+                "evidence_id": "EV-e75e6393235948ac9595bb4700510136",
+                "entry_index": 14,
+                "literal_match": false
+              },
+              {
+                "turn": 4,
+                "claim_index": 2,
+                "evidence_id": "EV-14a8455e787b4854b44c02719b426736",
+                "entry_index": 0,
+                "literal_match": false
+              }
+            ],
+            "errors": [
+              "['EV-e75e6393235948ac9595bb4700510136', 'EV-14a8455e787b4854b44c02719b426736', 'EV-e36b22067c6e42ffa90996138cb8c00f', 'EV-377e81b337834d13830f2f6a8e5b310b'] is too long",
+              "['EV-e75e6393235948ac9595bb4700510136', 'EV-14a8455e787b4854b44c02719b426736', 'EV-e36b22067c6e42ffa90996138cb8c00f', 'EV-377e81b337834d13830f2f6a8e5b310b'] is too long"
+            ]
+          },
+          "resume": {
+            "status": "INVESTIGATION_INCOMPLETE",
+            "failure": "VALIDATION_REPAIR_EXHAUSTED",
+            "tools": 0,
+            "D9_commits": 0,
+            "reads": 0,
+            "repairs": 1,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [],
+            "errors": [
+              "['EV-e75e6393235948ac9595bb4700510136', 'EV-14a8455e787b4854b44c02719b426736', 'EV-e36b22067c6e42ffa90996138cb8c00f', 'EV-377e81b337834d13830f2f6a8e5b310b'] is too long",
+              "['EV-e75e6393235948ac9595bb4700510136', 'EV-14a8455e787b4854b44c02719b426736', 'EV-e36b22067c6e42ffa90996138cb8c00f', 'EV-377e81b337834d13830f2f6a8e5b310b'] is too long"
+            ]
+          }
+        }
+      ]
+    },
+    "repair_dev_v4": {
+      "source_snapshot_files": 161,
+      "initial_hashes_verified": 12,
+      "arms": {
+        "A": {
+          "latency_s": [
+            1.7970000000022992,
+            1.6879999999982829,
+            1.8909999999996217
+          ],
+          "mean_latency_s": 1.792000000000068
+        },
+        "B": {
+          "n": 3,
+          "finals": 0,
+          "status_FINISHED_count": 0,
+          "tools": 0,
+          "D9_commits": 0,
+          "reads": 0,
+          "repairs": 1,
+          "first_pass_finals": 0,
+          "literal_bound_claims": 0,
+          "tokens_prompt": 11428,
+          "tokens_output": 976,
+          "latency_s": [
+            4.031999999999243,
+            4.0310000000026776,
+            7.937000000001717
+          ],
+          "end_to_end_s": [
+            5.8290000000015425,
+            5.71900000000096,
+            9.828000000001339
+          ],
+          "calls": 4,
+          "effective_review": 3,
+          "literal_new_fact_uses": 0,
+          "raw_binding_attempts": 0,
+          "raw_binding_literal_matches": 0,
+          "mean_latency_s": 5.333333333334546,
+          "mean_end_to_end_s": 7.125333333334614
+        },
+        "C": {
+          "n": 3,
+          "finals": 1,
+          "status_FINISHED_count": 1,
+          "tools": 3,
+          "D9_commits": 3,
+          "reads": 0,
+          "repairs": 0,
+          "first_pass_finals": 1,
+          "literal_bound_claims": 0,
+          "tokens_prompt": 28685,
+          "tokens_output": 4212,
+          "latency_s": [
+            23.18800000000192,
+            23.01600000000326,
+            19.04699999999866
+          ],
+          "end_to_end_s": [
+            24.98500000000422,
+            24.704000000001543,
+            20.937999999998283
+          ],
+          "calls": 6,
+          "effective_review": 3,
+          "literal_new_fact_uses": 3,
+          "raw_binding_attempts": 0,
+          "raw_binding_literal_matches": 0,
+          "mean_latency_s": 21.750333333334613,
+          "mean_end_to_end_s": 23.542333333334682
+        },
+        "D": {
+          "n": 3,
+          "finals": 0,
+          "status_FINISHED_count": 0,
+          "tools": 3,
+          "D9_commits": 3,
+          "reads": 0,
+          "repairs": 3,
+          "first_pass_finals": 0,
+          "literal_bound_claims": 0,
+          "tokens_prompt": 49992,
+          "tokens_output": 7930,
+          "latency_s": [
+            36.89100000000326,
+            37.48400000000038,
+            40.625
+          ],
+          "end_to_end_s": [
+            38.68800000000556,
+            39.17199999999866,
+            42.51599999999962
+          ],
+          "calls": 12,
+          "effective_review": 3,
+          "literal_new_fact_uses": 0,
+          "raw_binding_attempts": 18,
+          "raw_binding_literal_matches": 1,
+          "mean_latency_s": 38.333333333334544,
+          "mean_end_to_end_s": 40.125333333334616
+        },
+        "resume": {
+          "n": 3,
+          "finals": 0,
+          "status_FINISHED_count": 0,
+          "tools": 0,
+          "D9_commits": 0,
+          "reads": 0,
+          "repairs": 3,
+          "first_pass_finals": 0,
+          "literal_bound_claims": 0,
+          "tokens_prompt": 39165,
+          "tokens_output": 7324,
+          "latency_s": [
+            34.09300000000076,
+            32.93700000000172,
+            36.81200000000172
+          ],
+          "end_to_end_s": [],
+          "calls": 9,
+          "effective_review": 3,
+          "literal_new_fact_uses": 0,
+          "raw_binding_attempts": 18,
+          "raw_binding_literal_matches": 3,
+          "mean_latency_s": 34.6140000000014
+        }
+      },
+      "cases": [
+        {
+          "index": 0,
+          "B": {
+            "status": "INVESTIGATION_INCOMPLETE",
+            "failure": "MODEL_REQUESTED_MORE_EVIDENCE",
+            "tools": 0,
+            "D9_commits": 0,
+            "reads": 0,
+            "repairs": 0,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [],
+            "errors": []
+          },
+          "C": {
+            "status": "REJECTED_OR_MODEL_ERROR",
+            "failure": null,
+            "tools": 1,
+            "D9_commits": 1,
+            "reads": 0,
+            "repairs": 0,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [],
+            "errors": [
+              "EVIDENCE_PHASE_MISMATCH: New fact must cite a new evidence ID"
+            ]
+          },
+          "D": {
+            "status": "INVESTIGATION_INCOMPLETE",
+            "failure": "VALIDATION_REPAIR_EXHAUSTED",
+            "tools": 1,
+            "D9_commits": 1,
+            "reads": 0,
+            "repairs": 1,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [
+              {
+                "turn": 3,
+                "claim_index": 0,
+                "evidence_id": "EV-189e330fdc6d4fa2808012616911d0f5",
+                "entry_index": 0,
+                "literal_match": true
+              },
+              {
+                "turn": 3,
+                "claim_index": 1,
+                "evidence_id": "EV-189e330fdc6d4fa2808012616911d0f5",
+                "entry_index": 1,
+                "literal_match": false
+              },
+              {
+                "turn": 3,
+                "claim_index": 2,
+                "evidence_id": "EV-189e330fdc6d4fa2808012616911d0f5",
+                "entry_index": 14,
+                "literal_match": false
+              },
+              {
+                "turn": 4,
+                "claim_index": 0,
+                "evidence_id": "EV-189e330fdc6d4fa2808012616911d0f5",
+                "entry_index": 0,
+                "literal_match": false
+              },
+              {
+                "turn": 4,
+                "claim_index": 1,
+                "evidence_id": "EV-189e330fdc6d4fa2808012616911d0f5",
+                "entry_index": 1,
+                "literal_match": false
+              },
+              {
+                "turn": 4,
+                "claim_index": 2,
+                "evidence_id": "EV-189e330fdc6d4fa2808012616911d0f5",
+                "entry_index": 2,
+                "literal_match": false
+              }
+            ],
+            "errors": [
+              "CLAIM_SOURCE_BINDING: no matching visible entry/source",
+              "CLAIM_LITERAL_MISMATCH: selected entry is not stated in claim"
+            ]
+          },
+          "resume": {
+            "status": "INVESTIGATION_INCOMPLETE",
+            "failure": "VALIDATION_REPAIR_EXHAUSTED",
+            "tools": 0,
+            "D9_commits": 0,
+            "reads": 0,
+            "repairs": 1,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [
+              {
+                "turn": 2,
+                "claim_index": 0,
+                "evidence_id": "EV-2147ea23d45a4ac480c2dae55253a7f1",
+                "entry_index": 0,
+                "literal_match": false
+              },
+              {
+                "turn": 2,
+                "claim_index": 1,
+                "evidence_id": "EV-189e330fdc6d4fa2808012616911d0f5",
+                "entry_index": 0,
+                "literal_match": true
+              },
+              {
+                "turn": 2,
+                "claim_index": 2,
+                "evidence_id": "EV-d8da99390d3c4de78a55fe44d1a16498",
+                "entry_index": 0,
+                "literal_match": false
+              },
+              {
+                "turn": 3,
+                "claim_index": 0,
+                "evidence_id": "EV-2147ea23d45a4ac480c2dae55253a7f1",
+                "entry_index": 0,
+                "literal_match": false
+              },
+              {
+                "turn": 3,
+                "claim_index": 1,
+                "evidence_id": "EV-189e330fdc6d4fa2808012616911d0f5",
+                "entry_index": 0,
+                "literal_match": true
+              },
+              {
+                "turn": 3,
+                "claim_index": 2,
+                "evidence_id": "EV-189e330fdc6d4fa2808012616911d0f5",
+                "entry_index": 14,
+                "literal_match": false
+              }
+            ],
+            "errors": [
+              "CLAIM_SOURCE_BINDING: no matching visible entry/source",
+              "CLAIM_SOURCE_BINDING: no matching visible entry/source"
+            ]
+          }
+        },
+        {
+          "index": 1,
+          "B": {
+            "status": "INVESTIGATION_INCOMPLETE",
+            "failure": "MODEL_REQUESTED_MORE_EVIDENCE",
+            "tools": 0,
+            "D9_commits": 0,
+            "reads": 0,
+            "repairs": 0,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [],
+            "errors": []
+          },
+          "C": {
+            "status": "FINISHED",
+            "failure": null,
+            "tools": 1,
+            "D9_commits": 1,
+            "reads": 0,
+            "repairs": 0,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [],
+            "errors": []
+          },
+          "D": {
+            "status": "INVESTIGATION_INCOMPLETE",
+            "failure": "VALIDATION_REPAIR_EXHAUSTED",
+            "tools": 1,
+            "D9_commits": 1,
+            "reads": 0,
+            "repairs": 1,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [
+              {
+                "turn": 3,
+                "claim_index": 0,
+                "evidence_id": "EV-f95985bf3c654f0ca535e02478978ce8",
+                "entry_index": 14,
+                "literal_match": false
+              },
+              {
+                "turn": 3,
+                "claim_index": 1,
+                "evidence_id": "EV-5d5d759a4b4e4f9fa6f3c03c8901363a",
+                "entry_index": 0,
+                "literal_match": false
+              },
+              {
+                "turn": 3,
+                "claim_index": 2,
+                "evidence_id": "EV-f95985bf3c654f0ca535e02478978ce8",
+                "entry_index": 15,
+                "literal_match": false
+              },
+              {
+                "turn": 4,
+                "claim_index": 0,
+                "evidence_id": "EV-f95985bf3c654f0ca535e02478978ce8",
+                "entry_index": 14,
+                "literal_match": false
+              },
+              {
+                "turn": 4,
+                "claim_index": 1,
+                "evidence_id": "EV-5d5d759a4b4e4f9fa6f3c03c8901363a",
+                "entry_index": 0,
+                "literal_match": false
+              },
+              {
+                "turn": 4,
+                "claim_index": 2,
+                "evidence_id": "EV-b066674ddbc24f4c92984707a8239969",
+                "entry_index": 0,
+                "literal_match": false
+              }
+            ],
+            "errors": [
+              "CLAIM_LITERAL_MISMATCH: selected entry is not stated in claim",
+              "CLAIM_LITERAL_MISMATCH: selected entry is not stated in claim"
+            ]
+          },
+          "resume": {
+            "status": "INVESTIGATION_INCOMPLETE",
+            "failure": "VALIDATION_REPAIR_EXHAUSTED",
+            "tools": 0,
+            "D9_commits": 0,
+            "reads": 0,
+            "repairs": 1,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [
+              {
+                "turn": 2,
+                "claim_index": 0,
+                "evidence_id": "EV-f95985bf3c654f0ca535e02478978ce8",
+                "entry_index": 4,
+                "literal_match": false
+              },
+              {
+                "turn": 2,
+                "claim_index": 1,
+                "evidence_id": "EV-5d5d759a4b4e4f9fa6f3c03c8901363a",
+                "entry_index": 0,
+                "literal_match": false
+              },
+              {
+                "turn": 2,
+                "claim_index": 2,
+                "evidence_id": "EV-f95985bf3c654f0ca535e02478978ce8",
+                "entry_index": 15,
+                "literal_match": false
+              },
+              {
+                "turn": 3,
+                "claim_index": 0,
+                "evidence_id": "EV-5d5d759a4b4e4f9fa6f3c03c8901363a",
+                "entry_index": 0,
+                "literal_match": false
+              },
+              {
+                "turn": 3,
+                "claim_index": 1,
+                "evidence_id": "EV-f95985bf3c654f0ca535e02478978ce8",
+                "entry_index": 4,
+                "literal_match": true
+              },
+              {
+                "turn": 3,
+                "claim_index": 2,
+                "evidence_id": "EV-f95985bf3c654f0ca535e02478978ce8",
+                "entry_index": 15,
+                "literal_match": false
+              }
+            ],
+            "errors": [
+              "CLAIM_LITERAL_MISMATCH: selected entry is not stated in claim",
+              "CLAIM_SOURCE_BINDING: no matching visible entry/source"
+            ]
+          }
+        },
+        {
+          "index": 2,
+          "B": {
+            "status": "INVESTIGATION_INCOMPLETE",
+            "failure": "MODEL_REQUESTED_MORE_EVIDENCE",
+            "tools": 0,
+            "D9_commits": 0,
+            "reads": 0,
+            "repairs": 1,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [],
+            "errors": [
+              "EVIDENCE_NOT_VISIBLE: cited ID not present in this prompt"
+            ]
+          },
+          "C": {
+            "status": "REJECTED_OR_MODEL_ERROR",
+            "failure": null,
+            "tools": 1,
+            "D9_commits": 1,
+            "reads": 0,
+            "repairs": 0,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [],
+            "errors": [
+              "EVIDENCE_PHASE_MISMATCH: Old/new evidence groups are incorrect"
+            ]
+          },
+          "D": {
+            "status": "INVESTIGATION_INCOMPLETE",
+            "failure": "VALIDATION_REPAIR_EXHAUSTED",
+            "tools": 1,
+            "D9_commits": 1,
+            "reads": 0,
+            "repairs": 1,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [
+              {
+                "turn": 3,
+                "claim_index": 0,
+                "evidence_id": "EV-d8ce4aae6228427a88445a9c6723718e",
+                "entry_index": 0,
+                "literal_match": false
+              },
+              {
+                "turn": 3,
+                "claim_index": 1,
+                "evidence_id": "EV-735319270c734b198bfdba0310f064e4",
+                "entry_index": 0,
+                "literal_match": false
+              },
+              {
+                "turn": 3,
+                "claim_index": 2,
+                "evidence_id": "EV-d8ce4aae6228427a88445a9c6723718e",
+                "entry_index": 15,
+                "literal_match": false
+              },
+              {
+                "turn": 4,
+                "claim_index": 0,
+                "evidence_id": "EV-d8ce4aae6228427a88445a9c6723718e",
+                "entry_index": 14,
+                "literal_match": false
+              },
+              {
+                "turn": 4,
+                "claim_index": 1,
+                "evidence_id": "EV-735319270c734b198bfdba0310f064e4",
+                "entry_index": 0,
+                "literal_match": false
+              },
+              {
+                "turn": 4,
+                "claim_index": 2,
+                "evidence_id": "EV-d8ce4aae6228427a88445a9c6723718e",
+                "entry_index": 15,
+                "literal_match": false
+              }
+            ],
+            "errors": [
+              "CLAIM_LITERAL_MISMATCH: selected entry is not stated in claim",
+              "CLAIM_LITERAL_MISMATCH: selected entry is not stated in claim"
+            ]
+          },
+          "resume": {
+            "status": "INVESTIGATION_INCOMPLETE",
+            "failure": "VALIDATION_REPAIR_EXHAUSTED",
+            "tools": 0,
+            "D9_commits": 0,
+            "reads": 0,
+            "repairs": 1,
+            "literal_bound_claims": 0,
+            "raw_bindings_all_final_attempts": [
+              {
+                "turn": 2,
+                "claim_index": 0,
+                "evidence_id": "EV-d8ce4aae6228427a88445a9c6723718e",
+                "entry_index": 0,
+                "literal_match": false
+              },
+              {
+                "turn": 2,
+                "claim_index": 0,
+                "evidence_id": "EV-d8ce4aae6228427a88445a9c6723718e",
+                "entry_index": 1,
+                "literal_match": false
+              },
+              {
+                "turn": 2,
+                "claim_index": 0,
+                "evidence_id": "EV-d8ce4aae6228427a88445a9c6723718e",
+                "entry_index": 15,
+                "literal_match": false
+              },
+              {
+                "turn": 3,
+                "claim_index": 0,
+                "evidence_id": "EV-d8ce4aae6228427a88445a9c6723718e",
+                "entry_index": 0,
+                "literal_match": false
+              },
+              {
+                "turn": 3,
+                "claim_index": 1,
+                "evidence_id": "EV-735319270c734b198bfdba0310f064e4",
+                "entry_index": 0,
+                "literal_match": false
+              },
+              {
+                "turn": 3,
+                "claim_index": 2,
+                "evidence_id": "EV-d8ce4aae6228427a88445a9c6723718e",
+                "entry_index": 15,
+                "literal_match": false
+              }
+            ],
+            "errors": [
+              "CLAIM_LITERAL_MISMATCH: selected entry is not stated in claim",
+              "CLAIM_LITERAL_MISMATCH: selected entry is not stated in claim"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "clarification": "status_FINISHED_count is raw status, NOT proof of unflagged grounding; earlier audit used misleading name unflagged_status for legacy C. Original audit retained."
+}
