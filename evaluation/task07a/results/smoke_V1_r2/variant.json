@@ -1,0 +1,60 @@
+{
+  "variant": "V1",
+  "seed": 42,
+  "hypothesis": "H1 native thinking (E1); confound: also changes sampling",
+  "planner": "V34",
+  "oracle": false,
+  "cohort_classes": [
+    "IN_INITIAL_TOOL_PROJECTION",
+    "REACHABLE_BY_BOUNDED_RETRIEVAL",
+    "INACCESSIBLE_UNDER_LIMITS",
+    "NOT_STATIC_ANSWERABLE",
+    "INITIAL_EVIDENCE_SUFFICIENT"
+  ],
+  "agent_config": {
+    "model": "qwen3.5:4b",
+    "ollama_host": "http://127.0.0.1:11434",
+    "temperature": 0.6,
+    "num_predict": 12288,
+    "think": true,
+    "inference_timeout_s": 240,
+    "known_reputations": {},
+    "max_tokens": 200000,
+    "max_iterations": 5,
+    "max_tool_calls": 1,
+    "wall_clock_s": 900,
+    "max_context_chars": 24000,
+    "max_value_chars": 800
+  },
+  "decoding": {
+    "num_ctx": 24576,
+    "seed": 42,
+    "top_p": 0.95,
+    "top_k": 20,
+    "presence_penalty": 0.0
+  },
+  "track": "RAW_PE_E2E",
+  "evaluation_kind": "DEV_DIAGNOSTIC",
+  "smoke": true,
+  "confirmatory": "NOT_RUN",
+  "cohort_note": "DEV smoke case outside the 07A cohort",
+  "cohort_aliases": [
+    "dev_0001"
+  ],
+  "manifest_filter": {
+    "source_manifest": "evaluation/task06b_j/results/dev/staging_smoke_cases_v1.json",
+    "source_sha256": "1b777e165d3852db9054d98966a6262dfc8ffff44bc561142ef68fb235070b22",
+    "classes": null,
+    "limit": 1,
+    "aliases": [
+      "dev_0001"
+    ]
+  },
+  "runner_version": "task07a-ablation-v1",
+  "harness_sha256": {
+    "evaluation/task07a/variants.py": "633e36faa647c99b0ee11eee2ae01f7221d07aa9fa8fb90e3198032e61c280fa",
+    "evaluation/task07a/ablation.py": "8d08eb2062d373aa8ce55644fabc9644b5391159aa4483973921c4294ad68e55",
+    "evaluation/task07a/metrics.py": "59672732c42ca4b75985dfcc6b1ad2fb945c28717ab89090a34363f34f49a198"
+  },
+  "freeze_sha256": "e2b5af64999d81bebff01c1157a5a2d2d00ac10e64f556f7a71549fd77dab889"
+}

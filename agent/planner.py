@@ -8,8 +8,10 @@ falls back to a different model.
 from __future__ import annotations
 
 import json
+import math
 import time
 import urllib.request
+from dataclasses import dataclass
 from typing import Any, Dict, List, Mapping, Optional, Protocol
 
 from .config import AgentConfig
@@ -31,6 +33,52 @@ class PlanResult:
         self.meta = meta or {}
 
 
+@dataclass(frozen=True)
+class DecodingOptions:
+    """Additive, opt-in Ollama decoding knobs (TASK 07A, D3).
+
+    The defaults reproduce the frozen request body byte-for-byte (num_ctx 8192,
+    seed 42, no top_p/top_k/presence_penalty keys). Optional sampling keys are sent
+    ONLY when not None. Kept in planner.py (not AgentConfig) because agent/config.py
+    is pinned by the 06A frozen-baseline guard (evaluation/task06a/tests/test_controls.py).
+    """
+    num_ctx: int = 8192
+    seed: int = 42
+    top_p: Optional[float] = None
+    top_k: Optional[int] = None
+    presence_penalty: Optional[float] = None
+
+    def __post_init__(self):
+        def is_int(v):
+            return isinstance(v, int) and not isinstance(v, bool)
+
+        def is_num(v):
+            return isinstance(v, (int, float)) and not isinstance(v, bool) and math.isfinite(v)
+
+        if not is_int(self.num_ctx) or not 2048 <= self.num_ctx <= 65536:
+            raise ValueError("Invalid decoding option: num_ctx")
+        if not is_int(self.seed) or not 0 <= self.seed < 2 ** 31:
+            raise ValueError("Invalid decoding option: seed")
+        if self.top_p is not None and (not is_num(self.top_p) or not 0 < self.top_p <= 1):
+            raise ValueError("Invalid decoding option: top_p")
+        if self.top_k is not None and (not is_int(self.top_k) or not 1 <= self.top_k <= 1000):
+            raise ValueError("Invalid decoding option: top_k")
+        if self.presence_penalty is not None and (not is_num(self.presence_penalty)
+                                                  or not -2 <= self.presence_penalty <= 2):
+            raise ValueError("Invalid decoding option: presence_penalty")
+
+    def options(self, temperature: float, num_predict: int) -> Dict[str, Any]:
+        out: Dict[str, Any] = {"temperature": temperature, "seed": self.seed,
+                               "num_predict": num_predict, "num_ctx": self.num_ctx}
+        for key in ("top_p", "top_k", "presence_penalty"):
+            if getattr(self, key) is not None:
+                out[key] = getattr(self, key)
+        return out
+
+
+DEFAULT_DECODING = DecodingOptions()
+
+
 class _RejectRedirects(urllib.request.HTTPRedirectHandler):
     """Schema-aware evaluation calls never follow an endpoint redirect."""
 
@@ -42,10 +90,13 @@ class _RejectRedirects(urllib.request.HTTPRedirectHandler):
 class OllamaPlanner:
     """Local local Qwen via Ollama /api/chat with JSON-schema-constrained output."""
 
-    def __init__(self, cfg: AgentConfig):
+    def __init__(self, cfg: AgentConfig, decoding: Optional[DecodingOptions] = None):
         if not cfg.is_local_loopback():
             raise PlannerError("Ollama host must be a local loopback address")
+        if decoding is not None and not isinstance(decoding, DecodingOptions):
+            raise PlannerError("decoding must be a DecodingOptions instance")
         self._cfg = cfg
+        self._decoding = decoding or DEFAULT_DECODING
 
     def decide(self, context: Mapping[str, Any]) -> PlanResult:
         # Frozen v1 request contract and transport behaviour remain the default.
@@ -78,7 +129,7 @@ class OllamaPlanner:
             "stream": False,
             "think": cfg.think,
             "format": format_schema,   # constrained decoding when supported
-            "options": {"temperature": cfg.temperature, "seed": 42, "num_predict": min(cfg.num_predict, context.get("output_token_limit", cfg.num_predict)), "num_ctx": 8192},
+            "options": self._decoding.options(cfg.temperature, min(cfg.num_predict, context.get("output_token_limit", cfg.num_predict))),
         }
         req = urllib.request.Request(
             cfg.ollama_host.rstrip("/") + "/api/chat",
@@ -94,11 +145,21 @@ class OllamaPlanner:
         except Exception as exc:  # transport/timeout/http
             raise PlannerError(f"Ollama inference failed: {type(exc).__name__}: {exc}") from exc
         latency = round(time.time() - t0, 2)
-        content = (payload.get("message") or {}).get("content")
+        message = payload.get("message") or {}
+        content = message.get("content")
+        thinking = message.get("thinking")
         if not isinstance(content, str) or not content.strip():
+            if isinstance(thinking, str) and thinking:
+                # Diagnostic only (no fallback): thinking consumed the output without content.
+                raise PlannerError(f"Ollama returned empty content (thinking_chars={len(thinking)}, "
+                                   f"done_reason={payload.get('done_reason')}, eval_count={payload.get('eval_count')})")
             raise PlannerError("Ollama returned empty content")
-        return PlanResult(content, latency, {"model": cfg.model, "think": cfg.think,
-                                             "eval_count": payload.get("eval_count"), "prompt_eval_count": payload.get("prompt_eval_count"), "done_reason": payload.get("done_reason")})
+        meta = {"model": cfg.model, "think": cfg.think,
+                "eval_count": payload.get("eval_count"), "prompt_eval_count": payload.get("prompt_eval_count"), "done_reason": payload.get("done_reason")}
+        if isinstance(thinking, str):
+            # Model-authored reasoning text, recorded verbatim for audit; never trusted evidence.
+            meta.update(thinking=thinking, thinking_chars=len(thinking))
+        return PlanResult(content, latency, meta)
 
 
 class MockPlanner:
