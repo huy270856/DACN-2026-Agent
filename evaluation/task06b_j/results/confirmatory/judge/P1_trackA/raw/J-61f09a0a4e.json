@@ -1,0 +1,98 @@
+{
+ "item_id": "J-61f09a0a4e",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 2,
+   "rationale": "All claims match the visible evidence: PE32+ x64 non-DLL (EV-32849b, EV-a6f92e), benign raw 0.006746 uncalibrated (EV-1176da), 16 of 64 committed imports visible out of 234 provider entries (EV-91003d; ref 15 __setusermatherr correct).",
+   "evidence_ids": [
+    "EV-32849b517cb744368ca47c36c59696ec",
+    "EV-a6f92e6ef9a24b0a9d73e6a9fe81153f",
+    "EV-1176dae4eb91478887b95925ada1cb51",
+    "EV-91003d8238364b52ab8b0057e6606a24"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 2,
+   "rationale": "Every statement is traceable to the correct record with correct scope (visible slice described as incomplete).",
+   "evidence_ids": [
+    "EV-32849b517cb744368ca47c36c59696ec",
+    "EV-a6f92e6ef9a24b0a9d73e6a9fe81153f",
+    "EV-1176dae4eb91478887b95925ada1cb51",
+    "EV-91003d8238364b52ab8b0057e6606a24"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 2,
+   "rationale": "Case-specific limits (16/234 visible, uncalibrated score, no runtime) are stated and the conclusion is limited to type and detector output.",
+   "evidence_ids": [
+    "EV-91003d8238364b52ab8b0057e6606a24",
+    "EV-1176dae4eb91478887b95925ada1cb51"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 2,
+   "rationale": "MONITOR is proportionate; the prediction is reported as uncalibrated, not used as proof.",
+   "evidence_ids": [
+    "EV-1176dae4eb91478887b95925ada1cb51"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 2,
+   "rationale": "\"Full import verification requires reading remaining committed entries\" is a specific step that resolves the named unknown (the unread committed import entries).",
+   "evidence_ids": [
+    "EV-91003d8238364b52ab8b0057e6606a24"
+   ]
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-32849b517cb744368ca47c36c59696ec",
+    "EV-a6f92e6ef9a24b0a9d73e6a9fe81153f"
+   ],
+   "rationale": "is_dll false, PE32+, x64."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-1176dae4eb91478887b95925ada1cb51"
+   ],
+   "rationale": "raw_score 0.006746, benign, uncalibrated."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-91003d8238364b52ab8b0057e6606a24"
+   ],
+   "rationale": "committed 64, visible 16; index 15 __setusermatherr."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-91003d8238364b52ab8b0057e6606a24",
+    "EV-1176dae4eb91478887b95925ada1cb51"
+   ],
+   "rationale": "Matches evidence limitations."
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "The import list confirms standard runtime functions (msvcrt.dll) but is incomplete due to truncation.",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-91003d8238364b52ab8b0057e6606a24"
+   ],
+   "rationale": "Visible entries are msvcrt CRT functions; incompleteness stated."
+  }
+ ]
+}

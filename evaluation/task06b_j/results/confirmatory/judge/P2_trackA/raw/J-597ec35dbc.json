@@ -1,0 +1,106 @@
+{
+  "item_id": "J-597ec35dbc",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 0,
+      "rationale": "C1 to C3 are supported: valid PE32+ x64 executable; benign at 0.0014; no import entries visible. C4 ('The file may lack file-system access capabilities based on the low malware score') is UNSUPPORTED. The malware score carries no information about file-system capability, and no import data was seen. The hypothesis is hedged ('unverified'), but its stated evidential basis is invalid, and it is a listed material claim. So 0.",
+      "evidence_ids": [
+        "EV-d830205e41ae4721a02b4b917e899961",
+        "EV-142ecb96e17344fb936439f4977bedb7",
+        "EV-9d0bf3ad1874432887026d8e31734e3d"
+      ]
+    },
+    "R2_evidence_traceability": {
+      "score": 2,
+      "rationale": "Every statement points to the record that carries it, with inline IDs in the explanation. C3's 'no import entries visible' cites pe_header, whose limitation states that imports are not collected. Scope is correct, with no misattribution.",
+      "evidence_ids": [
+        "EV-d830205e41ae4721a02b4b917e899961",
+        "EV-142ecb96e17344fb936439f4977bedb7",
+        "EV-9d0bf3ad1874432887026d8e31734e3d"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 2,
+      "rationale": "Case-specific limitations are stated and constrain the conclusion: imports are not visible, so FS API use cannot be inferred from headers; the score is raw and uncalibrated, with a feature-parity caveat; there was no runtime execution. The answer is INSUFFICIENT_EVIDENCE with LOW confidence. C4 is explicitly flagged as unverified.",
+      "evidence_ids": [
+        "EV-d830205e41ae4721a02b4b917e899961",
+        "EV-9d0bf3ad1874432887026d8e31734e3d"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 2,
+      "rationale": "MONITOR with LOW confidence and INSUFFICIENT_EVIDENCE is proportionate and consistent with the stated uncertainty. The decision rests on the evidence gap, not on the detector label. Human decision is preserved.",
+      "evidence_ids": [
+        "EV-9d0bf3ad1874432887026d8e31734e3d",
+        "EV-d830205e41ae4721a02b4b917e899961"
+      ]
+    },
+    "R9_next_step_planning": {
+      "score": 1,
+      "rationale": "The text says that seeing the declared imports (e.g. CreateFile, DeleteFile) or executing the binary is needed to determine FS capability, and that C4 is 'unverified without import analysis or execution'. This points toward a relevant step, but it is phrased as a limitation rather than a proposed next action, and it is generic (import analysis or execution).",
+      "evidence_ids": [
+        "EV-d830205e41ae4721a02b4b917e899961"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-d830205e41ae4721a02b4b917e899961",
+        "EV-142ecb96e17344fb936439f4977bedb7"
+      ],
+      "rationale": "PE32+, x64, executable image; structural_valid true."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-9d0bf3ad1874432887026d8e31734e3d"
+      ],
+      "rationale": "raw_score 0.00147 is about 0.0014; benign."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-d830205e41ae4721a02b4b917e899961"
+      ],
+      "rationale": "No import facet visible; the pe_header limitation says imports are not collected."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "SEMANTIC_SELF_CORROBORATION"
+      ],
+      "evidence_ids": [
+        "EV-9d0bf3ad1874432887026d8e31734e3d"
+      ],
+      "rationale": "Uses the detector score as the reason for a capability hypothesis. The author-visible prediction record is an uncalibrated maliciousness score and carries no information about file-system APIs.",
+      "evidence_access": "AGENT_VISIBLE"
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "Missing evidence IDs suggest potential import data was omitted or unavailable.",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [],
+      "evidence_ids": [],
+      "rationale": "Import data was indeed unavailable. The speculation that the omitted IDs held import data is wrong per the reference (they are metadata/identity records), but their content was not visible to the author and the statement is hedged."
+    },
+    {
+      "text": "The static prediction suggests benign behavior",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-9d0bf3ad1874432887026d8e31734e3d"
+      ],
+      "rationale": "The prediction is a benign label, not a statement about behaviour; the report immediately caveats it."
+    }
+  ]
+}

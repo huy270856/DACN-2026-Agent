@@ -1,0 +1,85 @@
+{
+  "item_id": "J-4c0d4407ff",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": 2,
+      "rationale": "Process-control question; call justified by a specific need to look for CreateProcess/OpenProcess/VirtualAlloc declarations.",
+      "evidence_ids": [
+        "EV-59a532a1d7a3410cba5f55145dd543bd"
+      ]
+    },
+    "R4_new_evidence_relevance": {
+      "score": 1,
+      "rationale": "Committed 64 of 112 entries are msvcrt, auditpolcore policy functions, string/console; no process-control APIs. Limiting only.",
+      "evidence_ids": [
+        "EV-59a532a1d7a3410cba5f55145dd543bd"
+      ]
+    },
+    "R5_new_evidence_consumption": {
+      "score": 2,
+      "rationale": "Visible 16 msvcrt entries read correctly; coverage 16 of 64 committed stated; absence not treated as proof.",
+      "evidence_ids": [
+        "EV-59a532a1d7a3410cba5f55145dd543bd"
+      ]
+    },
+    "R6_incremental_value": {
+      "score": 1,
+      "rationale": "Minor insight (no process APIs in the first 16 imports), but the report puts most of its weight on the detector score (\"strongly suggests benignity\", \"No evidence contradicts the benign classification\") rather than on the question.",
+      "evidence_ids": [
+        "EV-59a532a1d7a3410cba5f55145dd543bd",
+        "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-5e446b26d39442b09b2ba165dad663fe"
+      ],
+      "rationale": "Header/format records show PE32+, x64, not DLL."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-59a532a1d7a3410cba5f55145dd543bd"
+      ],
+      "rationale": "Visible entries are msvcrt; no process-control APIs among them."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+      ],
+      "rationale": "Prediction benign, raw ~0.001."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-59a532a1d7a3410cba5f55145dd543bd"
+      ],
+      "rationale": "Matches tool limitation."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "The malware prediction score (0.001) strongly suggests benignity.",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [
+        "SCORE_AS_PROBABILITY_OR_TRUTH"
+      ],
+      "evidence_ids": [
+        "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+      ],
+      "rationale": "Score is far below threshold, but \"strongly suggests\" treats an uncalibrated raw score as a confidence measure."
+    }
+  ]
+}

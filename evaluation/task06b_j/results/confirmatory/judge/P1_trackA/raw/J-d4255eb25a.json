@@ -1,0 +1,66 @@
+{
+ "item_id": "J-d4255eb25a",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 2,
+   "rationale": "The few statements (static prediction benign, raw score uncalibrated, concrete imports unavailable, no runtime behaviour observed) all match the visible evidence: prediction record 6d947a and no import evidence among the visible items.",
+   "evidence_ids": [
+    "EV-6d947a0de0ee40d2be40f61821738275"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 2,
+   "rationale": "The prediction is embedded verbatim (prediction_shown); the remaining statements concern absence of import/runtime evidence and are correctly scoped; no misattribution.",
+   "evidence_ids": [
+    "EV-6d947a0de0ee40d2be40f61821738275"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 1,
+   "rationale": "Limitations are stated (static only, uncalibrated, imports unavailable) but in generic template form; they are not explicitly tied to the file-system access question (that this stays unknown), though there is no overreach.",
+   "evidence_ids": [
+    "EV-6d947a0de0ee40d2be40f61821738275"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 1,
+   "rationale": "MONITOR is a cautious, acceptable action, but the only stated basis is the static model classifying BENIGN, so it is weakly justified for the question asked. Not semantic self-corroboration: the label is not argued to be confirmed.",
+   "evidence_ids": [
+    "EV-6d947a0de0ee40d2be40f61821738275"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 0,
+   "rationale": "No next-step reasoning anywhere in the text; the MONITOR recommendation is not a plan to resolve an unknown.",
+   "evidence_ids": []
+  }
+ },
+ "claims": [],
+ "additional_claims": [
+  {
+   "text": "Mô hình tĩnh phân loại BENIGN (static model classifies BENIGN)",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-6d947a0de0ee40d2be40f61821738275"
+   ],
+   "rationale": "predicted_label benign in the prediction record."
+  },
+  {
+   "text": "concrete imports unavailable",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [],
+   "rationale": "No import evidence was visible to the author."
+  },
+  {
+   "text": "phân tích chỉ dựa trên đặc trưng tĩnh, không quan sát hành vi runtime (static features only, no runtime behaviour observed)",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-6d947a0de0ee40d2be40f61821738275"
+   ],
+   "rationale": "Matches prediction limitations."
+  }
+ ]
+}

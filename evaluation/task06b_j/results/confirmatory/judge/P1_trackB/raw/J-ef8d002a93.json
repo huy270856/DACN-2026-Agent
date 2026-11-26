@@ -1,0 +1,120 @@
+{
+  "item_id": "J-ef8d002a93",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE for this item (no analyzer tool was available or called).",
+      "evidence_ids": []
+    },
+    "R4_new_evidence_relevance": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE for this item (no analyzer tool was available or called).",
+      "evidence_ids": []
+    },
+    "R5_new_evidence_consumption": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE for this item (no analyzer tool was available or called).",
+      "evidence_ids": []
+    },
+    "R6_incremental_value": {
+      "score": -1,
+      "rationale": "No tool was available, and the report's additions go beyond the evidence in a misleading direction. It says the raw score 0.0067 'contradicts typical high-confidence benign detections' and 'indicates low confidence for benign'. In fact the score is far below the 0.832 threshold, and no calibrated confidence exists. It also suggests 'potential evasion' (C4) with no evidential basis. An analyst could read these as signals of suspicion that the evidence does not carry.",
+      "evidence_ids": [
+        "EV-1176dae4eb91478887b95925ada1cb51",
+        "EV-32849b517cb744368ca47c36c59696ec",
+        "EV-a6f92e6ef9a24b0a9d73e6a9fe81153f"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-32849b517cb744368ca47c36c59696ec",
+        "EV-a6f92e6ef9a24b0a9d73e6a9fe81153f"
+      ],
+      "rationale": "PE32+ x64, not DLL, structural_valid true via magic bytes and headers."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-1176dae4eb91478887b95925ada1cb51"
+      ],
+      "rationale": "Benign, raw 0.006746, score_is_calibrated_probability false."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-32849b517cb744368ca47c36c59696ec"
+      ],
+      "rationale": "Only the header, format and prediction are visible."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "UNSUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-1176dae4eb91478887b95925ada1cb51",
+        "EV-32849b517cb744368ca47c36c59696ec"
+      ],
+      "rationale": "Nothing in the visible evidence indicates evasion or non-standard characteristics. A low score below threshold plus missing import data is not evidence of evasion.",
+      "evidence_access": "AGENT_VISIBLE"
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "The static detector predicts 'benign' with a very low raw score (0.0067), which contradicts typical high-confidence benign detections",
+      "verdict": "CONTRADICTED",
+      "tags": [
+        "SCORE_AS_PROBABILITY_OR_TRUTH"
+      ],
+      "evidence_ids": [
+        "EV-1176dae4eb91478887b95925ada1cb51"
+      ],
+      "rationale": "A raw score of 0.0067 against a 0.832 threshold is squarely on the benign side. Nothing in the record makes it 'contradict' benign detection.",
+      "evidence_access": "AGENT_VISIBLE"
+    },
+    {
+      "text": "Raw LightGBM score (0.0067) indicates low confidence for 'benign' classification without runtime context.",
+      "verdict": "CONTRADICTED",
+      "tags": [
+        "SCORE_AS_PROBABILITY_OR_TRUTH"
+      ],
+      "evidence_ids": [
+        "EV-1176dae4eb91478887b95925ada1cb51"
+      ],
+      "rationale": "This inverts the score's meaning and treats it as a confidence value. The record states the score is not a calibrated probability.",
+      "evidence_access": "AGENT_VISIBLE"
+    },
+    {
+      "text": "aligns with the absence of obvious malicious signatures in the header",
+      "verdict": "UNSUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-32849b517cb744368ca47c36c59696ec"
+      ],
+      "rationale": "The header record contains only minimal structural fields. No signature scan was performed.",
+      "evidence_access": "AGENT_VISIBLE"
+    },
+    {
+      "text": "Missing evidence IDs suggest potential import data exists but was not retrieved or is truncated.",
+      "verdict": "CONTRADICTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b30368c24f5b45cda55ed3a567bd39bc",
+        "EV-46b23d2443af40c7bd02ad6fcafb1995",
+        "EV-1fb777d5b54d457c87a5d388a05a24d8",
+        "EV-bce32f93c7914126b7f6c79926f6e859",
+        "EV-a12face686774c8391e93b27683d5769"
+      ],
+      "rationale": "In the reference, the omitted IDs are metadata, identity, hash and readability records, not import data.",
+      "evidence_access": "INACCESSIBLE_BEYOND_LIMITS"
+    }
+  ]
+}

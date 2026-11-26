@@ -1,0 +1,71 @@
+{
+  "item_id": "J-597ec35dbc",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE for this item: no analyzer tool was offered/called in the trace.",
+      "evidence_ids": []
+    },
+    "R4_new_evidence_relevance": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE: no analyzer output was committed during the run.",
+      "evidence_ids": []
+    },
+    "R5_new_evidence_consumption": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE: there is no new tool/retrieval evidence to consume.",
+      "evidence_ids": []
+    },
+    "R6_incremental_value": {
+      "score": 0,
+      "rationale": "No tool was available. The report correctly states that file-system capability cannot be determined because imports are not visible, which repeats what the initial evidence already implies. C4 (low malware score suggests the file may lack file-system capability) is a non sequitur but is explicitly hedged as unverified, so it does not make the report net misleading. Net value 0.",
+      "evidence_ids": [
+        "EV-9d0bf3ad1874432887026d8e31734e3d",
+        "EV-d830205e41ae4721a02b4b917e899961"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-d830205e41ae4721a02b4b917e899961",
+        "EV-142ecb96e17344fb936439f4977bedb7"
+      ],
+      "rationale": "Header/format records show PE32+, x64, executable image."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-9d0bf3ad1874432887026d8e31734e3d"
+      ],
+      "rationale": "Prediction record shows benign, raw_score 0.00147."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-d830205e41ae4721a02b4b917e899961"
+      ],
+      "rationale": "No import evidence is visible; header limitation says imports are not collected."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "SCORE_AS_PROBABILITY_OR_TRUTH"
+      ],
+      "evidence_ids": [
+        "EV-9d0bf3ad1874432887026d8e31734e3d"
+      ],
+      "rationale": "A malware-classifier score carries no information about whether file-system APIs are declared; using it to suggest absence of file-system capability is unsupported, even though hedged.",
+      "evidence_access": "AGENT_VISIBLE"
+    }
+  ],
+  "additional_claims": []
+}

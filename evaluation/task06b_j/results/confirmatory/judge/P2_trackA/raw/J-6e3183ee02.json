@@ -1,0 +1,102 @@
+{
+  "item_id": "J-6e3183ee02",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 2,
+      "rationale": "All claims are supported and scoped to what was seen: PE32+ x64 executable; benign at 0.0015; the 32 visible entries are CRT string/runtime/private functions with no file-system APIs (CreateFile, WriteFile, DeleteFile); 32 of 64 committed visible, so absence is not proven. Hidden reference entries (e.g. WriteFile at index 47) were not visible to the author and do not contradict the visible-scoped claims. One uncertainty note is garbled ('absence ... in visible range is unknown') but not factually wrong in intent.",
+      "evidence_ids": [
+        "EV-d830205e41ae4721a02b4b917e899961",
+        "EV-9d0bf3ad1874432887026d8e31734e3d",
+        "EV-10d46e1d6cad4de1948dca598a9177ad"
+      ]
+    },
+    "R2_evidence_traceability": {
+      "score": 1,
+      "rationale": "Claims cite the correct records, and the resolved refs are correct (0 memset, 20 memmove). The explanation's 'the import list is truncated (32/64 visible)' sizes the list at 64, while the author-visible record shows provider_total_entries=108. C4 correctly says 'committed', so this is loose scope rather than slice-as-whole. Score 1.",
+      "evidence_ids": [
+        "EV-10d46e1d6cad4de1948dca598a9177ad"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 2,
+      "rationale": "Case-specific limitations are stated and applied: partial import view (32 of 64 committed), dynamically resolved FS capability possible, uncalibrated score, no dynamic execution. The conclusion stays at INSUFFICIENT_EVIDENCE with LOW confidence.",
+      "evidence_ids": [
+        "EV-10d46e1d6cad4de1948dca598a9177ad",
+        "EV-9d0bf3ad1874432887026d8e31734e3d"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 2,
+      "rationale": "MONITOR with LOW confidence and INSUFFICIENT_EVIDENCE is proportionate. The decision explicitly rests on insufficient import visibility, not on the detector label. Human decision is preserved.",
+      "evidence_ids": [
+        "EV-10d46e1d6cad4de1948dca598a9177ad",
+        "EV-9d0bf3ad1874432887026d8e31734e3d"
+      ]
+    },
+    "R9_next_step_planning": {
+      "score": 1,
+      "rationale": "'Without seeing all imports or running the binary, we cannot definitively rule out ... file-system capabilities.' This implies relevant steps (more imports, execution), but they are generic and phrased as limitations. No concrete action is proposed, such as reading the remaining 32 committed entries.",
+      "evidence_ids": [
+        "EV-10d46e1d6cad4de1948dca598a9177ad"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-d830205e41ae4721a02b4b917e899961"
+      ],
+      "rationale": "PE32+, x64, is_dll false."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-9d0bf3ad1874432887026d8e31734e3d"
+      ],
+      "rationale": "raw_score 0.00147 is about 0.0015; benign."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-10d46e1d6cad4de1948dca598a9177ad"
+      ],
+      "rationale": "Visible 0-31 are CRT functions (memset 0, wcsncmp 1, _o__exit 10, memmove 20); no file-system APIs. Refs are correct."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-10d46e1d6cad4de1948dca598a9177ad"
+      ],
+      "rationale": "32 of 64 committed visible; matches the record limitations."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "the import list is truncated (32/64 visible)",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-10d46e1d6cad4de1948dca598a9177ad"
+      ],
+      "rationale": "Truncation is real, but the list has 108 entries; 64 is the committed cap."
+    },
+    {
+      "text": "File-system APIs (CreateFile, WriteFile, DeleteFile) are not visible in the truncated import list.",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-10d46e1d6cad4de1948dca598a9177ad"
+      ],
+      "rationale": "Correct for the visible entries 0-31."
+    }
+  ]
+}

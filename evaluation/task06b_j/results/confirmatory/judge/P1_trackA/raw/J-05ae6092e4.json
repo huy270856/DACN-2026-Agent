@@ -1,0 +1,103 @@
+{
+ "item_id": "J-05ae6092e4",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 2,
+   "rationale": "All claims match visible evidence: the 48 visible imports (EV-f17286) are only api-ms-win-crt runtime/math/private symbols, committed 64 vs visible 48 is correct, the prediction values (EV-9381a8) are reproduced correctly, and the absence statement is scoped to the visible subset.",
+   "evidence_ids": [
+    "EV-f17286b16c364ca8aab19a377c37ec59",
+    "EV-9381a8f998f347629cf75f51bc13e79e"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 2,
+   "rationale": "Each claim cites the source that carries it (imports detail for import statements, prediction record for score) with correct scope (visible subset, not whole table).",
+   "evidence_ids": [
+    "EV-f17286b16c364ca8aab19a377c37ec59",
+    "EV-9381a8f998f347629cf75f51bc13e79e"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 2,
+   "rationale": "States case-specific limits: 48/64 visible with truncation preventing absence claims, uncalibrated score, no dynamic/network monitoring, dynamic API resolution; the conclusion stays INSUFFICIENT_EVIDENCE accordingly. It understates that 193 provider entries exist (only 64 committed) but does not overreach.",
+   "evidence_ids": [
+    "EV-f17286b16c364ca8aab19a377c37ec59",
+    "EV-9381a8f998f347629cf75f51bc13e79e"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 2,
+   "rationale": "MONITOR with INSUFFICIENT_EVIDENCE is proportionate to a runtime network question that static data cannot settle; the benign prediction is stated but not used as proof.",
+   "evidence_ids": [
+    "EV-f17286b16c364ca8aab19a377c37ec59",
+    "EV-9381a8f998f347629cf75f51bc13e79e"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 1,
+   "rationale": "Only \"Runtime monitoring is required to definitively answer the question\" - a generic dynamic-analysis step; no specific step for the named unknown of the unread import entries.",
+   "evidence_ids": [
+    "EV-f17286b16c364ca8aab19a377c37ec59"
+   ]
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-f17286b16c364ca8aab19a377c37ec59"
+   ],
+   "rationale": "Indices 0-47 are all api-ms-win-crt-runtime/math/private symbols; no network APIs in that subset."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-f17286b16c364ca8aab19a377c37ec59"
+   ],
+   "rationale": "committed_entries=64, visible_entries=48."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-9381a8f998f347629cf75f51bc13e79e"
+   ],
+   "rationale": "raw_score 0.00121, label benign, score_is_calibrated_probability=false."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-f17286b16c364ca8aab19a377c37ec59",
+    "EV-9381a8f998f347629cf75f51bc13e79e"
+   ],
+   "rationale": "Matches the evidence limitations (dynamically resolved APIs not enumerated; static only)."
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "Static analysis cannot rule out dynamic API resolution or obfuscation techniques that bypass import tables.",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-f17286b16c364ca8aab19a377c37ec59"
+   ],
+   "rationale": "Consistent with stated evidence limitation."
+  },
+  {
+   "text": "while evidence points to non-network behavior",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-f17286b16c364ca8aab19a377c37ec59"
+   ],
+   "rationale": "Visible imports show no network APIs; the statement is hedged as insufficient."
+  }
+ ]
+}

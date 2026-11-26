@@ -1,0 +1,80 @@
+{
+  "item_id": "J-fdc4ad9966",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 2,
+      "rationale": "The report makes four material statements: (1) the static model predicts BENIGN; (2) the raw score is uncalibrated; (3) analysis is static only, with no runtime observation; (4) concrete imports are unavailable. Statement 1 matches the prediction record. Statement 2 matches score_is_calibrated_probability=false. Statement 3 matches the prediction record's limitations. Statement 4 matches the evidence: no import facet was collected, and the pe_header limitations say imports are not collected. Nothing is unsupported or overclaimed, and the prediction is not presented as truth. It does not answer the question about runtime network communication. That is a completeness issue, not a factual one.",
+      "evidence_ids": [
+        "EV-5ff7e2b8b52641bf8dd2e7eb1c31d638",
+        "EV-3b09799ee9304dea929c1083b3354e2b"
+      ]
+    },
+    "R2_evidence_traceability": {
+      "score": 1,
+      "rationale": "The prediction block is reproduced verbatim (prediction_shown), so the label and score statements are traceable. The report cites no evidence IDs. The statement 'concrete imports unavailable' is not tied to any source; it is consistent with the pe_header limitation, but the report does not point there. No misattribution, but one material statement is untraceable, so 1.",
+      "evidence_ids": [
+        "EV-5ff7e2b8b52641bf8dd2e7eb1c31d638",
+        "EV-3b09799ee9304dea929c1083b3354e2b"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 1,
+      "rationale": "States that analysis is static only, that no runtime behaviour was observed and that imports are unavailable. These are the relevant limitations for a runtime-network question. However, they are listed as boilerplate and never applied to the question: the report never says that network communication cannot be established. The conclusion (MONITOR) does not overreach, so 1.",
+      "evidence_ids": [
+        "EV-5ff7e2b8b52641bf8dd2e7eb1c31d638",
+        "EV-3b09799ee9304dea929c1083b3354e2b"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 1,
+      "rationale": "MONITOR is a mild, proportionate action, and the report states that the analysis is static only. However, the only stated basis is the detector's BENIGN label ('the static model classifies BENIGN; suggest monitoring'). No independent evidence supports the action. It does not argue that the label is correct, so this is not semantic self-corroboration, but the justification is weak. Human decision is not foreclosed. Score 1.",
+      "evidence_ids": [
+        "EV-5ff7e2b8b52641bf8dd2e7eb1c31d638"
+      ]
+    },
+    "R9_next_step_planning": {
+      "score": 0,
+      "rationale": "No next-step reasoning appears anywhere in the text. 'Đề xuất theo dõi' (suggest monitoring) is a disposition, not an investigative step tied to an unknown.",
+      "evidence_ids": []
+    }
+  },
+  "claims": [],
+  "additional_claims": [
+    {
+      "text": "Mô hình tĩnh phân loại BENIGN (static model classifies BENIGN)",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-5ff7e2b8b52641bf8dd2e7eb1c31d638"
+      ],
+      "rationale": "predicted_label=benign in the prediction record; stated as a model output, not as truth."
+    },
+    {
+      "text": "raw score uncalibrated",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-5ff7e2b8b52641bf8dd2e7eb1c31d638"
+      ],
+      "rationale": "score_is_calibrated_probability=false."
+    },
+    {
+      "text": "concrete imports unavailable",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-3b09799ee9304dea929c1083b3354e2b"
+      ],
+      "rationale": "No import facet among visible evidence; the pe_header limitation states that imports are not collected."
+    },
+    {
+      "text": "phân tích chỉ dựa trên đặc trưng tĩnh, không quan sát hành vi runtime (analysis is static only; no runtime behaviour observed)",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-5ff7e2b8b52641bf8dd2e7eb1c31d638"
+      ],
+      "rationale": "Matches the prediction record limitation: static analysis only, no runtime behaviour observed."
+    }
+  ]
+}

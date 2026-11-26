@@ -1,0 +1,133 @@
+{
+  "item_id": "J-cdf604e96a",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 0,
+      "rationale": "C3 and C4 are supported. C2 is supported only as scoped to the visible entries. But the explanation's 'The file imports only msvcrt.dll functions' is a SCOPE_OVERCLAIM from 16 of 60 visible entries. The reference contradicts it: hidden committed entries come from registry, credentials, file, processthreads and other API sets, 21 libraries in all. The reason's 'Static analysis reveals a benign executable with no network-related imports' also asserts whole-file absence from a partial view and treats the label as fact. 'without DLL dependencies' is contradicted by the author's own visible msvcrt.dll imports. 'predicts benign behavior with high confidence' reads the raw score as confidence. Score 0.",
+      "evidence_ids": [
+        "EV-84f5ba59d44f4e38827359079fe2ac04",
+        "EV-9471e4632818455da40c03f95c6b22f9",
+        "EV-bebc79e738ac41e5a94f174f473ddbea"
+      ]
+    },
+    "R2_evidence_traceability": {
+      "score": 0,
+      "rationale": "Visible slice presented as the whole table: 'The file imports only msvcrt.dll functions', and C1 says 'The file imports 16 entries from msvcrt.dll'. Both attribute the scope of the 16 visible entries to the file's full import table, which the author-visible record says has 60 committed entries. This is a scope misattribution under R2, separate from the factual overclaim scored under R1.",
+      "evidence_ids": [
+        "EV-84f5ba59d44f4e38827359079fe2ac04"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 0,
+      "rationale": "The report states 'Only 16 of 60 committed import entries are visible; other entries may exist' and that the score is not a calibrated probability. It then contradicts both: it concludes the file imports only msvcrt.dll with no network-related imports, and describes the prediction as 'high confidence'. The conclusion overreaches its own stated limitations.",
+      "evidence_ids": [
+        "EV-84f5ba59d44f4e38827359079fe2ac04",
+        "EV-9471e4632818455da40c03f95c6b22f9"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 0,
+      "rationale": "The assessment ('The file appears benign based on imports and prediction', alignment CONSISTENT, 'malware model predicts benign behavior with high confidence') rests on the detector's own output, read as confidence, plus an overclaimed import view. That is semantic self-corroboration in the decision basis. MONITOR itself is mild, but the justification is unsound.",
+      "evidence_ids": [
+        "EV-9471e4632818455da40c03f95c6b22f9",
+        "EV-84f5ba59d44f4e38827359079fe2ac04"
+      ]
+    },
+    "R9_next_step_planning": {
+      "score": 0,
+      "rationale": "No next-step reasoning is found. The report does not propose reading the remaining 44 committed entries, which were reachable via page reads, or any other step.",
+      "evidence_ids": []
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [
+        "SCOPE_OVERCLAIM"
+      ],
+      "evidence_ids": [
+        "EV-84f5ba59d44f4e38827359079fe2ac04"
+      ],
+      "rationale": "The 16 visible entries are msvcrt functions and the refs (0, 1, 2) are correct. But 'The file imports 16 entries from msvcrt.dll' states a file-level count from a partial view; the full table has 18 msvcrt entries among 60."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-84f5ba59d44f4e38827359079fe2ac04"
+      ],
+      "rationale": "Scoped to what is 'visible': no ws2_32 or winsock in entries 0-15. The reference shows no network DLL in the full 60 either."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-9471e4632818455da40c03f95c6b22f9"
+      ],
+      "rationale": "raw_score 0.00253 is about 0.0025; benign."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-84f5ba59d44f4e38827359079fe2ac04"
+      ],
+      "rationale": "Matches the record limitations."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "The file imports only msvcrt.dll functions (memory management, exit handlers, string ops).",
+      "verdict": "CONTRADICTED",
+      "tags": [
+        "SCOPE_OVERCLAIM"
+      ],
+      "evidence_ids": [
+        "EV-84f5ba59d44f4e38827359079fe2ac04"
+      ],
+      "rationale": "Only 16 of 60 committed entries were visible. The reference shows hidden committed entries from many other libraries (registry, credentials, file, processthreads, delayload). The remaining committed entries were reachable by bounded page reads; the material does not show whether that action was offered.",
+      "evidence_access": "ACCESSIBLE_NOT_RETRIEVED"
+    },
+    {
+      "text": "Static analysis reveals a benign executable with no network-related imports.",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "SCOPE_OVERCLAIM",
+        "SCORE_AS_PROBABILITY_OR_TRUTH"
+      ],
+      "evidence_ids": [
+        "EV-84f5ba59d44f4e38827359079fe2ac04",
+        "EV-9471e4632818455da40c03f95c6b22f9"
+      ],
+      "rationale": "Whole-file absence is asserted from 16 of 60 entries (true per the reference, but not established by what the author saw), and 'benign executable' presents the label as fact.",
+      "evidence_access": "ACCESSIBLE_NOT_RETRIEVED"
+    },
+    {
+      "text": "the file structure indicates it is an x64 PE32+ executable without DLL dependencies",
+      "verdict": "CONTRADICTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-84f5ba59d44f4e38827359079fe2ac04",
+        "EV-bebc79e738ac41e5a94f174f473ddbea"
+      ],
+      "rationale": "x64 PE32+ is correct, but the author-visible import record shows imports from msvcrt.dll, so the file has DLL dependencies.",
+      "evidence_access": "AGENT_VISIBLE"
+    },
+    {
+      "text": "The malware model predicts benign behavior with high confidence (low score).",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "SCORE_AS_PROBABILITY_OR_TRUTH"
+      ],
+      "evidence_ids": [
+        "EV-9471e4632818455da40c03f95c6b22f9"
+      ],
+      "rationale": "The raw score is explicitly not a calibrated probability (author-visible), so it cannot be read as high confidence.",
+      "evidence_access": "AGENT_VISIBLE"
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+{
+ "item_id": "J-12bf456549",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 1,
+   "rationale": "PE type and detector output are correct (EV-e53a46, EV-08ec55, EV-c0fb92). One limitation is loosely worded: header validation is described as \"magic bytes only\" while the evidence says minimum DOS/COFF/optional headers. Not central.",
+   "evidence_ids": [
+    "EV-e53a46fcf7b04217943c40f932df897b",
+    "EV-08ec5500211141e3926cff75e13904a9",
+    "EV-c0fb92db0aa844f9833a10deca6abff7"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 2,
+   "rationale": "Each statement is traced to the record that carries it (header records for type, prediction record for score; the import-not-collected limitation is carried by the pe_header record limitations).",
+   "evidence_ids": [
+    "EV-e53a46fcf7b04217943c40f932df897b",
+    "EV-08ec5500211141e3926cff75e13904a9",
+    "EV-c0fb92db0aa844f9833a10deca6abff7"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 2,
+   "rationale": "Case-specific limitations (no import visibility, uncalibrated score, feature-parity caveat, no dynamic execution) are stated and confine the conclusion to type and detector output.",
+   "evidence_ids": [
+    "EV-c0fb92db0aa844f9833a10deca6abff7",
+    "EV-e53a46fcf7b04217943c40f932df897b"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 2,
+   "rationale": "MONITOR at MEDIUM confidence is proportionate; the detector output is reported, not used as confirmation.",
+   "evidence_ids": [
+    "EV-c0fb92db0aa844f9833a10deca6abff7"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 0,
+   "rationale": "No next-step reasoning observed; unknowns are named but no step is proposed.",
+   "evidence_ids": []
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-e53a46fcf7b04217943c40f932df897b",
+    "EV-08ec5500211141e3926cff75e13904a9"
+   ],
+   "rationale": "PE32+, x64, not DLL."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-c0fb92db0aa844f9833a10deca6abff7"
+   ],
+   "rationale": "benign, raw 0.0106 rounds to 0.01."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-e53a46fcf7b04217943c40f932df897b"
+   ],
+   "rationale": "No import evidence was visible; pe_header limitations state imports are not collected."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-c0fb92db0aa844f9833a10deca6abff7"
+   ],
+   "rationale": "Hedged hypothesis consistent with static-only limitation."
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "PE header validation is minimal (magic bytes only), not full structural validation.",
+   "verdict": "PARTIALLY_SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-e53a46fcf7b04217943c40f932df897b",
+    "EV-08ec5500211141e3926cff75e13904a9"
+   ],
+   "rationale": "Validation is minimal, but it covers DOS/COFF/optional headers, not magic bytes only."
+  },
+  {
+   "text": "model features may differ from training data",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-c0fb92db0aa844f9833a10deca6abff7"
+   ],
+   "rationale": "Matches the LIEF version parity limitation."
+  }
+ ]
+}

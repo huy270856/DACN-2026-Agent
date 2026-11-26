@@ -1,0 +1,132 @@
+{
+ "item_id": "J-1874020da2",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 0,
+   "rationale": "Several material claims exceed what was seen: \"The file imports only msvcrt.dll functions\" generalises 16 visible of 60 committed entries to the whole file and is contradicted by committed non-visible entries (registry, credential APIs); \"without DLL dependencies\" is contradicted by the visible msvcrt.dll imports; the raw score is presented as \"high confidence\".",
+   "evidence_ids": [
+    "EV-84f5ba59d44f4e38827359079fe2ac04",
+    "EV-9471e4632818455da40c03f95c6b22f9"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 0,
+   "rationale": "Scope misattribution: the visible 16-entry slice of EV-84f5ba is presented as the whole import table (\"imports only msvcrt.dll\", \"imports 16 entries from msvcrt.dll\"). This independently violates traceability scope, separate from the factual error under R1.",
+   "evidence_ids": [
+    "EV-84f5ba59d44f4e38827359079fe2ac04"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 0,
+   "rationale": "The report states \"Only 16 of 60 committed import entries are visible\" but its explanation contradicts that limitation by asserting the file imports only msvcrt.dll and has no network-related imports; it also treats an uncalibrated score as high confidence despite noting it is raw.",
+   "evidence_ids": [
+    "EV-84f5ba59d44f4e38827359079fe2ac04",
+    "EV-9471e4632818455da40c03f95c6b22f9"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 1,
+   "rationale": "MONITOR is itself proportionate for a runtime question static data cannot answer, but justification leans on the prediction (\"appears benign based on imports and prediction\", \"high confidence\"), a minor inconsistency with its stated uncertainty.",
+   "evidence_ids": [
+    "EV-9471e4632818455da40c03f95c6b22f9",
+    "EV-84f5ba59d44f4e38827359079fe2ac04"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 0,
+   "rationale": "No next-step reasoning observed; no proposal to read the remaining import pages or to monitor network activity.",
+   "evidence_ids": []
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "PARTIALLY_SUPPORTED",
+   "tags": [
+    "SCOPE_OVERCLAIM"
+   ],
+   "evidence_ids": [
+    "EV-84f5ba59d44f4e38827359079fe2ac04"
+   ],
+   "rationale": "16 visible msvcrt entries including malloc/exit/_wcsicmp are correct and resolved refs 0-2 are right, but phrased as what the file imports; msvcrt has 18 committed entries and other libraries exist."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-84f5ba59d44f4e38827359079fe2ac04"
+   ],
+   "rationale": "Scoped to visible entries; no network DLL among the 16 visible."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-9471e4632818455da40c03f95c6b22f9"
+   ],
+   "rationale": "raw_score 0.00253, benign."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-84f5ba59d44f4e38827359079fe2ac04"
+   ],
+   "rationale": "Matches evidence limitations."
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "The file imports only msvcrt.dll functions",
+   "verdict": "CONTRADICTED",
+   "tags": [
+    "SCOPE_OVERCLAIM"
+   ],
+   "evidence_ids": [
+    "EV-84f5ba59d44f4e38827359079fe2ac04"
+   ],
+   "rationale": "Committed but not visible entries include api-ms-win-core-registry, security-credentials and other libraries (library_count 21); the visible slice was 16/60. Reachability of those entries depended on a page read; the material shows only one page read, not whether more were offered.",
+   "evidence_access": "ACCESSIBLE_NOT_RETRIEVED"
+  },
+  {
+   "text": "the file structure indicates it is an x64 PE32+ executable without DLL dependencies",
+   "verdict": "CONTRADICTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-84f5ba59d44f4e38827359079fe2ac04",
+    "EV-bebc79e738ac41e5a94f174f473ddbea"
+   ],
+   "rationale": "The visible import evidence itself shows dependencies on msvcrt.dll; the header only shows is_dll=false.",
+   "evidence_access": "AGENT_VISIBLE"
+  },
+  {
+   "text": "The malware model predicts benign behavior with high confidence (low score)",
+   "verdict": "UNSUPPORTED",
+   "tags": [
+    "SCORE_AS_PROBABILITY_OR_TRUTH"
+   ],
+   "evidence_ids": [
+    "EV-9471e4632818455da40c03f95c6b22f9"
+   ],
+   "rationale": "Score is explicitly not a calibrated probability; a low raw score is not confidence.",
+   "evidence_access": "AGENT_VISIBLE"
+  },
+  {
+   "text": "Static analysis reveals a benign executable with no network-related imports.",
+   "verdict": "UNSUPPORTED",
+   "tags": [
+    "SCOPE_OVERCLAIM",
+    "SCORE_AS_PROBABILITY_OR_TRUTH"
+   ],
+   "evidence_ids": [
+    "EV-84f5ba59d44f4e38827359079fe2ac04",
+    "EV-9471e4632818455da40c03f95c6b22f9"
+   ],
+   "rationale": "\"Benign executable\" treats the prediction as truth, and absence of network imports is asserted for the file while only 16/60 entries were seen (the unseen entries were committed; the material does not show whether a further page read was offered).",
+   "evidence_access": "ACCESSIBLE_NOT_RETRIEVED"
+  }
+ ]
+}

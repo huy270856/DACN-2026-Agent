@@ -1,0 +1,86 @@
+{
+  "item_id": "J-2b89cf9cb0",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": 2,
+      "rationale": "Runtime network question; the call targeted declared network imports, the only static signal available.",
+      "evidence_ids": [
+        "EV-a25a207979694ae4800fe31dd24616d2"
+      ]
+    },
+    "R4_new_evidence_relevance": {
+      "score": 1,
+      "rationale": "Committed 64 of 134 entries contain no network APIs (msvcrt, ntdll, KERNEL32 loader/locale); limiting only.",
+      "evidence_ids": [
+        "EV-a25a207979694ae4800fe31dd24616d2"
+      ]
+    },
+    "R5_new_evidence_consumption": {
+      "score": 2,
+      "rationale": "Two pages read; correctly reported no network APIs in the visible 32 and that missing entries may hold them; stated coverage as 32 of 64 committed.",
+      "evidence_ids": [
+        "EV-a25a207979694ae4800fe31dd24616d2"
+      ]
+    },
+    "R6_incremental_value": {
+      "score": 1,
+      "rationale": "Minor specific insight: no network declarations in the first 32 imports, kept as INSUFFICIENT_EVIDENCE with a call for runtime monitoring.",
+      "evidence_ids": [
+        "EV-a25a207979694ae4800fe31dd24616d2",
+        "EV-5ff7e2b8b52641bf8dd2e7eb1c31d638"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-a25a207979694ae4800fe31dd24616d2"
+      ],
+      "rationale": "Visible entries 0-31 are msvcrt only."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-5ff7e2b8b52641bf8dd2e7eb1c31d638"
+      ],
+      "rationale": "Prediction benign, raw ~0.0034."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-a25a207979694ae4800fe31dd24616d2"
+      ],
+      "rationale": "visible 32 of 64 committed."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "NOT_ASSESSABLE",
+      "tags": [],
+      "evidence_ids": [
+        "EV-a25a207979694ae4800fe31dd24616d2"
+      ],
+      "rationale": "Speculative hypothesis about dynamic loading; static data cannot decide it."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "The file appears benign based on visible imports and a low static prediction score.",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [
+        "SCORE_AS_PROBABILITY_OR_TRUTH"
+      ],
+      "evidence_ids": [
+        "EV-a25a207979694ae4800fe31dd24616d2",
+        "EV-5ff7e2b8b52641bf8dd2e7eb1c31d638"
+      ],
+      "rationale": "Visible imports are unremarkable, but \"appears benign\" leans on the uncalibrated detector label."
+    }
+  ]
+}

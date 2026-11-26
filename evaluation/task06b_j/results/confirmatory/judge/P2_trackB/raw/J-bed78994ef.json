@@ -1,0 +1,73 @@
+{
+  "item_id": "J-bed78994ef",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": 0,
+      "rationale": "The question was answerable from the initial evidence, and the stated reason for calling the tool rests on a misreading: the model treated the near-zero raw score as something that \"contradicts typical malware detection behavior\" and might be a false negative. This is not a defensible information need.",
+      "evidence_ids": [
+        "EV-41b247a726f340b88142e4cae5f40dd9"
+      ]
+    },
+    "R4_new_evidence_relevance": {
+      "score": 0,
+      "rationale": "Import declarations (KERNEL32, msvcrt, ulib) do not bear on EXE vs DLL, architecture or detector output.",
+      "evidence_ids": [
+        "EV-41b247a726f340b88142e4cae5f40dd9"
+      ]
+    },
+    "R5_new_evidence_consumption": {
+      "score": 2,
+      "rationale": "Visible entries described correctly (\"standard Windows system imports\"); coverage given as 16 of 74 (about 22%), which is correct against the provider total. C3 mislabels 74 as \"committed\" (64 were committed), a minor wording slip.",
+      "evidence_ids": [
+        "EV-41b247a726f340b88142e4cae5f40dd9"
+      ]
+    },
+    "R6_incremental_value": {
+      "score": 0,
+      "rationale": "Nothing beyond the initial header and prediction records.",
+      "evidence_ids": [
+        "EV-41b247a726f340b88142e4cae5f40dd9",
+        "EV-b055c7deb9694c848515d303069f975c"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-3bee76ce4f2a4c64be323f61eb21196f"
+      ],
+      "rationale": "Header shows PE32+, x64, is_dll false."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b055c7deb9694c848515d303069f975c"
+      ],
+      "rationale": "Prediction benign, raw 0.003."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-41b247a726f340b88142e4cae5f40dd9"
+      ],
+      "rationale": "16 visible of 74 total is correct, but committed_entries is 64, not 74."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-41b247a726f340b88142e4cae5f40dd9"
+      ],
+      "rationale": "Hedged statement consistent with tool limitation."
+    }
+  ],
+  "additional_claims": []
+}

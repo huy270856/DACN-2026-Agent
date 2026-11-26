@@ -1,0 +1,94 @@
+{
+  "item_id": "J-f80da67d06",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE for this item (no analyzer tool was available or called).",
+      "evidence_ids": []
+    },
+    "R4_new_evidence_relevance": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE for this item (no analyzer tool was available or called).",
+      "evidence_ids": []
+    },
+    "R5_new_evidence_consumption": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE for this item (no analyzer tool was available or called).",
+      "evidence_ids": []
+    },
+    "R6_incremental_value": {
+      "score": -1,
+      "rationale": "No tool was available. The only addition beyond the restated evidence is framing the detector output as fact. The report says the image 'is identified as a benign x64 PE executable with no malware indicators in the static model' and that 'Static analysis confirms a benign x64 PE executable'. That turns an uncalibrated model prediction into a confirmed verdict, which would mislead an analyst even though calibration caveats appear elsewhere.",
+      "evidence_ids": [
+        "EV-fbff4b4bd8d744ed9e1195dad0cd983d",
+        "EV-63a2a2cf678d4bf48a8859f6dd13e11f",
+        "EV-fe7a80c3f5414e879e3a43841a8e732f"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-63a2a2cf678d4bf48a8859f6dd13e11f",
+        "EV-fe7a80c3f5414e879e3a43841a8e732f"
+      ],
+      "rationale": "PE32+ x64, not DLL."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-fbff4b4bd8d744ed9e1195dad0cd983d"
+      ],
+      "rationale": "Benign, raw 0.00168."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-63a2a2cf678d4bf48a8859f6dd13e11f"
+      ],
+      "rationale": "No import entries are visible. The caveat about declared imports is correct."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-fbff4b4bd8d744ed9e1195dad0cd983d"
+      ],
+      "rationale": "The LIEF 0.15.1 vs 0.9.0 mismatch is stated in the prediction record's limitations."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "Static analysis confirms a benign x64 PE executable.",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "SCORE_AS_PROBABILITY_OR_TRUTH"
+      ],
+      "evidence_ids": [
+        "EV-fbff4b4bd8d744ed9e1195dad0cd983d"
+      ],
+      "rationale": "Static analysis produced only a model prediction (raw, uncalibrated). It does not confirm the file is benign.",
+      "evidence_access": "AGENT_VISIBLE"
+    },
+    {
+      "text": "The image is identified as a benign x64 PE executable with no malware indicators in the static model.",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "SCORE_AS_PROBABILITY_OR_TRUTH"
+      ],
+      "evidence_ids": [
+        "EV-fbff4b4bd8d744ed9e1195dad0cd983d"
+      ],
+      "rationale": "This treats the predicted label as an identification of the file. The record does not expose 'malware indicators'.",
+      "evidence_access": "AGENT_VISIBLE"
+    }
+  ]
+}

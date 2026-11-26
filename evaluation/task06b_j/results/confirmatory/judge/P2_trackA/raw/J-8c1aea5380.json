@@ -1,0 +1,103 @@
+{
+  "item_id": "J-8c1aea5380",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 1,
+      "rationale": "C1 to C4 are supported: benign at 0.0013; 16 of 64 committed visible, all msvcrt, with no Winsock or DNS; dynamic resolution not enumerated; the LIEF 0.15.1 vs 0.9.0 parity caveat. The free-text 'Static evidence confirms benign classification' is PARTIALLY_SUPPORTED: no evidence independent of the classifier confirms it. Score 1.",
+      "evidence_ids": [
+        "EV-4bc6623e8a6c45d9982ad102cf838f96",
+        "EV-f531389fe4494f439e2e20e68b161db9"
+      ]
+    },
+    "R2_evidence_traceability": {
+      "score": 2,
+      "rationale": "Claims cite the records that carry them, and the resolved ref (entry 0, __iob_func) is correct. Scope is stated as 16 of 64 committed entries, which is accurate. The 148 provider total is omitted, but no slice is presented as the whole table.",
+      "evidence_ids": [
+        "EV-f531389fe4494f439e2e20e68b161db9",
+        "EV-4bc6623e8a6c45d9982ad102cf838f96"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 2,
+      "rationale": "Case-specific limitations are stated: only 16 of 64 committed visible, absence in the visible set does not guarantee absence, dynamic resolution is not enumerated, LIEF feature-parity, the score is uncalibrated, no runtime analysis. The network-capability question is left open ('lack of definitive negative proof').",
+      "evidence_ids": [
+        "EV-f531389fe4494f439e2e20e68b161db9",
+        "EV-4bc6623e8a6c45d9982ad102cf838f96"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 0,
+      "rationale": "The recommendation is explicitly justified by the detector's own output: 'monitor rather than block or quarantine due to the low risk signal', together with 'Static evidence confirms benign classification' and alignment CONSISTENT. The detector label and score are the main reason for the decision, presented as confirmed. That is semantic self-corroboration, even though MONITOR itself is a mild action.",
+      "evidence_ids": [
+        "EV-4bc6623e8a6c45d9982ad102cf838f96"
+      ]
+    },
+    "R9_next_step_planning": {
+      "score": 0,
+      "rationale": "No next-step reasoning is found. Network capability is left unresolved, but no step is proposed, such as reading further committed import pages.",
+      "evidence_ids": []
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-4bc6623e8a6c45d9982ad102cf838f96"
+      ],
+      "rationale": "benign, raw_score 0.0012985 is about 0.0013."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-f531389fe4494f439e2e20e68b161db9"
+      ],
+      "rationale": "visible 16 of committed 64; entries 0-15 are msvcrt with no network APIs; ref entry 0 is correct."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-f531389fe4494f439e2e20e68b161db9"
+      ],
+      "rationale": "Matches the record limitations."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-4bc6623e8a6c45d9982ad102cf838f96"
+      ],
+      "rationale": "Matches the prediction record limitation on LIEF versions."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "Static evidence confirms benign classification",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [
+        "SEMANTIC_SELF_CORROBORATION"
+      ],
+      "evidence_ids": [
+        "EV-4bc6623e8a6c45d9982ad102cf838f96"
+      ],
+      "rationale": "Only the detector itself supports the benign classification; nothing independent confirms it."
+    },
+    {
+      "text": "The recommendation is to monitor rather than block or quarantine due to the low risk signal",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [
+        "SEMANTIC_SELF_CORROBORATION"
+      ],
+      "evidence_ids": [
+        "EV-4bc6623e8a6c45d9982ad102cf838f96"
+      ],
+      "rationale": "The 'low risk signal' is the detector's uncalibrated score, used as the decision's main justification."
+    }
+  ]
+}

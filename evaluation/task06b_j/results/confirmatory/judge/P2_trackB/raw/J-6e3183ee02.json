@@ -1,0 +1,73 @@
+{
+  "item_id": "J-6e3183ee02",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": 2,
+      "rationale": "File-system question; call and page read targeted specific file API declarations.",
+      "evidence_ids": [
+        "EV-10d46e1d6cad4de1948dca598a9177ad"
+      ]
+    },
+    "R4_new_evidence_relevance": {
+      "score": 2,
+      "rationale": "Committed entries include WriteFile and GetFileType (idx 46-47), relevant to file-system capability.",
+      "evidence_ids": [
+        "EV-10d46e1d6cad4de1948dca598a9177ad"
+      ]
+    },
+    "R5_new_evidence_consumption": {
+      "score": 2,
+      "rationale": "Two pages read; correctly reported no file-system APIs among the 32 visible CRT entries and stated coverage (32 of 64 committed) with absence left unknown.",
+      "evidence_ids": [
+        "EV-10d46e1d6cad4de1948dca598a9177ad"
+      ]
+    },
+    "R6_incremental_value": {
+      "score": 1,
+      "rationale": "Minor insight: first 32 declarations are CRT-only, hedged as INSUFFICIENT_EVIDENCE; not misleading.",
+      "evidence_ids": [
+        "EV-10d46e1d6cad4de1948dca598a9177ad",
+        "EV-9d0bf3ad1874432887026d8e31734e3d"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-d830205e41ae4721a02b4b917e899961"
+      ],
+      "rationale": "Header/format records show PE32+, x64, not DLL."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-9d0bf3ad1874432887026d8e31734e3d"
+      ],
+      "rationale": "Prediction benign, raw ~0.0015."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-10d46e1d6cad4de1948dca598a9177ad"
+      ],
+      "rationale": "Visible 0-31 are CRT; none are file-system APIs."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-10d46e1d6cad4de1948dca598a9177ad"
+      ],
+      "rationale": "visible 32 of 64 committed."
+    }
+  ],
+  "additional_claims": []
+}

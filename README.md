@@ -39,7 +39,9 @@ flowchart LR
 **Khả năng đã có:** pipeline PE → dự đoán LightGBM → Agent điều tra nhiều bước qua D1–D9 với một
 analyzer imports thật, có bằng chứng được commit và Agent đọc lại ở vòng sau.
 **Giới hạn hiện tại:** Agent **chưa** được chứng minh là nâng cao độ chính xác phát hiện; đánh giá
-semantic/grounding vẫn cần người chấm độc lập; chưa có holdout xác nhận.
+semantic/grounding mới có LLM-as-Judge (provisional), vẫn cần người chấm độc lập. Confirmatory
+holdout 20 PE benign (06B-J) cho kết quả **INCONCLUSIVE, nghiêng về âm tính** về giá trị của việc
+Agent tự gọi tool.
 
 **Trạng thái phát triển:** nguyên mẫu nghiên cứu chạy được, **chưa** phải sản phẩm production.
 Chi tiết kỹ thuật tuần này: [`evaluation/TASK06_FINAL_REPORT.md`](evaluation/TASK06_FINAL_REPORT.md).
@@ -116,6 +118,34 @@ hoàn chỉnh (trên DEV v2 ban đầu chỉ 1/4 final tool-enabled hợp lệ).
   prediction vào bằng chứng ủng hộ (self-corroboration được screen bắt đúng). **Semantic evaluation
   vẫn PENDING.** Chi tiết: [`evaluation/task06b/R2_REPORT.md`](evaluation/task06b/R2_REPORT.md).
 
+### 6. Đánh giá confirmatory độc lập (TASK 06B-J)
+- **Thiết kế:** 3 arm trên cùng input:
+  - A: static template.
+  - B: Agent v3.4 không có tool.
+  - C: Agent v3.4 có analyzer và retrieval.
+
+  Holdout gồm **20 PE benign có chữ ký Microsoft**, chưa từng dùng ở các task trước: kiểm cả SHA
+  lẫn chương trình, loại các bản gần trùng. File được stage dưới tên trung tính. Câu hỏi v2 phân
+  tầng theo mức truy cập evidence (2/6/4/4/4). Rubric v2 đã qua calibration (2 vòng DEV).
+- **Thực thi:** đúng **1 lượt**, 60 report, isolation 40/40, không rerun.
+- **Chấm:** Claude-as-Judge 2 pass × 2 track (200 judgment, **LLM_JUDGE_PROVISIONAL**,
+  `human_verified=false`). Human grading PENDING.
+- **Kết quả (tất định + Judge, P1/P2):**
+  - **Hoàn tất:** C có final 20/20, B 7/20. 13 ca B là `REQUEST_MORE_EVIDENCE` hợp lệ; workflow
+    coi đây là kết thúc, không phải lỗi model.
+  - **Giá trị điều tra:** R6 của C là 0.50/0.50 (thang −1..2): dương nhưng nhỏ. Ở lớp cần
+    retrieval, Agent chỉ thấy evidence liên quan ở **1/6** case.
+  - **Gọi tool:** C gọi tool ở **20/20** case, kể cả **8/8** case không cần.
+  - **Lỗi claim:** C có claim UNSUPPORTED/CONTRADICTED ở 5–7/20 report, tương đương B; static 0
+    (vì template gần như không khẳng định gì).
+  - **Uncertainty (R7):** C 1.65–1.75, cao hơn static 1.0.
+  - **Truy nguồn (R2):** không kết luận được (Judge không ổn định: 0.32).
+  - **Self-corroboration:** structural 18/20.
+  - **Chi phí:** khoảng 2.5 lần latency và số lần gọi LLM; 18/20 report C chuyển MANUAL_REVIEW.
+- **Kết luận: INCONCLUSIVE, nghiêng về âm tính.** Chưa có bằng chứng việc Agent tự gọi tool tạo
+  thêm giá trị điều tra đáng kể trên cohort này. Không có thay đổi về detection. Chi tiết:
+  [`evaluation/task06b_j/CONFIRMATORY_REPORT.md`](evaluation/task06b_j/CONFIRMATORY_REPORT.md).
+
 ---
 
 ## Kết quả đạt được
@@ -127,22 +157,29 @@ Các thành phần đã hoạt động (có artifacts xác minh):
 - **Analyzer imports read-only** chạy qua D1–D9 (1 analyzer).
 - **Workflow điều tra nhiều bước** có live demonstration (06B): tool → D1–D9 → commit → đọc lại.
 - **Bộ test/thí nghiệm:** v3.4 — `test_v34.py` 26 passed; full regression **649 passed, 4 skipped,
-  81 subtests**; 05C 120 mẫu; 05D 35 PE E2E (0 lỗi); 06A DEV 24 ca; 06B-R DEV 3 PE.
+  81 subtests** (mốc 06B-R2); 05C 120 mẫu; 05D 35 PE E2E (0 lỗi); 06A DEV 24 ca; 06B-R DEV 3 PE.
+- **Hạ tầng đánh giá độc lập (06B-J):** runner 3 arm có staging trung tính và kiểm isolation,
+  blind package có leakage scan, rubric phiên bản hóa, Judge kit có audit, lock trước khi mở
+  mapping. Confirmatory 20 PE × 3 arm đã chạy và đã chấm. Regression hiện tại xem
+  `CONFIRMATORY_REPORT.md`.
 
 ---
 
 ## Hạn chế và hướng phát triển
 
-- **Semantic grounding chưa được xác nhận độc lập** — rule-based screen không phải semantic judge.
-- Agent **đôi khi dùng prediction làm bằng chứng cho chính prediction** (self-corroboration), được
-  fail-safe định tuyến sang MANUAL_REVIEW.
-- **Chưa có confirmatory holdout**; các lượt DEBUG dùng lại file phát triển nên không suy rộng.
-- **Human grading chưa hoàn tất** (gói chấm blind đã sẵn sàng).
-- Cần đánh giá thêm chất lượng suy luận và khả năng tổng quát hóa; **chưa** có bằng chứng Agent nâng
-  cao độ chính xác phát hiện mã độc.
+- **Semantic grounding mới được chấm bởi LLM-as-Judge (provisional)**, chưa có người chấm độc
+  lập. Hai pass Judge cùng họ model chỉ đo self-consistency. Không ổn định: R1, R5, R8 ở
+  calibration; R2 và R5 ở confirmatory.
+- **Self-corroboration** vẫn phổ biến: structural 18/20 ở arm tool-enabled; semantic 7–12/20.
+- **Confirmatory 06B-J chỉ có 20 PE benign** (mỗi lớp câu hỏi 2–6 case). Không suy rộng sang
+  malware; malicious raw-PE vẫn BLOCKED.
+- Agent gọi tool kể cả khi không cần và hiếm khi đọc tiếp evidence đã commit. Analyzer chỉ commit
+  64 entry, budget 5 lượt.
+- **Chưa** có bằng chứng Agent nâng cao độ chính xác phát hiện mã độc. Detection không đổi giữa
+  các arm.
 
-Hướng tiếp theo (sau khi báo cáo): human grading độc lập theo rubric; holdout mù tách nhãn khỏi
-prompt/repo; khảo sát prompt chống self-corroboration đo được; chưa mở TASK 06C.
+Câu hỏi còn mở: human grading độc lập; verification planning (contract chưa có trường
+next-step); semantic evidence consumption; hành vi trên malware và PE ngoài System32.
 
 ---
 
@@ -228,3 +265,4 @@ E2E với analyzer MOCK. Báo cáo: [Recovery report](docs/task04b/RECOVERY_REPO
 - Điều tra nhiều bước (06B): [`evaluation/task06b/REPORT.md`](evaluation/task06b/REPORT.md)
 - Retrieval + repair (06B-R): [`evaluation/task06b/REPAIR_REPORT.md`](evaluation/task06b/REPAIR_REPORT.md)
 - Evidence-native v3.4 (06B-R2): [`evaluation/task06b/R2_REPORT.md`](evaluation/task06b/R2_REPORT.md)
+- Đánh giá confirmatory độc lập (06B-J): [`evaluation/task06b_j/CONFIRMATORY_REPORT.md`](evaluation/task06b_j/CONFIRMATORY_REPORT.md), [`CALIBRATION_V2_REPORT.md`](evaluation/task06b_j/CALIBRATION_V2_REPORT.md)

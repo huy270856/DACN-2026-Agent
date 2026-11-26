@@ -1,0 +1,78 @@
+{
+  "item_id": "J-949b7ae54e",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": 2,
+      "rationale": "Network-capability question; call and page read targeted declared network imports.",
+      "evidence_ids": [
+        "EV-67759f8939614d0ebfebc25a4f8178b2"
+      ]
+    },
+    "R4_new_evidence_relevance": {
+      "score": 2,
+      "rationale": "Committed entries contain WS2_32 ordinal imports, ntdll!RtlIpv4AddressToStringW, IPHLPAPI GetTcpStatisticsEx/GetIcmpStatisticsEx and snmpapi; clearly relevant.",
+      "evidence_ids": [
+        "EV-67759f8939614d0ebfebc25a4f8178b2"
+      ]
+    },
+    "R5_new_evidence_consumption": {
+      "score": 1,
+      "rationale": "WS2_32 ordinal imports at idx 30-31 were correctly found and coverage (32 of 64 committed) stated. However, C4 misreads the ordinal-only imports (\"null symbols\") as suggesting the APIs \"may not be actively used\"; importing by ordinal is not evidence of non-use. RtlIpv4AddressToStringW (idx 29) was visible but not mentioned.",
+      "evidence_ids": [
+        "EV-67759f8939614d0ebfebc25a4f8178b2"
+      ]
+    },
+    "R6_incremental_value": {
+      "score": 1,
+      "rationale": "Substantive finding (declared WS2_32 imports, i.e. Winsock linkage) toward the question, weakened by the unsupported C4 inference that the null symbols and low score suggest non-use.",
+      "evidence_ids": [
+        "EV-67759f8939614d0ebfebc25a4f8178b2",
+        "EV-fc4b502469bf4896ac04b2afbedb5cfe"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-67759f8939614d0ebfebc25a4f8178b2"
+      ],
+      "rationale": "Entries 30 (#115) and 31 (#11) from WS2_32 with null symbol."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-fc4b502469bf4896ac04b2afbedb5cfe"
+      ],
+      "rationale": "Prediction benign, raw 0.0074."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-67759f8939614d0ebfebc25a4f8178b2"
+      ],
+      "rationale": "visible 32 of 64 committed."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "SCORE_AS_PROBABILITY_OR_TRUTH",
+        "RUNTIME_BEHAVIOUR_OVERCLAIM"
+      ],
+      "evidence_ids": [
+        "EV-67759f8939614d0ebfebc25a4f8178b2",
+        "EV-fc4b502469bf4896ac04b2afbedb5cfe"
+      ],
+      "rationale": "Ordinal imports with null symbol names say nothing about whether the APIs are used, and the malware score is not evidence about network use.",
+      "evidence_access": "AGENT_VISIBLE"
+    }
+  ],
+  "additional_claims": []
+}

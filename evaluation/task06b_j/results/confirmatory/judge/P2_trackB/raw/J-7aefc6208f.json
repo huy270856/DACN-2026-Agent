@@ -1,0 +1,73 @@
+{
+  "item_id": "J-7aefc6208f",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": 1,
+      "rationale": "The question (PE kind and detector output) was answerable from the initial evidence; the call was harmless but unnecessary, with a generic \"ground further analysis\" justification.",
+      "evidence_ids": [
+        "EV-9563aa2f4dd14756890a29360a9d6d13"
+      ]
+    },
+    "R4_new_evidence_relevance": {
+      "score": 0,
+      "rationale": "Import declarations (CRT) do not bear on EXE vs DLL, architecture or detector output.",
+      "evidence_ids": [
+        "EV-9563aa2f4dd14756890a29360a9d6d13"
+      ]
+    },
+    "R5_new_evidence_consumption": {
+      "score": 2,
+      "rationale": "Visible 16 CRT entries described correctly; coverage stated correctly (16 visible of 247 total).",
+      "evidence_ids": [
+        "EV-9563aa2f4dd14756890a29360a9d6d13"
+      ]
+    },
+    "R6_incremental_value": {
+      "score": 0,
+      "rationale": "Answer comes entirely from the initial header and prediction records; nothing added.",
+      "evidence_ids": [
+        "EV-9563aa2f4dd14756890a29360a9d6d13",
+        "EV-c0fb92db0aa844f9833a10deca6abff7"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-e53a46fcf7b04217943c40f932df897b"
+      ],
+      "rationale": "Header/format records show PE32+, x64, not DLL."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-c0fb92db0aa844f9833a10deca6abff7"
+      ],
+      "rationale": "Prediction benign, raw 0.0106."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-9563aa2f4dd14756890a29360a9d6d13"
+      ],
+      "rationale": "provider_total_entries 247, visible 16."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-9563aa2f4dd14756890a29360a9d6d13"
+      ],
+      "rationale": "Matches tool limitations."
+    }
+  ],
+  "additional_claims": []
+}

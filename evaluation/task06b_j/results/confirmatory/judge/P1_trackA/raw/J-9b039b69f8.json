@@ -1,0 +1,103 @@
+{
+ "item_id": "J-9b039b69f8",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 1,
+   "rationale": "C1-C4 are supported (header EV-63a2a2, prediction EV-fbff4b, 16/64 visible msvcrt imports with refs 0/6/13 correct in EV-2aea87). The explanation adds that the low score is \"consistent with benign characteristics\", a loosely worded, circular gloss on the detector output.",
+   "evidence_ids": [
+    "EV-63a2a2cf678d4bf48a8859f6dd13e11f",
+    "EV-fbff4b4bd8d744ed9e1195dad0cd983d",
+    "EV-2aea8744ae0e47c4a681559133572d83"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 2,
+   "rationale": "Every claim traces to the record carrying it, with the import list described as incomplete.",
+   "evidence_ids": [
+    "EV-63a2a2cf678d4bf48a8859f6dd13e11f",
+    "EV-fbff4b4bd8d744ed9e1195dad0cd983d",
+    "EV-2aea8744ae0e47c4a681559133572d83"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 2,
+   "rationale": "States truncation (16/64), uncalibrated score with model/LIEF version mismatch, and no runtime analysis; conclusions are limited to type and detector output.",
+   "evidence_ids": [
+    "EV-2aea8744ae0e47c4a681559133572d83",
+    "EV-fbff4b4bd8d744ed9e1195dad0cd983d"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 2,
+   "rationale": "MONITOR is proportionate for this descriptive question.",
+   "evidence_ids": [
+    "EV-fbff4b4bd8d744ed9e1195dad0cd983d"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 0,
+   "rationale": "No next-step reasoning observed.",
+   "evidence_ids": []
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-63a2a2cf678d4bf48a8859f6dd13e11f"
+   ],
+   "rationale": "x64, PE32+, not DLL."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-fbff4b4bd8d744ed9e1195dad0cd983d"
+   ],
+   "rationale": "raw 0.00168, benign, uncalibrated."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-2aea8744ae0e47c4a681559133572d83"
+   ],
+   "rationale": "Indices 0 ?terminate, 6 _exit, 13 malloc, 11 memcpy are visible msvcrt entries."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-2aea8744ae0e47c4a681559133572d83"
+   ],
+   "rationale": "committed 64, visible 16."
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "very low raw score (~0.0017), consistent with benign characteristics",
+   "verdict": "PARTIALLY_SUPPORTED",
+   "tags": [
+    "SEMANTIC_SELF_CORROBORATION"
+   ],
+   "evidence_ids": [
+    "EV-fbff4b4bd8d744ed9e1195dad0cd983d"
+   ],
+   "rationale": "Restates the detector output as consistency with benignity; no independent benign characteristic is cited."
+  },
+  {
+   "text": "No new evidence added in this revision",
+   "verdict": "NOT_ASSESSABLE",
+   "tags": [],
+   "evidence_ids": [
+    "EV-2aea8744ae0e47c4a681559133572d83"
+   ],
+   "rationale": "The import record is COMMITTED_DURING_RUN; revision history is not shown in the material."
+  }
+ ]
+}

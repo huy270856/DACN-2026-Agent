@@ -1,0 +1,78 @@
+{
+  "item_id": "J-195f0ba7e9",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": 2,
+      "rationale": "Runtime network question; static imports cannot answer runtime behaviour, but they can show declared network capability. The call was tied to that need (Winsock/HTTP/DNS imports).",
+      "evidence_ids": [
+        "EV-5bec75a780f6464abc1d337420c047a0"
+      ]
+    },
+    "R4_new_evidence_relevance": {
+      "score": 1,
+      "rationale": "Committed 64 of 128 entries are msvcrt and ulib console/string helpers with no network APIs; only limiting information.",
+      "evidence_ids": [
+        "EV-5bec75a780f6464abc1d337420c047a0"
+      ]
+    },
+    "R5_new_evidence_consumption": {
+      "score": 1,
+      "rationale": "The 32 read entries are described correctly (\"standard C runtime and UI library functions\") and coverage 32/128 is stated correctly. But the author then reads the absence of network imports in a quarter of the table as indicating the file \"likely does not communicate over the network\" at runtime, which is more than the new evidence supports.",
+      "evidence_ids": [
+        "EV-5bec75a780f6464abc1d337420c047a0"
+      ]
+    },
+    "R6_incremental_value": {
+      "score": -1,
+      "rationale": "The headline addition is C4: the file \"likely does not communicate over the network at runtime\", based on 32/128 visible imports plus the malware score. This is a runtime conclusion from partial static data and would mislead an analyst on exactly the question asked.",
+      "evidence_ids": [
+        "EV-5bec75a780f6464abc1d337420c047a0",
+        "EV-73cbf0b507a842989ad592d6bb01c2eb"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-5bec75a780f6464abc1d337420c047a0"
+      ],
+      "rationale": "Entries 0-31 are msvcrt/ulib; no network APIs."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-73cbf0b507a842989ad592d6bb01c2eb"
+      ],
+      "rationale": "Prediction benign, raw ~0.002."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-5bec75a780f6464abc1d337420c047a0"
+      ],
+      "rationale": "visible 32 of provider total 128."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "RUNTIME_BEHAVIOUR_OVERCLAIM",
+        "SCOPE_OVERCLAIM"
+      ],
+      "evidence_ids": [
+        "EV-5bec75a780f6464abc1d337420c047a0",
+        "EV-73cbf0b507a842989ad592d6bb01c2eb"
+      ],
+      "rationale": "Runtime network behaviour cannot be established from static data, and 96 of 128 declarations were unseen; the malware score says nothing about network use.",
+      "evidence_access": "NO_STATIC_SOURCE"
+    }
+  ],
+  "additional_claims": []
+}

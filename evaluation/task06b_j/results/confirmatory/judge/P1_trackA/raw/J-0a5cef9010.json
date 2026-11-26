@@ -1,0 +1,98 @@
+{
+ "item_id": "J-0a5cef9010",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 2,
+   "rationale": "PE kind/arch/DLL flag match EV-e53a46/EV-08ec55; detector values match EV-c0fb92; import counts (247 total, 16 visible) and CRT nature of visible imports match EV-9563aa. Absence statements are correctly scoped.",
+   "evidence_ids": [
+    "EV-e53a46fcf7b04217943c40f932df897b",
+    "EV-08ec5500211141e3926cff75e13904a9",
+    "EV-c0fb92db0aa844f9833a10deca6abff7",
+    "EV-9563aa2f4dd14756890a29360a9d6d13"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 2,
+   "rationale": "Each claim cites the record carrying it; import statement correctly scoped to the visible page and resolved ref index 0 is correct.",
+   "evidence_ids": [
+    "EV-e53a46fcf7b04217943c40f932df897b",
+    "EV-08ec5500211141e3926cff75e13904a9",
+    "EV-c0fb92db0aa844f9833a10deca6abff7",
+    "EV-9563aa2f4dd14756890a29360a9d6d13"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 2,
+   "rationale": "Case-specific limits stated (16/247 visible, uncalibrated raw score, no dynamic analysis) and the conclusion is limited to PE type and detector output, as asked.",
+   "evidence_ids": [
+    "EV-9563aa2f4dd14756890a29360a9d6d13",
+    "EV-c0fb92db0aa844f9833a10deca6abff7"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 2,
+   "rationale": "MONITOR is proportionate; the detector output is reported, not used as proof.",
+   "evidence_ids": [
+    "EV-c0fb92db0aa844f9833a10deca6abff7"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 1,
+   "rationale": "Only notes that no tools were available to expand import coverage or run dynamic analysis; no specific actionable step proposed.",
+   "evidence_ids": [
+    "EV-9563aa2f4dd14756890a29360a9d6d13"
+   ]
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-e53a46fcf7b04217943c40f932df897b",
+    "EV-08ec5500211141e3926cff75e13904a9"
+   ],
+   "rationale": "pe_kind PE32+, x64, is_dll false."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-c0fb92db0aa844f9833a10deca6abff7"
+   ],
+   "rationale": "raw_score 0.01057, benign, uncalibrated."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-9563aa2f4dd14756890a29360a9d6d13"
+   ],
+   "rationale": "provider_total_entries 247, visible 16, CRT entries; resolved ref index 0 = _initterm_e correct."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-9563aa2f4dd14756890a29360a9d6d13",
+    "EV-c0fb92db0aa844f9833a10deca6abff7"
+   ],
+   "rationale": "Matches truncation and static-only limitations."
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "no new tools available to expand import coverage or run dynamic analysis",
+   "verdict": "NOT_ASSESSABLE",
+   "tags": [],
+   "evidence_ids": [
+    "EV-9563aa2f4dd14756890a29360a9d6d13"
+   ],
+   "rationale": "Whether a page-read action was offered is not shown in the material."
+  }
+ ]
+}

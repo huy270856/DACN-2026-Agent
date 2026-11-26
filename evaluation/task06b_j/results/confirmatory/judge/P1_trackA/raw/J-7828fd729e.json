@@ -1,0 +1,102 @@
+{
+ "item_id": "J-7828fd729e",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 1,
+   "rationale": "Core claims are supported: WriteFile (idx 2) and SetCurrentDirectoryW (idx 14) are visible in EV-39beae and framed as declared capability; prediction values match EV-cc53ff. Two uncertainty notes are loosely worded: \"absence of file I/O APIs in the visible set is unknown\" (file APIs are visibly present) and \"uncalibrated, indicating low confidence in the benign label\" (uncalibration does not imply low confidence).",
+   "evidence_ids": [
+    "EV-39beae79d52c41fa86f248fbf3cf5629",
+    "EV-cc53ff092a2a475d8ed8277df55653f4"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 2,
+   "rationale": "Claims trace to the correct records with visible-subset scope; import refs resolve correctly.",
+   "evidence_ids": [
+    "EV-39beae79d52c41fa86f248fbf3cf5629",
+    "EV-cc53ff092a2a475d8ed8277df55653f4"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 2,
+   "rationale": "Case-specific limits (16/64 visible, declared imports not runtime proof, uncalibrated score) are stated; conclusion stays INSUFFICIENT_EVIDENCE at LOW confidence.",
+   "evidence_ids": [
+    "EV-39beae79d52c41fa86f248fbf3cf5629",
+    "EV-cc53ff092a2a475d8ed8277df55653f4"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 2,
+   "rationale": "MONITOR is proportionate; declared FS capability is reported without overclaiming runtime use, and the prediction is not used as proof.",
+   "evidence_ids": [
+    "EV-39beae79d52c41fa86f248fbf3cf5629",
+    "EV-cc53ff092a2a475d8ed8277df55653f4"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 1,
+   "rationale": "\"Runtime monitoring is required to confirm if file operations occur\" is a generic dynamic step; no specific step for the unread committed import entries.",
+   "evidence_ids": [
+    "EV-39beae79d52c41fa86f248fbf3cf5629"
+   ]
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-39beae79d52c41fa86f248fbf3cf5629"
+   ],
+   "rationale": "Indices 2 WriteFile and 14 SetCurrentDirectoryW in KERNEL32.dll; stated as declared capability."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-cc53ff092a2a475d8ed8277df55653f4"
+   ],
+   "rationale": "raw 0.00171, benign."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-39beae79d52c41fa86f248fbf3cf5629"
+   ],
+   "rationale": "committed 64, visible 16."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-39beae79d52c41fa86f248fbf3cf5629"
+   ],
+   "rationale": "Matches evidence limitations."
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "Only 16 of 64 committed import entries are visible; absence of file I/O APIs in the visible set is unknown.",
+   "verdict": "PARTIALLY_SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-39beae79d52c41fa86f248fbf3cf5629"
+   ],
+   "rationale": "Counts correct; the visible set does contain file APIs (WriteFile, GetFileType, GetFullPathNameW), so the wording is confused."
+  },
+  {
+   "text": "Malware prediction score (0.0017) is raw and uncalibrated, indicating low confidence in the benign label.",
+   "verdict": "PARTIALLY_SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-cc53ff092a2a475d8ed8277df55653f4"
+   ],
+   "rationale": "Uncalibrated is correct; \"low confidence\" does not follow from that."
+  }
+ ]
+}

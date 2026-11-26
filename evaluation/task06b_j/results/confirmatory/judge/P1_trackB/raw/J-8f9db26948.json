@@ -1,0 +1,74 @@
+{
+  "item_id": "J-8f9db26948",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": 2,
+      "rationale": "A stated, case-specific need: declared imports are required to assess process-control capability, and the initial evidence lacked them.",
+      "evidence_ids": [
+        "EV-c92d01fc849d41b1bb5ae9b6ed583a0d",
+        "EV-5ae9f96c502e4faa84a9ee991a5eb921",
+        "EV-754d828e0629479899a8f6cca4b1beae"
+      ]
+    },
+    "R4_new_evidence_relevance": {
+      "score": 2,
+      "rationale": "The committed output is relevant. It includes TerminateProcess (index 40), GetCurrentProcess, CreateFileA and GlobalMemoryStatusEx, although the first 16 entries are msvcrt only.",
+      "evidence_ids": [
+        "EV-754d828e0629479899a8f6cca4b1beae"
+      ]
+    },
+    "R5_new_evidence_consumption": {
+      "score": 1,
+      "rationale": "The visible 16 msvcrt entries are read correctly, and the absence of process-control APIs is scoped to the visible list ('16 of 64 committed'). The report omits the provider total of 79. It did not read further, although TerminateProcess at index 40 was within the reachable committed range, and it does not say the unread entries were reachable. The access_limits note says committed-but-unseen entries were reachable only by bounded page reads (at most 2 x 16), and the material does not show whether that read action was offered here.",
+      "evidence_ids": [
+        "EV-754d828e0629479899a8f6cca4b1beae"
+      ]
+    },
+    "R6_incremental_value": {
+      "score": 1,
+      "rationale": "Minor, scoped gain: no process-control APIs among the first 16 declared entries, with the remaining unknowns stated. It misses the reachable TerminateProcess, so the gain stays minor.",
+      "evidence_ids": [
+        "EV-754d828e0629479899a8f6cca4b1beae"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-5ae9f96c502e4faa84a9ee991a5eb921"
+      ],
+      "rationale": "PE32+ x64 with executable_image_flag."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-c92d01fc849d41b1bb5ae9b6ed583a0d"
+      ],
+      "rationale": "Raw 0.0033, benign."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-754d828e0629479899a8f6cca4b1beae"
+      ],
+      "rationale": "Visible 0-15 are msvcrt, with no process-control APIs."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-754d828e0629479899a8f6cca4b1beae"
+      ],
+      "rationale": "Correct limitation."
+    }
+  ],
+  "additional_claims": []
+}

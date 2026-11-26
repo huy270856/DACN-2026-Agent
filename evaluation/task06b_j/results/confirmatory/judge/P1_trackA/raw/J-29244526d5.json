@@ -1,0 +1,101 @@
+{
+ "item_id": "J-29244526d5",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 0,
+   "rationale": "Most claims are supported (CreateFileW/CreateFileMappingW at indices 1-2 of EV-af8792; prediction EV-527dfd), but the uncertainty note \"No evidence of dynamic API resolution\" is contradicted by the visible import list, which includes GetProcAddress (index 9) and GetModuleHandleW (index 8). A material claim contradicted by evidence the author saw.",
+   "evidence_ids": [
+    "EV-af879296e6aa47bd8f47acad0c4c0161",
+    "EV-527dfd2793a74f1aabe379c9a8227644"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 2,
+   "rationale": "Claims cite the correct records with visible-subset scope; the import refs resolve correctly.",
+   "evidence_ids": [
+    "EV-af879296e6aa47bd8f47acad0c4c0161",
+    "EV-527dfd2793a74f1aabe379c9a8227644"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 2,
+   "rationale": "Case-specific limits (16 of 64 visible, missing imports not assumed absent, no runtime) are stated and conclusions are kept to declared capability. The GetProcAddress error does not contradict a stated limitation, so it is scored under R1 only.",
+   "evidence_ids": [
+    "EV-af879296e6aa47bd8f47acad0c4c0161"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 2,
+   "rationale": "MONITOR with INSUFFICIENT_EVIDENCE is proportionate; the prediction is reported as static-only.",
+   "evidence_ids": [
+    "EV-527dfd2793a74f1aabe379c9a8227644"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 1,
+   "rationale": "Only implicit: \"Without runtime execution or full import visibility, we cannot confirm...\" names what is missing but proposes no concrete step.",
+   "evidence_ids": [
+    "EV-af879296e6aa47bd8f47acad0c4c0161"
+   ]
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-af879296e6aa47bd8f47acad0c4c0161"
+   ],
+   "rationale": "Indices 1 and 2 are KERNEL32 CreateFileW and CreateFileMappingW; framed as declared capability."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-527dfd2793a74f1aabe379c9a8227644"
+   ],
+   "rationale": "raw 0.00417, benign, uncalibrated."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-af879296e6aa47bd8f47acad0c4c0161"
+   ],
+   "rationale": "committed 64, visible 16; truncation limitation."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-af879296e6aa47bd8f47acad0c4c0161"
+   ],
+   "rationale": "Hedged possibility; GetProcAddress is in fact visible."
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "No evidence of dynamic API resolution or actual file operations.",
+   "verdict": "CONTRADICTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-af879296e6aa47bd8f47acad0c4c0161"
+   ],
+   "rationale": "GetProcAddress (index 9) and GetModuleHandleW (index 8) are visible declared imports, i.e. static evidence of dynamic resolution capability.",
+   "evidence_access": "AGENT_VISIBLE"
+  },
+  {
+   "text": "Absence of FS APIs in visible list is unknown.",
+   "verdict": "PARTIALLY_SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-af879296e6aa47bd8f47acad0c4c0161"
+   ],
+   "rationale": "Confused wording: FS APIs (CreateFileW, CreateFileMappingW, MapViewOfFile) are present in the visible list."
+  }
+ ]
+}

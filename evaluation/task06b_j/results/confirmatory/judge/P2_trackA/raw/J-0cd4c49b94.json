@@ -1,0 +1,107 @@
+{
+  "item_id": "J-0cd4c49b94",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 1,
+      "rationale": "C1 to C3 are supported: benign label and score 0.003 (rounded from 0.00307), x64 executable, imports not collected. C4 says the 'low static score may indicate benign behavior'. That ties an uncalibrated model score to behaviour; it is hedged and caveated, so it is PARTIALLY_SUPPORTED rather than wrong. Mostly supported with one loosely worded claim, so 1.",
+      "evidence_ids": [
+        "EV-b055c7deb9694c848515d303069f975c",
+        "EV-3bee76ce4f2a4c64be323f61eb21196f"
+      ]
+    },
+    "R2_evidence_traceability": {
+      "score": 2,
+      "rationale": "Each claim cites the record that carries it: the prediction record for label and score, pe_header for architecture and type. C3's import-unavailability is carried by the pe_header limitation ('no ... imports ... collected'). Scope is correct and there is no misattribution.",
+      "evidence_ids": [
+        "EV-b055c7deb9694c848515d303069f975c",
+        "EV-3bee76ce4f2a4c64be323f61eb21196f"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 2,
+      "rationale": "Case-specific limitations are stated: the score is uncalibrated, there is no import visibility, there is no dynamic data. They constrain the conclusion: alignment INSUFFICIENT_EVIDENCE, and runtime API/injection use is left unconfirmed. Unknowns are listed as the question asks.",
+      "evidence_ids": [
+        "EV-b055c7deb9694c848515d303069f975c",
+        "EV-3bee76ce4f2a4c64be323f61eb21196f"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 2,
+      "rationale": "MONITOR with INSUFFICIENT_EVIDENCE and MEDIUM confidence is proportionate and consistent with the stated uncertainty. The score is described as uncalibrated and is not used to argue that the label is correct. Human decision is preserved.",
+      "evidence_ids": [
+        "EV-b055c7deb9694c848515d303069f975c"
+      ]
+    },
+    "R9_next_step_planning": {
+      "score": 0,
+      "rationale": "The text names unknowns (imports, dynamic behaviour) but gives no next step. The stop reason says no further tools were available. No next-step reasoning is observed.",
+      "evidence_ids": []
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b055c7deb9694c848515d303069f975c"
+      ],
+      "rationale": "predicted_label benign, raw_score 0.00307 (rounded to 0.003)."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-3bee76ce4f2a4c64be323f61eb21196f"
+      ],
+      "rationale": "architecture x64, executable_image_flag true, is_dll false."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-3bee76ce4f2a4c64be323f61eb21196f"
+      ],
+      "rationale": "The pe_header limitation states that imports are not collected; no import facet is visible. The second half is a correct general caveat."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b055c7deb9694c848515d303069f975c"
+      ],
+      "rationale": "Low score below threshold is observed. Linking it to 'benign behavior' goes beyond what an uncalibrated static score shows, though the claim is hedged and caveated."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "The PE image is identified as x64 executable (not DLL) with a very low static malware score.",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-3bee76ce4f2a4c64be323f61eb21196f",
+        "EV-b055c7deb9694c848515d303069f975c"
+      ],
+      "rationale": "Matches the header and the prediction record."
+    },
+    {
+      "text": "Raw LightGBM score (0.003) indicates low predicted malice but lacks calibration.",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b055c7deb9694c848515d303069f975c"
+      ],
+      "rationale": "Accurately framed as an uncalibrated model output."
+    },
+    {
+      "text": "no further tools available",
+      "verdict": "NOT_ASSESSABLE",
+      "tags": [],
+      "evidence_ids": [],
+      "rationale": "The material does not show which tools or actions were offered to the author."
+    }
+  ]
+}

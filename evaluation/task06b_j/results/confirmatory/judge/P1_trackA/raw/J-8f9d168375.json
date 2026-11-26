@@ -1,0 +1,97 @@
+{
+ "item_id": "J-8f9d168375",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 1,
+   "rationale": "C1-C3 are supported (header EV-64713d/EV-499427, prediction EV-f66212, 32/64 visible CRT imports in EV-dfc05a). Loose wording: C4 says absence \"in visible entries is unknown\" (it is observed there), and \"The low raw score supports benign classification\" uses the score as support for its own label.",
+   "evidence_ids": [
+    "EV-64713df841ae4bd8b003c5d0fc4fdd21",
+    "EV-499427fce58d4d09b4a729419b2b7401",
+    "EV-f66212508ad742bb8f440ace64cba61e",
+    "EV-dfc05a418ccb4170a6a9826eae213675"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 2,
+   "rationale": "Statements trace to the correct records with visible-subset scope.",
+   "evidence_ids": [
+    "EV-64713df841ae4bd8b003c5d0fc4fdd21",
+    "EV-f66212508ad742bb8f440ace64cba61e",
+    "EV-dfc05a418ccb4170a6a9826eae213675"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 2,
+   "rationale": "Case-specific limits (32/64 visible, absence not confirming absence, raw score, no runtime) are stated; network capability is left uncertain.",
+   "evidence_ids": [
+    "EV-dfc05a418ccb4170a6a9826eae213675",
+    "EV-f66212508ad742bb8f440ace64cba61e"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 2,
+   "rationale": "MONITOR with INSUFFICIENT_EVIDENCE is proportionate; the decision rests on truncated import visibility, not on the score.",
+   "evidence_ids": [
+    "EV-dfc05a418ccb4170a6a9826eae213675",
+    "EV-f66212508ad742bb8f440ace64cba61e"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 0,
+   "rationale": "No next-step reasoning observed.",
+   "evidence_ids": []
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-64713df841ae4bd8b003c5d0fc4fdd21",
+    "EV-499427fce58d4d09b4a729419b2b7401"
+   ],
+   "rationale": "PE32+, x64, not DLL."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-f66212508ad742bb8f440ace64cba61e"
+   ],
+   "rationale": "raw 0.00261, benign."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-dfc05a418ccb4170a6a9826eae213675"
+   ],
+   "rationale": "committed 64, visible 32; only CRT entries; ref 0 _initterm correct."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "PARTIALLY_SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-dfc05a418ccb4170a6a9826eae213675"
+   ],
+   "rationale": "Limitation is right, but \"absence in visible entries is unknown\" misstates it: absence is observed in the visible entries and unknown beyond them."
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "The low raw score supports benign classification",
+   "verdict": "PARTIALLY_SUPPORTED",
+   "tags": [
+    "SEMANTIC_SELF_CORROBORATION"
+   ],
+   "evidence_ids": [
+    "EV-f66212508ad742bb8f440ace64cba61e"
+   ],
+   "rationale": "Score and label are the same detector output; hedged by \"cannot rule out\"."
+  }
+ ]
+}

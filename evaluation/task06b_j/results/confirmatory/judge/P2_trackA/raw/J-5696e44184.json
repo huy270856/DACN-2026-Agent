@@ -1,0 +1,114 @@
+{
+  "item_id": "J-5696e44184",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 0,
+      "rationale": "C1, C2 and C4 are supported. C3, the central claim, says the visible imports have 'no explicit file-system APIs in the first 16 entries' while citing msvcrt fread (12) and fwrite (15). Entry 13, feof, is also visible. These are declared file read/write I/O functions, directly relevant to the question's 'reading, writing ... files'. The explanation repeats 'the absence of file-system APIs in the visible set'. That misreads author-visible evidence (CONTRADICTED, AGENT_VISIBLE), so 0.",
+      "evidence_ids": [
+        "EV-d3f2862aefc84ecb929ea138413335ec",
+        "EV-1e45575736334d27917c0fde3c296db0",
+        "EV-6d947a0de0ee40d2be40f61821738275"
+      ]
+    },
+    "R2_evidence_traceability": {
+      "score": 1,
+      "rationale": "Claims cite the correct records, and the resolved refs are correct (10 memcpy, 12 fread, 15 fwrite). The explanation's 'the import table is truncated (16/64 visible)' sizes the table at 64, while the author-visible record shows provider_total_entries=101. C4 correctly says 'committed', so this is loose scope rather than slice-as-whole. Score 1.",
+      "evidence_ids": [
+        "EV-d3f2862aefc84ecb929ea138413335ec"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 1,
+      "rationale": "Case-specific limitations are stated: 16 of 64 committed visible, FS APIs may be in the hidden portion, the score is uncalibrated, static only. But the explanation then calls the score a 'strong benign signal', which works against its own uncalibrated-score limitation. R7 is lowered for that contradiction of a stated limitation, not for the C3 misreading (scored under R1).",
+      "evidence_ids": [
+        "EV-d3f2862aefc84ecb929ea138413335ec",
+        "EV-6d947a0de0ee40d2be40f61821738275"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 0,
+      "rationale": "The decision is explicitly justified by the detector's own output: 'The recommendation to monitor balances the strong benign signal against the limited visibility', with alignment CONSISTENT. Using the uncalibrated label/score as a strong signal in the decision basis is semantic self-corroboration.",
+      "evidence_ids": [
+        "EV-6d947a0de0ee40d2be40f61821738275"
+      ]
+    },
+    "R9_next_step_planning": {
+      "score": 0,
+      "rationale": "No next-step reasoning is found. The hidden portion is named as an unknown, but no step (e.g. reading the next committed page) is proposed.",
+      "evidence_ids": []
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-1e45575736334d27917c0fde3c296db0"
+      ],
+      "rationale": "PE32+, x64, executable image, is_dll false."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-6d947a0de0ee40d2be40f61821738275"
+      ],
+      "rationale": "raw_score 0.01395 is about 0.014; threshold 0.832; benign."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "CONTRADICTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-d3f2862aefc84ecb929ea138413335ec"
+      ],
+      "rationale": "The cited entries fread (12) and fwrite (15), plus feof (13), are declared file read/write functions. Saying there are 'no explicit file-system APIs' among them misreads the author's own visible evidence.",
+      "evidence_access": "AGENT_VISIBLE"
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-d3f2862aefc84ecb929ea138413335ec"
+      ],
+      "rationale": "visible 16 of committed 64; matches the record limitations."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "the absence of file-system APIs in the visible set does not confirm their absence",
+      "verdict": "CONTRADICTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-d3f2862aefc84ecb929ea138413335ec"
+      ],
+      "rationale": "File I/O functions (fread, fwrite, feof) are present in the visible set, so the premise of absence is wrong.",
+      "evidence_access": "AGENT_VISIBLE"
+    },
+    {
+      "text": "The recommendation to monitor balances the strong benign signal against the limited visibility of critical system calls.",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "SEMANTIC_SELF_CORROBORATION",
+        "SCORE_AS_PROBABILITY_OR_TRUTH"
+      ],
+      "evidence_ids": [
+        "EV-6d947a0de0ee40d2be40f61821738275"
+      ],
+      "rationale": "The uncalibrated detector score is the only basis for a 'strong benign signal'; it is used as independent support for the decision.",
+      "evidence_access": "AGENT_VISIBLE"
+    },
+    {
+      "text": "No evidence of dynamic linking or obfuscation techniques was explicitly detected in the provided data.",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-d3f2862aefc84ecb929ea138413335ec"
+      ],
+      "rationale": "No GetProcAddress or LoadLibrary in the visible 16 entries; scoped to the provided data."
+    }
+  ]
+}

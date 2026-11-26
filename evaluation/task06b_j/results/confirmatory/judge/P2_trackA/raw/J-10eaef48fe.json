@@ -1,0 +1,108 @@
+{
+  "item_id": "J-10eaef48fe",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 2,
+      "rationale": "All claims match the author-visible records: non-DLL PE32+ x64 (pe_header/format); benign label with raw score 0.006746, uncalibrated; 16 of 64 committed entries visible out of 234 total; static analysis cannot rule out dynamically resolved APIs. 'Import list confirms standard runtime functions (msvcrt.dll)' is scoped to the visible slice, which is all msvcrt. The free-text 'complete PE header classification' is slightly generous given the minimum-header coverage, but exe/DLL and architecture are fully covered by that record.",
+      "evidence_ids": [
+        "EV-32849b517cb744368ca47c36c59696ec",
+        "EV-a6f92e6ef9a24b0a9d73e6a9fe81153f",
+        "EV-1176dae4eb91478887b95925ada1cb51",
+        "EV-91003d8238364b52ab8b0057e6606a24"
+      ]
+    },
+    "R2_evidence_traceability": {
+      "score": 2,
+      "rationale": "Claims cite the records that carry them, and the resolved import ref (entry 15, msvcrt.dll!__setusermatherr) is correct. Scope is stated accurately in both forms: 16 of 64 committed, and 16 of 234 total. No misattribution.",
+      "evidence_ids": [
+        "EV-32849b517cb744368ca47c36c59696ec",
+        "EV-a6f92e6ef9a24b0a9d73e6a9fe81153f",
+        "EV-1176dae4eb91478887b95925ada1cb51",
+        "EV-91003d8238364b52ab8b0057e6606a24"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 2,
+      "rationale": "Case-specific limitations are stated: the import list is truncated (16/234), dynamic resolution and runtime behaviour are unavailable, and the score is uncalibrated. They constrain the conclusion: MEDIUM confidence, and the absence of hidden APIs is explicitly not claimed.",
+      "evidence_ids": [
+        "EV-91003d8238364b52ab8b0057e6606a24",
+        "EV-1176dae4eb91478887b95925ada1cb51"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 2,
+      "rationale": "MONITOR is proportionate for a benign-predicted x64 executable with stated gaps. The score is explicitly described as not a calibrated probability, and no self-confirming argument is made. Human decision is preserved.",
+      "evidence_ids": [
+        "EV-1176dae4eb91478887b95925ada1cb51",
+        "EV-91003d8238364b52ab8b0057e6606a24"
+      ]
+    },
+    "R9_next_step_planning": {
+      "score": 2,
+      "rationale": "'Full import verification requires reading remaining committed entries.' This is a specific step that would resolve a named unknown of this case (the unseen import entries). The record shows that 48 committed entries remained reachable by page reads.",
+      "evidence_ids": [
+        "EV-91003d8238364b52ab8b0057e6606a24"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-32849b517cb744368ca47c36c59696ec",
+        "EV-a6f92e6ef9a24b0a9d73e6a9fe81153f"
+      ],
+      "rationale": "is_dll false, executable_image_flag true, PE32+, x64."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-1176dae4eb91478887b95925ada1cb51"
+      ],
+      "rationale": "raw_score 0.006746, benign, score_is_calibrated_probability false."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-91003d8238364b52ab8b0057e6606a24"
+      ],
+      "rationale": "visible_entries 16, committed_entries 64; entry 15 = msvcrt.dll!__setusermatherr is correct."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-91003d8238364b52ab8b0057e6606a24",
+        "EV-1176dae4eb91478887b95925ada1cb51"
+      ],
+      "rationale": "Matches the limitations that dynamically resolved APIs are not enumerated and that the analysis is static only."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "The import list confirms standard runtime functions (msvcrt.dll) but is incomplete due to truncation.",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-91003d8238364b52ab8b0057e6606a24"
+      ],
+      "rationale": "Visible entries 0-15 are all msvcrt.dll; truncation acknowledged."
+    },
+    {
+      "text": "Import list is truncated (16/234 visible); missing entries are unknown.",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-91003d8238364b52ab8b0057e6606a24"
+      ],
+      "rationale": "provider_total_entries 234, visible 16."
+    }
+  ]
+}

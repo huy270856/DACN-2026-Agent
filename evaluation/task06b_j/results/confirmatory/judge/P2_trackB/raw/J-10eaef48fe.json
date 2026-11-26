@@ -1,0 +1,74 @@
+{
+  "item_id": "J-10eaef48fe",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": 1,
+      "rationale": "The question (PE kind, architecture, detector output) was already fully answerable from the initial header and prediction records; calling the import tool was harmless but not needed. Justification (\"dynamic APIs or obfuscated import resolution\") is generic rather than tied to the question.",
+      "evidence_ids": [
+        "EV-91003d8238364b52ab8b0057e6606a24"
+      ]
+    },
+    "R4_new_evidence_relevance": {
+      "score": 0,
+      "rationale": "Import declarations (msvcrt CRT functions) do not bear on EXE vs DLL, architecture, or detector output; nothing relevant to this question.",
+      "evidence_ids": [
+        "EV-91003d8238364b52ab8b0057e6606a24"
+      ]
+    },
+    "R5_new_evidence_consumption": {
+      "score": 2,
+      "rationale": "The 16 visible msvcrt entries are described correctly, and coverage is stated accurately (16 of 64 committed, 16/234 total).",
+      "evidence_ids": [
+        "EV-91003d8238364b52ab8b0057e6606a24"
+      ]
+    },
+    "R6_incremental_value": {
+      "score": 0,
+      "rationale": "The answer to the question comes entirely from the initial evidence; the import detail adds nothing toward it.",
+      "evidence_ids": [
+        "EV-91003d8238364b52ab8b0057e6606a24",
+        "EV-1176dae4eb91478887b95925ada1cb51"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-32849b517cb744368ca47c36c59696ec"
+      ],
+      "rationale": "Header/format records show PE32+, x64, not DLL."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-1176dae4eb91478887b95925ada1cb51"
+      ],
+      "rationale": "Prediction benign, raw 0.006746, not calibrated."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-91003d8238364b52ab8b0057e6606a24"
+      ],
+      "rationale": "visible_entries 16, committed 64."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-91003d8238364b52ab8b0057e6606a24",
+        "EV-1176dae4eb91478887b95925ada1cb51"
+      ],
+      "rationale": "Matches the stated limitations."
+    }
+  ],
+  "additional_claims": []
+}

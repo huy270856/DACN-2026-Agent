@@ -1,0 +1,122 @@
+{
+  "item_id": "J-0df4cd07c2",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 1,
+      "rationale": "C1 to C4 are supported: valid PE32+ x64 executable; benign 0.0026; 32 of 64 committed entries visible, all CRT and none network-related; absence is not confirmed. Two free-text statements are loose. (1) The explanation calls the import table '32/64 visible'. The author's own record shows provider_total_entries=360, so 64 is only the committed cap, not the table size. That statement is PARTIALLY_SUPPORTED. (2) 'The low raw score supports benign classification' uses the score to back its own label (self-corroboration, handled under R8). Not central to the INSUFFICIENT_EVIDENCE conclusion, so 1.",
+      "evidence_ids": [
+        "EV-64713df841ae4bd8b003c5d0fc4fdd21",
+        "EV-499427fce58d4d09b4a729419b2b7401",
+        "EV-f66212508ad742bb8f440ace64cba61e",
+        "EV-dfc05a418ccb4170a6a9826eae213675"
+      ]
+    },
+    "R2_evidence_traceability": {
+      "score": 1,
+      "rationale": "The claims cite the correct records: pe_header/format, prediction, and the imports detail with a resolved entry. The explanation's '(32/64 visible)' gives a scope for the import table that the cited record does not support: the record shows 360 provider entries. C3 and the uncertainty notes correctly say 'committed', so this is loose wording rather than presenting the slice as the whole table. Score 1.",
+      "evidence_ids": [
+        "EV-dfc05a418ccb4170a6a9826eae213675"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 2,
+      "rationale": "Case-specific limitations are stated and applied. Visible imports are truncated, absence in the visible set does not confirm absence, there is no runtime validation, and obfuscation is possible. The conclusion is held at INSUFFICIENT_EVIDENCE. The report does not mention the 296 never-committed entries, but it does not overreach on network capability.",
+      "evidence_ids": [
+        "EV-dfc05a418ccb4170a6a9826eae213675",
+        "EV-f66212508ad742bb8f440ace64cba61e"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 1,
+      "rationale": "MONITOR with INSUFFICIENT_EVIDENCE is proportionate and the human decision is preserved. However, the explanation says 'the low raw score supports benign classification'. That uses the detector's score as support for the detector's own label: minor self-corroboration. It is not the main basis of the decision, which rests on the import gap, so 1 rather than 0.",
+      "evidence_ids": [
+        "EV-f66212508ad742bb8f440ace64cba61e",
+        "EV-dfc05a418ccb4170a6a9826eae213675"
+      ]
+    },
+    "R9_next_step_planning": {
+      "score": 0,
+      "rationale": "The text names the unknown (network imports beyond the visible slice) but proposes no step to resolve it. The stop reason just says capability remains uncertain. No next-step reasoning.",
+      "evidence_ids": []
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-64713df841ae4bd8b003c5d0fc4fdd21",
+        "EV-499427fce58d4d09b4a729419b2b7401"
+      ],
+      "rationale": "PE32+, x64, is_dll false, structural_valid true."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-f66212508ad742bb8f440ace64cba61e"
+      ],
+      "rationale": "benign, raw_score 0.00261."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-dfc05a418ccb4170a6a9826eae213675"
+      ],
+      "rationale": "visible_entries 32 of committed 64; the visible entries (indices 0-31) are all api-ms-win-crt imports, with no Winsock or DNS. The resolved ref (entry 0, _initterm) is correct."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-dfc05a418ccb4170a6a9826eae213675"
+      ],
+      "rationale": "Consistent with the import record limitation that absence from truncated output is unknown."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "the import table is truncated (32/64 visible)",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-dfc05a418ccb4170a6a9826eae213675"
+      ],
+      "rationale": "Truncation is real, but the table has 360 entries (provider_total_entries, visible to the author). 64 is only the committed cap, so the stated table scope is understated."
+    },
+    {
+      "text": "The low raw score supports benign classification",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [
+        "SEMANTIC_SELF_CORROBORATION"
+      ],
+      "evidence_ids": [
+        "EV-f66212508ad742bb8f440ace64cba61e"
+      ],
+      "rationale": "The score is below the threshold, which is the definition of the benign label. Presenting it as support for that label is self-referential."
+    },
+    {
+      "text": "No evidence for HTTP, DNS, or socket usage found in truncated imports.",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-dfc05a418ccb4170a6a9826eae213675"
+      ],
+      "rationale": "Correct for the 32 visible entries, and scoped to the truncated view."
+    },
+    {
+      "text": "cannot rule out obfuscated network behavior",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-dfc05a418ccb4170a6a9826eae213675"
+      ],
+      "rationale": "Consistent with the limitation that dynamically resolved APIs are not enumerated."
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "item_id": "J-2bc81650f5",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": 2,
+      "rationale": "Process-control question; call justified by the specific need to check for CreateProcess/OpenProcess-type declarations.",
+      "evidence_ids": [
+        "EV-f063dfeb82894438877fa2bfb6f85ff9"
+      ]
+    },
+    "R4_new_evidence_relevance": {
+      "score": 1,
+      "rationale": "Committed 64 of 246 entries are CRT plus RtlLengthSecurityDescriptor; no process-control APIs. Only limiting.",
+      "evidence_ids": [
+        "EV-f063dfeb82894438877fa2bfb6f85ff9"
+      ]
+    },
+    "R5_new_evidence_consumption": {
+      "score": 2,
+      "rationale": "First page (16 CRT entries) read correctly; coverage (16 of 64 committed) stated; absence treated as unknown.",
+      "evidence_ids": [
+        "EV-f063dfeb82894438877fa2bfb6f85ff9"
+      ]
+    },
+    "R6_incremental_value": {
+      "score": 1,
+      "rationale": "Minor insight: no process-control declarations in the first 16 imports, hedged. Linking the low score to the lack of visible imports is loose but not central.",
+      "evidence_ids": [
+        "EV-f063dfeb82894438877fa2bfb6f85ff9",
+        "EV-4763ce98541c495bb9120ed9e8722fdd"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-9446452e179a4f099dc1aedd2aec7bb8"
+      ],
+      "rationale": "Header shows PE32+, x64."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-4763ce98541c495bb9120ed9e8722fdd"
+      ],
+      "rationale": "Prediction benign, raw ~0.001."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-f063dfeb82894438877fa2bfb6f85ff9"
+      ],
+      "rationale": "Visible 16 are CRT only."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-f063dfeb82894438877fa2bfb6f85ff9"
+      ],
+      "rationale": "Matches tool limitation."
+    }
+  ],
+  "additional_claims": []
+}

@@ -197,6 +197,61 @@ cải thiện có bằng chứng).
 
 ---
 
+## 9. Cập nhật kết thúc TASK 06: đánh giá confirmatory độc lập (TASK 06B-J)
+
+> §1–§8 giữ nguyên như bản ghi trước 06B-J. Mục này **cập nhật** §7–§8 với kết quả đã xác
+> minh. Nguồn: [`task06b_j/CONFIRMATORY_REPORT.md`](task06b_j/CONFIRMATORY_REPORT.md),
+> [`task06b_j/CALIBRATION_V2_REPORT.md`](task06b_j/CALIBRATION_V2_REPORT.md),
+> `task06b_j/results/confirmatory/`.
+
+**Phương pháp:**
+
+- 3 arm trên cùng input đã freeze: A static, B Agent v3.4 không có tool, C Agent v3.4 có
+  analyzer và retrieval.
+- Cohort: 20 PE benign có chữ ký Microsoft. Cả SHA lẫn chương trình đều chưa dùng ở các task
+  trước; đã loại `ipconfig` (đã dùng ở 05D) và `pathping` (gần trùng tracert).
+- Stage dưới tên trung tính; câu hỏi v2 phân tầng theo accessibility (2/6/4/4/4).
+- Rubric v2 qua 2 vòng calibration DEV, có quy tắc dừng đã khóa.
+- Thực thi **1 lượt** (60 report), sau đó chấm Claude-as-Judge 2 pass × 2 track (200 judgment,
+  provisional). Human grading PENDING.
+
+**Kết quả chính (P1/P2; tất định khi được ghi rõ):**
+
+| Hạng mục | A static | B no-tool | C tool-enabled |
+|---|---|---|---|
+| Final (tất định) | 20 template | 7/20 | 20/20 |
+| Gọi tool khi không cần (tất định) | — | — | 8/8 |
+| Lớp retrieval: evidence liên quan thấy được (tất định) | — | — | 1/6 |
+| R6 giá trị điều tra (−1..2) | — | −0.29 (n=7) | 0.50 / 0.50 |
+| R7 uncertainty | 1.00 | 1.43 | 1.65 / 1.75 |
+| Report có claim UNSUPPORTED/CONTRADICTED | 0/20 | 3/7 | 7/20 / 5/20 |
+| Structural self-corroboration (tất định) | — | 6/7 | 18/20 |
+| Latency trung bình | — | 8.1 s | 20.5 s |
+
+**Kết luận nghiên cứu TASK 06: INCONCLUSIVE, nghiêng về âm tính.**
+
+- Agent tool-enabled hoàn tất ổn định hơn (lợi thế cấu trúc). Uncertainty tốt hơn template
+  (CI của C − A không chứa 0).
+- Nhưng **chưa** có bằng chứng tool tự chủ tạo thêm giá trị điều tra đáng kể:
+  - R6 thấp;
+  - retrieval hiếm khi tới được evidence liên quan;
+  - tool được gọi cả khi không cần;
+  - tỷ lệ claim sai không giảm so với no-tool;
+  - chi phí khoảng 2.5 lần.
+- R2 và R5 không ổn định trên confirmatory nên không kết luận được.
+- Detection **không đổi**; không tuyên bố cải thiện độ chính xác phát hiện.
+- 13/20 ca B incomplete là lựa chọn `REQUEST_MORE_EVIDENCE` hợp lệ, workflow coi là kết thúc.
+  Không phải lỗi schema hay budget.
+
+**Engineering:** PASS. Hạ tầng đánh giá đã chạy trọn và truy vết được (freeze, lock, hash,
+isolation, leakage). **Research:** INCONCLUSIVE; human grading PENDING. Malicious raw-PE vẫn
+BLOCKED.
+
+**Câu hỏi còn mở:** người chấm độc lập; verification planning (contract chưa có trường
+next-step); semantic evidence consumption; tổng quát hóa sang malware hay PE ngoài System32.
+
+---
+
 *Nguyên tắc báo cáo: không che giấu giới hạn; không `success=true` khi validation reject; phân biệt
 parser/structural-accepted ≠ clean-grounded ≠ semantic-verified; rule screen ≠ human grading;
 MOCK_LLM ≠ live autonomy; DEBUG-trên-DEV ≠ confirmatory.*

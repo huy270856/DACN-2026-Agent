@@ -1,0 +1,105 @@
+{
+  "item_id": "J-bed78994ef",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 1,
+      "rationale": "C1, C2 and C4 are supported: PE32+ x64 executable, not a DLL; benign at 0.003; hidden imports may contain further functionality. C3 is PARTIALLY_SUPPORTED: it says '16 out of 74 committed import entries'. The record shows 64 committed out of a provider total of 74, so the label is wrong, though the 16/74 ratio (about 22% of declared imports) is correct. 'Consistent with the lack of obvious malicious signatures in the visible import list' is a loose gloss. Score 1.",
+      "evidence_ids": [
+        "EV-3bee76ce4f2a4c64be323f61eb21196f",
+        "EV-b055c7deb9694c848515d303069f975c",
+        "EV-41b247a726f340b88142e4cae5f40dd9"
+      ]
+    },
+    "R2_evidence_traceability": {
+      "score": 2,
+      "rationale": "Claims cite the records that carry them, and the resolved ref (entry 0, KERNEL32!SetThreadUILanguage) is correct. Coverage is expressed against the true total (16 of 74 declared, 22%), so the visible slice is not presented as the whole table. The 'committed' mislabel in C3 is a factual slip scored under R1.",
+      "evidence_ids": [
+        "EV-41b247a726f340b88142e4cae5f40dd9",
+        "EV-3bee76ce4f2a4c64be323f61eb21196f",
+        "EV-b055c7deb9694c848515d303069f975c"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 2,
+      "rationale": "Case-specific limitations are stated and constrain the answer: only 16 of 74 imports visible, the score is uncalibrated and static-only, no runtime execution. The conclusion stays at MEDIUM confidence with explicit 'significant uncertainty'.",
+      "evidence_ids": [
+        "EV-41b247a726f340b88142e4cae5f40dd9",
+        "EV-b055c7deb9694c848515d303069f975c"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 2,
+      "rationale": "MONITOR is proportionate for a benign-predicted x64 executable with stated gaps. The detector is compared to the visible imports rather than used to confirm itself, and its uncalibrated nature is stated. Human decision is preserved.",
+      "evidence_ids": [
+        "EV-b055c7deb9694c848515d303069f975c",
+        "EV-41b247a726f340b88142e4cae5f40dd9"
+      ]
+    },
+    "R9_next_step_planning": {
+      "score": 2,
+      "rationale": "'A full import dump or runtime execution is required for high-confidence assessment.' The full import dump is a specific step that directly resolves the named unknown: only 22% of declared imports are visible, and critical functionality may be hidden.",
+      "evidence_ids": [
+        "EV-41b247a726f340b88142e4cae5f40dd9"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-3bee76ce4f2a4c64be323f61eb21196f"
+      ],
+      "rationale": "PE32+, x64, is_dll false."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b055c7deb9694c848515d303069f975c"
+      ],
+      "rationale": "raw_score 0.00307 is about 0.003; benign."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-41b247a726f340b88142e4cae5f40dd9"
+      ],
+      "rationale": "16 visible out of 74 total is correct, but 74 is provider_total_entries; committed_entries is 64. Ref entry 0 is correct."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-41b247a726f340b88142e4cae5f40dd9"
+      ],
+      "rationale": "A hedged hypothesis consistent with truncation."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "only 22% of declared imports are visible",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-41b247a726f340b88142e4cae5f40dd9"
+      ],
+      "rationale": "16/74 is about 21.6%."
+    },
+    {
+      "text": "consistent with the lack of obvious malicious signatures in the visible import list",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-41b247a726f340b88142e4cae5f40dd9",
+        "EV-b055c7deb9694c848515d303069f975c"
+      ],
+      "rationale": "The visible 16 KERNEL32/msvcrt entries are unremarkable, but that covers about 22% of the imports."
+    }
+  ]
+}

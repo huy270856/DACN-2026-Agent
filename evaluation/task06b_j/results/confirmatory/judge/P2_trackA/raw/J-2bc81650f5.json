@@ -1,0 +1,104 @@
+{
+  "item_id": "J-2bc81650f5",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 1,
+      "rationale": "C1 to C4 are supported: PE32+ x64; benign at 0.001; 16 of 64 committed visible, with no process-control API in the visible CRT entries; static imports do not prove behaviour. The free-text reason 'Static evidence confirms benign classification' is PARTIALLY_SUPPORTED: the only evidence for that classification is the classifier itself. The explanation's framing of the score as 'consistent with the lack of visible process control imports' is also loose. Mostly supported, so 1.",
+      "evidence_ids": [
+        "EV-b04ab5a2682e4d869d4e517fde82860d",
+        "EV-4763ce98541c495bb9120ed9e8722fdd",
+        "EV-f063dfeb82894438877fa2bfb6f85ff9"
+      ]
+    },
+    "R2_evidence_traceability": {
+      "score": 2,
+      "rationale": "Each claim cites the record that carries it, and the resolved ref (entry 15, _o__set_new_mode) is correct. Scope is stated as 16 of 64 committed entries, which is accurate. The 246-entry total is omitted, but nothing is misattributed.",
+      "evidence_ids": [
+        "EV-b04ab5a2682e4d869d4e517fde82860d",
+        "EV-4763ce98541c495bb9120ed9e8722fdd",
+        "EV-f063dfeb82894438877fa2bfb6f85ff9"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 2,
+      "rationale": "Case-specific limitations are stated: 16/64 visible, absence beyond the visible set unknown, the score is uncalibrated and 'may be misleading', no runtime analysis. The process-control conclusion is kept to 'cannot be confirmed statically'.",
+      "evidence_ids": [
+        "EV-f063dfeb82894438877fa2bfb6f85ff9",
+        "EV-4763ce98541c495bb9120ed9e8722fdd"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 1,
+      "rationale": "MONITOR is proportionate and the human decision is preserved. However, the alignment is CONSISTENT and the reason says 'Static evidence confirms benign classification', which treats the detector output as confirmed by the evidence. This is a mild self-corroborating framing; the import-based conclusion is otherwise properly limited.",
+      "evidence_ids": [
+        "EV-4763ce98541c495bb9120ed9e8722fdd",
+        "EV-f063dfeb82894438877fa2bfb6f85ff9"
+      ]
+    },
+    "R9_next_step_planning": {
+      "score": 0,
+      "rationale": "No next-step reasoning is found. The unseen import entries are named as an unknown, but no step is proposed.",
+      "evidence_ids": []
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b04ab5a2682e4d869d4e517fde82860d"
+      ],
+      "rationale": "format: structural_valid true, PE32+, x64."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-4763ce98541c495bb9120ed9e8722fdd"
+      ],
+      "rationale": "raw_score 0.00102 is about 0.001; benign."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-f063dfeb82894438877fa2bfb6f85ff9"
+      ],
+      "rationale": "16 visible of 64 committed, all CRT entries; ref entry 15 is correct."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-f063dfeb82894438877fa2bfb6f85ff9"
+      ],
+      "rationale": "Consistent with the record limitations, despite the awkward wording 'absence ... in the visible list is unknown'."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "Static evidence confirms benign classification",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [
+        "SEMANTIC_SELF_CORROBORATION"
+      ],
+      "evidence_ids": [
+        "EV-4763ce98541c495bb9120ed9e8722fdd"
+      ],
+      "rationale": "The benign classification is the detector's output; no independent evidence confirms it."
+    },
+    {
+      "text": "Raw prediction score (0.001) is uncalibrated and may be misleading.",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-4763ce98541c495bb9120ed9e8722fdd"
+      ],
+      "rationale": "score_is_calibrated_probability false."
+    }
+  ]
+}

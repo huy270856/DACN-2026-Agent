@@ -1,0 +1,101 @@
+{
+ "item_id": "J-283cb8a526",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 1,
+   "rationale": "Claims C1-C4 are supported (EV-4bc662, EV-f53138). The free-text reason \"Static evidence confirms benign classification\" treats the model label as confirmed; this is loosely worded rather than central, since the explanation otherwise keeps it as a prediction.",
+   "evidence_ids": [
+    "EV-4bc6623e8a6c45d9982ad102cf838f96",
+    "EV-f531389fe4494f439e2e20e68b161db9"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 2,
+   "rationale": "Prediction and import statements trace to the correct records; import absence is scoped to the first 16 visible entries.",
+   "evidence_ids": [
+    "EV-4bc6623e8a6c45d9982ad102cf838f96",
+    "EV-f531389fe4494f439e2e20e68b161db9"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 2,
+   "rationale": "States case-specific limits: 16 of 64 committed visible, absence in visible list not proving absence, uncalibrated score with LIEF parity caveat, no dynamic analysis; network capability is left undetermined.",
+   "evidence_ids": [
+    "EV-f531389fe4494f439e2e20e68b161db9",
+    "EV-4bc6623e8a6c45d9982ad102cf838f96"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 1,
+   "rationale": "MONITOR is proportionate, but the justification leans on the model output (\"low risk signal\", \"Static evidence confirms benign classification\"), a minor inconsistency with its own uncertainty notes.",
+   "evidence_ids": [
+    "EV-4bc6623e8a6c45d9982ad102cf838f96"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 0,
+   "rationale": "No next-step reasoning observed.",
+   "evidence_ids": []
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-4bc6623e8a6c45d9982ad102cf838f96"
+   ],
+   "rationale": "benign, raw 0.0013."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-f531389fe4494f439e2e20e68b161db9"
+   ],
+   "rationale": "committed 64, visible 16, all msvcrt CRT; resolved ref index 0 __iob_func correct."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-f531389fe4494f439e2e20e68b161db9"
+   ],
+   "rationale": "Matches evidence limitations."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-4bc6623e8a6c45d9982ad102cf838f96"
+   ],
+   "rationale": "Matches the prediction limitation on LIEF 0.15.1 vs 0.9.0."
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "Static evidence confirms benign classification",
+   "verdict": "PARTIALLY_SUPPORTED",
+   "tags": [
+    "SCORE_AS_PROBABILITY_OR_TRUTH"
+   ],
+   "evidence_ids": [
+    "EV-4bc6623e8a6c45d9982ad102cf838f96"
+   ],
+   "rationale": "The record shows the model predicted benign; \"confirms\" presents the label as established."
+  },
+  {
+   "text": "the import detail for network-related APIs (sockets, DNS, HTTP) is truncated to only 16 entries out of 64 committed",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-f531389fe4494f439e2e20e68b161db9"
+   ],
+   "rationale": "The import detail (all imports, not network-specific) shows 16 of 64 visible."
+  }
+ ]
+}

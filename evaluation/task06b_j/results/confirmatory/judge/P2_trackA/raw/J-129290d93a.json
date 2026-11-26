@@ -1,0 +1,112 @@
+{
+  "item_id": "J-129290d93a",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 1,
+      "rationale": "C1 to C4 are supported. Visible entries 0-15 are all msvcrt and contain no process-creation or process-access APIs. The claim is scoped to the visible set, so hidden reference entries (e.g. TerminateProcess and OpenProcessToken at indices 43 and 45, not visible to the author) do not contradict it. The free-text statements 'The malware score supports benignity' and 'Static evidence confirms benign classification' treat the detector score as support for its own label; they are hedged with 'lacks calibration' and are PARTIALLY_SUPPORTED. Mostly supported, so 1.",
+      "evidence_ids": [
+        "EV-f4c0bcbf9e7b46ddb7282a3eddedae13",
+        "EV-e16cc916638b4a428e6b628c14c953cb",
+        "EV-3646158dfe224266baa5326f3cee231c"
+      ]
+    },
+    "R2_evidence_traceability": {
+      "score": 1,
+      "rationale": "Claims cite the correct records, and the resolved refs are correct (entry 0 fflush, entry 3 exit). The explanation says 'the import list is truncated (16/64 visible)'. The author's own record shows provider_total_entries=130, so 64 is the committed cap, not the import list. The uncertainty notes and C4 correctly say 'committed', so this is loose wording rather than presenting the slice as the whole table. Score 1.",
+      "evidence_ids": [
+        "EV-e16cc916638b4a428e6b628c14c953cb"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 2,
+      "rationale": "Case-specific limitations are stated and applied: only 16 of 64 committed imports are visible, absence in the visible set does not prove absence (including dynamically resolved APIs), the score is uncalibrated, LIEF feature parity is not asserted, and there is no runtime analysis. The conclusion on process control stays at 'cannot be ruled out' with MEDIUM confidence.",
+      "evidence_ids": [
+        "EV-e16cc916638b4a428e6b628c14c953cb",
+        "EV-3646158dfe224266baa5326f3cee231c"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 1,
+      "rationale": "MONITOR is proportionate and the human decision is preserved. However, the explanation says 'The malware score supports benignity', alignment is CONSISTENT, and the reason says 'Static evidence confirms benign classification'. These lean on the detector's own score as corroboration of its label. Since the process-control conclusion rests on the import view, this is a minor issue, so 1.",
+      "evidence_ids": [
+        "EV-3646158dfe224266baa5326f3cee231c",
+        "EV-e16cc916638b4a428e6b628c14c953cb"
+      ]
+    },
+    "R9_next_step_planning": {
+      "score": 0,
+      "rationale": "Unknowns are named (hidden imports in the unread entries), but no step to resolve them is proposed. Another committed page was reachable and goes unmentioned. No next-step reasoning.",
+      "evidence_ids": []
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-f4c0bcbf9e7b46ddb7282a3eddedae13",
+        "EV-ccd1206b0ab64fc9b1357177b7b8f857"
+      ],
+      "rationale": "PE32+, x64, is_dll false."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-e16cc916638b4a428e6b628c14c953cb"
+      ],
+      "rationale": "Visible entries 0-15 are all msvcrt.dll CRT functions; refs fflush (0) and exit (3) are correct. No CreateProcess, OpenProcess or memory-access API in the visible set."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-3646158dfe224266baa5326f3cee231c"
+      ],
+      "rationale": "raw_score 0.001196 is about 0.0012; benign."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-e16cc916638b4a428e6b628c14c953cb"
+      ],
+      "rationale": "visible 16 of committed 64; consistent with the record limitations."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "The malware score supports benignity but lacks calibration.",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [
+        "SEMANTIC_SELF_CORROBORATION"
+      ],
+      "evidence_ids": [
+        "EV-3646158dfe224266baa5326f3cee231c"
+      ],
+      "rationale": "The score is just the detector's output. Presenting it as support for benignity is self-referential, although the calibration caveat is given."
+    },
+    {
+      "text": "the import list is truncated (16/64 visible)",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-e16cc916638b4a428e6b628c14c953cb"
+      ],
+      "rationale": "The import list has 130 entries (provider_total_entries visible to the author); 64 is the committed cap."
+    },
+    {
+      "text": "Visible imports (msvcrt.dll) contain no process control APIs (CreateProcess, OpenProcess, etc.).",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-e16cc916638b4a428e6b628c14c953cb"
+      ],
+      "rationale": "Correct for entries 0-15."
+    }
+  ]
+}

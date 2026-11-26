@@ -1,0 +1,85 @@
+{
+  "item_id": "J-d49f6b3213",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE for this item (no analyzer tool was available or called).",
+      "evidence_ids": []
+    },
+    "R4_new_evidence_relevance": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE for this item (no analyzer tool was available or called).",
+      "evidence_ids": []
+    },
+    "R5_new_evidence_consumption": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE for this item (no analyzer tool was available or called).",
+      "evidence_ids": []
+    },
+    "R6_incremental_value": {
+      "score": 0,
+      "rationale": "No tool was available. The report correctly concludes that file-system capability cannot be determined from header and prediction alone, which adds nothing beyond the initial evidence. C4 infers that the file 'may lack file-system access capabilities' from the low malware score. That inference is unfounded, but it is explicitly hedged as unverified, so the net value is 0 rather than negative.",
+      "evidence_ids": [
+        "EV-d830205e41ae4721a02b4b917e899961",
+        "EV-142ecb96e17344fb936439f4977bedb7",
+        "EV-9d0bf3ad1874432887026d8e31734e3d"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-d830205e41ae4721a02b4b917e899961",
+        "EV-142ecb96e17344fb936439f4977bedb7"
+      ],
+      "rationale": "Valid PE32+ x64 executable image."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-9d0bf3ad1874432887026d8e31734e3d"
+      ],
+      "rationale": "Raw score 0.00147, label benign."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-d830205e41ae4721a02b4b917e899961"
+      ],
+      "rationale": "No import entries are visible."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "UNSUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-9d0bf3ad1874432887026d8e31734e3d"
+      ],
+      "rationale": "A detector's benign score says nothing about whether a file declares or uses file-system APIs, so the score cannot ground a capability claim. The relevant import data was not available to the author (no tool).",
+      "evidence_access": "INACCESSIBLE_BEYOND_LIMITS"
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "Missing evidence IDs suggest potential import data was omitted or unavailable.",
+      "verdict": "CONTRADICTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b6a72f93c4c24a53bb0750fecd284a0b",
+        "EV-760d7e8a010045779dcae4e7dbfeb009",
+        "EV-9b856be7463a4515af3850e33fc87667",
+        "EV-7e086003a37c4fbaa8d7786343fd1af1",
+        "EV-c94b780dc7764e75954200de37d134ce"
+      ],
+      "rationale": "The omitted IDs are metadata, identity, readable, unchanged-check and sha256 records in the reference, not import data. The author could not see them.",
+      "evidence_access": "INACCESSIBLE_BEYOND_LIMITS"
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "item_id": "J-c74f4d7fc5",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": 2,
+      "rationale": "A stated, case-specific need: inspect declared imports for socket/DNS/HTTP APIs absent from the initial evidence.",
+      "evidence_ids": [
+        "EV-fc4b502469bf4896ac04b2afbedb5cfe",
+        "EV-b904b513d310443ab4fd52a699e486ae",
+        "EV-67759f8939614d0ebfebc25a4f8178b2"
+      ]
+    },
+    "R4_new_evidence_relevance": {
+      "score": 2,
+      "rationale": "Clearly relevant. The visible entries contain WS2_32.dll ordinal imports (#115, #11) and ntdll RtlIpv4AddressToStringW. The committed entries add WS2_32 #52/#14, IPHLPAPI GetTcpStatisticsEx/GetIcmpStatisticsEx and snmpapi.",
+      "evidence_ids": [
+        "EV-67759f8939614d0ebfebc25a4f8178b2"
+      ]
+    },
+    "R5_new_evidence_consumption": {
+      "score": 1,
+      "rationale": "The WS2_32 ordinal imports at indices 30-31 are correctly identified. The interpretation has errors. The explanation says 'the specific symbols are not visible in the truncated list', but these are ordinal imports (symbol null) fully visible in the page, not truncated. C4 reads null symbols as suggesting the API 'may not be actively used'. The report also misses RtlIpv4AddressToStringW (index 29). Coverage '32 of 64 committed' is right but omits the provider total of 71. A second permitted page (32-47, including WS2_32 #52/#14) was left unread without saying it was reachable.",
+      "evidence_ids": [
+        "EV-67759f8939614d0ebfebc25a4f8178b2"
+      ]
+    },
+    "R6_incremental_value": {
+      "score": 1,
+      "rationale": "The core finding, declared WS2_32 (Winsock) imports and therefore network capability, is substantive and answers the question. C4 then undercuts it by suggesting that null symbols and a low malware score mean the imports 'may not be actively used or malicious'. That hedge could mislead, so the net value is minor-to-moderate.",
+      "evidence_ids": [
+        "EV-67759f8939614d0ebfebc25a4f8178b2",
+        "EV-fc4b502469bf4896ac04b2afbedb5cfe"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-67759f8939614d0ebfebc25a4f8178b2"
+      ],
+      "rationale": "WS2_32.dll ordinal 115 (index 30) and ordinal 11 (index 31), symbol null."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-fc4b502469bf4896ac04b2afbedb5cfe"
+      ],
+      "rationale": "Raw 0.0075, benign."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-67759f8939614d0ebfebc25a4f8178b2"
+      ],
+      "rationale": "32 of 64 committed visible."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "UNSUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-67759f8939614d0ebfebc25a4f8178b2",
+        "EV-fc4b502469bf4896ac04b2afbedb5cfe"
+      ],
+      "rationale": "Import by ordinal (null symbol name) is normal and says nothing about whether the API is used. The detector score does not bear on use of a declared import either.",
+      "evidence_access": "AGENT_VISIBLE"
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "the specific symbols are not visible in the truncated list",
+      "verdict": "CONTRADICTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-67759f8939614d0ebfebc25a4f8178b2"
+      ],
+      "rationale": "The WS2_32 entries are fully visible as ordinal imports. The null symbol reflects import by ordinal, not truncation.",
+      "evidence_access": "AGENT_VISIBLE"
+    }
+  ]
+}

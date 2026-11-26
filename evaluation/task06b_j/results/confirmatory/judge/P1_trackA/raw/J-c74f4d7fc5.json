@@ -1,0 +1,107 @@
+{
+ "item_id": "J-c74f4d7fc5",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 0,
+   "rationale": "C1-C3 are correct (WS2_32 ordinals #115/#11 at indices 30/31 with null symbols; raw 0.0074 benign; 32/64 visible). But C4 infers that null symbols and a low score suggest the network imports \"may not be actively used\": ordinal imports with null names say nothing about use, and runtime use cannot be judged statically.",
+   "evidence_ids": [
+    "EV-67759f8939614d0ebfebc25a4f8178b2",
+    "EV-fc4b502469bf4896ac04b2afbedb5cfe"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 1,
+   "rationale": "Observed statements trace correctly to EV-67759f and EV-fc4b50, but C4 cites the malware-prediction record for a usage claim it does not carry (partly decorative citation).",
+   "evidence_ids": [
+    "EV-67759f8939614d0ebfebc25a4f8178b2",
+    "EV-fc4b502469bf4896ac04b2afbedb5cfe"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 2,
+   "rationale": "Case-specific limits (32/64 visible, null-symbol ordinals, uncalibrated score, no runtime) are stated and the main conclusion stays INSUFFICIENT_EVIDENCE.",
+   "evidence_ids": [
+    "EV-67759f8939614d0ebfebc25a4f8178b2",
+    "EV-fc4b502469bf4896ac04b2afbedb5cfe"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 1,
+   "rationale": "MONITOR is acceptable, but C4 uses the low detector score to downplay observed Winsock imports, a weakly justified reasoning step.",
+   "evidence_ids": [
+    "EV-67759f8939614d0ebfebc25a4f8178b2",
+    "EV-fc4b502469bf4896ac04b2afbedb5cfe"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 0,
+   "rationale": "No next-step reasoning observed.",
+   "evidence_ids": []
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-67759f8939614d0ebfebc25a4f8178b2"
+   ],
+   "rationale": "Indices 30 #115 and 31 #11 under WS2_32.dll with null symbols."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-fc4b502469bf4896ac04b2afbedb5cfe"
+   ],
+   "rationale": "raw 0.00746, benign."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-67759f8939614d0ebfebc25a4f8178b2"
+   ],
+   "rationale": "committed 64, visible 32."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "UNSUPPORTED",
+   "tags": [
+    "RUNTIME_BEHAVIOUR_OVERCLAIM",
+    "SEMANTIC_SELF_CORROBORATION"
+   ],
+   "evidence_ids": [
+    "EV-67759f8939614d0ebfebc25a4f8178b2",
+    "EV-fc4b502469bf4896ac04b2afbedb5cfe"
+   ],
+   "rationale": "Null symbol names only mean import by ordinal; neither they nor the detector score indicate whether the APIs are used at runtime.",
+   "evidence_access": "NO_STATIC_SOURCE"
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "The file imports from WS2_32.dll (Winsock 2), which is required for network communication",
+   "verdict": "PARTIALLY_SUPPORTED",
+   "tags": [
+    "OUTSIDE_EVIDENCE_KNOWLEDGE"
+   ],
+   "evidence_ids": [
+    "EV-67759f8939614d0ebfebc25a4f8178b2"
+   ],
+   "rationale": "WS2_32 import is visible; \"required for network communication\" is general outside knowledge and overstated."
+  },
+  {
+   "text": "Static evidence shows limited network-related imports (WS2_32 ordinals) but no explicit socket functions",
+   "verdict": "PARTIALLY_SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-67759f8939614d0ebfebc25a4f8178b2"
+   ],
+   "rationale": "Ordinals are unnamed, so socket functions cannot be ruled out among them; RtlIpv4AddressToStringW (idx 29) is also visible and not mentioned."
+  }
+ ]
+}

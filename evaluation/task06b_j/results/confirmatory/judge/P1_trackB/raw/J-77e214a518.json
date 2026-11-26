@@ -1,0 +1,89 @@
+{
+  "item_id": "J-77e214a518",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": 2,
+      "rationale": "A stated, case-specific need: verify declared process-control APIs (CreateProcess, OpenProcess, VirtualAlloc) that the initial evidence did not include.",
+      "evidence_ids": [
+        "EV-6f8593c0dca94932ad0d4ac0558dc0d0",
+        "EV-5e446b26d39442b09b2ba165dad663fe",
+        "EV-59a532a1d7a3410cba5f55145dd543bd"
+      ]
+    },
+    "R4_new_evidence_relevance": {
+      "score": 1,
+      "rationale": "The committed 64 of 112 entries are msvcrt and auditpolcore.dll audit-policy functions plus console/string APIs. There is no process-creation or memory-access API, so relevance is limiting only.",
+      "evidence_ids": [
+        "EV-59a532a1d7a3410cba5f55145dd543bd"
+      ]
+    },
+    "R5_new_evidence_consumption": {
+      "score": 1,
+      "rationale": "The visible 16 msvcrt entries are read correctly, the absence of process APIs is scoped to them, and '16 of 64 committed' is correct. The report omits the provider total of 112 and does not flag the 48 reachable committed entries as unread. The access_limits note says committed-but-unseen entries were reachable only by bounded page reads (at most 2 x 16), and the material does not show whether that read action was offered here.",
+      "evidence_ids": [
+        "EV-59a532a1d7a3410cba5f55145dd543bd"
+      ]
+    },
+    "R6_incremental_value": {
+      "score": 0,
+      "rationale": "The scoped observation (no process-control APIs in the first 16) is marginal. The report also presents the raw score as 'strongly suggests benignity' and the file as having 'benign static characteristics'. Net, it adds nothing that sharpens the process-control question.",
+      "evidence_ids": [
+        "EV-59a532a1d7a3410cba5f55145dd543bd",
+        "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-5e446b26d39442b09b2ba165dad663fe",
+        "EV-444209370a5547919c13880a17e0db33"
+      ],
+      "rationale": "PE32+ x64, not DLL."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-59a532a1d7a3410cba5f55145dd543bd"
+      ],
+      "rationale": "Visible 0-15 are msvcrt (including __dllonexit, _exit and exit), with no process-control APIs."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+      ],
+      "rationale": "Raw 0.0011, benign."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-59a532a1d7a3410cba5f55145dd543bd"
+      ],
+      "rationale": "Correct limitation."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "The malware prediction score (0.001) strongly suggests benignity.",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "SCORE_AS_PROBABILITY_OR_TRUTH"
+      ],
+      "evidence_ids": [
+        "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+      ],
+      "rationale": "The raw score is uncalibrated, and its strength cannot be read as evidential strength.",
+      "evidence_access": "AGENT_VISIBLE"
+    }
+  ]
+}

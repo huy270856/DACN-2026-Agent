@@ -1,0 +1,104 @@
+{
+ "item_id": "J-8f9db26948",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 1,
+   "rationale": "C1-C4 are supported (header EV-5ae9f9, prediction EV-c92d01, 16/64 visible msvcrt imports with no process-control APIs in EV-754d82; refs 0 and 2 correct). The uncertainty note saying absence \"in the visible list is unknown\" is loosely worded.",
+   "evidence_ids": [
+    "EV-5ae9f96c502e4faa84a9ee991a5eb921",
+    "EV-c92d01fc849d41b1bb5ae9b6ed583a0d",
+    "EV-754d828e0629479899a8f6cca4b1beae"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 2,
+   "rationale": "Statements trace to the correct records with visible-subset scope.",
+   "evidence_ids": [
+    "EV-5ae9f96c502e4faa84a9ee991a5eb921",
+    "EV-c92d01fc849d41b1bb5ae9b6ed583a0d",
+    "EV-754d828e0629479899a8f6cca4b1beae"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 2,
+   "rationale": "Case-specific limits (16/64 visible, uncalibrated score, no dynamic data) are stated and the answer is INSUFFICIENT_EVIDENCE at LOW confidence.",
+   "evidence_ids": [
+    "EV-754d828e0629479899a8f6cca4b1beae",
+    "EV-c92d01fc849d41b1bb5ae9b6ed583a0d"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 2,
+   "rationale": "MONITOR at LOW confidence is proportionate; benign suggestion is hedged and not the basis of the action.",
+   "evidence_ids": [
+    "EV-c92d01fc849d41b1bb5ae9b6ed583a0d"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 1,
+   "rationale": "Only implicit: \"without runtime data or a complete import view, execution risk cannot be ruled out\" names what is missing without proposing a concrete step.",
+   "evidence_ids": [
+    "EV-754d828e0629479899a8f6cca4b1beae"
+   ]
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-5ae9f96c502e4faa84a9ee991a5eb921"
+   ],
+   "rationale": "PE32+, x64, executable_image_flag true."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-c92d01fc849d41b1bb5ae9b6ed583a0d"
+   ],
+   "rationale": "raw 0.00332, benign."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-754d828e0629479899a8f6cca4b1beae"
+   ],
+   "rationale": "committed 64, visible 16 msvcrt entries; refs correct."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-754d828e0629479899a8f6cca4b1beae"
+   ],
+   "rationale": "Matches evidence limitations."
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "absence of process control APIs (CreateProcess, OpenProcess) in the visible list is unknown",
+   "verdict": "PARTIALLY_SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-754d828e0629479899a8f6cca4b1beae"
+   ],
+   "rationale": "Absence is observed in the visible list; it is unknown only beyond it."
+  },
+  {
+   "text": "The low malware score and lack of visible process control imports suggest benign behavior",
+   "verdict": "PARTIALLY_SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-c92d01fc849d41b1bb5ae9b6ed583a0d",
+    "EV-754d828e0629479899a8f6cca4b1beae"
+   ],
+   "rationale": "Hedged, but partly leans on the detector output."
+  }
+ ]
+}

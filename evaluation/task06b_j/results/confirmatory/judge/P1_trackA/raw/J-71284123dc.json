@@ -1,0 +1,94 @@
+{
+ "item_id": "J-71284123dc",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 1,
+   "rationale": "C1-C3 are supported (format EV-b04ab5, prediction EV-4763ce, 16/64 visible CRT imports in EV-f063df with ref 15 correct). C4 is confusingly worded (\"absence ... in the visible list is unknown\", though it is known within that list) and the free text says static evidence \"confirms benign classification\".",
+   "evidence_ids": [
+    "EV-b04ab5a2682e4d869d4e517fde82860d",
+    "EV-4763ce98541c495bb9120ed9e8722fdd",
+    "EV-f063dfeb82894438877fa2bfb6f85ff9"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 2,
+   "rationale": "Statements trace to the correct records; import absence scoped to the visible 16 entries.",
+   "evidence_ids": [
+    "EV-b04ab5a2682e4d869d4e517fde82860d",
+    "EV-4763ce98541c495bb9120ed9e8722fdd",
+    "EV-f063dfeb82894438877fa2bfb6f85ff9"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 2,
+   "rationale": "Case-specific limits (16/64 visible, uncalibrated score, no runtime) are stated and the capability is left unconfirmed.",
+   "evidence_ids": [
+    "EV-f063dfeb82894438877fa2bfb6f85ff9",
+    "EV-4763ce98541c495bb9120ed9e8722fdd"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 1,
+   "rationale": "MONITOR is proportionate, but the free-text justification leans on the prediction (\"confirms benign classification\").",
+   "evidence_ids": [
+    "EV-4763ce98541c495bb9120ed9e8722fdd"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 0,
+   "rationale": "No next-step reasoning observed.",
+   "evidence_ids": []
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-b04ab5a2682e4d869d4e517fde82860d"
+   ],
+   "rationale": "Format record: PE32+, x64."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-4763ce98541c495bb9120ed9e8722fdd"
+   ],
+   "rationale": "raw 0.00102, benign."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-f063dfeb82894438877fa2bfb6f85ff9"
+   ],
+   "rationale": "committed 64, visible 16 CRT entries; index 15 _o__set_new_mode correct."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "PARTIALLY_SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-f063dfeb82894438877fa2bfb6f85ff9"
+   ],
+   "rationale": "First half correct; \"absence ... in the visible list is unknown\" is confused - absence is observed in the visible list and unknown beyond it."
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "Static evidence confirms benign classification",
+   "verdict": "PARTIALLY_SUPPORTED",
+   "tags": [
+    "SCORE_AS_PROBABILITY_OR_TRUTH"
+   ],
+   "evidence_ids": [
+    "EV-4763ce98541c495bb9120ed9e8722fdd"
+   ],
+   "rationale": "The model predicted benign; \"confirms\" presents the label as established."
+  }
+ ]
+}

@@ -1,0 +1,107 @@
+{
+ "item_id": "J-62be6b1316",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 0,
+   "rationale": "Observed claims C1-C3 are correct (32 visible msvcrt/ulib entries of 128 total, raw 0.002 benign). But C4 and the explanation assert the file \"likely does not communicate over the network\" at runtime from 25% of declared imports plus a malware score that carries no network information: a runtime-behaviour overclaim from static data.",
+   "evidence_ids": [
+    "EV-5bec75a780f6464abc1d337420c047a0",
+    "EV-73cbf0b507a842989ad592d6bb01c2eb"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 1,
+   "rationale": "Observed statements trace correctly to EV-5bec75 and EV-73cbf0 with visible scope. However C4 cites the malware-prediction record as support for a network-behaviour conclusion that record does not carry, so the citation is partly decorative for that statement.",
+   "evidence_ids": [
+    "EV-5bec75a780f6464abc1d337420c047a0",
+    "EV-73cbf0b507a842989ad592d6bb01c2eb"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 1,
+   "rationale": "Case-specific limits are stated (32 of 128 visible, dynamic resolution, uncalibrated score), but the \"likely does not communicate\" conclusion leans past them; hedged (\"likely\"), so not an outright contradiction.",
+   "evidence_ids": [
+    "EV-5bec75a780f6464abc1d337420c047a0",
+    "EV-73cbf0b507a842989ad592d6bb01c2eb"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 1,
+   "rationale": "MONITOR is proportionate, but the reasoning uses the detector score as evidence (\"extremely low ... supporting a benign classification\", \"low score ... suggest benign behavior\"), which is weak and partly self-corroborating; the action itself does not rest solely on it.",
+   "evidence_ids": [
+    "EV-73cbf0b507a842989ad592d6bb01c2eb"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 0,
+   "rationale": "No next-step reasoning observed.",
+   "evidence_ids": []
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-5bec75a780f6464abc1d337420c047a0"
+   ],
+   "rationale": "Indices 0-31 are msvcrt.dll and ulib.dll entries; no network APIs among them."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-73cbf0b507a842989ad592d6bb01c2eb"
+   ],
+   "rationale": "raw 0.00217, benign."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-5bec75a780f6464abc1d337420c047a0"
+   ],
+   "rationale": "provider_total_entries 128, visible 32."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "UNSUPPORTED",
+   "tags": [
+    "RUNTIME_BEHAVIOUR_OVERCLAIM",
+    "SEMANTIC_SELF_CORROBORATION"
+   ],
+   "evidence_ids": [
+    "EV-5bec75a780f6464abc1d337420c047a0",
+    "EV-73cbf0b507a842989ad592d6bb01c2eb"
+   ],
+   "rationale": "Whether the file communicates at runtime cannot be established from a partial static import list; the malware score carries no network information and is used as corroboration of its own benign label.",
+   "evidence_access": "NO_STATIC_SOURCE"
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "The malware prediction score is extremely low (0.002), supporting a benign classification.",
+   "verdict": "UNSUPPORTED",
+   "tags": [
+    "SEMANTIC_SELF_CORROBORATION"
+   ],
+   "evidence_ids": [
+    "EV-73cbf0b507a842989ad592d6bb01c2eb"
+   ],
+   "rationale": "The score and the benign label are the same detector output; the score cannot independently support the classification.",
+   "evidence_access": "AGENT_VISIBLE"
+  },
+  {
+   "text": "The file imports standard C runtime and UI library functions but no visible network APIs.",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-5bec75a780f6464abc1d337420c047a0"
+   ],
+   "rationale": "Scoped to visible entries (msvcrt + ulib)."
+  }
+ ]
+}

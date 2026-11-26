@@ -1,0 +1,119 @@
+{
+  "item_id": "J-4c0d4407ff",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 0,
+      "rationale": "C1 to C4 are supported: x64 PE32+ executable, not a DLL; visible msvcrt imports with no CreateProcess/OpenProcess/TerminateProcess; benign 0.001; 16 of 64 committed visible. The explanation's 'The malware prediction score (0.001) strongly suggests benignity' treats an uncalibrated raw score as strong evidence that the file is benign. The author-visible prediction record says it is not a calibrated probability. 'benign static characteristics' has no source other than the detector. Treating the prediction as near-truth is a material error, so 0.",
+      "evidence_ids": [
+        "EV-444209370a5547919c13880a17e0db33",
+        "EV-5e446b26d39442b09b2ba165dad663fe",
+        "EV-59a532a1d7a3410cba5f55145dd543bd",
+        "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+      ]
+    },
+    "R2_evidence_traceability": {
+      "score": 1,
+      "rationale": "Claims cite the correct records, and the resolved ref (entry 10, msvcrt.dll!_exit) is correct. The explanation's '(16/64 visible)' sizes the import list at 64, while the visible record shows provider_total_entries=112. C4 correctly says 'committed', so this is loose scope rather than slice-as-whole. 'benign static characteristics' is not traceable to any source except the detector label. Score 1.",
+      "evidence_ids": [
+        "EV-59a532a1d7a3410cba5f55145dd543bd",
+        "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 1,
+      "rationale": "Relevant limitations are stated: 16/64 visible, the score is uncalibrated and static-only, no runtime or dynamic-resolution data. The process-control answer is properly limited ('cannot definitively rule out'). However, the explanation then says the uncalibrated score 'strongly suggests benignity', which works against its own stated calibration limitation. R7 is lowered for that reason only, and not to 0, because the answer to the actual question stays within limits.",
+      "evidence_ids": [
+        "EV-6f8593c0dca94932ad0d4ac0558dc0d0",
+        "EV-59a532a1d7a3410cba5f55145dd543bd"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 0,
+      "rationale": "The decision framing rests on the detector's own output: 'The malware prediction score (0.001) strongly suggests benignity', 'No evidence contradicts the benign classification', 'prediction supports benign classification', alignment CONSISTENT. That is semantic self-corroboration used as the main basis for the benign/CONSISTENT conclusion. MONITOR itself is not unsafe, but the reasoning rests on self-corroboration.",
+      "evidence_ids": [
+        "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+      ]
+    },
+    "R9_next_step_planning": {
+      "score": 0,
+      "rationale": "No next-step reasoning is found. Hidden process-control APIs are named as an unknown, but no step is proposed. Another committed page was reachable and goes unmentioned.",
+      "evidence_ids": []
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-5e446b26d39442b09b2ba165dad663fe",
+        "EV-444209370a5547919c13880a17e0db33"
+      ],
+      "rationale": "PE32+, x64, is_dll false."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-59a532a1d7a3410cba5f55145dd543bd"
+      ],
+      "rationale": "Visible entries 0-15 are msvcrt only (incl. __dllonexit 0, _exit 10, exit 12); no CreateProcess, OpenProcess or TerminateProcess. Ref entry 10 is correct."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+      ],
+      "rationale": "raw_score 0.00108 is about 0.001; benign."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-59a532a1d7a3410cba5f55145dd543bd"
+      ],
+      "rationale": "visible 16 of committed 64; matches the record limitations."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "The malware prediction score (0.001) strongly suggests benignity.",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "SCORE_AS_PROBABILITY_OR_TRUTH",
+        "SEMANTIC_SELF_CORROBORATION"
+      ],
+      "evidence_ids": [
+        "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+      ],
+      "rationale": "The raw score is explicitly not a calibrated probability (author-visible). It cannot be read as strong evidence that the file is benign.",
+      "evidence_access": "AGENT_VISIBLE"
+    },
+    {
+      "text": "The file is a valid x64 PE executable with benign static characteristics.",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [
+        "SEMANTIC_SELF_CORROBORATION"
+      ],
+      "evidence_ids": [
+        "EV-5e446b26d39442b09b2ba165dad663fe",
+        "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+      ],
+      "rationale": "x64 PE executable is supported. 'benign static characteristics' rests only on the detector label."
+    },
+    {
+      "text": "No evidence contradicts the benign classification.",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-59a532a1d7a3410cba5f55145dd543bd",
+        "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+      ],
+      "rationale": "True of the visible items, but only 16 of 112 imports were seen and no independent evidence was collected, so the lack of contradiction carries little weight."
+    }
+  ]
+}

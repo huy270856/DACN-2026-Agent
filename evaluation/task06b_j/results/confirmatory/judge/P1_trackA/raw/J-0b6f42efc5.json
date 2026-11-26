@@ -1,0 +1,104 @@
+{
+ "item_id": "J-0b6f42efc5",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 1,
+   "rationale": "PE type (EV-3bee76) and detector output (EV-b055c7) are correct. C3 calls 74 the number of committed entries, but committed_entries is 64 and 74 is the provider total; the 16/74 visible ratio (22%) is otherwise right. Loose wording, not central.",
+   "evidence_ids": [
+    "EV-3bee76ce4f2a4c64be323f61eb21196f",
+    "EV-b055c7deb9694c848515d303069f975c",
+    "EV-41b247a726f340b88142e4cae5f40dd9"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 2,
+   "rationale": "Statements cite the records that carry them; the import counts trace to EV-41b247 and visible scope is respected (the committed/total label slip is scored under R1).",
+   "evidence_ids": [
+    "EV-3bee76ce4f2a4c64be323f61eb21196f",
+    "EV-b055c7deb9694c848515d303069f975c",
+    "EV-41b247a726f340b88142e4cae5f40dd9"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 2,
+   "rationale": "Case-specific limits (16 of 74 imports visible, uncalibrated score, no runtime) are stated and keep confidence at MEDIUM; unknowns are listed as asked.",
+   "evidence_ids": [
+    "EV-41b247a726f340b88142e4cae5f40dd9",
+    "EV-b055c7deb9694c848515d303069f975c"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 2,
+   "rationale": "MONITOR is proportionate; the prediction is reported alongside its uncertainty, not used as proof.",
+   "evidence_ids": [
+    "EV-b055c7deb9694c848515d303069f975c"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 2,
+   "rationale": "\"A full import dump ... is required for high-confidence assessment\" targets the named unknown (78% of imports not visible), alongside runtime execution.",
+   "evidence_ids": [
+    "EV-41b247a726f340b88142e4cae5f40dd9"
+   ]
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-3bee76ce4f2a4c64be323f61eb21196f"
+   ],
+   "rationale": "PE32+, x64, is_dll false."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-b055c7deb9694c848515d303069f975c"
+   ],
+   "rationale": "raw_score 0.00307, benign."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "PARTIALLY_SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-41b247a726f340b88142e4cae5f40dd9"
+   ],
+   "rationale": "Visible 16 is right, but 74 is provider_total_entries, not committed_entries (64). Resolved ref index 0 SetThreadUILanguage is correct."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-41b247a726f340b88142e4cae5f40dd9"
+   ],
+   "rationale": "Hypothesis appropriately hedged given truncation."
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "only 22% of declared imports are visible",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-41b247a726f340b88142e4cae5f40dd9"
+   ],
+   "rationale": "16/74 = 21.6%."
+  },
+  {
+   "text": "consistent with the lack of obvious malicious signatures in the visible import list",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-41b247a726f340b88142e4cae5f40dd9",
+    "EV-b055c7deb9694c848515d303069f975c"
+   ],
+   "rationale": "Scoped to visible imports (KERNEL32/msvcrt basics)."
+  }
+ ]
+}

@@ -1,0 +1,73 @@
+{
+  "item_id": "J-52406dd148",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": 2,
+      "rationale": "Runtime network question; the call and the two follow-up page reads targeted declared network imports.",
+      "evidence_ids": [
+        "EV-f17286b16c364ca8aab19a377c37ec59"
+      ]
+    },
+    "R4_new_evidence_relevance": {
+      "score": 1,
+      "rationale": "Committed 64 of 193 entries contain no network APIs (CRT and downlevel kernel32 sync/threadpool). Limiting only.",
+      "evidence_ids": [
+        "EV-f17286b16c364ca8aab19a377c37ec59"
+      ]
+    },
+    "R5_new_evidence_consumption": {
+      "score": 2,
+      "rationale": "Read 48 of 64 committed entries, correctly reported no network APIs, and stated coverage accurately (48 visible, 16 committed entries unseen).",
+      "evidence_ids": [
+        "EV-f17286b16c364ca8aab19a377c37ec59"
+      ]
+    },
+    "R6_incremental_value": {
+      "score": 1,
+      "rationale": "Minor insight: no network declarations across 48 imports, with the runtime question correctly left open (INSUFFICIENT_EVIDENCE, runtime monitoring needed).",
+      "evidence_ids": [
+        "EV-f17286b16c364ca8aab19a377c37ec59",
+        "EV-9381a8f998f347629cf75f51bc13e79e"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-f17286b16c364ca8aab19a377c37ec59"
+      ],
+      "rationale": "Entries 0-47 are CRT/math/private only."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-f17286b16c364ca8aab19a377c37ec59"
+      ],
+      "rationale": "committed 64, visible 48."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-9381a8f998f347629cf75f51bc13e79e"
+      ],
+      "rationale": "Prediction benign, raw 0.0012, not calibrated."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-f17286b16c364ca8aab19a377c37ec59"
+      ],
+      "rationale": "Matches tool limitations."
+    }
+  ],
+  "additional_claims": []
+}

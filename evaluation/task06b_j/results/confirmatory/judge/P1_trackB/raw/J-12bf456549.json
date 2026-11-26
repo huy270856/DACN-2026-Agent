@@ -1,0 +1,80 @@
+{
+  "item_id": "J-12bf456549",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE for this item (no analyzer tool was available or called).",
+      "evidence_ids": []
+    },
+    "R4_new_evidence_relevance": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE for this item (no analyzer tool was available or called).",
+      "evidence_ids": []
+    },
+    "R5_new_evidence_consumption": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE for this item (no analyzer tool was available or called).",
+      "evidence_ids": []
+    },
+    "R6_incremental_value": {
+      "score": 0,
+      "rationale": "No tool was available; the report restates the header facts (PE32+, x64, not DLL) and the benign prediction with raw score ~0.0106 plus generic limitations. Accurate overall, but nothing is added beyond the initial evidence. The 'magic bytes only' wording slightly understates the header check (it is DOS/COFF/optional-header minimum), which is not misleading enough to make the value negative.",
+      "evidence_ids": [
+        "EV-e53a46fcf7b04217943c40f932df897b",
+        "EV-08ec5500211141e3926cff75e13904a9",
+        "EV-c0fb92db0aa844f9833a10deca6abff7"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-e53a46fcf7b04217943c40f932df897b",
+        "EV-08ec5500211141e3926cff75e13904a9"
+      ],
+      "rationale": "pe_header/format show PE32+, x64, is_dll false, executable_image_flag true."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-c0fb92db0aa844f9833a10deca6abff7"
+      ],
+      "rationale": "Prediction record: predicted_label benign, raw_score 0.01057."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-e53a46fcf7b04217943c40f932df897b"
+      ],
+      "rationale": "No import evidence is visible, and the header limitation says no imports are collected."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-c0fb92db0aa844f9833a10deca6abff7"
+      ],
+      "rationale": "A hedged caution that matches the stated limitations (raw score, static only). It makes no positive assertion."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "PE header validation is minimal (magic bytes only), not full structural validation.",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-08ec5500211141e3926cff75e13904a9",
+        "EV-e53a46fcf7b04217943c40f932df897b"
+      ],
+      "rationale": "The validation is minimal, but the detection used magic bytes and headers (DOS/COFF/optional header minimum), not only magic bytes."
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "item_id": "J-85dbcc10a8",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 1,
+      "rationale": "C1, C3 and C4 are supported: valid PE32+ x64 executable; no import data visible; FS capability may exist undetected. C2 gets the label and score right (benign, 0.014), but frames the raw score as indicating 'a low likelihood of malicious behavior'. The author-visible record states the score is not a calibrated probability, so C2 is PARTIALLY_SUPPORTED (score-as-probability wording). The central answer (cannot determine FS capability) is supported, so 1.",
+      "evidence_ids": [
+        "EV-1e45575736334d27917c0fde3c296db0",
+        "EV-8bd3f66a7b734cd1aa225386b75536eb",
+        "EV-6d947a0de0ee40d2be40f61821738275"
+      ]
+    },
+    "R2_evidence_traceability": {
+      "score": 2,
+      "rationale": "Every statement points to the record that carries it, with inline IDs. C3's missing-imports point cites pe_header, whose limitation says imports are not collected. No misattribution and no scope problem.",
+      "evidence_ids": [
+        "EV-1e45575736334d27917c0fde3c296db0",
+        "EV-8bd3f66a7b734cd1aa225386b75536eb",
+        "EV-6d947a0de0ee40d2be40f61821738275"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 1,
+      "rationale": "Case-specific limitations are stated and constrain the FS answer: no import table, no runtime execution, the score is not calibrated. The answer is INSUFFICIENT_EVIDENCE with LOW confidence. However, the report then calls the score a 'low likelihood of malicious behavior' in C2 and the notes, contradicting its own statement that it is not a calibrated probability. R7 is lowered for that internal contradiction, but not to 0 because the main conclusion stays within limits.",
+      "evidence_ids": [
+        "EV-6d947a0de0ee40d2be40f61821738275",
+        "EV-1e45575736334d27917c0fde3c296db0"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 2,
+      "rationale": "MONITOR with LOW confidence and INSUFFICIENT_EVIDENCE is proportionate. The decision rests on the missing import and runtime data, not on the detector label. Human decision is preserved.",
+      "evidence_ids": [
+        "EV-1e45575736334d27917c0fde3c296db0",
+        "EV-6d947a0de0ee40d2be40f61821738275"
+      ]
+    },
+    "R9_next_step_planning": {
+      "score": 1,
+      "rationale": "'Without seeing the import entries or executing the binary, we cannot confirm if it creates, reads, writes, moves, or deletes files.' This points to relevant but generic steps (import listing, execution), phrased as a limitation rather than a concrete next action.",
+      "evidence_ids": [
+        "EV-1e45575736334d27917c0fde3c296db0"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-1e45575736334d27917c0fde3c296db0",
+        "EV-8bd3f66a7b734cd1aa225386b75536eb"
+      ],
+      "rationale": "PE32+, x64, executable; structural_valid true."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [
+        "SCORE_AS_PROBABILITY_OR_TRUTH"
+      ],
+      "evidence_ids": [
+        "EV-6d947a0de0ee40d2be40f61821738275"
+      ],
+      "rationale": "Label benign and score 0.01395 (about 0.014) are correct. 'Low likelihood of malicious behavior' reads a raw, explicitly uncalibrated score as a probability."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-1e45575736334d27917c0fde3c296db0"
+      ],
+      "rationale": "No import facet visible; pe_header limitation: imports not collected."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-1e45575736334d27917c0fde3c296db0",
+        "EV-6d947a0de0ee40d2be40f61821738275"
+      ],
+      "rationale": "A hedged hypothesis consistent with the missing import data."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "Malware prediction score (0.014) indicates low likelihood of malicious behavior but does not prove benignity.",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [
+        "SCORE_AS_PROBABILITY_OR_TRUTH"
+      ],
+      "evidence_ids": [
+        "EV-6d947a0de0ee40d2be40f61821738275"
+      ],
+      "rationale": "Treats the uncalibrated raw score as a likelihood."
+    },
+    {
+      "text": "Omitted evidence IDs suggest potential import or entropy data was not collected.",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [],
+      "evidence_ids": [],
+      "rationale": "Import and entropy data were indeed not collected. The omitted IDs actually hold metadata/identity records per the reference, which the author could not see; the statement is hedged."
+    }
+  ]
+}

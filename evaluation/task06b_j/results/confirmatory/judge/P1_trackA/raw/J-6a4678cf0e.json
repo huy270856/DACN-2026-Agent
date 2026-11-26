@@ -1,0 +1,105 @@
+{
+ "item_id": "J-6a4678cf0e",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 1,
+   "rationale": "Claims C1-C4 are supported (format EV-f4c0bc, visible msvcrt-only imports with no process-control APIs in EV-e16cc9, raw 0.0012 benign in EV-364615). Free text loosely presents the label as established (\"Static evidence confirms benign classification\", \"malware score supports benignity\").",
+   "evidence_ids": [
+    "EV-f4c0bcbf9e7b46ddb7282a3eddedae13",
+    "EV-e16cc916638b4a428e6b628c14c953cb",
+    "EV-3646158dfe224266baa5326f3cee231c"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 2,
+   "rationale": "Every claim traces to the record carrying it, with import absence scoped to the 16 visible entries.",
+   "evidence_ids": [
+    "EV-f4c0bcbf9e7b46ddb7282a3eddedae13",
+    "EV-e16cc916638b4a428e6b628c14c953cb",
+    "EV-3646158dfe224266baa5326f3cee231c"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 2,
+   "rationale": "Case-specific limits (16/64 visible, absence in view not proving absence, uncalibrated score with LIEF parity, no runtime) are stated and the capability is left unresolved.",
+   "evidence_ids": [
+    "EV-e16cc916638b4a428e6b628c14c953cb",
+    "EV-3646158dfe224266baa5326f3cee231c"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 1,
+   "rationale": "MONITOR is proportionate, but the justification leans on the detector (\"score supports benignity\", \"confirms benign classification\"), a minor inconsistency with its own calibration caveat.",
+   "evidence_ids": [
+    "EV-3646158dfe224266baa5326f3cee231c"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 0,
+   "rationale": "No next-step reasoning observed.",
+   "evidence_ids": []
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-f4c0bcbf9e7b46ddb7282a3eddedae13"
+   ],
+   "rationale": "Format record: PE32+, x64, is_dll false."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-e16cc916638b4a428e6b628c14c953cb"
+   ],
+   "rationale": "All 16 visible entries are msvcrt; refs 0 fflush and 3 exit correct."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-3646158dfe224266baa5326f3cee231c"
+   ],
+   "rationale": "raw 0.0012, benign."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-e16cc916638b4a428e6b628c14c953cb"
+   ],
+   "rationale": "committed 64, visible 16."
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "Static evidence confirms benign classification",
+   "verdict": "PARTIALLY_SUPPORTED",
+   "tags": [
+    "SCORE_AS_PROBABILITY_OR_TRUTH"
+   ],
+   "evidence_ids": [
+    "EV-3646158dfe224266baa5326f3cee231c"
+   ],
+   "rationale": "The record shows a benign prediction; \"confirms\" presents it as established."
+  },
+  {
+   "text": "The malware score supports benignity but lacks calibration.",
+   "verdict": "PARTIALLY_SUPPORTED",
+   "tags": [
+    "SEMANTIC_SELF_CORROBORATION"
+   ],
+   "evidence_ids": [
+    "EV-3646158dfe224266baa5326f3cee231c"
+   ],
+   "rationale": "Uses the score as support for its own label, though hedged by the calibration caveat."
+  }
+ ]
+}

@@ -1,0 +1,121 @@
+{
+ "item_id": "J-77e214a518",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 0,
+   "rationale": "C1-C4 are supported, but free-text claims overreach: \"The malware prediction score (0.001) strongly suggests benignity\" treats an explicitly uncalibrated score as strong evidence of truth, and \"benign static characteristics\"/\"benign PE structure\" are not carried by any header evidence.",
+   "evidence_ids": [
+    "EV-6f8593c0dca94932ad0d4ac0558dc0d0",
+    "EV-5e446b26d39442b09b2ba165dad663fe",
+    "EV-444209370a5547919c13880a17e0db33",
+    "EV-59a532a1d7a3410cba5f55145dd543bd"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 1,
+   "rationale": "Claims C1-C4 trace correctly. \"Valid x64 PE executable with benign static characteristics\" and \"benign PE structure\" cannot be traced to any source: the header records carry no benignity information.",
+   "evidence_ids": [
+    "EV-5e446b26d39442b09b2ba165dad663fe",
+    "EV-444209370a5547919c13880a17e0db33",
+    "EV-59a532a1d7a3410cba5f55145dd543bd"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 0,
+   "rationale": "The report states the score is uncalibrated yet says it \"strongly suggests benignity\" and that \"No evidence contradicts the benign classification\", contradicting its own stated limitation.",
+   "evidence_ids": [
+    "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 1,
+   "rationale": "MONITOR is itself proportionate, but the benign judgement is supported mainly by the detector output (\"prediction supports benign classification\"), a semantic self-corroboration in the reasoning; the cautious action keeps it from being unsafe.",
+   "evidence_ids": [
+    "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 0,
+   "rationale": "No next-step reasoning observed.",
+   "evidence_ids": []
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-5e446b26d39442b09b2ba165dad663fe",
+    "EV-444209370a5547919c13880a17e0db33"
+   ],
+   "rationale": "PE32+, x64, not DLL."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-59a532a1d7a3410cba5f55145dd543bd"
+   ],
+   "rationale": "Visible 16 msvcrt entries contain no CreateProcess/OpenProcess/TerminateProcess; ref 10 _exit correct."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+   ],
+   "rationale": "raw 0.00108, benign."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-59a532a1d7a3410cba5f55145dd543bd"
+   ],
+   "rationale": "committed 64, visible 16."
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "The malware prediction score (0.001) strongly suggests benignity.",
+   "verdict": "UNSUPPORTED",
+   "tags": [
+    "SCORE_AS_PROBABILITY_OR_TRUTH"
+   ],
+   "evidence_ids": [
+    "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+   ],
+   "rationale": "score_is_calibrated_probability=false; a raw score cannot be read as strong evidence of benignity.",
+   "evidence_access": "AGENT_VISIBLE"
+  },
+  {
+   "text": "prediction supports benign classification",
+   "verdict": "UNSUPPORTED",
+   "tags": [
+    "SEMANTIC_SELF_CORROBORATION"
+   ],
+   "evidence_ids": [
+    "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+   ],
+   "rationale": "The prediction is the benign classification; it cannot corroborate itself.",
+   "evidence_access": "AGENT_VISIBLE"
+  },
+  {
+   "text": "Static evidence confirms benign PE structure",
+   "verdict": "UNSUPPORTED",
+   "tags": [
+    "WRONG_ATTRIBUTION"
+   ],
+   "evidence_ids": [
+    "EV-5e446b26d39442b09b2ba165dad663fe",
+    "EV-444209370a5547919c13880a17e0db33"
+   ],
+   "rationale": "Header/format records establish only PE type and architecture, not benignity.",
+   "evidence_access": "AGENT_VISIBLE"
+  }
+ ]
+}

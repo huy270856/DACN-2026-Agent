@@ -1,0 +1,100 @@
+{
+  "item_id": "J-18c477f9bd",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 1,
+      "rationale": "C1 is supported: KERNEL32 CreateFileW (entry 1) and CreateFileMappingW (entry 2) are framed as declared capability. C2 and C3 are supported, and C4 is an appropriately hedged hypothesis. However, the uncertainty note 'No evidence of dynamic API resolution' overlooks GetProcAddress at visible entry 9, a declared import directly relevant to dynamic resolution. It is only true if read as 'no runtime observation', so PARTIALLY_SUPPORTED. C3 and the matching note ('absence of FS APIs in visible list ...') are oddly worded, since FS APIs are present in the visible list. Mostly supported, so 1.",
+      "evidence_ids": [
+        "EV-af879296e6aa47bd8f47acad0c4c0161",
+        "EV-527dfd2793a74f1aabe379c9a8227644"
+      ]
+    },
+    "R2_evidence_traceability": {
+      "score": 2,
+      "rationale": "Claims cite the records that carry them, and the import refs are correct (entries 1 and 2). Scope is stated as 16 of 64 committed entries, which is accurate. The 153-entry provider total is not mentioned, but nothing is misattributed and the slice is not presented as the whole.",
+      "evidence_ids": [
+        "EV-af879296e6aa47bd8f47acad0c4c0161",
+        "EV-527dfd2793a74f1aabe379c9a8227644"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 2,
+      "rationale": "Case-specific limitations are stated and applied: only 16 of 64 committed imports are visible, missing imports cannot be assumed absent, there is no runtime validation, and the score is uncalibrated. File-system capability is framed as 'declared', not as observed behaviour, and the conclusion stays at INSUFFICIENT_EVIDENCE.",
+      "evidence_ids": [
+        "EV-af879296e6aa47bd8f47acad0c4c0161",
+        "EV-527dfd2793a74f1aabe379c9a8227644"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 2,
+      "rationale": "MONITOR with INSUFFICIENT_EVIDENCE is proportionate. The benign prediction is described as static-only inference and is not used to argue the conclusion. Human decision is preserved.",
+      "evidence_ids": [
+        "EV-527dfd2793a74f1aabe379c9a8227644",
+        "EV-af879296e6aa47bd8f47acad0c4c0161"
+      ]
+    },
+    "R9_next_step_planning": {
+      "score": 0,
+      "rationale": "No next-step reasoning is found. Unknowns (the unseen import entries, runtime file operations) are named but no step is proposed. A second committed page was reachable and goes unmentioned.",
+      "evidence_ids": []
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-af879296e6aa47bd8f47acad0c4c0161"
+      ],
+      "rationale": "Entries 1 (CreateFileW) and 2 (CreateFileMappingW) from KERNEL32.dll are visible, and the claim is scoped to declared capability."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-527dfd2793a74f1aabe379c9a8227644"
+      ],
+      "rationale": "raw_score 0.00417 is about 0.004; benign; not calibrated."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-af879296e6aa47bd8f47acad0c4c0161"
+      ],
+      "rationale": "visible 16 of committed 64. The intended point (unseen entries may hold further FS APIs) matches the record's limitations, although the wording is awkward."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-af879296e6aa47bd8f47acad0c4c0161"
+      ],
+      "rationale": "Stated as a hypothesis; consistent with the limitation that dynamically resolved APIs are not enumerated."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "No evidence of dynamic API resolution or actual file operations.",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-af879296e6aa47bd8f47acad0c4c0161"
+      ],
+      "rationale": "True for runtime observation. But GetProcAddress (visible entry 9) is static evidence of the capability for dynamic API resolution, and the note ignores it."
+    },
+    {
+      "text": "Raw prediction score (0.004) indicates benign but lacks runtime validation.",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-527dfd2793a74f1aabe379c9a8227644"
+      ],
+      "rationale": "States the prediction as a model output with a caveat."
+    }
+  ]
+}

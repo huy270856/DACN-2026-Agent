@@ -1,0 +1,73 @@
+{
+  "item_id": "J-8c1aea5380",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": 2,
+      "rationale": "Network-capability question; call justified by a specific need to inspect declared socket/DNS/HTTP imports.",
+      "evidence_ids": [
+        "EV-f531389fe4494f439e2e20e68b161db9"
+      ]
+    },
+    "R4_new_evidence_relevance": {
+      "score": 2,
+      "rationale": "Committed entries include RegConnectRegistryW (idx 61), a remote-registry connection API, which bears on network capability; also negative information (no Winsock among 64).",
+      "evidence_ids": [
+        "EV-f531389fe4494f439e2e20e68b161db9"
+      ]
+    },
+    "R5_new_evidence_consumption": {
+      "score": 2,
+      "rationale": "First 16 msvcrt entries read correctly; coverage 16 of 64 committed stated and absence explicitly not treated as proof.",
+      "evidence_ids": [
+        "EV-f531389fe4494f439e2e20e68b161db9"
+      ]
+    },
+    "R6_incremental_value": {
+      "score": 1,
+      "rationale": "Minor hedged insight (no network APIs in first 16 declarations); not misleading, but leaves the question largely open.",
+      "evidence_ids": [
+        "EV-f531389fe4494f439e2e20e68b161db9",
+        "EV-4bc6623e8a6c45d9982ad102cf838f96"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-4bc6623e8a6c45d9982ad102cf838f96"
+      ],
+      "rationale": "Detector label benign, raw 0.0013 (stated as a classifier output)."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-f531389fe4494f439e2e20e68b161db9"
+      ],
+      "rationale": "Visible 0-15 are msvcrt; no network APIs."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-f531389fe4494f439e2e20e68b161db9"
+      ],
+      "rationale": "Matches tool limitations."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-4bc6623e8a6c45d9982ad102cf838f96"
+      ],
+      "rationale": "LIEF parity limitation is in the prediction record."
+    }
+  ],
+  "additional_claims": []
+}

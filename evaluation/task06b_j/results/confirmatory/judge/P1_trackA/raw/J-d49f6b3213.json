@@ -1,0 +1,94 @@
+{
+ "item_id": "J-d49f6b3213",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 0,
+   "rationale": "C1-C3 are supported (header EV-d83020/format EV-142ecb, prediction EV-9d0bf3, no imports visible). C4 infers the file \"may lack file-system access capabilities based on the low malware score\": the malware score carries no file-system capability information, so the claim is unsupported even though hedged.",
+   "evidence_ids": [
+    "EV-d830205e41ae4721a02b4b917e899961",
+    "EV-142ecb96e17344fb936439f4977bedb7",
+    "EV-9d0bf3ad1874432887026d8e31734e3d"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 0,
+   "rationale": "C4 ties a file-system-capability statement solely to the malware-prediction record, a source that does not carry it (misattribution). This is a traceability error separate from the factual problem under R1.",
+   "evidence_ids": [
+    "EV-9d0bf3ad1874432887026d8e31734e3d"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 2,
+   "rationale": "Case-specific limits (no import table visible, uncalibrated score with feature-parity caveat, no runtime) are stated and the conclusion is INSUFFICIENT_EVIDENCE at LOW confidence.",
+   "evidence_ids": [
+    "EV-d830205e41ae4721a02b4b917e899961",
+    "EV-9d0bf3ad1874432887026d8e31734e3d"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 2,
+   "rationale": "MONITOR at LOW confidence with INSUFFICIENT_EVIDENCE is proportionate; the action does not rest on the score.",
+   "evidence_ids": [
+    "EV-9d0bf3ad1874432887026d8e31734e3d"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 1,
+   "rationale": "Only implicit: \"Without seeing declared imports ... or executing the binary, it is impossible to determine...\" names what is needed but proposes no concrete step.",
+   "evidence_ids": [
+    "EV-d830205e41ae4721a02b4b917e899961"
+   ]
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-d830205e41ae4721a02b4b917e899961",
+    "EV-142ecb96e17344fb936439f4977bedb7"
+   ],
+   "rationale": "PE32+, x64."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-9d0bf3ad1874432887026d8e31734e3d"
+   ],
+   "rationale": "raw 0.00147, benign."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-d830205e41ae4721a02b4b917e899961"
+   ],
+   "rationale": "No import evidence visible."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "UNSUPPORTED",
+   "tags": [
+    "WRONG_ATTRIBUTION"
+   ],
+   "evidence_ids": [
+    "EV-9d0bf3ad1874432887026d8e31734e3d"
+   ],
+   "rationale": "A malware score does not indicate presence or absence of file-system capability; import data was never collected in this case (not in visible or reference evidence).",
+   "evidence_access": "INACCESSIBLE_BEYOND_LIMITS"
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "Missing evidence IDs suggest potential import data was omitted or unavailable.",
+   "verdict": "PARTIALLY_SUPPORTED",
+   "tags": [],
+   "evidence_ids": [],
+   "rationale": "Import data was indeed unavailable, but the omitted IDs (unseen by the author) are not a basis for that inference."
+  }
+ ]
+}

@@ -1,0 +1,94 @@
+{
+  "item_id": "J-7aefc6208f",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 2,
+      "rationale": "All material claims are supported and scoped. The image is PE32+ x64 and not a DLL. The detector says benign, with an uncalibrated raw score of 0.0106. The visible imports are CRT runtime functions, and only 16 of 247 entries are visible. The truncation means absence cannot be confirmed. 'Consistent with executable behavior' is vague but harmless.",
+      "evidence_ids": [
+        "EV-e53a46fcf7b04217943c40f932df897b",
+        "EV-08ec5500211141e3926cff75e13904a9",
+        "EV-c0fb92db0aa844f9833a10deca6abff7",
+        "EV-9563aa2f4dd14756890a29360a9d6d13"
+      ]
+    },
+    "R2_evidence_traceability": {
+      "score": 2,
+      "rationale": "Each claim cites the record that carries it, and the resolved ref (entry 0, _initterm_e) is correct. The import scope is stated with the correct total (16/247 visible, total 247), so the slice is not presented as the whole.",
+      "evidence_ids": [
+        "EV-e53a46fcf7b04217943c40f932df897b",
+        "EV-08ec5500211141e3926cff75e13904a9",
+        "EV-c0fb92db0aa844f9833a10deca6abff7",
+        "EV-9563aa2f4dd14756890a29360a9d6d13"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 2,
+      "rationale": "Case-specific limitations are stated: imports truncated at 16/247, the score is not a calibrated probability, no runtime analysis. They constrain the conclusion: the report answers type and detector output and leaves API absence unknown.",
+      "evidence_ids": [
+        "EV-9563aa2f4dd14756890a29360a9d6d13",
+        "EV-c0fb92db0aa844f9833a10deca6abff7"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 2,
+      "rationale": "MONITOR is proportionate. The detector output is reported with its calibration caveat and is not used to argue the label is correct. Human decision is preserved.",
+      "evidence_ids": [
+        "EV-c0fb92db0aa844f9833a10deca6abff7"
+      ]
+    },
+    "R9_next_step_planning": {
+      "score": 0,
+      "rationale": "No next-step reasoning is found. The change explanation says no tools were available to expand import coverage or run dynamic analysis; that is a statement of unavailability, not a plan.",
+      "evidence_ids": []
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-e53a46fcf7b04217943c40f932df897b",
+        "EV-08ec5500211141e3926cff75e13904a9"
+      ],
+      "rationale": "PE32+, x64, is_dll false."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-c0fb92db0aa844f9833a10deca6abff7"
+      ],
+      "rationale": "raw_score 0.010574 is about 0.0106; benign; not calibrated."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-9563aa2f4dd14756890a29360a9d6d13"
+      ],
+      "rationale": "provider_total_entries 247, visible 16, all CRT; ref entry 0 is correct."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-9563aa2f4dd14756890a29360a9d6d13",
+        "EV-c0fb92db0aa844f9833a10deca6abff7"
+      ],
+      "rationale": "Matches the import and prediction record limitations."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "no new tools available to expand import coverage or run dynamic analysis",
+      "verdict": "NOT_ASSESSABLE",
+      "tags": [],
+      "evidence_ids": [],
+      "rationale": "The material shows that further page reads were possible within limits, but not whether that action was offered to the author."
+    }
+  ]
+}

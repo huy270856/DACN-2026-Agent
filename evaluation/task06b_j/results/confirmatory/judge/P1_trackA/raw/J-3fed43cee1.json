@@ -1,0 +1,88 @@
+{
+ "item_id": "J-3fed43cee1",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 2,
+   "rationale": "All claims match visible evidence: x64 PE32+ executable, not DLL (EV-3bee76); benign, raw 0.003 (EV-b055c7); no import data visible. Hypotheses are hedged.",
+   "evidence_ids": [
+    "EV-3bee76ce4f2a4c64be323f61eb21196f",
+    "EV-b055c7deb9694c848515d303069f975c"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 2,
+   "rationale": "Each claim cites the record that carries it; the no-import limitation is carried by the pe_header limitations.",
+   "evidence_ids": [
+    "EV-3bee76ce4f2a4c64be323f61eb21196f",
+    "EV-b055c7deb9694c848515d303069f975c"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 2,
+   "rationale": "States case-specific limits (no import visibility, uncalibrated score with feature-parity caveat, no dynamic data) and keeps conclusions to type and detector output with INSUFFICIENT_EVIDENCE.",
+   "evidence_ids": [
+    "EV-3bee76ce4f2a4c64be323f61eb21196f",
+    "EV-b055c7deb9694c848515d303069f975c"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 2,
+   "rationale": "MONITOR is proportionate; the score is reported as uncalibrated and not used as proof.",
+   "evidence_ids": [
+    "EV-b055c7deb9694c848515d303069f975c"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 0,
+   "rationale": "No next-step reasoning; it only notes \"no further tools available\".",
+   "evidence_ids": []
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-b055c7deb9694c848515d303069f975c"
+   ],
+   "rationale": "benign, raw 0.00307."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-3bee76ce4f2a4c64be323f61eb21196f"
+   ],
+   "rationale": "x64, executable_image_flag true, is_dll false."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-3bee76ce4f2a4c64be323f61eb21196f"
+   ],
+   "rationale": "No import evidence visible; declared imports are capabilities only."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-b055c7deb9694c848515d303069f975c"
+   ],
+   "rationale": "Hedged; notes lack of calibration."
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "no further tools available",
+   "verdict": "NOT_ASSESSABLE",
+   "tags": [],
+   "evidence_ids": [],
+   "rationale": "The material does not show which actions were offered."
+  }
+ ]
+}

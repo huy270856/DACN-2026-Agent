@@ -69,3 +69,9 @@ Mỗi sự kiện có ảnh hưởng tới tính hợp lệ của lượt chấm
 22. Package chấm semantic `package_conf_p1/p2` (rubric v2 `dbb791cd…`, 2 seed). Đã export 4 kit ngoài repo, `kit_audit=PASS`. Developer **không** chấm. Trạng thái: SEMANTIC_GRADING_PENDING. Hướng dẫn: OWNER_FINAL_JUDGE_COMMANDS.md.
 23. Bản `package_v1` (id `06BJ-CONF-v1`) dựng trước đó đã bị thay bằng `package_conf_p1/p2` để đặt tên pass rõ ràng; bản cũ chưa được giao, chấm hay commit.
 24. **Quyết định của owner về push (2026-11-26):** repo là PUBLIC. Push lúc này sẽ công khai mapping evaluator-only, output thô từng arm của run_v1 và reference answer của holdout trong khi chấm semantic confirmatory còn PENDING. Owner chọn **hoãn push** tới khi 4 kit đã được import và lock. Các commit vẫn ở local; remote `origin/feat/task06b-real-multistep-investigation` vẫn ở `7da1302`.
+
+## 2026-11-26 — Chấm semantic confirmatory và đóng TASK 06
+
+25. Đã import 4 kit confirmatory (200 judgment + 4 session note), tất cả `COMPLETE_VALID`; hash và validate lại đều PASS. Model UNKNOWN (self-reported "Claude Opus 5.5", UNVERIFIED). `judge/LOCK.json` được tạo trước khi mở mapping.
+26. Self-consistency trên confirmatory: R2 0.319 và R5 0.300 không ổn định; các tiêu chí khác ≥ 0.80. Phân loại primary/exploratory giữ nguyên như đã khóa; kết luận về R2 ghi là INCONCLUSIVE.
+27. Kết luận TASK 06: INCONCLUSIVE, nghiêng về âm tính (CONFIRMATORY_REPORT §6). README gốc và TASK06_FINAL_REPORT §9 được cập nhật theo ủy quyền của owner.

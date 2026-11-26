@@ -1,0 +1,73 @@
+{
+  "item_id": "J-7f78940717",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": 1,
+      "rationale": "The question was answerable from the initial evidence; the call was unnecessary but harmless, justified generically (\"ground the classification in concrete API usage\").",
+      "evidence_ids": [
+        "EV-2aea8744ae0e47c4a681559133572d83"
+      ]
+    },
+    "R4_new_evidence_relevance": {
+      "score": 0,
+      "rationale": "Import declarations do not bear on EXE vs DLL, architecture or detector output.",
+      "evidence_ids": [
+        "EV-2aea8744ae0e47c4a681559133572d83"
+      ]
+    },
+    "R5_new_evidence_consumption": {
+      "score": 2,
+      "rationale": "Visible msvcrt entries described correctly; coverage 16 of 64 committed stated.",
+      "evidence_ids": [
+        "EV-2aea8744ae0e47c4a681559133572d83"
+      ]
+    },
+    "R6_incremental_value": {
+      "score": 0,
+      "rationale": "No contribution to the question beyond the initial evidence.",
+      "evidence_ids": [
+        "EV-2aea8744ae0e47c4a681559133572d83",
+        "EV-fbff4b4bd8d744ed9e1195dad0cd983d"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-63a2a2cf678d4bf48a8859f6dd13e11f"
+      ],
+      "rationale": "Header/format records show PE32+, x64, not DLL."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-fbff4b4bd8d744ed9e1195dad0cd983d"
+      ],
+      "rationale": "Prediction benign, raw ~0.0017, uncalibrated."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-2aea8744ae0e47c4a681559133572d83"
+      ],
+      "rationale": "Visible entries include terminate, exit, malloc, memcpy."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-2aea8744ae0e47c4a681559133572d83"
+      ],
+      "rationale": "visible 16, committed 64."
+    }
+  ],
+  "additional_claims": []
+}

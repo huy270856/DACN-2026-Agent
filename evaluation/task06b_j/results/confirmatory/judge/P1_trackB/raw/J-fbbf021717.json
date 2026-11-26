@@ -1,0 +1,82 @@
+{
+  "item_id": "J-fbbf021717",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE for this item (no analyzer tool was available or called).",
+      "evidence_ids": []
+    },
+    "R4_new_evidence_relevance": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE for this item (no analyzer tool was available or called).",
+      "evidence_ids": []
+    },
+    "R5_new_evidence_consumption": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE for this item (no analyzer tool was available or called).",
+      "evidence_ids": []
+    },
+    "R6_incremental_value": {
+      "score": 0,
+      "rationale": "No tool was available. The report accurately restates the PE type and benign prediction and correctly says the absence of import data makes file-system capability unknown. That adds nothing beyond the initial evidence. The speculation that the missing IDs hold truncated import data is wrong (they are metadata/hash records) but marginal, so the value is 0.",
+      "evidence_ids": [
+        "EV-f13c4b0bc75b40f2a5f165fb1bd50f88",
+        "EV-6d5e946816314a93b3eef4eeeb02aecd",
+        "EV-527dfd2793a74f1aabe379c9a8227644"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-f13c4b0bc75b40f2a5f165fb1bd50f88",
+        "EV-6d5e946816314a93b3eef4eeeb02aecd"
+      ],
+      "rationale": "PE32+ x64, not a DLL. The limitations state the target was not executed."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-527dfd2793a74f1aabe379c9a8227644"
+      ],
+      "rationale": "Raw score 0.00417, label benign."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-f13c4b0bc75b40f2a5f165fb1bd50f88"
+      ],
+      "rationale": "No import data is visible. The claim cites the prediction record, but the pe_header limitation carries the statement that imports are not collected."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [],
+      "rationale": "A conditional, hedged hypothesis that the report explicitly says cannot be confirmed."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "Missing evidence IDs indicate truncated or uncollected import data.",
+      "verdict": "CONTRADICTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-039c1436034142a785a5b442d2374d09",
+        "EV-ef21287123074d7996628610c11287fb",
+        "EV-419623917a3142eaad656228bd215d3b",
+        "EV-51dcc1a2a2134ce287acf09f1c92da52",
+        "EV-da032f03615a43198e12335e3f7e765f"
+      ],
+      "rationale": "The reference shows the omitted IDs are metadata, file_identity, readable, unchanged-check and sha256 records, not import data. The author could not see them and had no read action.",
+      "evidence_access": "INACCESSIBLE_BEYOND_LIMITS"
+    }
+  ]
+}

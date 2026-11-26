@@ -1,0 +1,4572 @@
+{
+  "schema_version": "task06b-j-judgments-v1",
+  "rubric_id": "task06b-j-rubric-v2",
+  "rubric_sha256": "dbb791cda454d56bdc11d1c5cf72a622d96ced72359214794f0932feeae91557",
+  "package_id": "06BJ-CONF-P1",
+  "view": "common",
+  "evaluator": {
+    "kind": "LLM_JUDGE",
+    "evaluator_id": "claude-code-session:UNKNOWN",
+    "provider": "Anthropic Claude via interactive Claude Code session (owner-operated)",
+    "model": "UNKNOWN",
+    "model_version_or_digest": "UNKNOWN",
+    "self_reported_model_UNVERIFIED": "Claude Opus 5.5 (claude-opus-5-5)",
+    "session_id": "UNKNOWN",
+    "inference_method": "INTERACTIVE_LLM_JUDGE_BLIND_BATCH",
+    "automated_api_inference": false,
+    "prompt_sha256": "43c621f062a4b709fca158655e10cbbf6b9cd36421521d4db314ebf2a77fee3f",
+    "raw_responses_file": "raw/",
+    "kit_version": "task06b-j-judge-kit-v1",
+    "track": "A",
+    "human_verified": false,
+    "operator_note": "Owner-operated fresh Claude Code session; /status output not provided (self-reported model only)"
+  },
+  "pass_id": "conf-P1-trackA",
+  "created_utc": "2026-11-26T08:58:51.433682+00:00",
+  "package_view_sha256": "99ac32b67a28d9e5c694cf30c36fd155b86b71c547942890dc268f96e44df740",
+  "judgments": [
+    {
+      "item_id": "J-05ae6092e4",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "All claims match visible evidence: the 48 visible imports (EV-f17286) are only api-ms-win-crt runtime/math/private symbols, committed 64 vs visible 48 is correct, the prediction values (EV-9381a8) are reproduced correctly, and the absence statement is scoped to the visible subset.",
+          "evidence_ids": [
+            "EV-f17286b16c364ca8aab19a377c37ec59",
+            "EV-9381a8f998f347629cf75f51bc13e79e"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "Each claim cites the source that carries it (imports detail for import statements, prediction record for score) with correct scope (visible subset, not whole table).",
+          "evidence_ids": [
+            "EV-f17286b16c364ca8aab19a377c37ec59",
+            "EV-9381a8f998f347629cf75f51bc13e79e"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 2,
+          "rationale": "States case-specific limits: 48/64 visible with truncation preventing absence claims, uncalibrated score, no dynamic/network monitoring, dynamic API resolution; the conclusion stays INSUFFICIENT_EVIDENCE accordingly. It understates that 193 provider entries exist (only 64 committed) but does not overreach.",
+          "evidence_ids": [
+            "EV-f17286b16c364ca8aab19a377c37ec59",
+            "EV-9381a8f998f347629cf75f51bc13e79e"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR with INSUFFICIENT_EVIDENCE is proportionate to a runtime network question that static data cannot settle; the benign prediction is stated but not used as proof.",
+          "evidence_ids": [
+            "EV-f17286b16c364ca8aab19a377c37ec59",
+            "EV-9381a8f998f347629cf75f51bc13e79e"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 1,
+          "rationale": "Only \"Runtime monitoring is required to definitively answer the question\" - a generic dynamic-analysis step; no specific step for the named unknown of the unread import entries.",
+          "evidence_ids": [
+            "EV-f17286b16c364ca8aab19a377c37ec59"
+          ]
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-f17286b16c364ca8aab19a377c37ec59"
+          ],
+          "rationale": "Indices 0-47 are all api-ms-win-crt-runtime/math/private symbols; no network APIs in that subset."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-f17286b16c364ca8aab19a377c37ec59"
+          ],
+          "rationale": "committed_entries=64, visible_entries=48."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-9381a8f998f347629cf75f51bc13e79e"
+          ],
+          "rationale": "raw_score 0.00121, label benign, score_is_calibrated_probability=false."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-f17286b16c364ca8aab19a377c37ec59",
+            "EV-9381a8f998f347629cf75f51bc13e79e"
+          ],
+          "rationale": "Matches the evidence limitations (dynamically resolved APIs not enumerated; static only)."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "Static analysis cannot rule out dynamic API resolution or obfuscation techniques that bypass import tables.",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-f17286b16c364ca8aab19a377c37ec59"
+          ],
+          "rationale": "Consistent with stated evidence limitation."
+        },
+        {
+          "text": "while evidence points to non-network behavior",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-f17286b16c364ca8aab19a377c37ec59"
+          ],
+          "rationale": "Visible imports show no network APIs; the statement is hedged as insufficient."
+        }
+      ]
+    },
+    {
+      "item_id": "J-0635116090",
+      "criteria": {
+        "R1_factual_support": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R2_evidence_traceability": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R7_uncertainty_limitations": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "No accepted final assessment; the system fell back to human MANUAL_REVIEW, a safe fallback that is not penalised.",
+          "evidence_ids": []
+        },
+        "R9_next_step_planning": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": []
+    },
+    {
+      "item_id": "J-09fa3520cc",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "The few statements (static prediction benign, raw score uncalibrated, concrete imports unavailable, no runtime behaviour observed) all match the visible evidence: prediction record 4bc662 and no import evidence among the visible items.",
+          "evidence_ids": [
+            "EV-4bc6623e8a6c45d9982ad102cf838f96"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "The prediction is embedded verbatim (prediction_shown); the remaining statements concern absence of import/runtime evidence and are correctly scoped; no misattribution.",
+          "evidence_ids": [
+            "EV-4bc6623e8a6c45d9982ad102cf838f96"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 1,
+          "rationale": "Limitations are stated (static only, uncalibrated, imports unavailable) but in generic template form; they are not explicitly tied to the network communication question (that this stays unknown), though there is no overreach.",
+          "evidence_ids": [
+            "EV-4bc6623e8a6c45d9982ad102cf838f96"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is a cautious, acceptable action, but the only stated basis is the static model classifying BENIGN, so it is weakly justified for the question asked. Not semantic self-corroboration: the label is not argued to be confirmed.",
+          "evidence_ids": [
+            "EV-4bc6623e8a6c45d9982ad102cf838f96"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning anywhere in the text; the MONITOR recommendation is not a plan to resolve an unknown.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": [
+        {
+          "text": "Mô hình tĩnh phân loại BENIGN (static model classifies BENIGN)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-4bc6623e8a6c45d9982ad102cf838f96"
+          ],
+          "rationale": "predicted_label benign in the prediction record."
+        },
+        {
+          "text": "concrete imports unavailable",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "No import evidence was visible to the author."
+        },
+        {
+          "text": "phân tích chỉ dựa trên đặc trưng tĩnh, không quan sát hành vi runtime (static features only, no runtime behaviour observed)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-4bc6623e8a6c45d9982ad102cf838f96"
+          ],
+          "rationale": "Matches prediction limitations."
+        }
+      ]
+    },
+    {
+      "item_id": "J-0a5cef9010",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "PE kind/arch/DLL flag match EV-e53a46/EV-08ec55; detector values match EV-c0fb92; import counts (247 total, 16 visible) and CRT nature of visible imports match EV-9563aa. Absence statements are correctly scoped.",
+          "evidence_ids": [
+            "EV-e53a46fcf7b04217943c40f932df897b",
+            "EV-08ec5500211141e3926cff75e13904a9",
+            "EV-c0fb92db0aa844f9833a10deca6abff7",
+            "EV-9563aa2f4dd14756890a29360a9d6d13"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "Each claim cites the record carrying it; import statement correctly scoped to the visible page and resolved ref index 0 is correct.",
+          "evidence_ids": [
+            "EV-e53a46fcf7b04217943c40f932df897b",
+            "EV-08ec5500211141e3926cff75e13904a9",
+            "EV-c0fb92db0aa844f9833a10deca6abff7",
+            "EV-9563aa2f4dd14756890a29360a9d6d13"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 2,
+          "rationale": "Case-specific limits stated (16/247 visible, uncalibrated raw score, no dynamic analysis) and the conclusion is limited to PE type and detector output, as asked.",
+          "evidence_ids": [
+            "EV-9563aa2f4dd14756890a29360a9d6d13",
+            "EV-c0fb92db0aa844f9833a10deca6abff7"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR is proportionate; the detector output is reported, not used as proof.",
+          "evidence_ids": [
+            "EV-c0fb92db0aa844f9833a10deca6abff7"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 1,
+          "rationale": "Only notes that no tools were available to expand import coverage or run dynamic analysis; no specific actionable step proposed.",
+          "evidence_ids": [
+            "EV-9563aa2f4dd14756890a29360a9d6d13"
+          ]
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-e53a46fcf7b04217943c40f932df897b",
+            "EV-08ec5500211141e3926cff75e13904a9"
+          ],
+          "rationale": "pe_kind PE32+, x64, is_dll false."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-c0fb92db0aa844f9833a10deca6abff7"
+          ],
+          "rationale": "raw_score 0.01057, benign, uncalibrated."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-9563aa2f4dd14756890a29360a9d6d13"
+          ],
+          "rationale": "provider_total_entries 247, visible 16, CRT entries; resolved ref index 0 = _initterm_e correct."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-9563aa2f4dd14756890a29360a9d6d13",
+            "EV-c0fb92db0aa844f9833a10deca6abff7"
+          ],
+          "rationale": "Matches truncation and static-only limitations."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "no new tools available to expand import coverage or run dynamic analysis",
+          "verdict": "NOT_ASSESSABLE",
+          "tags": [],
+          "evidence_ids": [
+            "EV-9563aa2f4dd14756890a29360a9d6d13"
+          ],
+          "rationale": "Whether a page-read action was offered is not shown in the material."
+        }
+      ]
+    },
+    {
+      "item_id": "J-0b6f42efc5",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 1,
+          "rationale": "PE type (EV-3bee76) and detector output (EV-b055c7) are correct. C3 calls 74 the number of committed entries, but committed_entries is 64 and 74 is the provider total; the 16/74 visible ratio (22%) is otherwise right. Loose wording, not central.",
+          "evidence_ids": [
+            "EV-3bee76ce4f2a4c64be323f61eb21196f",
+            "EV-b055c7deb9694c848515d303069f975c",
+            "EV-41b247a726f340b88142e4cae5f40dd9"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "Statements cite the records that carry them; the import counts trace to EV-41b247 and visible scope is respected (the committed/total label slip is scored under R1).",
+          "evidence_ids": [
+            "EV-3bee76ce4f2a4c64be323f61eb21196f",
+            "EV-b055c7deb9694c848515d303069f975c",
+            "EV-41b247a726f340b88142e4cae5f40dd9"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 2,
+          "rationale": "Case-specific limits (16 of 74 imports visible, uncalibrated score, no runtime) are stated and keep confidence at MEDIUM; unknowns are listed as asked.",
+          "evidence_ids": [
+            "EV-41b247a726f340b88142e4cae5f40dd9",
+            "EV-b055c7deb9694c848515d303069f975c"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR is proportionate; the prediction is reported alongside its uncertainty, not used as proof.",
+          "evidence_ids": [
+            "EV-b055c7deb9694c848515d303069f975c"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 2,
+          "rationale": "\"A full import dump ... is required for high-confidence assessment\" targets the named unknown (78% of imports not visible), alongside runtime execution.",
+          "evidence_ids": [
+            "EV-41b247a726f340b88142e4cae5f40dd9"
+          ]
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-3bee76ce4f2a4c64be323f61eb21196f"
+          ],
+          "rationale": "PE32+, x64, is_dll false."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b055c7deb9694c848515d303069f975c"
+          ],
+          "rationale": "raw_score 0.00307, benign."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-41b247a726f340b88142e4cae5f40dd9"
+          ],
+          "rationale": "Visible 16 is right, but 74 is provider_total_entries, not committed_entries (64). Resolved ref index 0 SetThreadUILanguage is correct."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-41b247a726f340b88142e4cae5f40dd9"
+          ],
+          "rationale": "Hypothesis appropriately hedged given truncation."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "only 22% of declared imports are visible",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-41b247a726f340b88142e4cae5f40dd9"
+          ],
+          "rationale": "16/74 = 21.6%."
+        },
+        {
+          "text": "consistent with the lack of obvious malicious signatures in the visible import list",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-41b247a726f340b88142e4cae5f40dd9",
+            "EV-b055c7deb9694c848515d303069f975c"
+          ],
+          "rationale": "Scoped to visible imports (KERNEL32/msvcrt basics)."
+        }
+      ]
+    },
+    {
+      "item_id": "J-11640e15a8",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "The few statements (static prediction benign, raw score uncalibrated, concrete imports unavailable, no runtime behaviour observed) all match the visible evidence: prediction record fc4b50 and no import evidence among the visible items.",
+          "evidence_ids": [
+            "EV-fc4b502469bf4896ac04b2afbedb5cfe"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "The prediction is embedded verbatim (prediction_shown); the remaining statements concern absence of import/runtime evidence and are correctly scoped; no misattribution.",
+          "evidence_ids": [
+            "EV-fc4b502469bf4896ac04b2afbedb5cfe"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 1,
+          "rationale": "Limitations are stated (static only, uncalibrated, imports unavailable) but in generic template form; they are not explicitly tied to the network communication question (that this stays unknown), though there is no overreach.",
+          "evidence_ids": [
+            "EV-fc4b502469bf4896ac04b2afbedb5cfe"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is a cautious, acceptable action, but the only stated basis is the static model classifying BENIGN, so it is weakly justified for the question asked. Not semantic self-corroboration: the label is not argued to be confirmed.",
+          "evidence_ids": [
+            "EV-fc4b502469bf4896ac04b2afbedb5cfe"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning anywhere in the text; the MONITOR recommendation is not a plan to resolve an unknown.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": [
+        {
+          "text": "Mô hình tĩnh phân loại BENIGN (static model classifies BENIGN)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-fc4b502469bf4896ac04b2afbedb5cfe"
+          ],
+          "rationale": "predicted_label benign in the prediction record."
+        },
+        {
+          "text": "concrete imports unavailable",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "No import evidence was visible to the author."
+        },
+        {
+          "text": "phân tích chỉ dựa trên đặc trưng tĩnh, không quan sát hành vi runtime (static features only, no runtime behaviour observed)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-fc4b502469bf4896ac04b2afbedb5cfe"
+          ],
+          "rationale": "Matches prediction limitations."
+        }
+      ]
+    },
+    {
+      "item_id": "J-12bf456549",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 1,
+          "rationale": "PE type and detector output are correct (EV-e53a46, EV-08ec55, EV-c0fb92). One limitation is loosely worded: header validation is described as \"magic bytes only\" while the evidence says minimum DOS/COFF/optional headers. Not central.",
+          "evidence_ids": [
+            "EV-e53a46fcf7b04217943c40f932df897b",
+            "EV-08ec5500211141e3926cff75e13904a9",
+            "EV-c0fb92db0aa844f9833a10deca6abff7"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "Each statement is traced to the record that carries it (header records for type, prediction record for score; the import-not-collected limitation is carried by the pe_header record limitations).",
+          "evidence_ids": [
+            "EV-e53a46fcf7b04217943c40f932df897b",
+            "EV-08ec5500211141e3926cff75e13904a9",
+            "EV-c0fb92db0aa844f9833a10deca6abff7"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 2,
+          "rationale": "Case-specific limitations (no import visibility, uncalibrated score, feature-parity caveat, no dynamic execution) are stated and confine the conclusion to type and detector output.",
+          "evidence_ids": [
+            "EV-c0fb92db0aa844f9833a10deca6abff7",
+            "EV-e53a46fcf7b04217943c40f932df897b"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR at MEDIUM confidence is proportionate; the detector output is reported, not used as confirmation.",
+          "evidence_ids": [
+            "EV-c0fb92db0aa844f9833a10deca6abff7"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning observed; unknowns are named but no step is proposed.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-e53a46fcf7b04217943c40f932df897b",
+            "EV-08ec5500211141e3926cff75e13904a9"
+          ],
+          "rationale": "PE32+, x64, not DLL."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-c0fb92db0aa844f9833a10deca6abff7"
+          ],
+          "rationale": "benign, raw 0.0106 rounds to 0.01."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-e53a46fcf7b04217943c40f932df897b"
+          ],
+          "rationale": "No import evidence was visible; pe_header limitations state imports are not collected."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-c0fb92db0aa844f9833a10deca6abff7"
+          ],
+          "rationale": "Hedged hypothesis consistent with static-only limitation."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "PE header validation is minimal (magic bytes only), not full structural validation.",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-e53a46fcf7b04217943c40f932df897b",
+            "EV-08ec5500211141e3926cff75e13904a9"
+          ],
+          "rationale": "Validation is minimal, but it covers DOS/COFF/optional headers, not magic bytes only."
+        },
+        {
+          "text": "model features may differ from training data",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-c0fb92db0aa844f9833a10deca6abff7"
+          ],
+          "rationale": "Matches the LIEF version parity limitation."
+        }
+      ]
+    },
+    {
+      "item_id": "J-1874020da2",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 0,
+          "rationale": "Several material claims exceed what was seen: \"The file imports only msvcrt.dll functions\" generalises 16 visible of 60 committed entries to the whole file and is contradicted by committed non-visible entries (registry, credential APIs); \"without DLL dependencies\" is contradicted by the visible msvcrt.dll imports; the raw score is presented as \"high confidence\".",
+          "evidence_ids": [
+            "EV-84f5ba59d44f4e38827359079fe2ac04",
+            "EV-9471e4632818455da40c03f95c6b22f9"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 0,
+          "rationale": "Scope misattribution: the visible 16-entry slice of EV-84f5ba is presented as the whole import table (\"imports only msvcrt.dll\", \"imports 16 entries from msvcrt.dll\"). This independently violates traceability scope, separate from the factual error under R1.",
+          "evidence_ids": [
+            "EV-84f5ba59d44f4e38827359079fe2ac04"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 0,
+          "rationale": "The report states \"Only 16 of 60 committed import entries are visible\" but its explanation contradicts that limitation by asserting the file imports only msvcrt.dll and has no network-related imports; it also treats an uncalibrated score as high confidence despite noting it is raw.",
+          "evidence_ids": [
+            "EV-84f5ba59d44f4e38827359079fe2ac04",
+            "EV-9471e4632818455da40c03f95c6b22f9"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is itself proportionate for a runtime question static data cannot answer, but justification leans on the prediction (\"appears benign based on imports and prediction\", \"high confidence\"), a minor inconsistency with its stated uncertainty.",
+          "evidence_ids": [
+            "EV-9471e4632818455da40c03f95c6b22f9",
+            "EV-84f5ba59d44f4e38827359079fe2ac04"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning observed; no proposal to read the remaining import pages or to monitor network activity.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [
+            "SCOPE_OVERCLAIM"
+          ],
+          "evidence_ids": [
+            "EV-84f5ba59d44f4e38827359079fe2ac04"
+          ],
+          "rationale": "16 visible msvcrt entries including malloc/exit/_wcsicmp are correct and resolved refs 0-2 are right, but phrased as what the file imports; msvcrt has 18 committed entries and other libraries exist."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-84f5ba59d44f4e38827359079fe2ac04"
+          ],
+          "rationale": "Scoped to visible entries; no network DLL among the 16 visible."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-9471e4632818455da40c03f95c6b22f9"
+          ],
+          "rationale": "raw_score 0.00253, benign."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-84f5ba59d44f4e38827359079fe2ac04"
+          ],
+          "rationale": "Matches evidence limitations."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "The file imports only msvcrt.dll functions",
+          "verdict": "CONTRADICTED",
+          "tags": [
+            "SCOPE_OVERCLAIM"
+          ],
+          "evidence_ids": [
+            "EV-84f5ba59d44f4e38827359079fe2ac04"
+          ],
+          "rationale": "Committed but not visible entries include api-ms-win-core-registry, security-credentials and other libraries (library_count 21); the visible slice was 16/60. Reachability of those entries depended on a page read; the material shows only one page read, not whether more were offered.",
+          "evidence_access": "ACCESSIBLE_NOT_RETRIEVED"
+        },
+        {
+          "text": "the file structure indicates it is an x64 PE32+ executable without DLL dependencies",
+          "verdict": "CONTRADICTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-84f5ba59d44f4e38827359079fe2ac04",
+            "EV-bebc79e738ac41e5a94f174f473ddbea"
+          ],
+          "rationale": "The visible import evidence itself shows dependencies on msvcrt.dll; the header only shows is_dll=false.",
+          "evidence_access": "AGENT_VISIBLE"
+        },
+        {
+          "text": "The malware model predicts benign behavior with high confidence (low score)",
+          "verdict": "UNSUPPORTED",
+          "tags": [
+            "SCORE_AS_PROBABILITY_OR_TRUTH"
+          ],
+          "evidence_ids": [
+            "EV-9471e4632818455da40c03f95c6b22f9"
+          ],
+          "rationale": "Score is explicitly not a calibrated probability; a low raw score is not confidence.",
+          "evidence_access": "AGENT_VISIBLE"
+        },
+        {
+          "text": "Static analysis reveals a benign executable with no network-related imports.",
+          "verdict": "UNSUPPORTED",
+          "tags": [
+            "SCOPE_OVERCLAIM",
+            "SCORE_AS_PROBABILITY_OR_TRUTH"
+          ],
+          "evidence_ids": [
+            "EV-84f5ba59d44f4e38827359079fe2ac04",
+            "EV-9471e4632818455da40c03f95c6b22f9"
+          ],
+          "rationale": "\"Benign executable\" treats the prediction as truth, and absence of network imports is asserted for the file while only 16/60 entries were seen (the unseen entries were committed; the material does not show whether a further page read was offered).",
+          "evidence_access": "ACCESSIBLE_NOT_RETRIEVED"
+        }
+      ]
+    },
+    {
+      "item_id": "J-210ec6121a",
+      "criteria": {
+        "R1_factual_support": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R2_evidence_traceability": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R7_uncertainty_limitations": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "No accepted final assessment; the system fell back to human MANUAL_REVIEW, a safe fallback that is not penalised.",
+          "evidence_ids": []
+        },
+        "R9_next_step_planning": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": []
+    },
+    {
+      "item_id": "J-252a275ba0",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "Claims match visible evidence: the 32 visible imports (EV-a25a20) are msvcrt CRT functions with no network APIs, 32/64 committed is correct, prediction values match EV-5ff7e2. \"Appears benign\" is hedged and paired with INSUFFICIENT_EVIDENCE/LOW confidence.",
+          "evidence_ids": [
+            "EV-a25a207979694ae4800fe31dd24616d2",
+            "EV-5ff7e2b8b52641bf8dd2e7eb1c31d638"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "Claims cite the records carrying them with correct visible-subset scope.",
+          "evidence_ids": [
+            "EV-a25a207979694ae4800fe31dd24616d2",
+            "EV-5ff7e2b8b52641bf8dd2e7eb1c31d638"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 2,
+          "rationale": "Case-specific limits are stated (32/64 visible, dynamic resolution possible, uncalibrated score, no runtime execution) and keep the answer at INSUFFICIENT_EVIDENCE. It understates the unseen part (provider total 134, not just a \"hidden half\"), but without overreach.",
+          "evidence_ids": [
+            "EV-a25a207979694ae4800fe31dd24616d2",
+            "EV-5ff7e2b8b52641bf8dd2e7eb1c31d638"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR with LOW confidence is proportionate for a runtime network question; the score is not used as proof.",
+          "evidence_ids": [
+            "EV-5ff7e2b8b52641bf8dd2e7eb1c31d638"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 1,
+          "rationale": "\"Runtime monitoring is required to verify actual behavior\" is tied to the question but is a generic dynamic-analysis step; no specific step such as reading the remaining committed import entries.",
+          "evidence_ids": [
+            "EV-a25a207979694ae4800fe31dd24616d2"
+          ]
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-a25a207979694ae4800fe31dd24616d2"
+          ],
+          "rationale": "Indices 0-31 are msvcrt.dll CRT functions only."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-5ff7e2b8b52641bf8dd2e7eb1c31d638"
+          ],
+          "rationale": "raw_score 0.00342, benign."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-a25a207979694ae4800fe31dd24616d2"
+          ],
+          "rationale": "committed 64, visible 32."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-a25a207979694ae4800fe31dd24616d2"
+          ],
+          "rationale": "Hedged possibility matching the stated limitation that dynamically resolved APIs are not enumerated."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "The file appears benign based on visible imports and a low static prediction score.",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-a25a207979694ae4800fe31dd24616d2",
+            "EV-5ff7e2b8b52641bf8dd2e7eb1c31d638"
+          ],
+          "rationale": "Hedged reading of visible imports plus reported prediction; conclusion kept at INSUFFICIENT_EVIDENCE."
+        },
+        {
+          "text": "no further tools available",
+          "verdict": "NOT_ASSESSABLE",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "The material does not show which actions were offered."
+        }
+      ]
+    },
+    {
+      "item_id": "J-283cb8a526",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 1,
+          "rationale": "Claims C1-C4 are supported (EV-4bc662, EV-f53138). The free-text reason \"Static evidence confirms benign classification\" treats the model label as confirmed; this is loosely worded rather than central, since the explanation otherwise keeps it as a prediction.",
+          "evidence_ids": [
+            "EV-4bc6623e8a6c45d9982ad102cf838f96",
+            "EV-f531389fe4494f439e2e20e68b161db9"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "Prediction and import statements trace to the correct records; import absence is scoped to the first 16 visible entries.",
+          "evidence_ids": [
+            "EV-4bc6623e8a6c45d9982ad102cf838f96",
+            "EV-f531389fe4494f439e2e20e68b161db9"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 2,
+          "rationale": "States case-specific limits: 16 of 64 committed visible, absence in visible list not proving absence, uncalibrated score with LIEF parity caveat, no dynamic analysis; network capability is left undetermined.",
+          "evidence_ids": [
+            "EV-f531389fe4494f439e2e20e68b161db9",
+            "EV-4bc6623e8a6c45d9982ad102cf838f96"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is proportionate, but the justification leans on the model output (\"low risk signal\", \"Static evidence confirms benign classification\"), a minor inconsistency with its own uncertainty notes.",
+          "evidence_ids": [
+            "EV-4bc6623e8a6c45d9982ad102cf838f96"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning observed.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-4bc6623e8a6c45d9982ad102cf838f96"
+          ],
+          "rationale": "benign, raw 0.0013."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-f531389fe4494f439e2e20e68b161db9"
+          ],
+          "rationale": "committed 64, visible 16, all msvcrt CRT; resolved ref index 0 __iob_func correct."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-f531389fe4494f439e2e20e68b161db9"
+          ],
+          "rationale": "Matches evidence limitations."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-4bc6623e8a6c45d9982ad102cf838f96"
+          ],
+          "rationale": "Matches the prediction limitation on LIEF 0.15.1 vs 0.9.0."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "Static evidence confirms benign classification",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [
+            "SCORE_AS_PROBABILITY_OR_TRUTH"
+          ],
+          "evidence_ids": [
+            "EV-4bc6623e8a6c45d9982ad102cf838f96"
+          ],
+          "rationale": "The record shows the model predicted benign; \"confirms\" presents the label as established."
+        },
+        {
+          "text": "the import detail for network-related APIs (sockets, DNS, HTTP) is truncated to only 16 entries out of 64 committed",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-f531389fe4494f439e2e20e68b161db9"
+          ],
+          "rationale": "The import detail (all imports, not network-specific) shows 16 of 64 visible."
+        }
+      ]
+    },
+    {
+      "item_id": "J-29244526d5",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 0,
+          "rationale": "Most claims are supported (CreateFileW/CreateFileMappingW at indices 1-2 of EV-af8792; prediction EV-527dfd), but the uncertainty note \"No evidence of dynamic API resolution\" is contradicted by the visible import list, which includes GetProcAddress (index 9) and GetModuleHandleW (index 8). A material claim contradicted by evidence the author saw.",
+          "evidence_ids": [
+            "EV-af879296e6aa47bd8f47acad0c4c0161",
+            "EV-527dfd2793a74f1aabe379c9a8227644"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "Claims cite the correct records with visible-subset scope; the import refs resolve correctly.",
+          "evidence_ids": [
+            "EV-af879296e6aa47bd8f47acad0c4c0161",
+            "EV-527dfd2793a74f1aabe379c9a8227644"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 2,
+          "rationale": "Case-specific limits (16 of 64 visible, missing imports not assumed absent, no runtime) are stated and conclusions are kept to declared capability. The GetProcAddress error does not contradict a stated limitation, so it is scored under R1 only.",
+          "evidence_ids": [
+            "EV-af879296e6aa47bd8f47acad0c4c0161"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR with INSUFFICIENT_EVIDENCE is proportionate; the prediction is reported as static-only.",
+          "evidence_ids": [
+            "EV-527dfd2793a74f1aabe379c9a8227644"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 1,
+          "rationale": "Only implicit: \"Without runtime execution or full import visibility, we cannot confirm...\" names what is missing but proposes no concrete step.",
+          "evidence_ids": [
+            "EV-af879296e6aa47bd8f47acad0c4c0161"
+          ]
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-af879296e6aa47bd8f47acad0c4c0161"
+          ],
+          "rationale": "Indices 1 and 2 are KERNEL32 CreateFileW and CreateFileMappingW; framed as declared capability."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-527dfd2793a74f1aabe379c9a8227644"
+          ],
+          "rationale": "raw 0.00417, benign, uncalibrated."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-af879296e6aa47bd8f47acad0c4c0161"
+          ],
+          "rationale": "committed 64, visible 16; truncation limitation."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-af879296e6aa47bd8f47acad0c4c0161"
+          ],
+          "rationale": "Hedged possibility; GetProcAddress is in fact visible."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "No evidence of dynamic API resolution or actual file operations.",
+          "verdict": "CONTRADICTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-af879296e6aa47bd8f47acad0c4c0161"
+          ],
+          "rationale": "GetProcAddress (index 9) and GetModuleHandleW (index 8) are visible declared imports, i.e. static evidence of dynamic resolution capability.",
+          "evidence_access": "AGENT_VISIBLE"
+        },
+        {
+          "text": "Absence of FS APIs in visible list is unknown.",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-af879296e6aa47bd8f47acad0c4c0161"
+          ],
+          "rationale": "Confused wording: FS APIs (CreateFileW, CreateFileMappingW, MapViewOfFile) are present in the visible list."
+        }
+      ]
+    },
+    {
+      "item_id": "J-3125819b2f",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "The few statements (static prediction benign, raw score uncalibrated, concrete imports unavailable, no runtime behaviour observed) all match the visible evidence: prediction record 4763ce and no import evidence among the visible items.",
+          "evidence_ids": [
+            "EV-4763ce98541c495bb9120ed9e8722fdd"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "The prediction is embedded verbatim (prediction_shown); the remaining statements concern absence of import/runtime evidence and are correctly scoped; no misattribution.",
+          "evidence_ids": [
+            "EV-4763ce98541c495bb9120ed9e8722fdd"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 1,
+          "rationale": "Limitations are stated (static only, uncalibrated, imports unavailable) but in generic template form; they are not explicitly tied to the process control question (that this stays unknown), though there is no overreach.",
+          "evidence_ids": [
+            "EV-4763ce98541c495bb9120ed9e8722fdd"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is a cautious, acceptable action, but the only stated basis is the static model classifying BENIGN, so it is weakly justified for the question asked. Not semantic self-corroboration: the label is not argued to be confirmed.",
+          "evidence_ids": [
+            "EV-4763ce98541c495bb9120ed9e8722fdd"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning anywhere in the text; the MONITOR recommendation is not a plan to resolve an unknown.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": [
+        {
+          "text": "Mô hình tĩnh phân loại BENIGN (static model classifies BENIGN)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-4763ce98541c495bb9120ed9e8722fdd"
+          ],
+          "rationale": "predicted_label benign in the prediction record."
+        },
+        {
+          "text": "concrete imports unavailable",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "No import evidence was visible to the author."
+        },
+        {
+          "text": "phân tích chỉ dựa trên đặc trưng tĩnh, không quan sát hành vi runtime (static features only, no runtime behaviour observed)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-4763ce98541c495bb9120ed9e8722fdd"
+          ],
+          "rationale": "Matches prediction limitations."
+        }
+      ]
+    },
+    {
+      "item_id": "J-346d0a3f38",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "The few statements (static prediction benign, raw score uncalibrated, concrete imports unavailable, no runtime behaviour observed) all match the visible evidence: prediction record 1176da and no import evidence among the visible items.",
+          "evidence_ids": [
+            "EV-1176dae4eb91478887b95925ada1cb51"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "The prediction is embedded verbatim (prediction_shown); the remaining statements concern absence of import/runtime evidence and are correctly scoped; no misattribution.",
+          "evidence_ids": [
+            "EV-1176dae4eb91478887b95925ada1cb51"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 1,
+          "rationale": "Limitations are stated (static only, uncalibrated, imports unavailable) but in generic template form; they are not explicitly tied to the PE image type and detector output question (that this stays unknown), though there is no overreach.",
+          "evidence_ids": [
+            "EV-1176dae4eb91478887b95925ada1cb51"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is a cautious, acceptable action, but the only stated basis is the static model classifying BENIGN, so it is weakly justified for the question asked. Not semantic self-corroboration: the label is not argued to be confirmed.",
+          "evidence_ids": [
+            "EV-1176dae4eb91478887b95925ada1cb51"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning anywhere in the text; the MONITOR recommendation is not a plan to resolve an unknown.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": [
+        {
+          "text": "Mô hình tĩnh phân loại BENIGN (static model classifies BENIGN)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-1176dae4eb91478887b95925ada1cb51"
+          ],
+          "rationale": "predicted_label benign in the prediction record."
+        },
+        {
+          "text": "concrete imports unavailable",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "No import evidence was visible to the author."
+        },
+        {
+          "text": "phân tích chỉ dựa trên đặc trưng tĩnh, không quan sát hành vi runtime (static features only, no runtime behaviour observed)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-1176dae4eb91478887b95925ada1cb51"
+          ],
+          "rationale": "Matches prediction limitations."
+        }
+      ]
+    },
+    {
+      "item_id": "J-3798107f01",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "The few statements (static prediction benign, raw score uncalibrated, concrete imports unavailable, no runtime behaviour observed) all match the visible evidence: prediction record 04e1a2 and no import evidence among the visible items.",
+          "evidence_ids": [
+            "EV-04e1a25327284235bc04ca5a5fe6b769"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "The prediction is embedded verbatim (prediction_shown); the remaining statements concern absence of import/runtime evidence and are correctly scoped; no misattribution.",
+          "evidence_ids": [
+            "EV-04e1a25327284235bc04ca5a5fe6b769"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 1,
+          "rationale": "Limitations are stated (static only, uncalibrated, imports unavailable) but in generic template form; they are not explicitly tied to the file-system access question (that this stays unknown), though there is no overreach.",
+          "evidence_ids": [
+            "EV-04e1a25327284235bc04ca5a5fe6b769"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is a cautious, acceptable action, but the only stated basis is the static model classifying BENIGN, so it is weakly justified for the question asked. Not semantic self-corroboration: the label is not argued to be confirmed.",
+          "evidence_ids": [
+            "EV-04e1a25327284235bc04ca5a5fe6b769"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning anywhere in the text; the MONITOR recommendation is not a plan to resolve an unknown.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": [
+        {
+          "text": "Mô hình tĩnh phân loại BENIGN (static model classifies BENIGN)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-04e1a25327284235bc04ca5a5fe6b769"
+          ],
+          "rationale": "predicted_label benign in the prediction record."
+        },
+        {
+          "text": "concrete imports unavailable",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "No import evidence was visible to the author."
+        },
+        {
+          "text": "phân tích chỉ dựa trên đặc trưng tĩnh, không quan sát hành vi runtime (static features only, no runtime behaviour observed)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-04e1a25327284235bc04ca5a5fe6b769"
+          ],
+          "rationale": "Matches prediction limitations."
+        }
+      ]
+    },
+    {
+      "item_id": "J-3878bce0f7",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "The few statements (static prediction benign, raw score uncalibrated, concrete imports unavailable, no runtime behaviour observed) all match the visible evidence: prediction record 9d0bf3 and no import evidence among the visible items.",
+          "evidence_ids": [
+            "EV-9d0bf3ad1874432887026d8e31734e3d"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "The prediction is embedded verbatim (prediction_shown); the remaining statements concern absence of import/runtime evidence and are correctly scoped; no misattribution.",
+          "evidence_ids": [
+            "EV-9d0bf3ad1874432887026d8e31734e3d"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 1,
+          "rationale": "Limitations are stated (static only, uncalibrated, imports unavailable) but in generic template form; they are not explicitly tied to the file-system access question (that this stays unknown), though there is no overreach.",
+          "evidence_ids": [
+            "EV-9d0bf3ad1874432887026d8e31734e3d"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is a cautious, acceptable action, but the only stated basis is the static model classifying BENIGN, so it is weakly justified for the question asked. Not semantic self-corroboration: the label is not argued to be confirmed.",
+          "evidence_ids": [
+            "EV-9d0bf3ad1874432887026d8e31734e3d"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning anywhere in the text; the MONITOR recommendation is not a plan to resolve an unknown.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": [
+        {
+          "text": "Mô hình tĩnh phân loại BENIGN (static model classifies BENIGN)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-9d0bf3ad1874432887026d8e31734e3d"
+          ],
+          "rationale": "predicted_label benign in the prediction record."
+        },
+        {
+          "text": "concrete imports unavailable",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "No import evidence was visible to the author."
+        },
+        {
+          "text": "phân tích chỉ dựa trên đặc trưng tĩnh, không quan sát hành vi runtime (static features only, no runtime behaviour observed)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-9d0bf3ad1874432887026d8e31734e3d"
+          ],
+          "rationale": "Matches prediction limitations."
+        }
+      ]
+    },
+    {
+      "item_id": "J-395acf2dca",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "The few statements (static prediction benign, raw score uncalibrated, concrete imports unavailable, no runtime behaviour observed) all match the visible evidence: prediction record 5ff7e2 and no import evidence among the visible items.",
+          "evidence_ids": [
+            "EV-5ff7e2b8b52641bf8dd2e7eb1c31d638"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "The prediction is embedded verbatim (prediction_shown); the remaining statements concern absence of import/runtime evidence and are correctly scoped; no misattribution.",
+          "evidence_ids": [
+            "EV-5ff7e2b8b52641bf8dd2e7eb1c31d638"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 1,
+          "rationale": "Limitations are stated (static only, uncalibrated, imports unavailable) but in generic template form; they are not explicitly tied to the runtime network communication question (that this stays unknown), though there is no overreach.",
+          "evidence_ids": [
+            "EV-5ff7e2b8b52641bf8dd2e7eb1c31d638"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is a cautious, acceptable action, but the only stated basis is the static model classifying BENIGN, so it is weakly justified for the question asked. Not semantic self-corroboration: the label is not argued to be confirmed.",
+          "evidence_ids": [
+            "EV-5ff7e2b8b52641bf8dd2e7eb1c31d638"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning anywhere in the text; the MONITOR recommendation is not a plan to resolve an unknown.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": [
+        {
+          "text": "Mô hình tĩnh phân loại BENIGN (static model classifies BENIGN)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-5ff7e2b8b52641bf8dd2e7eb1c31d638"
+          ],
+          "rationale": "predicted_label benign in the prediction record."
+        },
+        {
+          "text": "concrete imports unavailable",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "No import evidence was visible to the author."
+        },
+        {
+          "text": "phân tích chỉ dựa trên đặc trưng tĩnh, không quan sát hành vi runtime (static features only, no runtime behaviour observed)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-5ff7e2b8b52641bf8dd2e7eb1c31d638"
+          ],
+          "rationale": "Matches prediction limitations."
+        }
+      ]
+    },
+    {
+      "item_id": "J-3b185f3df7",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "The few statements (static prediction benign, raw score uncalibrated, concrete imports unavailable, no runtime behaviour observed) all match the visible evidence: prediction record 527dfd and no import evidence among the visible items.",
+          "evidence_ids": [
+            "EV-527dfd2793a74f1aabe379c9a8227644"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "The prediction is embedded verbatim (prediction_shown); the remaining statements concern absence of import/runtime evidence and are correctly scoped; no misattribution.",
+          "evidence_ids": [
+            "EV-527dfd2793a74f1aabe379c9a8227644"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 1,
+          "rationale": "Limitations are stated (static only, uncalibrated, imports unavailable) but in generic template form; they are not explicitly tied to the file-system access question (that this stays unknown), though there is no overreach.",
+          "evidence_ids": [
+            "EV-527dfd2793a74f1aabe379c9a8227644"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is a cautious, acceptable action, but the only stated basis is the static model classifying BENIGN, so it is weakly justified for the question asked. Not semantic self-corroboration: the label is not argued to be confirmed.",
+          "evidence_ids": [
+            "EV-527dfd2793a74f1aabe379c9a8227644"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning anywhere in the text; the MONITOR recommendation is not a plan to resolve an unknown.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": [
+        {
+          "text": "Mô hình tĩnh phân loại BENIGN (static model classifies BENIGN)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-527dfd2793a74f1aabe379c9a8227644"
+          ],
+          "rationale": "predicted_label benign in the prediction record."
+        },
+        {
+          "text": "concrete imports unavailable",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "No import evidence was visible to the author."
+        },
+        {
+          "text": "phân tích chỉ dựa trên đặc trưng tĩnh, không quan sát hành vi runtime (static features only, no runtime behaviour observed)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-527dfd2793a74f1aabe379c9a8227644"
+          ],
+          "rationale": "Matches prediction limitations."
+        }
+      ]
+    },
+    {
+      "item_id": "J-3c1a75b742",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "The few statements (static prediction benign, raw score uncalibrated, concrete imports unavailable, no runtime behaviour observed) all match the visible evidence: prediction record b055c7 and no import evidence among the visible items.",
+          "evidence_ids": [
+            "EV-b055c7deb9694c848515d303069f975c"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "The prediction is embedded verbatim (prediction_shown); the remaining statements concern absence of import/runtime evidence and are correctly scoped; no misattribution.",
+          "evidence_ids": [
+            "EV-b055c7deb9694c848515d303069f975c"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 1,
+          "rationale": "Limitations are stated (static only, uncalibrated, imports unavailable) but in generic template form; they are not explicitly tied to the PE image type and detector output question (that this stays unknown), though there is no overreach.",
+          "evidence_ids": [
+            "EV-b055c7deb9694c848515d303069f975c"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is a cautious, acceptable action, but the only stated basis is the static model classifying BENIGN, so it is weakly justified for the question asked. Not semantic self-corroboration: the label is not argued to be confirmed.",
+          "evidence_ids": [
+            "EV-b055c7deb9694c848515d303069f975c"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning anywhere in the text; the MONITOR recommendation is not a plan to resolve an unknown.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": [
+        {
+          "text": "Mô hình tĩnh phân loại BENIGN (static model classifies BENIGN)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b055c7deb9694c848515d303069f975c"
+          ],
+          "rationale": "predicted_label benign in the prediction record."
+        },
+        {
+          "text": "concrete imports unavailable",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "No import evidence was visible to the author."
+        },
+        {
+          "text": "phân tích chỉ dựa trên đặc trưng tĩnh, không quan sát hành vi runtime (static features only, no runtime behaviour observed)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b055c7deb9694c848515d303069f975c"
+          ],
+          "rationale": "Matches prediction limitations."
+        }
+      ]
+    },
+    {
+      "item_id": "J-3c6b896220",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 1,
+          "rationale": "PE type (EV-1e4557) and prediction values (EV-6d947a) are correct and the absence of import data is accurate. C2 reads the uncalibrated raw score as \"a low likelihood of malicious behavior\", which is loosely probability-like (the explanation itself notes it is not a calibrated probability); the omitted-ID inference is speculative. Not central to the FS answer, which stays undetermined.",
+          "evidence_ids": [
+            "EV-1e45575736334d27917c0fde3c296db0",
+            "EV-6d947a0de0ee40d2be40f61821738275"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "Statements cite the header and prediction records that carry them; the no-import limitation is correctly scoped to what was visible.",
+          "evidence_ids": [
+            "EV-1e45575736334d27917c0fde3c296db0",
+            "EV-8bd3f66a7b734cd1aa225386b75536eb",
+            "EV-6d947a0de0ee40d2be40f61821738275"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 2,
+          "rationale": "Case-specific limitations (no import table visible, so FS APIs cannot be checked; uncalibrated score; no runtime) are stated and the conclusion is INSUFFICIENT_EVIDENCE at LOW confidence.",
+          "evidence_ids": [
+            "EV-1e45575736334d27917c0fde3c296db0",
+            "EV-6d947a0de0ee40d2be40f61821738275"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR at LOW confidence is proportionate; the prediction is explicitly not treated as proof of benignity.",
+          "evidence_ids": [
+            "EV-6d947a0de0ee40d2be40f61821738275"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 1,
+          "rationale": "Only implicit: \"Without seeing the import entries or executing the binary, we cannot confirm...\" names what is missing but proposes no concrete step.",
+          "evidence_ids": [
+            "EV-1e45575736334d27917c0fde3c296db0"
+          ]
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-1e45575736334d27917c0fde3c296db0",
+            "EV-8bd3f66a7b734cd1aa225386b75536eb"
+          ],
+          "rationale": "PE32+, x64, executable image."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [
+            "SCORE_AS_PROBABILITY_OR_TRUTH"
+          ],
+          "evidence_ids": [
+            "EV-6d947a0de0ee40d2be40f61821738275"
+          ],
+          "rationale": "Values correct (0.01395, benign), but \"low likelihood of malicious behavior\" reads the uncalibrated raw score as a probability."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-1e45575736334d27917c0fde3c296db0"
+          ],
+          "rationale": "No import evidence was visible; pe_header limitations say imports are not collected."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-6d947a0de0ee40d2be40f61821738275"
+          ],
+          "rationale": "Hedged possibility consistent with missing import data."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "Omitted evidence IDs suggest potential import or entropy data was not collected.",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "Import data was indeed not collected, but the omitted IDs (whose content the author did not see) are not a basis for that inference."
+        }
+      ]
+    },
+    {
+      "item_id": "J-3fed43cee1",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "All claims match visible evidence: x64 PE32+ executable, not DLL (EV-3bee76); benign, raw 0.003 (EV-b055c7); no import data visible. Hypotheses are hedged.",
+          "evidence_ids": [
+            "EV-3bee76ce4f2a4c64be323f61eb21196f",
+            "EV-b055c7deb9694c848515d303069f975c"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "Each claim cites the record that carries it; the no-import limitation is carried by the pe_header limitations.",
+          "evidence_ids": [
+            "EV-3bee76ce4f2a4c64be323f61eb21196f",
+            "EV-b055c7deb9694c848515d303069f975c"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 2,
+          "rationale": "States case-specific limits (no import visibility, uncalibrated score with feature-parity caveat, no dynamic data) and keeps conclusions to type and detector output with INSUFFICIENT_EVIDENCE.",
+          "evidence_ids": [
+            "EV-3bee76ce4f2a4c64be323f61eb21196f",
+            "EV-b055c7deb9694c848515d303069f975c"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR is proportionate; the score is reported as uncalibrated and not used as proof.",
+          "evidence_ids": [
+            "EV-b055c7deb9694c848515d303069f975c"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning; it only notes \"no further tools available\".",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b055c7deb9694c848515d303069f975c"
+          ],
+          "rationale": "benign, raw 0.00307."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-3bee76ce4f2a4c64be323f61eb21196f"
+          ],
+          "rationale": "x64, executable_image_flag true, is_dll false."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-3bee76ce4f2a4c64be323f61eb21196f"
+          ],
+          "rationale": "No import evidence visible; declared imports are capabilities only."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b055c7deb9694c848515d303069f975c"
+          ],
+          "rationale": "Hedged; notes lack of calibration."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "no further tools available",
+          "verdict": "NOT_ASSESSABLE",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "The material does not show which actions were offered."
+        }
+      ]
+    },
+    {
+      "item_id": "J-4ab772cca9",
+      "criteria": {
+        "R1_factual_support": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R2_evidence_traceability": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R7_uncertainty_limitations": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "No accepted final assessment; the system fell back to human MANUAL_REVIEW, a safe fallback that is not penalised.",
+          "evidence_ids": []
+        },
+        "R9_next_step_planning": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": []
+    },
+    {
+      "item_id": "J-5e7bafc2eb",
+      "criteria": {
+        "R1_factual_support": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R2_evidence_traceability": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R7_uncertainty_limitations": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "No accepted final assessment; the system fell back to human MANUAL_REVIEW, a safe fallback that is not penalised.",
+          "evidence_ids": []
+        },
+        "R9_next_step_planning": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": []
+    },
+    {
+      "item_id": "J-60134c6f6f",
+      "criteria": {
+        "R1_factual_support": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R2_evidence_traceability": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R7_uncertainty_limitations": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "No accepted final assessment; the system fell back to human MANUAL_REVIEW, a safe fallback that is not penalised.",
+          "evidence_ids": []
+        },
+        "R9_next_step_planning": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": []
+    },
+    {
+      "item_id": "J-60405f5c7d",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 1,
+          "rationale": "Core claims are supported: PE type (EV-d83020), prediction (EV-9d0bf3), 32 visible CRT imports with no FS APIs (EV-10d46e; refs 0 memset and 20 memmove resolve correctly). One uncertainty note is loosely worded (\"absence of FS APIs in visible range is unknown\", though absence in the visible range is known).",
+          "evidence_ids": [
+            "EV-d830205e41ae4721a02b4b917e899961",
+            "EV-9d0bf3ad1874432887026d8e31734e3d",
+            "EV-10d46e1d6cad4de1948dca598a9177ad"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "Statements trace to the correct records with visible-subset scope (32 of 64 committed).",
+          "evidence_ids": [
+            "EV-d830205e41ae4721a02b4b917e899961",
+            "EV-9d0bf3ad1874432887026d8e31734e3d",
+            "EV-10d46e1d6cad4de1948dca598a9177ad"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 2,
+          "rationale": "Case-specific limits (32/64 visible, absence not proven, dynamic resolution, uncalibrated score) are stated and the answer stays INSUFFICIENT_EVIDENCE at LOW confidence.",
+          "evidence_ids": [
+            "EV-10d46e1d6cad4de1948dca598a9177ad",
+            "EV-9d0bf3ad1874432887026d8e31734e3d"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR is proportionate to the unresolved FS question.",
+          "evidence_ids": [
+            "EV-9d0bf3ad1874432887026d8e31734e3d"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 1,
+          "rationale": "Only implicit: \"Without seeing all imports or running the binary...\" names what is missing but no concrete step is proposed.",
+          "evidence_ids": [
+            "EV-10d46e1d6cad4de1948dca598a9177ad"
+          ]
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-d830205e41ae4721a02b4b917e899961"
+          ],
+          "rationale": "PE32+, x64, not DLL."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-9d0bf3ad1874432887026d8e31734e3d"
+          ],
+          "rationale": "benign, raw 0.00147."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-10d46e1d6cad4de1948dca598a9177ad"
+          ],
+          "rationale": "Indices 0-31 are api-ms-win-crt string/runtime/private functions; no FS APIs among them."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-10d46e1d6cad4de1948dca598a9177ad"
+          ],
+          "rationale": "committed 64, visible 32; truncation limitation."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "Only 32 of 64 committed entries are visible; absence of FS APIs in visible range is unknown.",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-10d46e1d6cad4de1948dca598a9177ad"
+          ],
+          "rationale": "Counts correct; the wording about the visible range is confused (absence is known within it, unknown beyond)."
+        },
+        {
+          "text": "Static evidence confirms PE structure and benign prediction but lacks file-system API declarations",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-d830205e41ae4721a02b4b917e899961",
+            "EV-9d0bf3ad1874432887026d8e31734e3d",
+            "EV-10d46e1d6cad4de1948dca598a9177ad"
+          ],
+          "rationale": "\"Lacks\" is qualified by the truncation note in the same sentence."
+        }
+      ]
+    },
+    {
+      "item_id": "J-61f09a0a4e",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "All claims match the visible evidence: PE32+ x64 non-DLL (EV-32849b, EV-a6f92e), benign raw 0.006746 uncalibrated (EV-1176da), 16 of 64 committed imports visible out of 234 provider entries (EV-91003d; ref 15 __setusermatherr correct).",
+          "evidence_ids": [
+            "EV-32849b517cb744368ca47c36c59696ec",
+            "EV-a6f92e6ef9a24b0a9d73e6a9fe81153f",
+            "EV-1176dae4eb91478887b95925ada1cb51",
+            "EV-91003d8238364b52ab8b0057e6606a24"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "Every statement is traceable to the correct record with correct scope (visible slice described as incomplete).",
+          "evidence_ids": [
+            "EV-32849b517cb744368ca47c36c59696ec",
+            "EV-a6f92e6ef9a24b0a9d73e6a9fe81153f",
+            "EV-1176dae4eb91478887b95925ada1cb51",
+            "EV-91003d8238364b52ab8b0057e6606a24"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 2,
+          "rationale": "Case-specific limits (16/234 visible, uncalibrated score, no runtime) are stated and the conclusion is limited to type and detector output.",
+          "evidence_ids": [
+            "EV-91003d8238364b52ab8b0057e6606a24",
+            "EV-1176dae4eb91478887b95925ada1cb51"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR is proportionate; the prediction is reported as uncalibrated, not used as proof.",
+          "evidence_ids": [
+            "EV-1176dae4eb91478887b95925ada1cb51"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 2,
+          "rationale": "\"Full import verification requires reading remaining committed entries\" is a specific step that resolves the named unknown (the unread committed import entries).",
+          "evidence_ids": [
+            "EV-91003d8238364b52ab8b0057e6606a24"
+          ]
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-32849b517cb744368ca47c36c59696ec",
+            "EV-a6f92e6ef9a24b0a9d73e6a9fe81153f"
+          ],
+          "rationale": "is_dll false, PE32+, x64."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-1176dae4eb91478887b95925ada1cb51"
+          ],
+          "rationale": "raw_score 0.006746, benign, uncalibrated."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-91003d8238364b52ab8b0057e6606a24"
+          ],
+          "rationale": "committed 64, visible 16; index 15 __setusermatherr."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-91003d8238364b52ab8b0057e6606a24",
+            "EV-1176dae4eb91478887b95925ada1cb51"
+          ],
+          "rationale": "Matches evidence limitations."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "The import list confirms standard runtime functions (msvcrt.dll) but is incomplete due to truncation.",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-91003d8238364b52ab8b0057e6606a24"
+          ],
+          "rationale": "Visible entries are msvcrt CRT functions; incompleteness stated."
+        }
+      ]
+    },
+    {
+      "item_id": "J-62be6b1316",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 0,
+          "rationale": "Observed claims C1-C3 are correct (32 visible msvcrt/ulib entries of 128 total, raw 0.002 benign). But C4 and the explanation assert the file \"likely does not communicate over the network\" at runtime from 25% of declared imports plus a malware score that carries no network information: a runtime-behaviour overclaim from static data.",
+          "evidence_ids": [
+            "EV-5bec75a780f6464abc1d337420c047a0",
+            "EV-73cbf0b507a842989ad592d6bb01c2eb"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 1,
+          "rationale": "Observed statements trace correctly to EV-5bec75 and EV-73cbf0 with visible scope. However C4 cites the malware-prediction record as support for a network-behaviour conclusion that record does not carry, so the citation is partly decorative for that statement.",
+          "evidence_ids": [
+            "EV-5bec75a780f6464abc1d337420c047a0",
+            "EV-73cbf0b507a842989ad592d6bb01c2eb"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 1,
+          "rationale": "Case-specific limits are stated (32 of 128 visible, dynamic resolution, uncalibrated score), but the \"likely does not communicate\" conclusion leans past them; hedged (\"likely\"), so not an outright contradiction.",
+          "evidence_ids": [
+            "EV-5bec75a780f6464abc1d337420c047a0",
+            "EV-73cbf0b507a842989ad592d6bb01c2eb"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is proportionate, but the reasoning uses the detector score as evidence (\"extremely low ... supporting a benign classification\", \"low score ... suggest benign behavior\"), which is weak and partly self-corroborating; the action itself does not rest solely on it.",
+          "evidence_ids": [
+            "EV-73cbf0b507a842989ad592d6bb01c2eb"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning observed.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-5bec75a780f6464abc1d337420c047a0"
+          ],
+          "rationale": "Indices 0-31 are msvcrt.dll and ulib.dll entries; no network APIs among them."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-73cbf0b507a842989ad592d6bb01c2eb"
+          ],
+          "rationale": "raw 0.00217, benign."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-5bec75a780f6464abc1d337420c047a0"
+          ],
+          "rationale": "provider_total_entries 128, visible 32."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "UNSUPPORTED",
+          "tags": [
+            "RUNTIME_BEHAVIOUR_OVERCLAIM",
+            "SEMANTIC_SELF_CORROBORATION"
+          ],
+          "evidence_ids": [
+            "EV-5bec75a780f6464abc1d337420c047a0",
+            "EV-73cbf0b507a842989ad592d6bb01c2eb"
+          ],
+          "rationale": "Whether the file communicates at runtime cannot be established from a partial static import list; the malware score carries no network information and is used as corroboration of its own benign label.",
+          "evidence_access": "NO_STATIC_SOURCE"
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "The malware prediction score is extremely low (0.002), supporting a benign classification.",
+          "verdict": "UNSUPPORTED",
+          "tags": [
+            "SEMANTIC_SELF_CORROBORATION"
+          ],
+          "evidence_ids": [
+            "EV-73cbf0b507a842989ad592d6bb01c2eb"
+          ],
+          "rationale": "The score and the benign label are the same detector output; the score cannot independently support the classification.",
+          "evidence_access": "AGENT_VISIBLE"
+        },
+        {
+          "text": "The file imports standard C runtime and UI library functions but no visible network APIs.",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-5bec75a780f6464abc1d337420c047a0"
+          ],
+          "rationale": "Scoped to visible entries (msvcrt + ulib)."
+        }
+      ]
+    },
+    {
+      "item_id": "J-6a4678cf0e",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 1,
+          "rationale": "Claims C1-C4 are supported (format EV-f4c0bc, visible msvcrt-only imports with no process-control APIs in EV-e16cc9, raw 0.0012 benign in EV-364615). Free text loosely presents the label as established (\"Static evidence confirms benign classification\", \"malware score supports benignity\").",
+          "evidence_ids": [
+            "EV-f4c0bcbf9e7b46ddb7282a3eddedae13",
+            "EV-e16cc916638b4a428e6b628c14c953cb",
+            "EV-3646158dfe224266baa5326f3cee231c"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "Every claim traces to the record carrying it, with import absence scoped to the 16 visible entries.",
+          "evidence_ids": [
+            "EV-f4c0bcbf9e7b46ddb7282a3eddedae13",
+            "EV-e16cc916638b4a428e6b628c14c953cb",
+            "EV-3646158dfe224266baa5326f3cee231c"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 2,
+          "rationale": "Case-specific limits (16/64 visible, absence in view not proving absence, uncalibrated score with LIEF parity, no runtime) are stated and the capability is left unresolved.",
+          "evidence_ids": [
+            "EV-e16cc916638b4a428e6b628c14c953cb",
+            "EV-3646158dfe224266baa5326f3cee231c"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is proportionate, but the justification leans on the detector (\"score supports benignity\", \"confirms benign classification\"), a minor inconsistency with its own calibration caveat.",
+          "evidence_ids": [
+            "EV-3646158dfe224266baa5326f3cee231c"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning observed.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-f4c0bcbf9e7b46ddb7282a3eddedae13"
+          ],
+          "rationale": "Format record: PE32+, x64, is_dll false."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-e16cc916638b4a428e6b628c14c953cb"
+          ],
+          "rationale": "All 16 visible entries are msvcrt; refs 0 fflush and 3 exit correct."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-3646158dfe224266baa5326f3cee231c"
+          ],
+          "rationale": "raw 0.0012, benign."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-e16cc916638b4a428e6b628c14c953cb"
+          ],
+          "rationale": "committed 64, visible 16."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "Static evidence confirms benign classification",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [
+            "SCORE_AS_PROBABILITY_OR_TRUTH"
+          ],
+          "evidence_ids": [
+            "EV-3646158dfe224266baa5326f3cee231c"
+          ],
+          "rationale": "The record shows a benign prediction; \"confirms\" presents it as established."
+        },
+        {
+          "text": "The malware score supports benignity but lacks calibration.",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [
+            "SEMANTIC_SELF_CORROBORATION"
+          ],
+          "evidence_ids": [
+            "EV-3646158dfe224266baa5326f3cee231c"
+          ],
+          "rationale": "Uses the score as support for its own label, though hedged by the calibration caveat."
+        }
+      ]
+    },
+    {
+      "item_id": "J-6eb859ff60",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "The few statements (static prediction benign, raw score uncalibrated, concrete imports unavailable, no runtime behaviour observed) all match the visible evidence: prediction record f66212 and no import evidence among the visible items.",
+          "evidence_ids": [
+            "EV-f66212508ad742bb8f440ace64cba61e"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "The prediction is embedded verbatim (prediction_shown); the remaining statements concern absence of import/runtime evidence and are correctly scoped; no misattribution.",
+          "evidence_ids": [
+            "EV-f66212508ad742bb8f440ace64cba61e"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 1,
+          "rationale": "Limitations are stated (static only, uncalibrated, imports unavailable) but in generic template form; they are not explicitly tied to the network communication question (that this stays unknown), though there is no overreach.",
+          "evidence_ids": [
+            "EV-f66212508ad742bb8f440ace64cba61e"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is a cautious, acceptable action, but the only stated basis is the static model classifying BENIGN, so it is weakly justified for the question asked. Not semantic self-corroboration: the label is not argued to be confirmed.",
+          "evidence_ids": [
+            "EV-f66212508ad742bb8f440ace64cba61e"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning anywhere in the text; the MONITOR recommendation is not a plan to resolve an unknown.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": [
+        {
+          "text": "Mô hình tĩnh phân loại BENIGN (static model classifies BENIGN)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-f66212508ad742bb8f440ace64cba61e"
+          ],
+          "rationale": "predicted_label benign in the prediction record."
+        },
+        {
+          "text": "concrete imports unavailable",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "No import evidence was visible to the author."
+        },
+        {
+          "text": "phân tích chỉ dựa trên đặc trưng tĩnh, không quan sát hành vi runtime (static features only, no runtime behaviour observed)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-f66212508ad742bb8f440ace64cba61e"
+          ],
+          "rationale": "Matches prediction limitations."
+        }
+      ]
+    },
+    {
+      "item_id": "J-704dd05379",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "The few statements (static prediction benign, raw score uncalibrated, concrete imports unavailable, no runtime behaviour observed) all match the visible evidence: prediction record 9381a8 and no import evidence among the visible items.",
+          "evidence_ids": [
+            "EV-9381a8f998f347629cf75f51bc13e79e"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "The prediction is embedded verbatim (prediction_shown); the remaining statements concern absence of import/runtime evidence and are correctly scoped; no misattribution.",
+          "evidence_ids": [
+            "EV-9381a8f998f347629cf75f51bc13e79e"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 1,
+          "rationale": "Limitations are stated (static only, uncalibrated, imports unavailable) but in generic template form; they are not explicitly tied to the runtime network communication question (that this stays unknown), though there is no overreach.",
+          "evidence_ids": [
+            "EV-9381a8f998f347629cf75f51bc13e79e"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is a cautious, acceptable action, but the only stated basis is the static model classifying BENIGN, so it is weakly justified for the question asked. Not semantic self-corroboration: the label is not argued to be confirmed.",
+          "evidence_ids": [
+            "EV-9381a8f998f347629cf75f51bc13e79e"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning anywhere in the text; the MONITOR recommendation is not a plan to resolve an unknown.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": [
+        {
+          "text": "Mô hình tĩnh phân loại BENIGN (static model classifies BENIGN)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-9381a8f998f347629cf75f51bc13e79e"
+          ],
+          "rationale": "predicted_label benign in the prediction record."
+        },
+        {
+          "text": "concrete imports unavailable",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "No import evidence was visible to the author."
+        },
+        {
+          "text": "phân tích chỉ dựa trên đặc trưng tĩnh, không quan sát hành vi runtime (static features only, no runtime behaviour observed)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-9381a8f998f347629cf75f51bc13e79e"
+          ],
+          "rationale": "Matches prediction limitations."
+        }
+      ]
+    },
+    {
+      "item_id": "J-71284123dc",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 1,
+          "rationale": "C1-C3 are supported (format EV-b04ab5, prediction EV-4763ce, 16/64 visible CRT imports in EV-f063df with ref 15 correct). C4 is confusingly worded (\"absence ... in the visible list is unknown\", though it is known within that list) and the free text says static evidence \"confirms benign classification\".",
+          "evidence_ids": [
+            "EV-b04ab5a2682e4d869d4e517fde82860d",
+            "EV-4763ce98541c495bb9120ed9e8722fdd",
+            "EV-f063dfeb82894438877fa2bfb6f85ff9"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "Statements trace to the correct records; import absence scoped to the visible 16 entries.",
+          "evidence_ids": [
+            "EV-b04ab5a2682e4d869d4e517fde82860d",
+            "EV-4763ce98541c495bb9120ed9e8722fdd",
+            "EV-f063dfeb82894438877fa2bfb6f85ff9"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 2,
+          "rationale": "Case-specific limits (16/64 visible, uncalibrated score, no runtime) are stated and the capability is left unconfirmed.",
+          "evidence_ids": [
+            "EV-f063dfeb82894438877fa2bfb6f85ff9",
+            "EV-4763ce98541c495bb9120ed9e8722fdd"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is proportionate, but the free-text justification leans on the prediction (\"confirms benign classification\").",
+          "evidence_ids": [
+            "EV-4763ce98541c495bb9120ed9e8722fdd"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning observed.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b04ab5a2682e4d869d4e517fde82860d"
+          ],
+          "rationale": "Format record: PE32+, x64."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-4763ce98541c495bb9120ed9e8722fdd"
+          ],
+          "rationale": "raw 0.00102, benign."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-f063dfeb82894438877fa2bfb6f85ff9"
+          ],
+          "rationale": "committed 64, visible 16 CRT entries; index 15 _o__set_new_mode correct."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-f063dfeb82894438877fa2bfb6f85ff9"
+          ],
+          "rationale": "First half correct; \"absence ... in the visible list is unknown\" is confused - absence is observed in the visible list and unknown beyond it."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "Static evidence confirms benign classification",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [
+            "SCORE_AS_PROBABILITY_OR_TRUTH"
+          ],
+          "evidence_ids": [
+            "EV-4763ce98541c495bb9120ed9e8722fdd"
+          ],
+          "rationale": "The model predicted benign; \"confirms\" presents the label as established."
+        }
+      ]
+    },
+    {
+      "item_id": "J-77e214a518",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 0,
+          "rationale": "C1-C4 are supported, but free-text claims overreach: \"The malware prediction score (0.001) strongly suggests benignity\" treats an explicitly uncalibrated score as strong evidence of truth, and \"benign static characteristics\"/\"benign PE structure\" are not carried by any header evidence.",
+          "evidence_ids": [
+            "EV-6f8593c0dca94932ad0d4ac0558dc0d0",
+            "EV-5e446b26d39442b09b2ba165dad663fe",
+            "EV-444209370a5547919c13880a17e0db33",
+            "EV-59a532a1d7a3410cba5f55145dd543bd"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 1,
+          "rationale": "Claims C1-C4 trace correctly. \"Valid x64 PE executable with benign static characteristics\" and \"benign PE structure\" cannot be traced to any source: the header records carry no benignity information.",
+          "evidence_ids": [
+            "EV-5e446b26d39442b09b2ba165dad663fe",
+            "EV-444209370a5547919c13880a17e0db33",
+            "EV-59a532a1d7a3410cba5f55145dd543bd"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 0,
+          "rationale": "The report states the score is uncalibrated yet says it \"strongly suggests benignity\" and that \"No evidence contradicts the benign classification\", contradicting its own stated limitation.",
+          "evidence_ids": [
+            "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is itself proportionate, but the benign judgement is supported mainly by the detector output (\"prediction supports benign classification\"), a semantic self-corroboration in the reasoning; the cautious action keeps it from being unsafe.",
+          "evidence_ids": [
+            "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning observed.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-5e446b26d39442b09b2ba165dad663fe",
+            "EV-444209370a5547919c13880a17e0db33"
+          ],
+          "rationale": "PE32+, x64, not DLL."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-59a532a1d7a3410cba5f55145dd543bd"
+          ],
+          "rationale": "Visible 16 msvcrt entries contain no CreateProcess/OpenProcess/TerminateProcess; ref 10 _exit correct."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+          ],
+          "rationale": "raw 0.00108, benign."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-59a532a1d7a3410cba5f55145dd543bd"
+          ],
+          "rationale": "committed 64, visible 16."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "The malware prediction score (0.001) strongly suggests benignity.",
+          "verdict": "UNSUPPORTED",
+          "tags": [
+            "SCORE_AS_PROBABILITY_OR_TRUTH"
+          ],
+          "evidence_ids": [
+            "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+          ],
+          "rationale": "score_is_calibrated_probability=false; a raw score cannot be read as strong evidence of benignity.",
+          "evidence_access": "AGENT_VISIBLE"
+        },
+        {
+          "text": "prediction supports benign classification",
+          "verdict": "UNSUPPORTED",
+          "tags": [
+            "SEMANTIC_SELF_CORROBORATION"
+          ],
+          "evidence_ids": [
+            "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+          ],
+          "rationale": "The prediction is the benign classification; it cannot corroborate itself.",
+          "evidence_access": "AGENT_VISIBLE"
+        },
+        {
+          "text": "Static evidence confirms benign PE structure",
+          "verdict": "UNSUPPORTED",
+          "tags": [
+            "WRONG_ATTRIBUTION"
+          ],
+          "evidence_ids": [
+            "EV-5e446b26d39442b09b2ba165dad663fe",
+            "EV-444209370a5547919c13880a17e0db33"
+          ],
+          "rationale": "Header/format records establish only PE type and architecture, not benignity.",
+          "evidence_access": "AGENT_VISIBLE"
+        }
+      ]
+    },
+    {
+      "item_id": "J-7828fd729e",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 1,
+          "rationale": "Core claims are supported: WriteFile (idx 2) and SetCurrentDirectoryW (idx 14) are visible in EV-39beae and framed as declared capability; prediction values match EV-cc53ff. Two uncertainty notes are loosely worded: \"absence of file I/O APIs in the visible set is unknown\" (file APIs are visibly present) and \"uncalibrated, indicating low confidence in the benign label\" (uncalibration does not imply low confidence).",
+          "evidence_ids": [
+            "EV-39beae79d52c41fa86f248fbf3cf5629",
+            "EV-cc53ff092a2a475d8ed8277df55653f4"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "Claims trace to the correct records with visible-subset scope; import refs resolve correctly.",
+          "evidence_ids": [
+            "EV-39beae79d52c41fa86f248fbf3cf5629",
+            "EV-cc53ff092a2a475d8ed8277df55653f4"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 2,
+          "rationale": "Case-specific limits (16/64 visible, declared imports not runtime proof, uncalibrated score) are stated; conclusion stays INSUFFICIENT_EVIDENCE at LOW confidence.",
+          "evidence_ids": [
+            "EV-39beae79d52c41fa86f248fbf3cf5629",
+            "EV-cc53ff092a2a475d8ed8277df55653f4"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR is proportionate; declared FS capability is reported without overclaiming runtime use, and the prediction is not used as proof.",
+          "evidence_ids": [
+            "EV-39beae79d52c41fa86f248fbf3cf5629",
+            "EV-cc53ff092a2a475d8ed8277df55653f4"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 1,
+          "rationale": "\"Runtime monitoring is required to confirm if file operations occur\" is a generic dynamic step; no specific step for the unread committed import entries.",
+          "evidence_ids": [
+            "EV-39beae79d52c41fa86f248fbf3cf5629"
+          ]
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-39beae79d52c41fa86f248fbf3cf5629"
+          ],
+          "rationale": "Indices 2 WriteFile and 14 SetCurrentDirectoryW in KERNEL32.dll; stated as declared capability."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-cc53ff092a2a475d8ed8277df55653f4"
+          ],
+          "rationale": "raw 0.00171, benign."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-39beae79d52c41fa86f248fbf3cf5629"
+          ],
+          "rationale": "committed 64, visible 16."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-39beae79d52c41fa86f248fbf3cf5629"
+          ],
+          "rationale": "Matches evidence limitations."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "Only 16 of 64 committed import entries are visible; absence of file I/O APIs in the visible set is unknown.",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-39beae79d52c41fa86f248fbf3cf5629"
+          ],
+          "rationale": "Counts correct; the visible set does contain file APIs (WriteFile, GetFileType, GetFullPathNameW), so the wording is confused."
+        },
+        {
+          "text": "Malware prediction score (0.0017) is raw and uncalibrated, indicating low confidence in the benign label.",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-cc53ff092a2a475d8ed8277df55653f4"
+          ],
+          "rationale": "Uncalibrated is correct; \"low confidence\" does not follow from that."
+        }
+      ]
+    },
+    {
+      "item_id": "J-7f6521db18",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "The few statements (static prediction benign, raw score uncalibrated, concrete imports unavailable, no runtime behaviour observed) all match the visible evidence: prediction record fbff4b and no import evidence among the visible items.",
+          "evidence_ids": [
+            "EV-fbff4b4bd8d744ed9e1195dad0cd983d"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "The prediction is embedded verbatim (prediction_shown); the remaining statements concern absence of import/runtime evidence and are correctly scoped; no misattribution.",
+          "evidence_ids": [
+            "EV-fbff4b4bd8d744ed9e1195dad0cd983d"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 1,
+          "rationale": "Limitations are stated (static only, uncalibrated, imports unavailable) but in generic template form; they are not explicitly tied to the PE image type and detector output question (that this stays unknown), though there is no overreach.",
+          "evidence_ids": [
+            "EV-fbff4b4bd8d744ed9e1195dad0cd983d"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is a cautious, acceptable action, but the only stated basis is the static model classifying BENIGN, so it is weakly justified for the question asked. Not semantic self-corroboration: the label is not argued to be confirmed.",
+          "evidence_ids": [
+            "EV-fbff4b4bd8d744ed9e1195dad0cd983d"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning anywhere in the text; the MONITOR recommendation is not a plan to resolve an unknown.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": [
+        {
+          "text": "Mô hình tĩnh phân loại BENIGN (static model classifies BENIGN)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-fbff4b4bd8d744ed9e1195dad0cd983d"
+          ],
+          "rationale": "predicted_label benign in the prediction record."
+        },
+        {
+          "text": "concrete imports unavailable",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "No import evidence was visible to the author."
+        },
+        {
+          "text": "phân tích chỉ dựa trên đặc trưng tĩnh, không quan sát hành vi runtime (static features only, no runtime behaviour observed)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-fbff4b4bd8d744ed9e1195dad0cd983d"
+          ],
+          "rationale": "Matches prediction limitations."
+        }
+      ]
+    },
+    {
+      "item_id": "J-878118f23f",
+      "criteria": {
+        "R1_factual_support": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R2_evidence_traceability": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R7_uncertainty_limitations": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "No accepted final assessment; the system fell back to human MANUAL_REVIEW, a safe fallback that is not penalised.",
+          "evidence_ids": []
+        },
+        "R9_next_step_planning": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": []
+    },
+    {
+      "item_id": "J-88fb15b92f",
+      "criteria": {
+        "R1_factual_support": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R2_evidence_traceability": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R7_uncertainty_limitations": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "No accepted final assessment; the system fell back to human MANUAL_REVIEW, a safe fallback that is not penalised.",
+          "evidence_ids": []
+        },
+        "R9_next_step_planning": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": []
+    },
+    {
+      "item_id": "J-8f9d168375",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 1,
+          "rationale": "C1-C3 are supported (header EV-64713d/EV-499427, prediction EV-f66212, 32/64 visible CRT imports in EV-dfc05a). Loose wording: C4 says absence \"in visible entries is unknown\" (it is observed there), and \"The low raw score supports benign classification\" uses the score as support for its own label.",
+          "evidence_ids": [
+            "EV-64713df841ae4bd8b003c5d0fc4fdd21",
+            "EV-499427fce58d4d09b4a729419b2b7401",
+            "EV-f66212508ad742bb8f440ace64cba61e",
+            "EV-dfc05a418ccb4170a6a9826eae213675"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "Statements trace to the correct records with visible-subset scope.",
+          "evidence_ids": [
+            "EV-64713df841ae4bd8b003c5d0fc4fdd21",
+            "EV-f66212508ad742bb8f440ace64cba61e",
+            "EV-dfc05a418ccb4170a6a9826eae213675"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 2,
+          "rationale": "Case-specific limits (32/64 visible, absence not confirming absence, raw score, no runtime) are stated; network capability is left uncertain.",
+          "evidence_ids": [
+            "EV-dfc05a418ccb4170a6a9826eae213675",
+            "EV-f66212508ad742bb8f440ace64cba61e"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR with INSUFFICIENT_EVIDENCE is proportionate; the decision rests on truncated import visibility, not on the score.",
+          "evidence_ids": [
+            "EV-dfc05a418ccb4170a6a9826eae213675",
+            "EV-f66212508ad742bb8f440ace64cba61e"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning observed.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-64713df841ae4bd8b003c5d0fc4fdd21",
+            "EV-499427fce58d4d09b4a729419b2b7401"
+          ],
+          "rationale": "PE32+, x64, not DLL."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-f66212508ad742bb8f440ace64cba61e"
+          ],
+          "rationale": "raw 0.00261, benign."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-dfc05a418ccb4170a6a9826eae213675"
+          ],
+          "rationale": "committed 64, visible 32; only CRT entries; ref 0 _initterm correct."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-dfc05a418ccb4170a6a9826eae213675"
+          ],
+          "rationale": "Limitation is right, but \"absence in visible entries is unknown\" misstates it: absence is observed in the visible entries and unknown beyond them."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "The low raw score supports benign classification",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [
+            "SEMANTIC_SELF_CORROBORATION"
+          ],
+          "evidence_ids": [
+            "EV-f66212508ad742bb8f440ace64cba61e"
+          ],
+          "rationale": "Score and label are the same detector output; hedged by \"cannot rule out\"."
+        }
+      ]
+    },
+    {
+      "item_id": "J-8f9db26948",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 1,
+          "rationale": "C1-C4 are supported (header EV-5ae9f9, prediction EV-c92d01, 16/64 visible msvcrt imports with no process-control APIs in EV-754d82; refs 0 and 2 correct). The uncertainty note saying absence \"in the visible list is unknown\" is loosely worded.",
+          "evidence_ids": [
+            "EV-5ae9f96c502e4faa84a9ee991a5eb921",
+            "EV-c92d01fc849d41b1bb5ae9b6ed583a0d",
+            "EV-754d828e0629479899a8f6cca4b1beae"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "Statements trace to the correct records with visible-subset scope.",
+          "evidence_ids": [
+            "EV-5ae9f96c502e4faa84a9ee991a5eb921",
+            "EV-c92d01fc849d41b1bb5ae9b6ed583a0d",
+            "EV-754d828e0629479899a8f6cca4b1beae"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 2,
+          "rationale": "Case-specific limits (16/64 visible, uncalibrated score, no dynamic data) are stated and the answer is INSUFFICIENT_EVIDENCE at LOW confidence.",
+          "evidence_ids": [
+            "EV-754d828e0629479899a8f6cca4b1beae",
+            "EV-c92d01fc849d41b1bb5ae9b6ed583a0d"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR at LOW confidence is proportionate; benign suggestion is hedged and not the basis of the action.",
+          "evidence_ids": [
+            "EV-c92d01fc849d41b1bb5ae9b6ed583a0d"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 1,
+          "rationale": "Only implicit: \"without runtime data or a complete import view, execution risk cannot be ruled out\" names what is missing without proposing a concrete step.",
+          "evidence_ids": [
+            "EV-754d828e0629479899a8f6cca4b1beae"
+          ]
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-5ae9f96c502e4faa84a9ee991a5eb921"
+          ],
+          "rationale": "PE32+, x64, executable_image_flag true."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-c92d01fc849d41b1bb5ae9b6ed583a0d"
+          ],
+          "rationale": "raw 0.00332, benign."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-754d828e0629479899a8f6cca4b1beae"
+          ],
+          "rationale": "committed 64, visible 16 msvcrt entries; refs correct."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-754d828e0629479899a8f6cca4b1beae"
+          ],
+          "rationale": "Matches evidence limitations."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "absence of process control APIs (CreateProcess, OpenProcess) in the visible list is unknown",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-754d828e0629479899a8f6cca4b1beae"
+          ],
+          "rationale": "Absence is observed in the visible list; it is unknown only beyond it."
+        },
+        {
+          "text": "The low malware score and lack of visible process control imports suggest benign behavior",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-c92d01fc849d41b1bb5ae9b6ed583a0d",
+            "EV-754d828e0629479899a8f6cca4b1beae"
+          ],
+          "rationale": "Hedged, but partly leans on the detector output."
+        }
+      ]
+    },
+    {
+      "item_id": "J-90952ef019",
+      "criteria": {
+        "R1_factual_support": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R2_evidence_traceability": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R7_uncertainty_limitations": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "No accepted final assessment; the system fell back to human MANUAL_REVIEW, a safe fallback that is not penalised.",
+          "evidence_ids": []
+        },
+        "R9_next_step_planning": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": []
+    },
+    {
+      "item_id": "J-97496fc495",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "The few statements (static prediction benign, raw score uncalibrated, concrete imports unavailable, no runtime behaviour observed) all match the visible evidence: prediction record c92d01 and no import evidence among the visible items.",
+          "evidence_ids": [
+            "EV-c92d01fc849d41b1bb5ae9b6ed583a0d"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "The prediction is embedded verbatim (prediction_shown); the remaining statements concern absence of import/runtime evidence and are correctly scoped; no misattribution.",
+          "evidence_ids": [
+            "EV-c92d01fc849d41b1bb5ae9b6ed583a0d"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 1,
+          "rationale": "Limitations are stated (static only, uncalibrated, imports unavailable) but in generic template form; they are not explicitly tied to the process control question (that this stays unknown), though there is no overreach.",
+          "evidence_ids": [
+            "EV-c92d01fc849d41b1bb5ae9b6ed583a0d"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is a cautious, acceptable action, but the only stated basis is the static model classifying BENIGN, so it is weakly justified for the question asked. Not semantic self-corroboration: the label is not argued to be confirmed.",
+          "evidence_ids": [
+            "EV-c92d01fc849d41b1bb5ae9b6ed583a0d"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning anywhere in the text; the MONITOR recommendation is not a plan to resolve an unknown.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": [
+        {
+          "text": "Mô hình tĩnh phân loại BENIGN (static model classifies BENIGN)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-c92d01fc849d41b1bb5ae9b6ed583a0d"
+          ],
+          "rationale": "predicted_label benign in the prediction record."
+        },
+        {
+          "text": "concrete imports unavailable",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "No import evidence was visible to the author."
+        },
+        {
+          "text": "phân tích chỉ dựa trên đặc trưng tĩnh, không quan sát hành vi runtime (static features only, no runtime behaviour observed)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-c92d01fc849d41b1bb5ae9b6ed583a0d"
+          ],
+          "rationale": "Matches prediction limitations."
+        }
+      ]
+    },
+    {
+      "item_id": "J-97ec47ac10",
+      "criteria": {
+        "R1_factual_support": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R2_evidence_traceability": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R7_uncertainty_limitations": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "No accepted final assessment; the system fell back to human MANUAL_REVIEW, a safe fallback that is not penalised.",
+          "evidence_ids": []
+        },
+        "R9_next_step_planning": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": []
+    },
+    {
+      "item_id": "J-97f03d06db",
+      "criteria": {
+        "R1_factual_support": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R2_evidence_traceability": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R7_uncertainty_limitations": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "No accepted final assessment; the system fell back to human MANUAL_REVIEW, a safe fallback that is not penalised.",
+          "evidence_ids": []
+        },
+        "R9_next_step_planning": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": []
+    },
+    {
+      "item_id": "J-9b039b69f8",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 1,
+          "rationale": "C1-C4 are supported (header EV-63a2a2, prediction EV-fbff4b, 16/64 visible msvcrt imports with refs 0/6/13 correct in EV-2aea87). The explanation adds that the low score is \"consistent with benign characteristics\", a loosely worded, circular gloss on the detector output.",
+          "evidence_ids": [
+            "EV-63a2a2cf678d4bf48a8859f6dd13e11f",
+            "EV-fbff4b4bd8d744ed9e1195dad0cd983d",
+            "EV-2aea8744ae0e47c4a681559133572d83"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "Every claim traces to the record carrying it, with the import list described as incomplete.",
+          "evidence_ids": [
+            "EV-63a2a2cf678d4bf48a8859f6dd13e11f",
+            "EV-fbff4b4bd8d744ed9e1195dad0cd983d",
+            "EV-2aea8744ae0e47c4a681559133572d83"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 2,
+          "rationale": "States truncation (16/64), uncalibrated score with model/LIEF version mismatch, and no runtime analysis; conclusions are limited to type and detector output.",
+          "evidence_ids": [
+            "EV-2aea8744ae0e47c4a681559133572d83",
+            "EV-fbff4b4bd8d744ed9e1195dad0cd983d"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR is proportionate for this descriptive question.",
+          "evidence_ids": [
+            "EV-fbff4b4bd8d744ed9e1195dad0cd983d"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning observed.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-63a2a2cf678d4bf48a8859f6dd13e11f"
+          ],
+          "rationale": "x64, PE32+, not DLL."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-fbff4b4bd8d744ed9e1195dad0cd983d"
+          ],
+          "rationale": "raw 0.00168, benign, uncalibrated."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-2aea8744ae0e47c4a681559133572d83"
+          ],
+          "rationale": "Indices 0 ?terminate, 6 _exit, 13 malloc, 11 memcpy are visible msvcrt entries."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-2aea8744ae0e47c4a681559133572d83"
+          ],
+          "rationale": "committed 64, visible 16."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "very low raw score (~0.0017), consistent with benign characteristics",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [
+            "SEMANTIC_SELF_CORROBORATION"
+          ],
+          "evidence_ids": [
+            "EV-fbff4b4bd8d744ed9e1195dad0cd983d"
+          ],
+          "rationale": "Restates the detector output as consistency with benignity; no independent benign characteristic is cited."
+        },
+        {
+          "text": "No new evidence added in this revision",
+          "verdict": "NOT_ASSESSABLE",
+          "tags": [],
+          "evidence_ids": [
+            "EV-2aea8744ae0e47c4a681559133572d83"
+          ],
+          "rationale": "The import record is COMMITTED_DURING_RUN; revision history is not shown in the material."
+        }
+      ]
+    },
+    {
+      "item_id": "J-9c65d2c17b",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "The few statements (static prediction benign, raw score uncalibrated, concrete imports unavailable, no runtime behaviour observed) all match the visible evidence: prediction record c0fb92 and no import evidence among the visible items.",
+          "evidence_ids": [
+            "EV-c0fb92db0aa844f9833a10deca6abff7"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "The prediction is embedded verbatim (prediction_shown); the remaining statements concern absence of import/runtime evidence and are correctly scoped; no misattribution.",
+          "evidence_ids": [
+            "EV-c0fb92db0aa844f9833a10deca6abff7"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 1,
+          "rationale": "Limitations are stated (static only, uncalibrated, imports unavailable) but in generic template form; they are not explicitly tied to the PE image type and detector output question (that this stays unknown), though there is no overreach.",
+          "evidence_ids": [
+            "EV-c0fb92db0aa844f9833a10deca6abff7"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is a cautious, acceptable action, but the only stated basis is the static model classifying BENIGN, so it is weakly justified for the question asked. Not semantic self-corroboration: the label is not argued to be confirmed.",
+          "evidence_ids": [
+            "EV-c0fb92db0aa844f9833a10deca6abff7"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning anywhere in the text; the MONITOR recommendation is not a plan to resolve an unknown.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": [
+        {
+          "text": "Mô hình tĩnh phân loại BENIGN (static model classifies BENIGN)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-c0fb92db0aa844f9833a10deca6abff7"
+          ],
+          "rationale": "predicted_label benign in the prediction record."
+        },
+        {
+          "text": "concrete imports unavailable",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "No import evidence was visible to the author."
+        },
+        {
+          "text": "phân tích chỉ dựa trên đặc trưng tĩnh, không quan sát hành vi runtime (static features only, no runtime behaviour observed)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-c0fb92db0aa844f9833a10deca6abff7"
+          ],
+          "rationale": "Matches prediction limitations."
+        }
+      ]
+    },
+    {
+      "item_id": "J-9d957aa0eb",
+      "criteria": {
+        "R1_factual_support": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R2_evidence_traceability": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R7_uncertainty_limitations": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "No accepted final assessment; the system fell back to human MANUAL_REVIEW, a safe fallback that is not penalised.",
+          "evidence_ids": []
+        },
+        "R9_next_step_planning": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": []
+    },
+    {
+      "item_id": "J-b39d377dac",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "The few statements (static prediction benign, raw score uncalibrated, concrete imports unavailable, no runtime behaviour observed) all match the visible evidence: prediction record 9471e4 and no import evidence among the visible items.",
+          "evidence_ids": [
+            "EV-9471e4632818455da40c03f95c6b22f9"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "The prediction is embedded verbatim (prediction_shown); the remaining statements concern absence of import/runtime evidence and are correctly scoped; no misattribution.",
+          "evidence_ids": [
+            "EV-9471e4632818455da40c03f95c6b22f9"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 1,
+          "rationale": "Limitations are stated (static only, uncalibrated, imports unavailable) but in generic template form; they are not explicitly tied to the runtime network communication question (that this stays unknown), though there is no overreach.",
+          "evidence_ids": [
+            "EV-9471e4632818455da40c03f95c6b22f9"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is a cautious, acceptable action, but the only stated basis is the static model classifying BENIGN, so it is weakly justified for the question asked. Not semantic self-corroboration: the label is not argued to be confirmed.",
+          "evidence_ids": [
+            "EV-9471e4632818455da40c03f95c6b22f9"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning anywhere in the text; the MONITOR recommendation is not a plan to resolve an unknown.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": [
+        {
+          "text": "Mô hình tĩnh phân loại BENIGN (static model classifies BENIGN)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-9471e4632818455da40c03f95c6b22f9"
+          ],
+          "rationale": "predicted_label benign in the prediction record."
+        },
+        {
+          "text": "concrete imports unavailable",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "No import evidence was visible to the author."
+        },
+        {
+          "text": "phân tích chỉ dựa trên đặc trưng tĩnh, không quan sát hành vi runtime (static features only, no runtime behaviour observed)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-9471e4632818455da40c03f95c6b22f9"
+          ],
+          "rationale": "Matches prediction limitations."
+        }
+      ]
+    },
+    {
+      "item_id": "J-b65146ee9b",
+      "criteria": {
+        "R1_factual_support": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R2_evidence_traceability": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R7_uncertainty_limitations": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "No accepted final assessment; the system fell back to human MANUAL_REVIEW, a safe fallback that is not penalised.",
+          "evidence_ids": []
+        },
+        "R9_next_step_planning": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": []
+    },
+    {
+      "item_id": "J-b8e5dcc1fc",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 0,
+          "rationale": "Header (EV-3d781c) and prediction (EV-04e1a2) claims are correct. But C2 says the visible imports contain no direct file-system APIs while the visible list includes CRT file-stream functions (fclose idx 8, fputs, fflush), and the free-text reason \"Static evidence shows a benign PE with no explicit file-system API imports\" drops the visible-subset scope and treats the prediction as truth; committed non-visible entries include fopen, fread, fwrite and _write.",
+          "evidence_ids": [
+            "EV-3d781ca1687c4204affc97797ab336ed",
+            "EV-04e1a25327284235bc04ca5a5fe6b769",
+            "EV-e921198bdebd4e4eb4c675f3241d379e"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 1,
+          "rationale": "Explanation and claims are scoped to the visible subset and cite the right records, but the free-text reason states absence of file-system imports and a \"benign PE\" without scope or a carrying source.",
+          "evidence_ids": [
+            "EV-e921198bdebd4e4eb4c675f3241d379e",
+            "EV-04e1a25327284235bc04ca5a5fe6b769"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 2,
+          "rationale": "Case-specific limits (16/64 visible, possible dynamic resolution, uncalibrated score, no runtime) are stated and FS capability is said to remain unknown.",
+          "evidence_ids": [
+            "EV-e921198bdebd4e4eb4c675f3241d379e",
+            "EV-04e1a25327284235bc04ca5a5fe6b769"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is proportionate, but the reasoning states \"prediction supports benign classification\", using the detector output to corroborate its own label.",
+          "evidence_ids": [
+            "EV-04e1a25327284235bc04ca5a5fe6b769"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning observed.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-3d781ca1687c4204affc97797ab336ed"
+          ],
+          "rationale": "PE32+, x64, executable."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-e921198bdebd4e4eb4c675f3241d379e"
+          ],
+          "rationale": "sprintf_s, putchar, gmtime and system are visible (refs correct), but visible CRT stream functions fclose/fputs/fflush are file I/O relevant to the question, so \"no direct file-system APIs\" is only true for Win32-level APIs."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-04e1a25327284235bc04ca5a5fe6b769"
+          ],
+          "rationale": "raw 0.00224, benign."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-e921198bdebd4e4eb4c675f3241d379e"
+          ],
+          "rationale": "committed 64, visible 16; absence not proven."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "Static evidence shows a benign PE with no explicit file-system API imports; prediction supports benign classification.",
+          "verdict": "CONTRADICTED",
+          "tags": [
+            "SCOPE_OVERCLAIM",
+            "SCORE_AS_PROBABILITY_OR_TRUTH",
+            "SEMANTIC_SELF_CORROBORATION"
+          ],
+          "evidence_ids": [
+            "EV-e921198bdebd4e4eb4c675f3241d379e",
+            "EV-04e1a25327284235bc04ca5a5fe6b769"
+          ],
+          "rationale": "Unscoped absence claim: committed non-visible entries include fopen, fread, fwrite, _write (and fclose is visible); \"benign PE\" treats the label as truth and the prediction is used to support itself. Reaching those entries required a page read; the material does not show whether one was offered.",
+          "evidence_access": "ACCESSIBLE_NOT_RETRIEVED"
+        }
+      ]
+    },
+    {
+      "item_id": "J-c74f4d7fc5",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 0,
+          "rationale": "C1-C3 are correct (WS2_32 ordinals #115/#11 at indices 30/31 with null symbols; raw 0.0074 benign; 32/64 visible). But C4 infers that null symbols and a low score suggest the network imports \"may not be actively used\": ordinal imports with null names say nothing about use, and runtime use cannot be judged statically.",
+          "evidence_ids": [
+            "EV-67759f8939614d0ebfebc25a4f8178b2",
+            "EV-fc4b502469bf4896ac04b2afbedb5cfe"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 1,
+          "rationale": "Observed statements trace correctly to EV-67759f and EV-fc4b50, but C4 cites the malware-prediction record for a usage claim it does not carry (partly decorative citation).",
+          "evidence_ids": [
+            "EV-67759f8939614d0ebfebc25a4f8178b2",
+            "EV-fc4b502469bf4896ac04b2afbedb5cfe"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 2,
+          "rationale": "Case-specific limits (32/64 visible, null-symbol ordinals, uncalibrated score, no runtime) are stated and the main conclusion stays INSUFFICIENT_EVIDENCE.",
+          "evidence_ids": [
+            "EV-67759f8939614d0ebfebc25a4f8178b2",
+            "EV-fc4b502469bf4896ac04b2afbedb5cfe"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is acceptable, but C4 uses the low detector score to downplay observed Winsock imports, a weakly justified reasoning step.",
+          "evidence_ids": [
+            "EV-67759f8939614d0ebfebc25a4f8178b2",
+            "EV-fc4b502469bf4896ac04b2afbedb5cfe"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning observed.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-67759f8939614d0ebfebc25a4f8178b2"
+          ],
+          "rationale": "Indices 30 #115 and 31 #11 under WS2_32.dll with null symbols."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-fc4b502469bf4896ac04b2afbedb5cfe"
+          ],
+          "rationale": "raw 0.00746, benign."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-67759f8939614d0ebfebc25a4f8178b2"
+          ],
+          "rationale": "committed 64, visible 32."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "UNSUPPORTED",
+          "tags": [
+            "RUNTIME_BEHAVIOUR_OVERCLAIM",
+            "SEMANTIC_SELF_CORROBORATION"
+          ],
+          "evidence_ids": [
+            "EV-67759f8939614d0ebfebc25a4f8178b2",
+            "EV-fc4b502469bf4896ac04b2afbedb5cfe"
+          ],
+          "rationale": "Null symbol names only mean import by ordinal; neither they nor the detector score indicate whether the APIs are used at runtime.",
+          "evidence_access": "NO_STATIC_SOURCE"
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "The file imports from WS2_32.dll (Winsock 2), which is required for network communication",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [
+            "OUTSIDE_EVIDENCE_KNOWLEDGE"
+          ],
+          "evidence_ids": [
+            "EV-67759f8939614d0ebfebc25a4f8178b2"
+          ],
+          "rationale": "WS2_32 import is visible; \"required for network communication\" is general outside knowledge and overstated."
+        },
+        {
+          "text": "Static evidence shows limited network-related imports (WS2_32 ordinals) but no explicit socket functions",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-67759f8939614d0ebfebc25a4f8178b2"
+          ],
+          "rationale": "Ordinals are unnamed, so socket functions cannot be ruled out among them; RtlIpv4AddressToStringW (idx 29) is also visible and not mentioned."
+        }
+      ]
+    },
+    {
+      "item_id": "J-cd5c47778e",
+      "criteria": {
+        "R1_factual_support": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R2_evidence_traceability": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R7_uncertainty_limitations": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "No accepted final assessment; the system fell back to human MANUAL_REVIEW, a safe fallback that is not penalised.",
+          "evidence_ids": []
+        },
+        "R9_next_step_planning": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "No accepted final report; criterion marked NOT_ASSESSABLE_INCOMPLETE.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": []
+    },
+    {
+      "item_id": "J-cfce82e01d",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "The few statements (static prediction benign, raw score uncalibrated, concrete imports unavailable, no runtime behaviour observed) all match the visible evidence: prediction record 6f8593 and no import evidence among the visible items.",
+          "evidence_ids": [
+            "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "The prediction is embedded verbatim (prediction_shown); the remaining statements concern absence of import/runtime evidence and are correctly scoped; no misattribution.",
+          "evidence_ids": [
+            "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 1,
+          "rationale": "Limitations are stated (static only, uncalibrated, imports unavailable) but in generic template form; they are not explicitly tied to the process control question (that this stays unknown), though there is no overreach.",
+          "evidence_ids": [
+            "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is a cautious, acceptable action, but the only stated basis is the static model classifying BENIGN, so it is weakly justified for the question asked. Not semantic self-corroboration: the label is not argued to be confirmed.",
+          "evidence_ids": [
+            "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning anywhere in the text; the MONITOR recommendation is not a plan to resolve an unknown.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": [
+        {
+          "text": "Mô hình tĩnh phân loại BENIGN (static model classifies BENIGN)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+          ],
+          "rationale": "predicted_label benign in the prediction record."
+        },
+        {
+          "text": "concrete imports unavailable",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "No import evidence was visible to the author."
+        },
+        {
+          "text": "phân tích chỉ dựa trên đặc trưng tĩnh, không quan sát hành vi runtime (static features only, no runtime behaviour observed)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-6f8593c0dca94932ad0d4ac0558dc0d0"
+          ],
+          "rationale": "Matches prediction limitations."
+        }
+      ]
+    },
+    {
+      "item_id": "J-d4255eb25a",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "The few statements (static prediction benign, raw score uncalibrated, concrete imports unavailable, no runtime behaviour observed) all match the visible evidence: prediction record 6d947a and no import evidence among the visible items.",
+          "evidence_ids": [
+            "EV-6d947a0de0ee40d2be40f61821738275"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "The prediction is embedded verbatim (prediction_shown); the remaining statements concern absence of import/runtime evidence and are correctly scoped; no misattribution.",
+          "evidence_ids": [
+            "EV-6d947a0de0ee40d2be40f61821738275"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 1,
+          "rationale": "Limitations are stated (static only, uncalibrated, imports unavailable) but in generic template form; they are not explicitly tied to the file-system access question (that this stays unknown), though there is no overreach.",
+          "evidence_ids": [
+            "EV-6d947a0de0ee40d2be40f61821738275"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is a cautious, acceptable action, but the only stated basis is the static model classifying BENIGN, so it is weakly justified for the question asked. Not semantic self-corroboration: the label is not argued to be confirmed.",
+          "evidence_ids": [
+            "EV-6d947a0de0ee40d2be40f61821738275"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning anywhere in the text; the MONITOR recommendation is not a plan to resolve an unknown.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": [
+        {
+          "text": "Mô hình tĩnh phân loại BENIGN (static model classifies BENIGN)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-6d947a0de0ee40d2be40f61821738275"
+          ],
+          "rationale": "predicted_label benign in the prediction record."
+        },
+        {
+          "text": "concrete imports unavailable",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "No import evidence was visible to the author."
+        },
+        {
+          "text": "phân tích chỉ dựa trên đặc trưng tĩnh, không quan sát hành vi runtime (static features only, no runtime behaviour observed)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-6d947a0de0ee40d2be40f61821738275"
+          ],
+          "rationale": "Matches prediction limitations."
+        }
+      ]
+    },
+    {
+      "item_id": "J-d49f6b3213",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 0,
+          "rationale": "C1-C3 are supported (header EV-d83020/format EV-142ecb, prediction EV-9d0bf3, no imports visible). C4 infers the file \"may lack file-system access capabilities based on the low malware score\": the malware score carries no file-system capability information, so the claim is unsupported even though hedged.",
+          "evidence_ids": [
+            "EV-d830205e41ae4721a02b4b917e899961",
+            "EV-142ecb96e17344fb936439f4977bedb7",
+            "EV-9d0bf3ad1874432887026d8e31734e3d"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 0,
+          "rationale": "C4 ties a file-system-capability statement solely to the malware-prediction record, a source that does not carry it (misattribution). This is a traceability error separate from the factual problem under R1.",
+          "evidence_ids": [
+            "EV-9d0bf3ad1874432887026d8e31734e3d"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 2,
+          "rationale": "Case-specific limits (no import table visible, uncalibrated score with feature-parity caveat, no runtime) are stated and the conclusion is INSUFFICIENT_EVIDENCE at LOW confidence.",
+          "evidence_ids": [
+            "EV-d830205e41ae4721a02b4b917e899961",
+            "EV-9d0bf3ad1874432887026d8e31734e3d"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR at LOW confidence with INSUFFICIENT_EVIDENCE is proportionate; the action does not rest on the score.",
+          "evidence_ids": [
+            "EV-9d0bf3ad1874432887026d8e31734e3d"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 1,
+          "rationale": "Only implicit: \"Without seeing declared imports ... or executing the binary, it is impossible to determine...\" names what is needed but proposes no concrete step.",
+          "evidence_ids": [
+            "EV-d830205e41ae4721a02b4b917e899961"
+          ]
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-d830205e41ae4721a02b4b917e899961",
+            "EV-142ecb96e17344fb936439f4977bedb7"
+          ],
+          "rationale": "PE32+, x64."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-9d0bf3ad1874432887026d8e31734e3d"
+          ],
+          "rationale": "raw 0.00147, benign."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-d830205e41ae4721a02b4b917e899961"
+          ],
+          "rationale": "No import evidence visible."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "UNSUPPORTED",
+          "tags": [
+            "WRONG_ATTRIBUTION"
+          ],
+          "evidence_ids": [
+            "EV-9d0bf3ad1874432887026d8e31734e3d"
+          ],
+          "rationale": "A malware score does not indicate presence or absence of file-system capability; import data was never collected in this case (not in visible or reference evidence).",
+          "evidence_access": "INACCESSIBLE_BEYOND_LIMITS"
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "Missing evidence IDs suggest potential import data was omitted or unavailable.",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "Import data was indeed unavailable, but the omitted IDs (unseen by the author) are not a basis for that inference."
+        }
+      ]
+    },
+    {
+      "item_id": "J-d58a87c7d1",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "The few statements (static prediction benign, raw score uncalibrated, concrete imports unavailable, no runtime behaviour observed) all match the visible evidence: prediction record cc53ff and no import evidence among the visible items.",
+          "evidence_ids": [
+            "EV-cc53ff092a2a475d8ed8277df55653f4"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "The prediction is embedded verbatim (prediction_shown); the remaining statements concern absence of import/runtime evidence and are correctly scoped; no misattribution.",
+          "evidence_ids": [
+            "EV-cc53ff092a2a475d8ed8277df55653f4"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 1,
+          "rationale": "Limitations are stated (static only, uncalibrated, imports unavailable) but in generic template form; they are not explicitly tied to the file-system access question (that this stays unknown), though there is no overreach.",
+          "evidence_ids": [
+            "EV-cc53ff092a2a475d8ed8277df55653f4"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is a cautious, acceptable action, but the only stated basis is the static model classifying BENIGN, so it is weakly justified for the question asked. Not semantic self-corroboration: the label is not argued to be confirmed.",
+          "evidence_ids": [
+            "EV-cc53ff092a2a475d8ed8277df55653f4"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning anywhere in the text; the MONITOR recommendation is not a plan to resolve an unknown.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": [
+        {
+          "text": "Mô hình tĩnh phân loại BENIGN (static model classifies BENIGN)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-cc53ff092a2a475d8ed8277df55653f4"
+          ],
+          "rationale": "predicted_label benign in the prediction record."
+        },
+        {
+          "text": "concrete imports unavailable",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "No import evidence was visible to the author."
+        },
+        {
+          "text": "phân tích chỉ dựa trên đặc trưng tĩnh, không quan sát hành vi runtime (static features only, no runtime behaviour observed)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-cc53ff092a2a475d8ed8277df55653f4"
+          ],
+          "rationale": "Matches prediction limitations."
+        }
+      ]
+    },
+    {
+      "item_id": "J-ecd8652306",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "The few statements (static prediction benign, raw score uncalibrated, concrete imports unavailable, no runtime behaviour observed) all match the visible evidence: prediction record 364615 and no import evidence among the visible items.",
+          "evidence_ids": [
+            "EV-3646158dfe224266baa5326f3cee231c"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "The prediction is embedded verbatim (prediction_shown); the remaining statements concern absence of import/runtime evidence and are correctly scoped; no misattribution.",
+          "evidence_ids": [
+            "EV-3646158dfe224266baa5326f3cee231c"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 1,
+          "rationale": "Limitations are stated (static only, uncalibrated, imports unavailable) but in generic template form; they are not explicitly tied to the process control question (that this stays unknown), though there is no overreach.",
+          "evidence_ids": [
+            "EV-3646158dfe224266baa5326f3cee231c"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is a cautious, acceptable action, but the only stated basis is the static model classifying BENIGN, so it is weakly justified for the question asked. Not semantic self-corroboration: the label is not argued to be confirmed.",
+          "evidence_ids": [
+            "EV-3646158dfe224266baa5326f3cee231c"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning anywhere in the text; the MONITOR recommendation is not a plan to resolve an unknown.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": [
+        {
+          "text": "Mô hình tĩnh phân loại BENIGN (static model classifies BENIGN)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-3646158dfe224266baa5326f3cee231c"
+          ],
+          "rationale": "predicted_label benign in the prediction record."
+        },
+        {
+          "text": "concrete imports unavailable",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "No import evidence was visible to the author."
+        },
+        {
+          "text": "phân tích chỉ dựa trên đặc trưng tĩnh, không quan sát hành vi runtime (static features only, no runtime behaviour observed)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-3646158dfe224266baa5326f3cee231c"
+          ],
+          "rationale": "Matches prediction limitations."
+        }
+      ]
+    },
+    {
+      "item_id": "J-ef8d002a93",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 0,
+          "rationale": "C1-C3 are correct (EV-32849b, EV-a6f92e, EV-1176da). Several material claims are unsupported: the low score \"contradicts typical high-confidence benign detections\"; it \"aligns with the absence of obvious malicious signatures in the header\" (no signature analysis exists); the raw score \"indicates low confidence\" for benign; C4 speculates about evasion from a low score and missing (uncollected) import data.",
+          "evidence_ids": [
+            "EV-32849b517cb744368ca47c36c59696ec",
+            "EV-a6f92e6ef9a24b0a9d73e6a9fe81153f",
+            "EV-1176dae4eb91478887b95925ada1cb51"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 0,
+          "rationale": "Misattribution: \"absence of obvious malicious signatures in the header\" is tied to the header record, which carries no signature or maliciousness information (its limitations say no signature trust or verdict is collected).",
+          "evidence_ids": [
+            "EV-32849b517cb744368ca47c36c59696ec"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 0,
+          "rationale": "The report notes the score is not calibrated yet interprets it as indicating \"low confidence for benign\" and as contradicting \"high-confidence benign detections\", contradicting its own stated limitation.",
+          "evidence_ids": [
+            "EV-1176dae4eb91478887b95925ada1cb51"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is acceptable for a descriptive question, but the reasoning (alignment CONSISTENT while speculating about evasion from a low score) is internally inconsistent and weakly justified.",
+          "evidence_ids": [
+            "EV-1176dae4eb91478887b95925ada1cb51"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning observed.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-32849b517cb744368ca47c36c59696ec",
+            "EV-a6f92e6ef9a24b0a9d73e6a9fe81153f"
+          ],
+          "rationale": "PE32+, x64, not DLL; detection magic_bytes_and_headers."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-1176dae4eb91478887b95925ada1cb51"
+          ],
+          "rationale": "raw 0.006746, benign, uncalibrated."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-32849b517cb744368ca47c36c59696ec"
+          ],
+          "rationale": "No import evidence visible."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "UNSUPPORTED",
+          "tags": [
+            "SCORE_AS_PROBABILITY_OR_TRUTH"
+          ],
+          "evidence_ids": [
+            "EV-1176dae4eb91478887b95925ada1cb51",
+            "EV-32849b517cb744368ca47c36c59696ec"
+          ],
+          "rationale": "A low benign-side raw score plus uncollected import data provides no basis for suspecting evasion or non-standard characteristics.",
+          "evidence_access": "AGENT_VISIBLE"
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "a very low raw score (0.0067), which contradicts typical high-confidence benign detections",
+          "verdict": "UNSUPPORTED",
+          "tags": [
+            "SCORE_AS_PROBABILITY_OR_TRUTH",
+            "OUTSIDE_EVIDENCE_KNOWLEDGE"
+          ],
+          "evidence_ids": [
+            "EV-1176dae4eb91478887b95925ada1cb51"
+          ],
+          "rationale": "Nothing in the evidence supports that a low raw score contradicts benign detections; the score is far below the threshold on the benign side.",
+          "evidence_access": "AGENT_VISIBLE"
+        },
+        {
+          "text": "aligns with the absence of obvious malicious signatures in the header",
+          "verdict": "UNSUPPORTED",
+          "tags": [
+            "WRONG_ATTRIBUTION"
+          ],
+          "evidence_ids": [
+            "EV-32849b517cb744368ca47c36c59696ec"
+          ],
+          "rationale": "Header evidence contains no signature/maliciousness analysis.",
+          "evidence_access": "AGENT_VISIBLE"
+        },
+        {
+          "text": "Raw LightGBM score (0.0067) indicates low confidence for benign classification",
+          "verdict": "UNSUPPORTED",
+          "tags": [
+            "SCORE_AS_PROBABILITY_OR_TRUTH"
+          ],
+          "evidence_ids": [
+            "EV-1176dae4eb91478887b95925ada1cb51"
+          ],
+          "rationale": "Score is not a calibrated probability or confidence measure.",
+          "evidence_access": "AGENT_VISIBLE"
+        },
+        {
+          "text": "Missing evidence IDs suggest potential import data exists but was not retrieved or is truncated.",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "Import data was not available, but the omitted IDs are not evidence about it."
+        }
+      ]
+    },
+    {
+      "item_id": "J-f78611d6b9",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "The few statements (static prediction benign, raw score uncalibrated, concrete imports unavailable, no runtime behaviour observed) all match the visible evidence: prediction record 73cbf0 and no import evidence among the visible items.",
+          "evidence_ids": [
+            "EV-73cbf0b507a842989ad592d6bb01c2eb"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "The prediction is embedded verbatim (prediction_shown); the remaining statements concern absence of import/runtime evidence and are correctly scoped; no misattribution.",
+          "evidence_ids": [
+            "EV-73cbf0b507a842989ad592d6bb01c2eb"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 1,
+          "rationale": "Limitations are stated (static only, uncalibrated, imports unavailable) but in generic template form; they are not explicitly tied to the runtime network communication question (that this stays unknown), though there is no overreach.",
+          "evidence_ids": [
+            "EV-73cbf0b507a842989ad592d6bb01c2eb"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is a cautious, acceptable action, but the only stated basis is the static model classifying BENIGN, so it is weakly justified for the question asked. Not semantic self-corroboration: the label is not argued to be confirmed.",
+          "evidence_ids": [
+            "EV-73cbf0b507a842989ad592d6bb01c2eb"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning anywhere in the text; the MONITOR recommendation is not a plan to resolve an unknown.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": [
+        {
+          "text": "Mô hình tĩnh phân loại BENIGN (static model classifies BENIGN)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-73cbf0b507a842989ad592d6bb01c2eb"
+          ],
+          "rationale": "predicted_label benign in the prediction record."
+        },
+        {
+          "text": "concrete imports unavailable",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "No import evidence was visible to the author."
+        },
+        {
+          "text": "phân tích chỉ dựa trên đặc trưng tĩnh, không quan sát hành vi runtime (static features only, no runtime behaviour observed)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-73cbf0b507a842989ad592d6bb01c2eb"
+          ],
+          "rationale": "Matches prediction limitations."
+        }
+      ]
+    },
+    {
+      "item_id": "J-f80da67d06",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 0,
+          "rationale": "C1-C3 are correct (header EV-63a2a2/format EV-fe7a80, prediction EV-fbff4b). But the explanation and free text present the model label as established fact (\"identified as a benign x64 PE executable\", \"Static analysis confirms a benign x64 PE executable\"), treating the prediction as truth.",
+          "evidence_ids": [
+            "EV-63a2a2cf678d4bf48a8859f6dd13e11f",
+            "EV-fe7a80c3f5414e879e3a43841a8e732f",
+            "EV-fbff4b4bd8d744ed9e1195dad0cd983d"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "Statements trace to the header/format and prediction records that carry them (the label-as-truth problem is scored under R1).",
+          "evidence_ids": [
+            "EV-63a2a2cf678d4bf48a8859f6dd13e11f",
+            "EV-fe7a80c3f5414e879e3a43841a8e732f",
+            "EV-fbff4b4bd8d744ed9e1195dad0cd983d"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 0,
+          "rationale": "The report states the score is \"low but uncalibrated\" and that capabilities cannot be verified, yet concludes \"Static analysis confirms a benign x64 PE executable\", contradicting its own stated limitation.",
+          "evidence_ids": [
+            "EV-fbff4b4bd8d744ed9e1195dad0cd983d"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is itself cautious, but the stated risk judgement rests on the detector output treated as confirmation of benignity (self-corroborating reasoning); the action, not the reasoning, keeps it acceptable.",
+          "evidence_ids": [
+            "EV-fbff4b4bd8d744ed9e1195dad0cd983d"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning observed.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-63a2a2cf678d4bf48a8859f6dd13e11f",
+            "EV-fe7a80c3f5414e879e3a43841a8e732f"
+          ],
+          "rationale": "PE32+, x64, not DLL."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-fbff4b4bd8d744ed9e1195dad0cd983d"
+          ],
+          "rationale": "raw 0.00168, benign."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-63a2a2cf678d4bf48a8859f6dd13e11f"
+          ],
+          "rationale": "No import evidence visible."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [
+            "SEMANTIC_SELF_CORROBORATION"
+          ],
+          "evidence_ids": [
+            "EV-fbff4b4bd8d744ed9e1195dad0cd983d"
+          ],
+          "rationale": "LIEF version mismatch is correct; \"low raw score suggests benign characteristics\" restates the detector output as support for itself."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "Static analysis confirms a benign x64 PE executable.",
+          "verdict": "UNSUPPORTED",
+          "tags": [
+            "SCORE_AS_PROBABILITY_OR_TRUTH",
+            "SEMANTIC_SELF_CORROBORATION"
+          ],
+          "evidence_ids": [
+            "EV-fbff4b4bd8d744ed9e1195dad0cd983d",
+            "EV-63a2a2cf678d4bf48a8859f6dd13e11f"
+          ],
+          "rationale": "Only the model predicts benign; nothing confirms benignity, and the score is explicitly not calibrated.",
+          "evidence_access": "AGENT_VISIBLE"
+        },
+        {
+          "text": "Missing evidence IDs suggest potential hidden details not accessible in this revision.",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "Speculative inference from IDs whose content the author did not see."
+        },
+        {
+          "text": "No new tools or pages were accessed.",
+          "verdict": "NOT_ASSESSABLE",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "Run history is not shown in the material."
+        }
+      ]
+    },
+    {
+      "item_id": "J-fbbf021717",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 1,
+          "rationale": "C1-C4 are supported (header EV-f13c4b/format EV-6d5e94, prediction EV-527dfd, no import evidence visible). Free text loosely says \"The low malware score supports benign behavior\" and infers from omitted IDs that import data is missing; not central to the FS conclusion, which stays undetermined.",
+          "evidence_ids": [
+            "EV-f13c4b0bc75b40f2a5f165fb1bd50f88",
+            "EV-6d5e946816314a93b3eef4eeeb02aecd",
+            "EV-527dfd2793a74f1aabe379c9a8227644"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "Statements trace to the records that carry them; the absence of import data is correctly scoped to the provided evidence.",
+          "evidence_ids": [
+            "EV-f13c4b0bc75b40f2a5f165fb1bd50f88",
+            "EV-6d5e946816314a93b3eef4eeeb02aecd",
+            "EV-527dfd2793a74f1aabe379c9a8227644"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 2,
+          "rationale": "Case-specific limitation (no import table, so FS APIs cannot be checked; uncalibrated score; no runtime) is stated and the conclusion is INSUFFICIENT_EVIDENCE at LOW confidence.",
+          "evidence_ids": [
+            "EV-527dfd2793a74f1aabe379c9a8227644"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR with LOW confidence is proportionate; it explicitly says the score does not replace import verification.",
+          "evidence_ids": [
+            "EV-527dfd2793a74f1aabe379c9a8227644"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 2,
+          "rationale": "Names import verification as the needed step (\"does not replace the need for import verification\"; checking for CreateFile/WriteFile/DeleteFile), which would resolve the named unknown.",
+          "evidence_ids": [
+            "EV-527dfd2793a74f1aabe379c9a8227644"
+          ]
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-f13c4b0bc75b40f2a5f165fb1bd50f88",
+            "EV-6d5e946816314a93b3eef4eeeb02aecd"
+          ],
+          "rationale": "PE32+, x64, not DLL; target not executed."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-527dfd2793a74f1aabe379c9a8227644"
+          ],
+          "rationale": "raw 0.00417, benign."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-527dfd2793a74f1aabe379c9a8227644"
+          ],
+          "rationale": "No import evidence among visible items."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "Hedged conditional; correctly marked unconfirmed."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "The low malware score supports benign behavior but does not replace the need for import verification.",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [
+            "SEMANTIC_SELF_CORROBORATION"
+          ],
+          "evidence_ids": [
+            "EV-527dfd2793a74f1aabe379c9a8227644"
+          ],
+          "rationale": "Uses the score as support for benign behavior, though explicitly subordinated to import verification."
+        },
+        {
+          "text": "Missing evidence IDs indicate truncated or uncollected import data.",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [],
+          "evidence_ids": [],
+          "rationale": "Import data was indeed not collected, but omitted IDs are not evidence of that."
+        }
+      ]
+    },
+    {
+      "item_id": "J-fcc3a7d609",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 0,
+          "rationale": "C1, C2 and C4 are correct. C3 and the explanation say there are \"no explicit file-system APIs\" in the first 16 entries while listing fread and fwrite, which are file read/write functions (with feof also visible); this misreads visible evidence central to the FS question. \"Strong benign signal\" also overstates an uncalibrated score.",
+          "evidence_ids": [
+            "EV-d3f2862aefc84ecb929ea138413335ec",
+            "EV-6d947a0de0ee40d2be40f61821738275",
+            "EV-1e45575736334d27917c0fde3c296db0"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "Claims cite the correct records with visible-subset scope; resolved refs 10/12/15 are correct (the misreading is scored under R1).",
+          "evidence_ids": [
+            "EV-d3f2862aefc84ecb929ea138413335ec",
+            "EV-6d947a0de0ee40d2be40f61821738275",
+            "EV-1e45575736334d27917c0fde3c296db0"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 0,
+          "rationale": "States the score is \"low but uncalibrated\" yet weighs it as a \"strong benign signal\" in the decision, contradicting its own stated limitation.",
+          "evidence_ids": [
+            "EV-6d947a0de0ee40d2be40f61821738275"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is acceptable, but it is justified as balancing a \"strong benign signal\" from the detector, and it misses the visible file read/write capability; weakly justified.",
+          "evidence_ids": [
+            "EV-6d947a0de0ee40d2be40f61821738275",
+            "EV-d3f2862aefc84ecb929ea138413335ec"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning observed.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-1e45575736334d27917c0fde3c296db0"
+          ],
+          "rationale": "PE32+, x64, executable, not DLL."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-6d947a0de0ee40d2be40f61821738275"
+          ],
+          "rationale": "raw 0.01395, threshold 0.832."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "CONTRADICTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-d3f2862aefc84ecb929ea138413335ec"
+          ],
+          "rationale": "fread (idx 12) and fwrite (idx 15) are visible file read/write functions, contradicting \"no explicit file-system APIs\" in the first 16 entries.",
+          "evidence_access": "AGENT_VISIBLE"
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-d3f2862aefc84ecb929ea138413335ec"
+          ],
+          "rationale": "committed 64, visible 16."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "The recommendation to monitor balances the strong benign signal against the limited visibility of critical system calls.",
+          "verdict": "UNSUPPORTED",
+          "tags": [
+            "SCORE_AS_PROBABILITY_OR_TRUTH"
+          ],
+          "evidence_ids": [
+            "EV-6d947a0de0ee40d2be40f61821738275"
+          ],
+          "rationale": "An uncalibrated raw score is not a \"strong\" signal.",
+          "evidence_access": "AGENT_VISIBLE"
+        },
+        {
+          "text": "Static evidence confirms PE structure and benign prediction but lacks file-system specific API declarations in the visible import set.",
+          "verdict": "CONTRADICTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-d3f2862aefc84ecb929ea138413335ec"
+          ],
+          "rationale": "Visible set includes fread, fwrite and feof.",
+          "evidence_access": "AGENT_VISIBLE"
+        }
+      ]
+    }
+  ]
+}

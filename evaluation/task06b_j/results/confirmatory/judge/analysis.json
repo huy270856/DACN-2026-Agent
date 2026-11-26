@@ -1,0 +1,2251 @@
+{
+  "note": "Arm results exclude constructed probes. Means use assessable numeric scores only; NA/NOT_ASSESSABLE are counted, never imputed.",
+  "evaluators": {
+    "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA": {
+      "evaluator": {
+        "kind": "LLM_JUDGE",
+        "evaluator_id": "claude-code-session:UNKNOWN",
+        "provider": "Anthropic Claude via interactive Claude Code session (owner-operated)",
+        "model": "UNKNOWN",
+        "model_version_or_digest": "UNKNOWN",
+        "self_reported_model_UNVERIFIED": "Claude Opus 5.5 (claude-opus-5-5)",
+        "session_id": "UNKNOWN",
+        "inference_method": "INTERACTIVE_LLM_JUDGE_BLIND_BATCH",
+        "automated_api_inference": false,
+        "prompt_sha256": "43c621f062a4b709fca158655e10cbbf6b9cd36421521d4db314ebf2a77fee3f",
+        "raw_responses_file": "raw/",
+        "kit_version": "task06b-j-judge-kit-v1",
+        "track": "A",
+        "human_verified": false,
+        "operator_note": "Owner-operated fresh Claude Code session; /status output not provided (self-reported model only)"
+      },
+      "rubric_id": "task06b-j-rubric-v2",
+      "per_arm": {
+        "C": {
+          "R1_factual_support": {
+            "n_assessable": 20,
+            "mean": 0.85,
+            "median": 1.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          },
+          "R2_evidence_traceability": {
+            "n_assessable": 20,
+            "mean": 1.7,
+            "median": 2.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          },
+          "R7_uncertainty_limitations": {
+            "n_assessable": 20,
+            "mean": 1.65,
+            "median": 2.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          },
+          "R8_decision_quality_safety": {
+            "n_assessable": 20,
+            "mean": 1.55,
+            "median": 2.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          },
+          "R9_next_step_planning": {
+            "n_assessable": 20,
+            "mean": 0.55,
+            "median": 0.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          }
+        },
+        "B": {
+          "R1_factual_support": {
+            "n_assessable": 7,
+            "mean": 0.714,
+            "median": 1,
+            "NA": 0,
+            "NOT_ASSESSABLE": 13
+          },
+          "R2_evidence_traceability": {
+            "n_assessable": 7,
+            "mean": 1.429,
+            "median": 2,
+            "NA": 0,
+            "NOT_ASSESSABLE": 13
+          },
+          "R7_uncertainty_limitations": {
+            "n_assessable": 7,
+            "mean": 1.429,
+            "median": 2,
+            "NA": 0,
+            "NOT_ASSESSABLE": 13
+          },
+          "R8_decision_quality_safety": {
+            "n_assessable": 20,
+            "mean": 1.9,
+            "median": 2.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          },
+          "R9_next_step_planning": {
+            "n_assessable": 7,
+            "mean": 0.571,
+            "median": 0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 13
+          }
+        },
+        "A": {
+          "R1_factual_support": {
+            "n_assessable": 20,
+            "mean": 2,
+            "median": 2.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          },
+          "R2_evidence_traceability": {
+            "n_assessable": 20,
+            "mean": 2,
+            "median": 2.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          },
+          "R7_uncertainty_limitations": {
+            "n_assessable": 20,
+            "mean": 1,
+            "median": 1.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          },
+          "R8_decision_quality_safety": {
+            "n_assessable": 20,
+            "mean": 1,
+            "median": 1.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          },
+          "R9_next_step_planning": {
+            "n_assessable": 20,
+            "mean": 0,
+            "median": 0.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          }
+        }
+      },
+      "paired": {
+        "C-A:R1_factual_support": {
+          "n_pairs": 20,
+          "mean_diff": -1.15,
+          "wins": 0,
+          "ties": 4,
+          "losses": 16,
+          "bootstrap95": [
+            -1.45,
+            -0.8
+          ]
+        },
+        "C-A:R2_evidence_traceability": {
+          "n_pairs": 20,
+          "mean_diff": -0.3,
+          "wins": 0,
+          "ties": 15,
+          "losses": 5,
+          "bootstrap95": [
+            -0.55,
+            -0.1
+          ]
+        },
+        "C-A:R7_uncertainty_limitations": {
+          "n_pairs": 20,
+          "mean_diff": 0.65,
+          "wins": 16,
+          "ties": 1,
+          "losses": 3,
+          "bootstrap95": [
+            0.3,
+            0.95
+          ]
+        },
+        "C-A:R8_decision_quality_safety": {
+          "n_pairs": 20,
+          "mean_diff": 0.55,
+          "wins": 11,
+          "ties": 9,
+          "losses": 0,
+          "bootstrap95": [
+            0.35,
+            0.75
+          ]
+        },
+        "C-A:R9_next_step_planning": {
+          "n_pairs": 20,
+          "mean_diff": 0.55,
+          "wins": 9,
+          "ties": 11,
+          "losses": 0,
+          "bootstrap95": [
+            0.3,
+            0.85
+          ]
+        },
+        "C-B:R1_factual_support": {
+          "n_pairs": 7,
+          "mean_diff": 0.286,
+          "wins": 4,
+          "ties": 0,
+          "losses": 3,
+          "bootstrap95": [
+            -0.429,
+            1.143
+          ]
+        },
+        "C-B:R2_evidence_traceability": {
+          "n_pairs": 7,
+          "mean_diff": 0.571,
+          "wins": 2,
+          "ties": 5,
+          "losses": 0,
+          "bootstrap95": [
+            0,
+            1.143
+          ]
+        },
+        "C-B:R7_uncertainty_limitations": {
+          "n_pairs": 7,
+          "mean_diff": 0.286,
+          "wins": 2,
+          "ties": 4,
+          "losses": 1,
+          "bootstrap95": [
+            -0.571,
+            1.143
+          ]
+        },
+        "C-B:R8_decision_quality_safety": {
+          "n_pairs": 20,
+          "mean_diff": -0.35,
+          "wins": 2,
+          "ties": 9,
+          "losses": 9,
+          "bootstrap95": [
+            -0.6,
+            -0.05
+          ]
+        },
+        "C-B:R9_next_step_planning": {
+          "n_pairs": 7,
+          "mean_diff": 0.429,
+          "wins": 3,
+          "ties": 2,
+          "losses": 2,
+          "bootstrap95": [
+            -0.429,
+            1.286
+          ]
+        },
+        "B-A:R1_factual_support": {
+          "n_pairs": 7,
+          "mean_diff": -1.286,
+          "wins": 0,
+          "ties": 1,
+          "losses": 6,
+          "bootstrap95": [
+            -1.714,
+            -0.714
+          ]
+        },
+        "B-A:R2_evidence_traceability": {
+          "n_pairs": 7,
+          "mean_diff": -0.571,
+          "wins": 0,
+          "ties": 5,
+          "losses": 2,
+          "bootstrap95": [
+            -1.143,
+            0
+          ]
+        },
+        "B-A:R7_uncertainty_limitations": {
+          "n_pairs": 7,
+          "mean_diff": 0.429,
+          "wins": 5,
+          "ties": 0,
+          "losses": 2,
+          "bootstrap95": [
+            -0.143,
+            1
+          ]
+        },
+        "B-A:R8_decision_quality_safety": {
+          "n_pairs": 20,
+          "mean_diff": 0.9,
+          "wins": 18,
+          "ties": 2,
+          "losses": 0,
+          "bootstrap95": [
+            0.75,
+            1
+          ]
+        },
+        "B-A:R9_next_step_planning": {
+          "n_pairs": 7,
+          "mean_diff": 0.571,
+          "wins": 3,
+          "ties": 4,
+          "losses": 0,
+          "bootstrap95": [
+            0.143,
+            1.143
+          ]
+        }
+      },
+      "claim_verdicts": {
+        "C": {
+          "SUPPORTED": 81,
+          "NOT_ASSESSABLE": 3,
+          "PARTIALLY_SUPPORTED": 19,
+          "CONTRADICTED": 6,
+          "UNSUPPORTED": 9
+        },
+        "A": {
+          "SUPPORTED": 60
+        },
+        "B": {
+          "SUPPORTED": 25,
+          "PARTIALLY_SUPPORTED": 9,
+          "NOT_ASSESSABLE": 2,
+          "UNSUPPORTED": 6
+        }
+      },
+      "claim_tags": {
+        "C": {
+          "SCOPE_OVERCLAIM": 4,
+          "SCORE_AS_PROBABILITY_OR_TRUTH": 8,
+          "RUNTIME_BEHAVIOUR_OVERCLAIM": 2,
+          "SEMANTIC_SELF_CORROBORATION": 8,
+          "WRONG_ATTRIBUTION": 1,
+          "OUTSIDE_EVIDENCE_KNOWLEDGE": 1
+        },
+        "B": {
+          "SCORE_AS_PROBABILITY_OR_TRUTH": 5,
+          "WRONG_ATTRIBUTION": 2,
+          "OUTSIDE_EVIDENCE_KNOWLEDGE": 1,
+          "SEMANTIC_SELF_CORROBORATION": 3
+        }
+      }
+    },
+    "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB": {
+      "evaluator": {
+        "kind": "LLM_JUDGE",
+        "evaluator_id": "claude-code-session:UNKNOWN",
+        "provider": "Anthropic Claude via interactive Claude Code session (owner-operated)",
+        "model": "UNKNOWN",
+        "model_version_or_digest": "UNKNOWN",
+        "self_reported_model_UNVERIFIED": "Claude Opus 5.5 (claude-opus-5-5)",
+        "session_id": "UNKNOWN",
+        "inference_method": "INTERACTIVE_LLM_JUDGE_BLIND_BATCH",
+        "automated_api_inference": false,
+        "prompt_sha256": "d3f36a886cbbba612afd94321dfcf3b66772c0ac9fb24567bef4ebe719b3b07e",
+        "raw_responses_file": "raw/",
+        "kit_version": "task06b-j-judge-kit-v1",
+        "track": "B",
+        "human_verified": false,
+        "operator_note": "Owner-operated fresh Claude Code session; /status output not provided (self-reported model only)"
+      },
+      "rubric_id": "task06b-j-rubric-v2",
+      "per_arm": {
+        "C": {
+          "R3_tool_decision_quality": {
+            "n_assessable": 20,
+            "mean": 1.55,
+            "median": 2.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          },
+          "R4_new_evidence_relevance": {
+            "n_assessable": 20,
+            "mean": 1.2,
+            "median": 1.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          },
+          "R5_new_evidence_consumption": {
+            "n_assessable": 20,
+            "mean": 0.95,
+            "median": 1.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          },
+          "R6_incremental_value": {
+            "n_assessable": 20,
+            "mean": 0.5,
+            "median": 1.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          }
+        },
+        "B": {
+          "R3_tool_decision_quality": {
+            "n_assessable": 0,
+            "mean": null,
+            "median": null,
+            "NA": 20,
+            "NOT_ASSESSABLE": 0
+          },
+          "R4_new_evidence_relevance": {
+            "n_assessable": 0,
+            "mean": null,
+            "median": null,
+            "NA": 20,
+            "NOT_ASSESSABLE": 0
+          },
+          "R5_new_evidence_consumption": {
+            "n_assessable": 0,
+            "mean": null,
+            "median": null,
+            "NA": 20,
+            "NOT_ASSESSABLE": 0
+          },
+          "R6_incremental_value": {
+            "n_assessable": 7,
+            "mean": -0.286,
+            "median": 0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 13
+          }
+        }
+      },
+      "paired": {
+        "C-B:R6_incremental_value": {
+          "n_pairs": 7,
+          "mean_diff": 0.571,
+          "wins": 4,
+          "ties": 2,
+          "losses": 1,
+          "bootstrap95": [
+            -0.143,
+            1.286
+          ]
+        }
+      },
+      "claim_verdicts": {
+        "C": {
+          "SUPPORTED": 70,
+          "PARTIALLY_SUPPORTED": 9,
+          "CONTRADICTED": 7,
+          "UNSUPPORTED": 8,
+          "NOT_ASSESSABLE": 1
+        },
+        "B": {
+          "SUPPORTED": 25,
+          "PARTIALLY_SUPPORTED": 2,
+          "CONTRADICTED": 6,
+          "UNSUPPORTED": 5
+        }
+      },
+      "claim_tags": {
+        "C": {
+          "SCOPE_OVERCLAIM": 3,
+          "SCORE_AS_PROBABILITY_OR_TRUTH": 6,
+          "RUNTIME_BEHAVIOUR_OVERCLAIM": 1,
+          "SEMANTIC_SELF_CORROBORATION": 3
+        },
+        "B": {
+          "SCORE_AS_PROBABILITY_OR_TRUTH": 5
+        }
+      }
+    },
+    "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA": {
+      "evaluator": {
+        "kind": "LLM_JUDGE",
+        "evaluator_id": "claude-code-session:UNKNOWN",
+        "provider": "Anthropic Claude via interactive Claude Code session (owner-operated)",
+        "model": "UNKNOWN",
+        "model_version_or_digest": "UNKNOWN",
+        "self_reported_model_UNVERIFIED": "Claude Opus 5.5 (claude-opus-5-5)",
+        "session_id": "UNKNOWN",
+        "inference_method": "INTERACTIVE_LLM_JUDGE_BLIND_BATCH",
+        "automated_api_inference": false,
+        "prompt_sha256": "73d2f97551a780a58e431ae60faf23379995200c061c62bf635e53574b08a445",
+        "raw_responses_file": "raw/",
+        "kit_version": "task06b-j-judge-kit-v1",
+        "track": "A",
+        "human_verified": false,
+        "operator_note": "Owner-operated fresh Claude Code session; /status output not provided (self-reported model only)"
+      },
+      "rubric_id": "task06b-j-rubric-v2",
+      "per_arm": {
+        "B": {
+          "R1_factual_support": {
+            "n_assessable": 7,
+            "mean": 0.571,
+            "median": 1,
+            "NA": 0,
+            "NOT_ASSESSABLE": 13
+          },
+          "R2_evidence_traceability": {
+            "n_assessable": 7,
+            "mean": 1.571,
+            "median": 2,
+            "NA": 0,
+            "NOT_ASSESSABLE": 13
+          },
+          "R7_uncertainty_limitations": {
+            "n_assessable": 7,
+            "mean": 1.429,
+            "median": 2,
+            "NA": 0,
+            "NOT_ASSESSABLE": 13
+          },
+          "R8_decision_quality_safety": {
+            "n_assessable": 20,
+            "mean": 1.8,
+            "median": 2.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          },
+          "R9_next_step_planning": {
+            "n_assessable": 7,
+            "mean": 0.429,
+            "median": 0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 13
+          }
+        },
+        "C": {
+          "R1_factual_support": {
+            "n_assessable": 20,
+            "mean": 0.9,
+            "median": 1.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          },
+          "R2_evidence_traceability": {
+            "n_assessable": 20,
+            "mean": 1.45,
+            "median": 1.5,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          },
+          "R7_uncertainty_limitations": {
+            "n_assessable": 20,
+            "mean": 1.75,
+            "median": 2.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          },
+          "R8_decision_quality_safety": {
+            "n_assessable": 20,
+            "mean": 1.1,
+            "median": 1.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          },
+          "R9_next_step_planning": {
+            "n_assessable": 20,
+            "mean": 0.4,
+            "median": 0.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          }
+        },
+        "A": {
+          "R1_factual_support": {
+            "n_assessable": 20,
+            "mean": 2,
+            "median": 2.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          },
+          "R2_evidence_traceability": {
+            "n_assessable": 20,
+            "mean": 1,
+            "median": 1.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          },
+          "R7_uncertainty_limitations": {
+            "n_assessable": 20,
+            "mean": 1,
+            "median": 1.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          },
+          "R8_decision_quality_safety": {
+            "n_assessable": 20,
+            "mean": 1,
+            "median": 1.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          },
+          "R9_next_step_planning": {
+            "n_assessable": 20,
+            "mean": 0,
+            "median": 0.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          }
+        }
+      },
+      "paired": {
+        "C-A:R1_factual_support": {
+          "n_pairs": 20,
+          "mean_diff": -1.1,
+          "wins": 0,
+          "ties": 3,
+          "losses": 17,
+          "bootstrap95": [
+            -1.4,
+            -0.85
+          ]
+        },
+        "C-A:R2_evidence_traceability": {
+          "n_pairs": 20,
+          "mean_diff": 0.45,
+          "wins": 10,
+          "ties": 9,
+          "losses": 1,
+          "bootstrap95": [
+            0.2,
+            0.7
+          ]
+        },
+        "C-A:R7_uncertainty_limitations": {
+          "n_pairs": 20,
+          "mean_diff": 0.75,
+          "wins": 16,
+          "ties": 3,
+          "losses": 1,
+          "bootstrap95": [
+            0.5,
+            0.95
+          ]
+        },
+        "C-A:R8_decision_quality_safety": {
+          "n_pairs": 20,
+          "mean_diff": 0.1,
+          "wins": 7,
+          "ties": 8,
+          "losses": 5,
+          "bootstrap95": [
+            -0.25,
+            0.45
+          ]
+        },
+        "C-A:R9_next_step_planning": {
+          "n_pairs": 20,
+          "mean_diff": 0.4,
+          "wins": 6,
+          "ties": 14,
+          "losses": 0,
+          "bootstrap95": [
+            0.15,
+            0.7
+          ]
+        },
+        "C-B:R1_factual_support": {
+          "n_pairs": 7,
+          "mean_diff": 0.714,
+          "wins": 4,
+          "ties": 2,
+          "losses": 1,
+          "bootstrap95": [
+            0,
+            1.429
+          ]
+        },
+        "C-B:R2_evidence_traceability": {
+          "n_pairs": 7,
+          "mean_diff": 0,
+          "wins": 2,
+          "ties": 2,
+          "losses": 3,
+          "bootstrap95": [
+            -0.714,
+            0.857
+          ]
+        },
+        "C-B:R7_uncertainty_limitations": {
+          "n_pairs": 7,
+          "mean_diff": 0.429,
+          "wins": 2,
+          "ties": 5,
+          "losses": 0,
+          "bootstrap95": [
+            0,
+            1
+          ]
+        },
+        "C-B:R8_decision_quality_safety": {
+          "n_pairs": 20,
+          "mean_diff": -0.7,
+          "wins": 3,
+          "ties": 5,
+          "losses": 12,
+          "bootstrap95": [
+            -1.15,
+            -0.25
+          ]
+        },
+        "C-B:R9_next_step_planning": {
+          "n_pairs": 7,
+          "mean_diff": 0.286,
+          "wins": 2,
+          "ties": 3,
+          "losses": 2,
+          "bootstrap95": [
+            -0.429,
+            1.143
+          ]
+        },
+        "B-A:R1_factual_support": {
+          "n_pairs": 7,
+          "mean_diff": -1.429,
+          "wins": 0,
+          "ties": 0,
+          "losses": 7,
+          "bootstrap95": [
+            -1.857,
+            -1.143
+          ]
+        },
+        "B-A:R2_evidence_traceability": {
+          "n_pairs": 7,
+          "mean_diff": 0.571,
+          "wins": 5,
+          "ties": 1,
+          "losses": 1,
+          "bootstrap95": [
+            0,
+            1
+          ]
+        },
+        "B-A:R7_uncertainty_limitations": {
+          "n_pairs": 7,
+          "mean_diff": 0.429,
+          "wins": 4,
+          "ties": 2,
+          "losses": 1,
+          "bootstrap95": [
+            -0.143,
+            0.857
+          ]
+        },
+        "B-A:R8_decision_quality_safety": {
+          "n_pairs": 20,
+          "mean_diff": 0.8,
+          "wins": 17,
+          "ties": 2,
+          "losses": 1,
+          "bootstrap95": [
+            0.55,
+            1
+          ]
+        },
+        "B-A:R9_next_step_planning": {
+          "n_pairs": 7,
+          "mean_diff": 0.429,
+          "wins": 3,
+          "ties": 4,
+          "losses": 0,
+          "bootstrap95": [
+            0.143,
+            0.857
+          ]
+        }
+      },
+      "claim_verdicts": {
+        "B": {
+          "SUPPORTED": 25,
+          "PARTIALLY_SUPPORTED": 14,
+          "NOT_ASSESSABLE": 1,
+          "UNSUPPORTED": 5,
+          "CONTRADICTED": 1
+        },
+        "C": {
+          "SUPPORTED": 85,
+          "PARTIALLY_SUPPORTED": 31,
+          "UNSUPPORTED": 7,
+          "NOT_ASSESSABLE": 2,
+          "CONTRADICTED": 4
+        },
+        "A": {
+          "SUPPORTED": 80
+        }
+      },
+      "claim_tags": {
+        "C": {
+          "SEMANTIC_SELF_CORROBORATION": 15,
+          "RUNTIME_BEHAVIOUR_OVERCLAIM": 2,
+          "SCORE_AS_PROBABILITY_OR_TRUTH": 4,
+          "OUTSIDE_EVIDENCE_KNOWLEDGE": 1,
+          "SCOPE_OVERCLAIM": 3
+        },
+        "B": {
+          "SEMANTIC_SELF_CORROBORATION": 3,
+          "SCORE_AS_PROBABILITY_OR_TRUTH": 4,
+          "UNSUPPORTED_API_OR_FEATURE": 1
+        }
+      }
+    },
+    "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB": {
+      "evaluator": {
+        "kind": "LLM_JUDGE",
+        "evaluator_id": "claude-code-session:UNKNOWN",
+        "provider": "Anthropic Claude via interactive Claude Code session (owner-operated)",
+        "model": "UNKNOWN",
+        "model_version_or_digest": "UNKNOWN",
+        "self_reported_model_UNVERIFIED": "claude-opus-5-5 (Claude Opus 5.5)",
+        "session_id": "UNKNOWN",
+        "inference_method": "INTERACTIVE_LLM_JUDGE_BLIND_BATCH",
+        "automated_api_inference": false,
+        "prompt_sha256": "d70ce5eb94c5a5c2822bca6e084f7f8edcd8a7e45e7bd3eba5b32e0feacaeeec",
+        "raw_responses_file": "raw/",
+        "kit_version": "task06b-j-judge-kit-v1",
+        "track": "B",
+        "human_verified": false,
+        "operator_note": "Owner-operated fresh Claude Code session; /status output not provided (self-reported model only)"
+      },
+      "rubric_id": "task06b-j-rubric-v2",
+      "per_arm": {
+        "B": {
+          "R3_tool_decision_quality": {
+            "n_assessable": 0,
+            "mean": null,
+            "median": null,
+            "NA": 20,
+            "NOT_ASSESSABLE": 0
+          },
+          "R4_new_evidence_relevance": {
+            "n_assessable": 0,
+            "mean": null,
+            "median": null,
+            "NA": 20,
+            "NOT_ASSESSABLE": 0
+          },
+          "R5_new_evidence_consumption": {
+            "n_assessable": 0,
+            "mean": null,
+            "median": null,
+            "NA": 20,
+            "NOT_ASSESSABLE": 0
+          },
+          "R6_incremental_value": {
+            "n_assessable": 7,
+            "mean": -0.286,
+            "median": 0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 13
+          }
+        },
+        "C": {
+          "R3_tool_decision_quality": {
+            "n_assessable": 20,
+            "mean": 1.75,
+            "median": 2.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          },
+          "R4_new_evidence_relevance": {
+            "n_assessable": 20,
+            "mean": 1.25,
+            "median": 1.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          },
+          "R5_new_evidence_consumption": {
+            "n_assessable": 20,
+            "mean": 1.65,
+            "median": 2.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          },
+          "R6_incremental_value": {
+            "n_assessable": 20,
+            "mean": 0.5,
+            "median": 1.0,
+            "NA": 0,
+            "NOT_ASSESSABLE": 0
+          }
+        }
+      },
+      "paired": {
+        "C-B:R6_incremental_value": {
+          "n_pairs": 7,
+          "mean_diff": 0.571,
+          "wins": 4,
+          "ties": 2,
+          "losses": 1,
+          "bootstrap95": [
+            -0.143,
+            1.286
+          ]
+        }
+      },
+      "claim_verdicts": {
+        "B": {
+          "SUPPORTED": 25,
+          "UNSUPPORTED": 5,
+          "PARTIALLY_SUPPORTED": 1,
+          "CONTRADICTED": 2
+        },
+        "C": {
+          "SUPPORTED": 72,
+          "NOT_ASSESSABLE": 2,
+          "UNSUPPORTED": 5,
+          "PARTIALLY_SUPPORTED": 5,
+          "CONTRADICTED": 4
+        }
+      },
+      "claim_tags": {
+        "C": {
+          "RUNTIME_BEHAVIOUR_OVERCLAIM": 2,
+          "SCOPE_OVERCLAIM": 3,
+          "SCORE_AS_PROBABILITY_OR_TRUTH": 6
+        },
+        "B": {
+          "SCORE_AS_PROBABILITY_OR_TRUTH": 6
+        }
+      }
+    }
+  },
+  "agreement": {
+    "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA vs LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA:R1_factual_support": {
+      "relation": "SELF_CONSISTENCY_NOT_CORRECTNESS",
+      "n": 47,
+      "percent_agreement": 0.872,
+      "cohen_kappa": 0.793
+    },
+    "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA vs LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA:R2_evidence_traceability": {
+      "relation": "SELF_CONSISTENCY_NOT_CORRECTNESS",
+      "n": 47,
+      "percent_agreement": 0.319,
+      "cohen_kappa": -0.014
+    },
+    "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA vs LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA:R7_uncertainty_limitations": {
+      "relation": "SELF_CONSISTENCY_NOT_CORRECTNESS",
+      "n": 47,
+      "percent_agreement": 0.915,
+      "cohen_kappa": 0.85
+    },
+    "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA vs LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA:R8_decision_quality_safety": {
+      "relation": "SELF_CONSISTENCY_NOT_CORRECTNESS",
+      "n": 60,
+      "percent_agreement": 0.817,
+      "cohen_kappa": 0.666
+    },
+    "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA vs LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA:R9_next_step_planning": {
+      "relation": "SELF_CONSISTENCY_NOT_CORRECTNESS",
+      "n": 47,
+      "percent_agreement": 0.915,
+      "cohen_kappa": 0.768
+    },
+    "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB vs LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB:R3_tool_decision_quality": {
+      "relation": "SELF_CONSISTENCY_NOT_CORRECTNESS",
+      "n": 20,
+      "percent_agreement": 0.8,
+      "cohen_kappa": 0.57
+    },
+    "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB vs LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB:R4_new_evidence_relevance": {
+      "relation": "SELF_CONSISTENCY_NOT_CORRECTNESS",
+      "n": 20,
+      "percent_agreement": 0.95,
+      "cohen_kappa": 0.922
+    },
+    "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB vs LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB:R5_new_evidence_consumption": {
+      "relation": "SELF_CONSISTENCY_NOT_CORRECTNESS",
+      "n": 20,
+      "percent_agreement": 0.3,
+      "cohen_kappa": 0.152
+    },
+    "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB vs LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB:R6_incremental_value": {
+      "relation": "SELF_CONSISTENCY_NOT_CORRECTNESS",
+      "n": 27,
+      "percent_agreement": 0.852,
+      "cohen_kappa": 0.777
+    }
+  },
+  "checker_vs_evaluator": [
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-05ae6092e4",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-0635116090",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-0a5cef9010",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-0b6f42efc5",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-12bf456549",
+      "arm": "B",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-1874020da2",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-210ec6121a",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-252a275ba0",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-283cb8a526",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-29244526d5",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-3c6b896220",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-3fed43cee1",
+      "arm": "B",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-4ab772cca9",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-5e7bafc2eb",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-60134c6f6f",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-60405f5c7d",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-61f09a0a4e",
+      "arm": "C",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-62be6b1316",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": true,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-6a4678cf0e",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": true,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-71284123dc",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-77e214a518",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": true,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-7828fd729e",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-878118f23f",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-88fb15b92f",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-8f9d168375",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": true,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-8f9db26948",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-90952ef019",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-97ec47ac10",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-97f03d06db",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-9b039b69f8",
+      "arm": "C",
+      "checker_flag": false,
+      "evaluator_tag": true,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-9d957aa0eb",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-b65146ee9b",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-b8e5dcc1fc",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": true,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-c74f4d7fc5",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": true,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-cd5c47778e",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-d49f6b3213",
+      "arm": "B",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-ef8d002a93",
+      "arm": "B",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-f80da67d06",
+      "arm": "B",
+      "checker_flag": true,
+      "evaluator_tag": true,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-fbbf021717",
+      "arm": "B",
+      "checker_flag": true,
+      "evaluator_tag": true,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackA",
+      "item_id": "J-fcc3a7d609",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-05ae6092e4",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-0635116090",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-0a5cef9010",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-0b6f42efc5",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-12bf456549",
+      "arm": "B",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-1874020da2",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-210ec6121a",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-252a275ba0",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-283cb8a526",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-29244526d5",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-3c6b896220",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-3fed43cee1",
+      "arm": "B",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-4ab772cca9",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-5e7bafc2eb",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-60134c6f6f",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-60405f5c7d",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-61f09a0a4e",
+      "arm": "C",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-62be6b1316",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": true,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-6a4678cf0e",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-71284123dc",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-77e214a518",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-7828fd729e",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-878118f23f",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-88fb15b92f",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-8f9d168375",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": true,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-8f9db26948",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-90952ef019",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-97ec47ac10",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-97f03d06db",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-9b039b69f8",
+      "arm": "C",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-9d957aa0eb",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-b65146ee9b",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-b8e5dcc1fc",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": true,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-c74f4d7fc5",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-cd5c47778e",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-d49f6b3213",
+      "arm": "B",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-ef8d002a93",
+      "arm": "B",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-f80da67d06",
+      "arm": "B",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-fbbf021717",
+      "arm": "B",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P1-trackB",
+      "item_id": "J-fcc3a7d609",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-06e22874d8",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-0cd4c49b94",
+      "arm": "B",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-0df4cd07c2",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": true,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-10eaef48fe",
+      "arm": "C",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-129290d93a",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": true,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-172996542a",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-18c477f9bd",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-195f0ba7e9",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": true,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-2b89cf9cb0",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": true,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-2bc81650f5",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": true,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-46da42dd72",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-4c0d4407ff",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": true,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-52406dd148",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-5696e44184",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": true,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-597ec35dbc",
+      "arm": "B",
+      "checker_flag": true,
+      "evaluator_tag": true,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-612bec0def",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": true,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-654e3cb57f",
+      "arm": "B",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-6e3183ee02",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-71c264d2cd",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-7aefc6208f",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-7de34b3827",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-7e657c7022",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-7f78940717",
+      "arm": "C",
+      "checker_flag": false,
+      "evaluator_tag": true,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-836780883b",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-85dbcc10a8",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-8c1aea5380",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": true,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-949b7ae54e",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": true,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-a0c172b463",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-a908448d67",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-b97d2d198c",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": true,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-bc8b93c57e",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-bed78994ef",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-c2566991a1",
+      "arm": "B",
+      "checker_flag": true,
+      "evaluator_tag": true,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-cdf604e96a",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-cf0498d71f",
+      "arm": "B",
+      "checker_flag": true,
+      "evaluator_tag": true,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-d5685d9a3d",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-dbdb0c898f",
+      "arm": "B",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-e56ebfd8d2",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-e643acf5a3",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackA",
+      "item_id": "J-f5ad2fb6b8",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-06e22874d8",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-0cd4c49b94",
+      "arm": "B",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-0df4cd07c2",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-10eaef48fe",
+      "arm": "C",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-129290d93a",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-172996542a",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-18c477f9bd",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-195f0ba7e9",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-2b89cf9cb0",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-2bc81650f5",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-46da42dd72",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-4c0d4407ff",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-52406dd148",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-5696e44184",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-597ec35dbc",
+      "arm": "B",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-612bec0def",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-654e3cb57f",
+      "arm": "B",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-6e3183ee02",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-71c264d2cd",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-7aefc6208f",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-7de34b3827",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-7e657c7022",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-7f78940717",
+      "arm": "C",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-836780883b",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-85dbcc10a8",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-8c1aea5380",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-949b7ae54e",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-a0c172b463",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-a908448d67",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-b97d2d198c",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-bc8b93c57e",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-bed78994ef",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-c2566991a1",
+      "arm": "B",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-cdf604e96a",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-cf0498d71f",
+      "arm": "B",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-d5685d9a3d",
+      "arm": "C",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-dbdb0c898f",
+      "arm": "B",
+      "checker_flag": true,
+      "evaluator_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-e56ebfd8d2",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-e643acf5a3",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "evaluator": "LLM_JUDGE:claude-code-session:UNKNOWN:conf-P2-trackB",
+      "item_id": "J-f5ad2fb6b8",
+      "arm": "B",
+      "checker_flag": false,
+      "evaluator_tag": false,
+      "status": "AGREE"
+    }
+  ]
+}

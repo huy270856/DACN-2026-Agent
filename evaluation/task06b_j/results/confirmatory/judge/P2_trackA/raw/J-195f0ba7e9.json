@@ -1,0 +1,119 @@
+{
+  "item_id": "J-195f0ba7e9",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 0,
+      "rationale": "C1 to C3 are supported: 32 visible entries from msvcrt.dll and ulib.dll with no Winsock or HTTP; benign at 0.002; 32 of 128 visible. C4 ('The file likely does not communicate over the network at runtime, based on the absence of visible network imports and low malware score') is UNSUPPORTED. It infers runtime behaviour from static data, from only 25% of the declared imports, and from a malware score that carries no network information. That is a runtime-behaviour overclaim, and C4 is central to the answer, so 0.",
+      "evidence_ids": [
+        "EV-5bec75a780f6464abc1d337420c047a0",
+        "EV-73cbf0b507a842989ad592d6bb01c2eb"
+      ]
+    },
+    "R2_evidence_traceability": {
+      "score": 2,
+      "rationale": "Statements cite the records that carry them, and scope is stated correctly: 'Only 32 of 128 total import entries are visible', with the first 32 entries described accurately. C4 cites the prediction for its premise (a low score), which the record does carry; the faulty inference is scored under R1. No misattribution.",
+      "evidence_ids": [
+        "EV-5bec75a780f6464abc1d337420c047a0",
+        "EV-73cbf0b507a842989ad592d6bb01c2eb"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 1,
+      "rationale": "Relevant limitations are stated: 32 of 128 visible, network APIs may exist in the unobserved portion, static imports do not prove runtime behaviour, and the score is uncalibrated. But they do not constrain the conclusion: C4 and the explanation still say the file 'likely does not communicate over the network', which is in tension with those stated limitations. R7 is lowered because the conclusion sits in tension with stated limitations. It is not 0 because the claim is hedged and the report also says it 'cannot rule out' dynamic resolution.",
+      "evidence_ids": [
+        "EV-5bec75a780f6464abc1d337420c047a0",
+        "EV-73cbf0b507a842989ad592d6bb01c2eb"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 0,
+      "rationale": "The conclusion (alignment CONSISTENT, 'likely does not communicate') rests materially on the detector's own output. The report says 'The malware prediction score is extremely low (0.002), supporting a benign classification', and C4 cites the low score as a basis for a runtime behavioural conclusion. That is semantic self-corroboration in the decision basis. MONITOR itself is mild, but the decision reasoning rests on it.",
+      "evidence_ids": [
+        "EV-73cbf0b507a842989ad592d6bb01c2eb"
+      ]
+    },
+    "R9_next_step_planning": {
+      "score": 0,
+      "rationale": "No next-step reasoning appears in the text. The unobserved 96 entries and runtime behaviour are named as unknowns, but no step to resolve them is proposed.",
+      "evidence_ids": []
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-5bec75a780f6464abc1d337420c047a0"
+      ],
+      "rationale": "Visible entries 0-31: msvcrt.dll (0-12) and ulib.dll (13-31); no network-related APIs."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-73cbf0b507a842989ad592d6bb01c2eb"
+      ],
+      "rationale": "raw_score 0.00217 is about 0.002; benign."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-5bec75a780f6464abc1d337420c047a0"
+      ],
+      "rationale": "visible 32, provider_total 128; dynamic resolution is not enumerated."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "RUNTIME_BEHAVIOUR_OVERCLAIM",
+        "SEMANTIC_SELF_CORROBORATION"
+      ],
+      "evidence_ids": [
+        "EV-5bec75a780f6464abc1d337420c047a0",
+        "EV-73cbf0b507a842989ad592d6bb01c2eb"
+      ],
+      "rationale": "Runtime network behaviour cannot be established from static declared imports, especially with 96 of 128 entries unseen. The detector score is not evidence about networking. No static source can establish the absence of runtime network communication.",
+      "evidence_access": "NO_STATIC_SOURCE"
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "The malware prediction score is extremely low (0.002), supporting a benign classification.",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [
+        "SEMANTIC_SELF_CORROBORATION"
+      ],
+      "evidence_ids": [
+        "EV-73cbf0b507a842989ad592d6bb01c2eb"
+      ],
+      "rationale": "The score value is correct, but presenting the score as support for the label it defines is self-referential."
+    },
+    {
+      "text": "The LightGBM model predicts benign behavior with a very low score.",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-73cbf0b507a842989ad592d6bb01c2eb"
+      ],
+      "rationale": "The model predicts a benign label from static features; it does not predict behaviour."
+    },
+    {
+      "text": "While this suggests the file likely does not communicate over the network",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "RUNTIME_BEHAVIOUR_OVERCLAIM"
+      ],
+      "evidence_ids": [
+        "EV-5bec75a780f6464abc1d337420c047a0",
+        "EV-73cbf0b507a842989ad592d6bb01c2eb"
+      ],
+      "rationale": "Same inference as C4; not establishable statically from a partial import view.",
+      "evidence_access": "NO_STATIC_SOURCE"
+    }
+  ]
+}

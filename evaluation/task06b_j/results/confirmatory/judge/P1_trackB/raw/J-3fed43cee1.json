@@ -1,0 +1,67 @@
+{
+  "item_id": "J-3fed43cee1",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE for this item (no analyzer tool was available or called).",
+      "evidence_ids": []
+    },
+    "R4_new_evidence_relevance": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE for this item (no analyzer tool was available or called).",
+      "evidence_ids": []
+    },
+    "R5_new_evidence_consumption": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE for this item (no analyzer tool was available or called).",
+      "evidence_ids": []
+    },
+    "R6_incremental_value": {
+      "score": 0,
+      "rationale": "No tool was available. The report restates the header type (x64, not DLL) and the benign prediction (raw 0.0031) with appropriate caveats on calibration and missing imports. Accurate, but nothing goes beyond the initial evidence.",
+      "evidence_ids": [
+        "EV-3bee76ce4f2a4c64be323f61eb21196f",
+        "EV-b055c7deb9694c848515d303069f975c"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b055c7deb9694c848515d303069f975c"
+      ],
+      "rationale": "Prediction: benign, raw_score 0.00307."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-3bee76ce4f2a4c64be323f61eb21196f"
+      ],
+      "rationale": "Header: x64, executable_image_flag true, is_dll false."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-3bee76ce4f2a4c64be323f61eb21196f"
+      ],
+      "rationale": "No import evidence is visible. Declared imports are capabilities, not runtime behaviour."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b055c7deb9694c848515d303069f975c"
+      ],
+      "rationale": "A hedged reading that matches the record's uncalibrated, static-only limitations."
+    }
+  ],
+  "additional_claims": []
+}

@@ -1,0 +1,102 @@
+{
+  "item_id": "J-b97d2d198c",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 1,
+      "rationale": "C1, C3 and C4 are supported. C2 is PARTIALLY_SUPPORTED. It correctly lists sprintf_s, putchar, gmtime and system, and correctly finds no Win32 file APIs (CreateFile, ReadFile). But the visible set also contains CRT stream functions relevant to file access: fclose (8), fputs (5) and fflush (6). The claim folds these into 'utilities (I/O ...)' rather than noting their possible file-stream relevance. They do not prove file access, since they may operate on stdio. The free-text 'Static evidence shows a benign PE ... prediction supports benign classification' is also loose. Mostly supported, so 1.",
+      "evidence_ids": [
+        "EV-3d781ca1687c4204affc97797ab336ed",
+        "EV-e921198bdebd4e4eb4c675f3241d379e",
+        "EV-04e1a25327284235bc04ca5a5fe6b769"
+      ]
+    },
+    "R2_evidence_traceability": {
+      "score": 1,
+      "rationale": "Claims cite the correct records, and the resolved refs are correct (0 sprintf_s, 1 putchar, 2 gmtime). The explanation's 'because only 16/64 import entries are visible' sizes the import table at 64, while the author-visible record shows provider_total_entries=111. The notes and C4 correctly say 'committed', so this is loose scope rather than slice-as-whole. Score 1.",
+      "evidence_ids": [
+        "EV-e921198bdebd4e4eb4c675f3241d379e"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 2,
+      "rationale": "Case-specific limitations are stated and applied: 16 of 64 committed visible, absence is not proven, the score is uncalibrated and static-only, no runtime or dynamic-resolution data. The conclusion explicitly says 'File-system capability remains unknown'.",
+      "evidence_ids": [
+        "EV-e921198bdebd4e4eb4c675f3241d379e",
+        "EV-04e1a25327284235bc04ca5a5fe6b769"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 1,
+      "rationale": "MONITOR is proportionate and the human decision is preserved. However, the reason says 'Static evidence shows a benign PE ... prediction supports benign classification', with alignment CONSISTENT. That uses the detector's output to back its own label. Since the FS question is left unknown, this is a minor issue, so 1.",
+      "evidence_ids": [
+        "EV-04e1a25327284235bc04ca5a5fe6b769"
+      ]
+    },
+    "R9_next_step_planning": {
+      "score": 0,
+      "rationale": "No next-step reasoning is found. FS capability is left unknown, but no step is proposed, such as reading the next committed page.",
+      "evidence_ids": []
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-3d781ca1687c4204affc97797ab336ed"
+      ],
+      "rationale": "PE32+, x64, executable image."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-e921198bdebd4e4eb4c675f3241d379e"
+      ],
+      "rationale": "The listed functions and 'system' (15) are correct, and there are no Win32 file APIs. But the visible fclose (8), fputs (5) and fflush (6) are CRT stream-I/O functions bearing on file access and are not flagged as such."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-04e1a25327284235bc04ca5a5fe6b769"
+      ],
+      "rationale": "raw_score 0.00224 is about 0.002; benign."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-e921198bdebd4e4eb4c675f3241d379e"
+      ],
+      "rationale": "visible 16 of committed 64."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "Static evidence shows a benign PE with no explicit file-system API imports; prediction supports benign classification.",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [
+        "SEMANTIC_SELF_CORROBORATION"
+      ],
+      "evidence_ids": [
+        "EV-04e1a25327284235bc04ca5a5fe6b769",
+        "EV-e921198bdebd4e4eb4c675f3241d379e"
+      ],
+      "rationale": "'Benign PE' rests only on the detector, which is then said to support its own classification."
+    },
+    {
+      "text": "because only 16/64 import entries are visible",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-e921198bdebd4e4eb4c675f3241d379e"
+      ],
+      "rationale": "16 of 64 committed; the table has 111 entries."
+    }
+  ]
+}

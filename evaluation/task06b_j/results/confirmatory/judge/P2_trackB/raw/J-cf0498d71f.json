@@ -1,0 +1,67 @@
+{
+  "item_id": "J-cf0498d71f",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE for this item: no analyzer tool was offered/called in the trace.",
+      "evidence_ids": []
+    },
+    "R4_new_evidence_relevance": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE: no analyzer output was committed during the run.",
+      "evidence_ids": []
+    },
+    "R5_new_evidence_consumption": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE: there is no new tool/retrieval evidence to consume.",
+      "evidence_ids": []
+    },
+    "R6_incremental_value": {
+      "score": 0,
+      "rationale": "No tool was available. The report correctly states imports are not visible so file-system capability cannot be confirmed or denied; accurate but nothing beyond the initial evidence.",
+      "evidence_ids": [
+        "EV-527dfd2793a74f1aabe379c9a8227644",
+        "EV-f13c4b0bc75b40f2a5f165fb1bd50f88"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-f13c4b0bc75b40f2a5f165fb1bd50f88",
+        "EV-6d5e946816314a93b3eef4eeeb02aecd"
+      ],
+      "rationale": "Header shows PE32+, x64, not DLL; target not executed per limitations."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-527dfd2793a74f1aabe379c9a8227644"
+      ],
+      "rationale": "Prediction record shows benign, raw_score 0.00417."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-527dfd2793a74f1aabe379c9a8227644",
+        "EV-f13c4b0bc75b40f2a5f165fb1bd50f88"
+      ],
+      "rationale": "No import evidence visible."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [],
+      "rationale": "Conditional hypothesis explicitly marked unconfirmable; no factual overreach."
+    }
+  ],
+  "additional_claims": []
+}

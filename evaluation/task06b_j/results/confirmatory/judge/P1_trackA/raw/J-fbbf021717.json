@@ -1,0 +1,101 @@
+{
+ "item_id": "J-fbbf021717",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 1,
+   "rationale": "C1-C4 are supported (header EV-f13c4b/format EV-6d5e94, prediction EV-527dfd, no import evidence visible). Free text loosely says \"The low malware score supports benign behavior\" and infers from omitted IDs that import data is missing; not central to the FS conclusion, which stays undetermined.",
+   "evidence_ids": [
+    "EV-f13c4b0bc75b40f2a5f165fb1bd50f88",
+    "EV-6d5e946816314a93b3eef4eeeb02aecd",
+    "EV-527dfd2793a74f1aabe379c9a8227644"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 2,
+   "rationale": "Statements trace to the records that carry them; the absence of import data is correctly scoped to the provided evidence.",
+   "evidence_ids": [
+    "EV-f13c4b0bc75b40f2a5f165fb1bd50f88",
+    "EV-6d5e946816314a93b3eef4eeeb02aecd",
+    "EV-527dfd2793a74f1aabe379c9a8227644"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 2,
+   "rationale": "Case-specific limitation (no import table, so FS APIs cannot be checked; uncalibrated score; no runtime) is stated and the conclusion is INSUFFICIENT_EVIDENCE at LOW confidence.",
+   "evidence_ids": [
+    "EV-527dfd2793a74f1aabe379c9a8227644"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 2,
+   "rationale": "MONITOR with LOW confidence is proportionate; it explicitly says the score does not replace import verification.",
+   "evidence_ids": [
+    "EV-527dfd2793a74f1aabe379c9a8227644"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 2,
+   "rationale": "Names import verification as the needed step (\"does not replace the need for import verification\"; checking for CreateFile/WriteFile/DeleteFile), which would resolve the named unknown.",
+   "evidence_ids": [
+    "EV-527dfd2793a74f1aabe379c9a8227644"
+   ]
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-f13c4b0bc75b40f2a5f165fb1bd50f88",
+    "EV-6d5e946816314a93b3eef4eeeb02aecd"
+   ],
+   "rationale": "PE32+, x64, not DLL; target not executed."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-527dfd2793a74f1aabe379c9a8227644"
+   ],
+   "rationale": "raw 0.00417, benign."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-527dfd2793a74f1aabe379c9a8227644"
+   ],
+   "rationale": "No import evidence among visible items."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [],
+   "rationale": "Hedged conditional; correctly marked unconfirmed."
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "The low malware score supports benign behavior but does not replace the need for import verification.",
+   "verdict": "PARTIALLY_SUPPORTED",
+   "tags": [
+    "SEMANTIC_SELF_CORROBORATION"
+   ],
+   "evidence_ids": [
+    "EV-527dfd2793a74f1aabe379c9a8227644"
+   ],
+   "rationale": "Uses the score as support for benign behavior, though explicitly subordinated to import verification."
+  },
+  {
+   "text": "Missing evidence IDs indicate truncated or uncollected import data.",
+   "verdict": "PARTIALLY_SUPPORTED",
+   "tags": [],
+   "evidence_ids": [],
+   "rationale": "Import data was indeed not collected, but omitted IDs are not evidence of that."
+  }
+ ]
+}

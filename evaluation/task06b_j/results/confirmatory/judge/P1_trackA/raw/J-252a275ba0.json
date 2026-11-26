@@ -1,0 +1,100 @@
+{
+ "item_id": "J-252a275ba0",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 2,
+   "rationale": "Claims match visible evidence: the 32 visible imports (EV-a25a20) are msvcrt CRT functions with no network APIs, 32/64 committed is correct, prediction values match EV-5ff7e2. \"Appears benign\" is hedged and paired with INSUFFICIENT_EVIDENCE/LOW confidence.",
+   "evidence_ids": [
+    "EV-a25a207979694ae4800fe31dd24616d2",
+    "EV-5ff7e2b8b52641bf8dd2e7eb1c31d638"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 2,
+   "rationale": "Claims cite the records carrying them with correct visible-subset scope.",
+   "evidence_ids": [
+    "EV-a25a207979694ae4800fe31dd24616d2",
+    "EV-5ff7e2b8b52641bf8dd2e7eb1c31d638"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 2,
+   "rationale": "Case-specific limits are stated (32/64 visible, dynamic resolution possible, uncalibrated score, no runtime execution) and keep the answer at INSUFFICIENT_EVIDENCE. It understates the unseen part (provider total 134, not just a \"hidden half\"), but without overreach.",
+   "evidence_ids": [
+    "EV-a25a207979694ae4800fe31dd24616d2",
+    "EV-5ff7e2b8b52641bf8dd2e7eb1c31d638"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 2,
+   "rationale": "MONITOR with LOW confidence is proportionate for a runtime network question; the score is not used as proof.",
+   "evidence_ids": [
+    "EV-5ff7e2b8b52641bf8dd2e7eb1c31d638"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 1,
+   "rationale": "\"Runtime monitoring is required to verify actual behavior\" is tied to the question but is a generic dynamic-analysis step; no specific step such as reading the remaining committed import entries.",
+   "evidence_ids": [
+    "EV-a25a207979694ae4800fe31dd24616d2"
+   ]
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-a25a207979694ae4800fe31dd24616d2"
+   ],
+   "rationale": "Indices 0-31 are msvcrt.dll CRT functions only."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-5ff7e2b8b52641bf8dd2e7eb1c31d638"
+   ],
+   "rationale": "raw_score 0.00342, benign."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-a25a207979694ae4800fe31dd24616d2"
+   ],
+   "rationale": "committed 64, visible 32."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-a25a207979694ae4800fe31dd24616d2"
+   ],
+   "rationale": "Hedged possibility matching the stated limitation that dynamically resolved APIs are not enumerated."
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "The file appears benign based on visible imports and a low static prediction score.",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-a25a207979694ae4800fe31dd24616d2",
+    "EV-5ff7e2b8b52641bf8dd2e7eb1c31d638"
+   ],
+   "rationale": "Hedged reading of visible imports plus reported prediction; conclusion kept at INSUFFICIENT_EVIDENCE."
+  },
+  {
+   "text": "no further tools available",
+   "verdict": "NOT_ASSESSABLE",
+   "tags": [],
+   "evidence_ids": [],
+   "rationale": "The material does not show which actions were offered."
+  }
+ ]
+}

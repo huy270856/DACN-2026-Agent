@@ -1,0 +1,112 @@
+{
+  "item_id": "J-d5685d9a3d",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 1,
+      "rationale": "C1 to C4 are supported: KERNEL32 WriteFile (2) and SetCurrentDirectoryW (14) are framed as declared capability; benign at 0.0017; 16 of 64 committed visible; declared imports do not prove runtime use. The statements 'score ... is raw and uncalibrated, indicating low confidence in the benign label' and the 'discrepancy between declared potential (WriteFile) and the low-confidence benign prediction' misread the record. Being uncalibrated means the score is not a probability, not that the model is unconfident, and WriteFile is not in tension with a benign label. These are PARTIALLY_SUPPORTED and peripheral to the FS answer, so 1.",
+      "evidence_ids": [
+        "EV-39beae79d52c41fa86f248fbf3cf5629",
+        "EV-cc53ff092a2a475d8ed8277df55653f4"
+      ]
+    },
+    "R2_evidence_traceability": {
+      "score": 2,
+      "rationale": "Claims cite the records that carry them, and the resolved refs are correct (2 WriteFile, 14 SetCurrentDirectoryW). Scope is stated as 16 of 64 committed entries, which is accurate; the 113 total is omitted, but nothing is misattributed.",
+      "evidence_ids": [
+        "EV-39beae79d52c41fa86f248fbf3cf5629",
+        "EV-cc53ff092a2a475d8ed8277df55653f4"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 2,
+      "rationale": "Case-specific limitations are stated and constrain the answer: only 16 of 64 committed visible, declared imports are capability not behaviour, dynamic resolution is possible, the score is uncalibrated. FS capability is reported as 'potential' and the conclusion is INSUFFICIENT_EVIDENCE with LOW confidence.",
+      "evidence_ids": [
+        "EV-39beae79d52c41fa86f248fbf3cf5629",
+        "EV-cc53ff092a2a475d8ed8277df55653f4"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 2,
+      "rationale": "MONITOR with LOW confidence and INSUFFICIENT_EVIDENCE is proportionate to declared but unconfirmed FS capability. The decision does not rest on the detector label; the report is if anything sceptical of it. Human decision is preserved.",
+      "evidence_ids": [
+        "EV-39beae79d52c41fa86f248fbf3cf5629",
+        "EV-cc53ff092a2a475d8ed8277df55653f4"
+      ]
+    },
+    "R9_next_step_planning": {
+      "score": 1,
+      "rationale": "'Runtime monitoring is required to confirm if file operations occur.' This is relevant to the case but is a generic dynamic step. It does not target the named import gap (the 48 unread committed entries) or specific file operations.",
+      "evidence_ids": [
+        "EV-39beae79d52c41fa86f248fbf3cf5629"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-39beae79d52c41fa86f248fbf3cf5629"
+      ],
+      "rationale": "Entries 2 (WriteFile) and 14 (SetCurrentDirectoryW) are visible; framed as potential capability."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-cc53ff092a2a475d8ed8277df55653f4"
+      ],
+      "rationale": "raw_score 0.001705 is about 0.0017; benign."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-39beae79d52c41fa86f248fbf3cf5629"
+      ],
+      "rationale": "visible 16 of committed 64."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-39beae79d52c41fa86f248fbf3cf5629"
+      ],
+      "rationale": "Matches the record limitations."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "Malware prediction score (0.0017) is raw and uncalibrated, indicating low confidence in the 'benign' label.",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-cc53ff092a2a475d8ed8277df55653f4"
+      ],
+      "rationale": "Raw and uncalibrated is correct. That does not mean the model has low confidence; it means the score cannot be read as a probability."
+    },
+    {
+      "text": "the discrepancy between declared potential (WriteFile) and the low-confidence benign prediction",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-39beae79d52c41fa86f248fbf3cf5629",
+        "EV-cc53ff092a2a475d8ed8277df55653f4"
+      ],
+      "rationale": "Declared WriteFile is not inconsistent with a benign label, and the prediction is not low-confidence per the record."
+    },
+    {
+      "text": "No evidence of actual file-system operations exists in static analysis.",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-39beae79d52c41fa86f248fbf3cf5629"
+      ],
+      "rationale": "Static declarations only; no runtime observation."
+    }
+  ]
+}

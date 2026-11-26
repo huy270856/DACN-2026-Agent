@@ -1,0 +1,103 @@
+{
+  "item_id": "J-52406dd148",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 1,
+      "rationale": "C1 to C4 are supported: the 48 visible entries (0-47) are CRT runtime/math/private with no network APIs; 48 of 64 committed visible; score 0.0012, benign, uncalibrated; static analysis cannot prove the absence of runtime networking. Two free-text statements are loose: 'Malware prediction indicates benign behavior' (the model outputs a label, not behaviour) and 'evidence points to non-network behavior' (a runtime-leaning inference from a partial static view). Both are hedged and PARTIALLY_SUPPORTED. Not central, so 1.",
+      "evidence_ids": [
+        "EV-f17286b16c364ca8aab19a377c37ec59",
+        "EV-9381a8f998f347629cf75f51bc13e79e"
+      ]
+    },
+    "R2_evidence_traceability": {
+      "score": 2,
+      "rationale": "Claims cite the records that carry them, and scope is stated correctly as committed entries (48 of 64 committed). The record's provider total of 193 is omitted, and C2's 'remaining 16' is explicitly about committed entries, so no slice is presented as the whole table. No misattribution.",
+      "evidence_ids": [
+        "EV-f17286b16c364ca8aab19a377c37ec59",
+        "EV-9381a8f998f347629cf75f51bc13e79e"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 2,
+      "rationale": "Case-specific limitations are stated and applied: the import view is truncated, dynamically resolved APIs and obfuscation are possible, the score is uncalibrated, and there was no dynamic execution or network monitoring. The answer to the runtime question is held at INSUFFICIENT_EVIDENCE: 'static analysis cannot confirm runtime absence of network communication'.",
+      "evidence_ids": [
+        "EV-f17286b16c364ca8aab19a377c37ec59",
+        "EV-9381a8f998f347629cf75f51bc13e79e"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 2,
+      "rationale": "MONITOR with INSUFFICIENT_EVIDENCE is proportionate and consistent with the stated uncertainty. The prediction is described as raw/uncalibrated and the decision does not rest on it. Human decision is preserved.",
+      "evidence_ids": [
+        "EV-9381a8f998f347629cf75f51bc13e79e",
+        "EV-f17286b16c364ca8aab19a377c37ec59"
+      ]
+    },
+    "R9_next_step_planning": {
+      "score": 1,
+      "rationale": "'Runtime monitoring is required to definitively answer the question', and the notes say no network monitoring was performed. This is relevant to the question but is a generic dynamic-analysis step. It names no concrete observable and does not address the 16 committed entries that were not read.",
+      "evidence_ids": [
+        "EV-f17286b16c364ca8aab19a377c37ec59"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-f17286b16c364ca8aab19a377c37ec59"
+      ],
+      "rationale": "Visible entries 0-47 are api-ms-win-crt runtime/math/private only; no network APIs."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-f17286b16c364ca8aab19a377c37ec59"
+      ],
+      "rationale": "committed_entries 64, visible_entries 48. The statement is scoped to committed entries; the 193 provider total is not mentioned."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-9381a8f998f347629cf75f51bc13e79e"
+      ],
+      "rationale": "raw_score 0.00121 is about 0.0012; benign; not calibrated."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-f17286b16c364ca8aab19a377c37ec59",
+        "EV-9381a8f998f347629cf75f51bc13e79e"
+      ],
+      "rationale": "Matches the record limitations (dynamically resolved APIs not enumerated; static only)."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "Malware prediction indicates benign behavior with a very low raw score.",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-9381a8f998f347629cf75f51bc13e79e"
+      ],
+      "rationale": "The model predicts a benign label from static features; it does not indicate behaviour."
+    },
+    {
+      "text": "while evidence points to non-network behavior, it is insufficient to rule out dynamic execution",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-f17286b16c364ca8aab19a377c37ec59"
+      ],
+      "rationale": "No network imports in 48 visible entries is a capability-level observation over a partial view (48 of 193). It is weak as a pointer to runtime behaviour, though appropriately hedged."
+    }
+  ]
+}

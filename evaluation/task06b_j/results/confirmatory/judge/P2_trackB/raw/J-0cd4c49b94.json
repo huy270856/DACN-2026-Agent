@@ -1,0 +1,67 @@
+{
+  "item_id": "J-0cd4c49b94",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE for this item: no analyzer tool was offered/called in the trace.",
+      "evidence_ids": []
+    },
+    "R4_new_evidence_relevance": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE: no analyzer output was committed during the run.",
+      "evidence_ids": []
+    },
+    "R5_new_evidence_consumption": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE: there is no new tool/retrieval evidence to consume.",
+      "evidence_ids": []
+    },
+    "R6_incremental_value": {
+      "score": 0,
+      "rationale": "No tool was available; the report restates the initial header facts (PE32+, x64, not DLL) and the detector output with its uncalibrated-score limitation, and notes import visibility is missing. Accurate but adds nothing beyond the initial evidence.",
+      "evidence_ids": [
+        "EV-b055c7deb9694c848515d303069f975c",
+        "EV-3bee76ce4f2a4c64be323f61eb21196f"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b055c7deb9694c848515d303069f975c"
+      ],
+      "rationale": "Prediction record shows label benign, raw_score 0.00307."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-3bee76ce4f2a4c64be323f61eb21196f"
+      ],
+      "rationale": "pe_header shows architecture x64, is_dll false, executable_image_flag true."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-3bee76ce4f2a4c64be323f61eb21196f"
+      ],
+      "rationale": "No import evidence is in the visible set; header limitation states imports are not collected."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b055c7deb9694c848515d303069f975c"
+      ],
+      "rationale": "Hedged hypothesis; score is far below threshold and the report notes it is uncalibrated and static-only."
+    }
+  ],
+  "additional_claims": []
+}

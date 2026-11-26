@@ -1,0 +1,104 @@
+{
+  "item_id": "J-654e3cb57f",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 1,
+      "rationale": "C1 to C3 are supported: PE32+ x64 executable, not a DLL; benign with raw score 0.0106 (about 0.01); no import visibility. C4 ('The low raw score may reflect benign characteristics') is hedged but loosely ties an uncalibrated score to file characteristics: PARTIALLY_SUPPORTED. The note 'PE header validation is minimal (magic bytes only)' slightly understates the check: the format record says magic_bytes_and_headers, and pe_header covers the DOS/COFF/optional header minimum. 'Polymorphic behavior' is outside-knowledge colour. Not central, so 1.",
+      "evidence_ids": [
+        "EV-e53a46fcf7b04217943c40f932df897b",
+        "EV-08ec5500211141e3926cff75e13904a9",
+        "EV-c0fb92db0aa844f9833a10deca6abff7"
+      ]
+    },
+    "R2_evidence_traceability": {
+      "score": 2,
+      "rationale": "Claims cite the records that carry them: pe_header/format for image type, the prediction for label and score, and the pe_header limitation for missing imports and signature checks. No misattribution and no scope problem.",
+      "evidence_ids": [
+        "EV-e53a46fcf7b04217943c40f932df897b",
+        "EV-08ec5500211141e3926cff75e13904a9",
+        "EV-c0fb92db0aa844f9833a10deca6abff7"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 2,
+      "rationale": "The limitations are specific to this case and constrain the answer. The score is uncalibrated, and the model's features may differ from its training data (the LIEF parity caveat). Header validation is minimal. Imports are not visible. No signature verification or dynamic execution was done. The report states what remains unknown, as the question asks, and does not overreach.",
+      "evidence_ids": [
+        "EV-e53a46fcf7b04217943c40f932df897b",
+        "EV-c0fb92db0aa844f9833a10deca6abff7"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 2,
+      "rationale": "MONITOR is proportionate for a benign-predicted x64 executable whose limitations are stated. The low score is explicitly said not to rule out obfuscation, and the decision does not rest on self-confirming use of the label. Human decision is preserved.",
+      "evidence_ids": [
+        "EV-c0fb92db0aa844f9833a10deca6abff7"
+      ]
+    },
+    "R9_next_step_planning": {
+      "score": 0,
+      "rationale": "No next-step reasoning appears anywhere in the text. Unknowns (imports, signature, dynamic behaviour) are listed but no step is proposed.",
+      "evidence_ids": []
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-e53a46fcf7b04217943c40f932df897b",
+        "EV-08ec5500211141e3926cff75e13904a9"
+      ],
+      "rationale": "PE32+, x64, is_dll false."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-c0fb92db0aa844f9833a10deca6abff7"
+      ],
+      "rationale": "raw_score 0.0106 is about 0.01; benign."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-e53a46fcf7b04217943c40f932df897b"
+      ],
+      "rationale": "No import facet visible; the pe_header limitation says imports are not collected."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-c0fb92db0aa844f9833a10deca6abff7"
+      ],
+      "rationale": "The hedge is appropriate, but an uncalibrated raw score is weak grounds for inferring benign characteristics."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "PE header validation is minimal (magic bytes only), not full structural validation.",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-e53a46fcf7b04217943c40f932df897b",
+        "EV-08ec5500211141e3926cff75e13904a9"
+      ],
+      "rationale": "Correct that validation is minimal, but it covers minimum headers (magic_bytes_and_headers; DOS/COFF/optional header), not only magic bytes."
+    },
+    {
+      "text": "No dynamic execution or signature verification was performed.",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-e53a46fcf7b04217943c40f932df897b",
+        "EV-c0fb92db0aa844f9833a10deca6abff7"
+      ],
+      "rationale": "pe_header limitation: target not executed, no signature trust collected."
+    }
+  ]
+}

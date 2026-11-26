@@ -1,0 +1,106 @@
+{
+ "item_id": "J-fcc3a7d609",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 0,
+   "rationale": "C1, C2 and C4 are correct. C3 and the explanation say there are \"no explicit file-system APIs\" in the first 16 entries while listing fread and fwrite, which are file read/write functions (with feof also visible); this misreads visible evidence central to the FS question. \"Strong benign signal\" also overstates an uncalibrated score.",
+   "evidence_ids": [
+    "EV-d3f2862aefc84ecb929ea138413335ec",
+    "EV-6d947a0de0ee40d2be40f61821738275",
+    "EV-1e45575736334d27917c0fde3c296db0"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 2,
+   "rationale": "Claims cite the correct records with visible-subset scope; resolved refs 10/12/15 are correct (the misreading is scored under R1).",
+   "evidence_ids": [
+    "EV-d3f2862aefc84ecb929ea138413335ec",
+    "EV-6d947a0de0ee40d2be40f61821738275",
+    "EV-1e45575736334d27917c0fde3c296db0"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 0,
+   "rationale": "States the score is \"low but uncalibrated\" yet weighs it as a \"strong benign signal\" in the decision, contradicting its own stated limitation.",
+   "evidence_ids": [
+    "EV-6d947a0de0ee40d2be40f61821738275"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 1,
+   "rationale": "MONITOR is acceptable, but it is justified as balancing a \"strong benign signal\" from the detector, and it misses the visible file read/write capability; weakly justified.",
+   "evidence_ids": [
+    "EV-6d947a0de0ee40d2be40f61821738275",
+    "EV-d3f2862aefc84ecb929ea138413335ec"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 0,
+   "rationale": "No next-step reasoning observed.",
+   "evidence_ids": []
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-1e45575736334d27917c0fde3c296db0"
+   ],
+   "rationale": "PE32+, x64, executable, not DLL."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-6d947a0de0ee40d2be40f61821738275"
+   ],
+   "rationale": "raw 0.01395, threshold 0.832."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "CONTRADICTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-d3f2862aefc84ecb929ea138413335ec"
+   ],
+   "rationale": "fread (idx 12) and fwrite (idx 15) are visible file read/write functions, contradicting \"no explicit file-system APIs\" in the first 16 entries.",
+   "evidence_access": "AGENT_VISIBLE"
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-d3f2862aefc84ecb929ea138413335ec"
+   ],
+   "rationale": "committed 64, visible 16."
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "The recommendation to monitor balances the strong benign signal against the limited visibility of critical system calls.",
+   "verdict": "UNSUPPORTED",
+   "tags": [
+    "SCORE_AS_PROBABILITY_OR_TRUTH"
+   ],
+   "evidence_ids": [
+    "EV-6d947a0de0ee40d2be40f61821738275"
+   ],
+   "rationale": "An uncalibrated raw score is not a \"strong\" signal.",
+   "evidence_access": "AGENT_VISIBLE"
+  },
+  {
+   "text": "Static evidence confirms PE structure and benign prediction but lacks file-system specific API declarations in the visible import set.",
+   "verdict": "CONTRADICTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-d3f2862aefc84ecb929ea138413335ec"
+   ],
+   "rationale": "Visible set includes fread, fwrite and feof.",
+   "evidence_access": "AGENT_VISIBLE"
+  }
+ ]
+}

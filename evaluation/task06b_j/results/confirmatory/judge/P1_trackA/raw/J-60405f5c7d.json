@@ -1,0 +1,105 @@
+{
+ "item_id": "J-60405f5c7d",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 1,
+   "rationale": "Core claims are supported: PE type (EV-d83020), prediction (EV-9d0bf3), 32 visible CRT imports with no FS APIs (EV-10d46e; refs 0 memset and 20 memmove resolve correctly). One uncertainty note is loosely worded (\"absence of FS APIs in visible range is unknown\", though absence in the visible range is known).",
+   "evidence_ids": [
+    "EV-d830205e41ae4721a02b4b917e899961",
+    "EV-9d0bf3ad1874432887026d8e31734e3d",
+    "EV-10d46e1d6cad4de1948dca598a9177ad"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 2,
+   "rationale": "Statements trace to the correct records with visible-subset scope (32 of 64 committed).",
+   "evidence_ids": [
+    "EV-d830205e41ae4721a02b4b917e899961",
+    "EV-9d0bf3ad1874432887026d8e31734e3d",
+    "EV-10d46e1d6cad4de1948dca598a9177ad"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 2,
+   "rationale": "Case-specific limits (32/64 visible, absence not proven, dynamic resolution, uncalibrated score) are stated and the answer stays INSUFFICIENT_EVIDENCE at LOW confidence.",
+   "evidence_ids": [
+    "EV-10d46e1d6cad4de1948dca598a9177ad",
+    "EV-9d0bf3ad1874432887026d8e31734e3d"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 2,
+   "rationale": "MONITOR is proportionate to the unresolved FS question.",
+   "evidence_ids": [
+    "EV-9d0bf3ad1874432887026d8e31734e3d"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 1,
+   "rationale": "Only implicit: \"Without seeing all imports or running the binary...\" names what is missing but no concrete step is proposed.",
+   "evidence_ids": [
+    "EV-10d46e1d6cad4de1948dca598a9177ad"
+   ]
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-d830205e41ae4721a02b4b917e899961"
+   ],
+   "rationale": "PE32+, x64, not DLL."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-9d0bf3ad1874432887026d8e31734e3d"
+   ],
+   "rationale": "benign, raw 0.00147."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-10d46e1d6cad4de1948dca598a9177ad"
+   ],
+   "rationale": "Indices 0-31 are api-ms-win-crt string/runtime/private functions; no FS APIs among them."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-10d46e1d6cad4de1948dca598a9177ad"
+   ],
+   "rationale": "committed 64, visible 32; truncation limitation."
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "Only 32 of 64 committed entries are visible; absence of FS APIs in visible range is unknown.",
+   "verdict": "PARTIALLY_SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-10d46e1d6cad4de1948dca598a9177ad"
+   ],
+   "rationale": "Counts correct; the wording about the visible range is confused (absence is known within it, unknown beyond)."
+  },
+  {
+   "text": "Static evidence confirms PE structure and benign prediction but lacks file-system API declarations",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-d830205e41ae4721a02b4b917e899961",
+    "EV-9d0bf3ad1874432887026d8e31734e3d",
+    "EV-10d46e1d6cad4de1948dca598a9177ad"
+   ],
+   "rationale": "\"Lacks\" is qualified by the truncation note in the same sentence."
+  }
+ ]
+}

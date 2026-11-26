@@ -1,0 +1,68 @@
+{
+  "item_id": "J-654e3cb57f",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE for this item: no analyzer tool was offered/called in the trace.",
+      "evidence_ids": []
+    },
+    "R4_new_evidence_relevance": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE: no analyzer output was committed during the run.",
+      "evidence_ids": []
+    },
+    "R5_new_evidence_consumption": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE: there is no new tool/retrieval evidence to consume.",
+      "evidence_ids": []
+    },
+    "R6_incremental_value": {
+      "score": 0,
+      "rationale": "No tool was available. Header type/architecture and detector output are restated correctly with the uncalibrated-score and missing-import limitations; nothing is added beyond the initial evidence.",
+      "evidence_ids": [
+        "EV-c0fb92db0aa844f9833a10deca6abff7",
+        "EV-e53a46fcf7b04217943c40f932df897b"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-e53a46fcf7b04217943c40f932df897b",
+        "EV-08ec5500211141e3926cff75e13904a9"
+      ],
+      "rationale": "Header shows PE32+, x64, is_dll false."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-c0fb92db0aa844f9833a10deca6abff7"
+      ],
+      "rationale": "Prediction record shows benign, raw_score 0.0106."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-e53a46fcf7b04217943c40f932df897b"
+      ],
+      "rationale": "No import evidence visible."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-c0fb92db0aa844f9833a10deca6abff7"
+      ],
+      "rationale": "Hedged statement that a low raw score does not rule out obfuscation; consistent with stated limitations."
+    }
+  ],
+  "additional_claims": []
+}

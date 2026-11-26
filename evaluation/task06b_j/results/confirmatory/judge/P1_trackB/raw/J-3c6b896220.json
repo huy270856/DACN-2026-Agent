@@ -1,0 +1,86 @@
+{
+  "item_id": "J-3c6b896220",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE for this item (no analyzer tool was available or called).",
+      "evidence_ids": []
+    },
+    "R4_new_evidence_relevance": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE for this item (no analyzer tool was available or called).",
+      "evidence_ids": []
+    },
+    "R5_new_evidence_consumption": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability is NOT_APPLICABLE for this item (no analyzer tool was available or called).",
+      "evidence_ids": []
+    },
+    "R6_incremental_value": {
+      "score": 0,
+      "rationale": "No tool was available. The report correctly says file-system capability cannot be determined without imports, and restates the header and prediction. Nothing is added beyond the initial evidence. It calls the raw score a 'low likelihood' and speculates that the omitted IDs hold import or entropy data (they are metadata, hash and identity records). Both are minor and do not change the analyst's picture, so the value is 0, not negative.",
+      "evidence_ids": [
+        "EV-1e45575736334d27917c0fde3c296db0",
+        "EV-8bd3f66a7b734cd1aa225386b75536eb",
+        "EV-6d947a0de0ee40d2be40f61821738275"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-1e45575736334d27917c0fde3c296db0",
+        "EV-8bd3f66a7b734cd1aa225386b75536eb"
+      ],
+      "rationale": "Header and format show valid PE32+ x64 executable image."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [
+        "SCORE_AS_PROBABILITY_OR_TRUTH"
+      ],
+      "evidence_ids": [
+        "EV-6d947a0de0ee40d2be40f61821738275"
+      ],
+      "rationale": "Label benign and raw score 0.01395 are correct. 'Low likelihood of malicious behavior' reads an uncalibrated raw score (score_is_calibrated_probability=false) as a probability."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-1e45575736334d27917c0fde3c296db0"
+      ],
+      "rationale": "No import evidence is in the visible set."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-6d947a0de0ee40d2be40f61821738275"
+      ],
+      "rationale": "A hedged statement of an unknown; the evidence cannot establish file-system capability either way."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "Omitted evidence IDs suggest potential import or entropy data was not collected.",
+      "verdict": "CONTRADICTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-639aee7d096243bfa7ffe3dd87237ebf",
+        "EV-5cc0683f70d749d1895d16f692878391",
+        "EV-a778555840234c6795aca769074bd5ee",
+        "EV-d3ffadab34974bb5a00e6913698c575d",
+        "EV-53ec14248c11403dadcf2fa581ec8247"
+      ],
+      "rationale": "In the reference, the omitted IDs are metadata, file_identity, readable, file_unchanged_during_collection and sha256 records, not import or entropy data. The author could not see them, and no tool or read action was available.",
+      "evidence_access": "INACCESSIBLE_BEYOND_LIMITS"
+    }
+  ]
+}

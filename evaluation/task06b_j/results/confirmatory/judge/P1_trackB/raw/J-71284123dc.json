@@ -1,0 +1,86 @@
+{
+  "item_id": "J-71284123dc",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": 2,
+      "rationale": "A case-specific, stated need to inspect declared imports for process-control APIs that were absent from the initial evidence.",
+      "evidence_ids": [
+        "EV-4763ce98541c495bb9120ed9e8722fdd",
+        "EV-b04ab5a2682e4d869d4e517fde82860d",
+        "EV-f063dfeb82894438877fa2bfb6f85ff9"
+      ]
+    },
+    "R4_new_evidence_relevance": {
+      "score": 1,
+      "rationale": "The committed 64 of 246 entries are almost entirely CRT runtime/private/string functions plus one ntdll security function. There is no process-control API, so the output is limiting only.",
+      "evidence_ids": [
+        "EV-f063dfeb82894438877fa2bfb6f85ff9"
+      ]
+    },
+    "R5_new_evidence_consumption": {
+      "score": 1,
+      "rationale": "The visible 16 entries are read correctly, the absence of process-control APIs is scoped to them, and '16 of 64 committed' is right. The report does not mention the 182 never-committed entries (total 246) and does not flag the 48 reachable committed entries as unread. The access_limits note says committed-but-unseen entries were reachable only by bounded page reads (at most 2 x 16), and the material does not show whether that read action was offered here.",
+      "evidence_ids": [
+        "EV-f063dfeb82894438877fa2bfb6f85ff9"
+      ]
+    },
+    "R6_incremental_value": {
+      "score": 1,
+      "rationale": "Minor, scoped gain: no process-control imports among the first 16 declared entries, with the remaining unknowns stated. The remark that the score is 'consistent with' the missing imports is weak but harmless.",
+      "evidence_ids": [
+        "EV-f063dfeb82894438877fa2bfb6f85ff9",
+        "EV-4763ce98541c495bb9120ed9e8722fdd"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b04ab5a2682e4d869d4e517fde82860d"
+      ],
+      "rationale": "Valid PE32+ x64."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-4763ce98541c495bb9120ed9e8722fdd"
+      ],
+      "rationale": "Raw 0.001, benign."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-f063dfeb82894438877fa2bfb6f85ff9"
+      ],
+      "rationale": "16 of 64 visible, all CRT startup functions."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-f063dfeb82894438877fa2bfb6f85ff9"
+      ],
+      "rationale": "Correct limitation."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "classifies it as benign with a very low raw score (0.001), consistent with the lack of visible process control imports in the truncated list",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-4763ce98541c495bb9120ed9e8722fdd",
+        "EV-f063dfeb82894438877fa2bfb6f85ff9"
+      ],
+      "rationale": "Both facts are true, but 16 CRT startup imports provide no meaningful corroboration of the detector label."
+    }
+  ]
+}
