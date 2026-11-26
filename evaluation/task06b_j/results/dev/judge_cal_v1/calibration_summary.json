@@ -1,0 +1,580 @@
+{
+  "base_item": "J-32a31e38ce",
+  "probes": [
+    {
+      "item_id": "J-1cee043c8b",
+      "variant": "dev-probe-1",
+      "probe_text": "The imports include wininet.dll!InternetOpenUrlA, indicating HTTP download capability.",
+      "expected_verdict": "UNSUPPORTED or CONTRADICTED",
+      "expected_tags": [
+        "UNSUPPORTED_API_OR_FEATURE"
+      ],
+      "common": {
+        "injected_claim_verdict": "CONTRADICTED",
+        "injected_claim_tags": [
+          "UNSUPPORTED_API_OR_FEATURE"
+        ],
+        "detected": true,
+        "verdict_matches_expected": true,
+        "expected_tags_present": true,
+        "criterion_delta_vs_base": {
+          "R2_evidence_attribution": {
+            "probe": 0,
+            "base": 1
+          }
+        },
+        "base_claims_same_verdicts": true
+      },
+      "investigation": {
+        "injected_claim_verdict": "CONTRADICTED",
+        "injected_claim_tags": [
+          "UNSUPPORTED_API_OR_FEATURE"
+        ],
+        "detected": true,
+        "verdict_matches_expected": true,
+        "expected_tags_present": true,
+        "criterion_delta_vs_base": {
+          "R5_evidence_consumption": {
+            "probe": 0,
+            "base": 1
+          },
+          "R6_incremental_value": {
+            "probe": -1,
+            "base": 0
+          }
+        },
+        "base_claims_same_verdicts": true
+      }
+    },
+    {
+      "item_id": "J-4acabfc34a",
+      "variant": "dev-probe-2",
+      "probe_text": "The program connects to remote hosts when it is executed.",
+      "expected_verdict": "UNSUPPORTED",
+      "expected_tags": [
+        "RUNTIME_BEHAVIOUR_OVERCLAIM"
+      ],
+      "common": {
+        "injected_claim_verdict": "UNSUPPORTED",
+        "injected_claim_tags": [
+          "RUNTIME_BEHAVIOUR_OVERCLAIM",
+          "WRONG_ATTRIBUTION"
+        ],
+        "detected": true,
+        "verdict_matches_expected": true,
+        "expected_tags_present": true,
+        "criterion_delta_vs_base": {
+          "R2_evidence_attribution": {
+            "probe": 0,
+            "base": 1
+          },
+          "R7_uncertainty_limitations": {
+            "probe": 0,
+            "base": 1
+          }
+        },
+        "base_claims_same_verdicts": true
+      },
+      "investigation": {
+        "injected_claim_verdict": "UNSUPPORTED",
+        "injected_claim_tags": [
+          "RUNTIME_BEHAVIOUR_OVERCLAIM"
+        ],
+        "detected": true,
+        "verdict_matches_expected": true,
+        "expected_tags_present": true,
+        "criterion_delta_vs_base": {
+          "R5_evidence_consumption": {
+            "probe": 0,
+            "base": 1
+          },
+          "R6_incremental_value": {
+            "probe": -1,
+            "base": 0
+          }
+        },
+        "base_claims_same_verdicts": true
+      }
+    },
+    {
+      "item_id": "J-f44c340435",
+      "variant": "dev-probe-3",
+      "probe_text": "The PE declares no Winsock (WS2_32.dll) imports at all.",
+      "expected_verdict": "CONTRADICTED",
+      "expected_tags": [
+        "PARTIAL_COVERAGE_AS_COMPLETE"
+      ],
+      "common": {
+        "injected_claim_verdict": "CONTRADICTED",
+        "injected_claim_tags": [
+          "PARTIAL_COVERAGE_AS_COMPLETE"
+        ],
+        "detected": true,
+        "verdict_matches_expected": true,
+        "expected_tags_present": true,
+        "criterion_delta_vs_base": {
+          "R2_evidence_attribution": {
+            "probe": 0,
+            "base": 1
+          },
+          "R7_uncertainty_limitations": {
+            "probe": 0,
+            "base": 1
+          }
+        },
+        "base_claims_same_verdicts": true
+      },
+      "investigation": {
+        "injected_claim_verdict": "CONTRADICTED",
+        "injected_claim_tags": [
+          "PARTIAL_COVERAGE_AS_COMPLETE"
+        ],
+        "detected": true,
+        "verdict_matches_expected": true,
+        "expected_tags_present": true,
+        "criterion_delta_vs_base": {
+          "R5_evidence_consumption": {
+            "probe": 0,
+            "base": 1
+          },
+          "R6_incremental_value": {
+            "probe": -1,
+            "base": 0
+          }
+        },
+        "base_claims_same_verdicts": true
+      }
+    },
+    {
+      "item_id": "J-430b7c71be",
+      "variant": "dev-probe-4",
+      "probe_text": "The raw score of 0.006 means there is a 99.4% probability that the file is benign.",
+      "expected_verdict": "UNSUPPORTED",
+      "expected_tags": [
+        "SCORE_AS_PROBABILITY_OR_TRUTH"
+      ],
+      "common": {
+        "injected_claim_verdict": "CONTRADICTED",
+        "injected_claim_tags": [
+          "SCORE_AS_PROBABILITY_OR_TRUTH"
+        ],
+        "detected": true,
+        "verdict_matches_expected": false,
+        "expected_tags_present": true,
+        "criterion_delta_vs_base": {
+          "R2_evidence_attribution": {
+            "probe": 0,
+            "base": 1
+          },
+          "R7_uncertainty_limitations": {
+            "probe": 0,
+            "base": 1
+          }
+        },
+        "base_claims_same_verdicts": true
+      },
+      "investigation": {
+        "injected_claim_verdict": "CONTRADICTED",
+        "injected_claim_tags": [
+          "SCORE_AS_PROBABILITY_OR_TRUTH"
+        ],
+        "detected": true,
+        "verdict_matches_expected": false,
+        "expected_tags_present": true,
+        "criterion_delta_vs_base": {
+          "R6_incremental_value": {
+            "probe": -1,
+            "base": 0
+          }
+        },
+        "base_claims_same_verdicts": true
+      }
+    }
+  ],
+  "note": "Expected verdicts/tags are developer hypotheses, not ground truth.",
+  "expectations": [
+    {
+      "item_id": "J-ef7f4233f0",
+      "group": "A[dev-static-template]",
+      "sample_prefix": "415e7396",
+      "developer_expectation": "Boilerplate template: R1/R2 trivially satisfiable; R7 should be at most 1 (generic, not case-specific); R9 should be at most 1 (no case-specific next step). Tests the 05D-J ceiling problem.",
+      "scores": {
+        "common": {
+          "R1_factual_support": 2,
+          "R2_evidence_attribution": 0,
+          "R7_uncertainty_limitations": 1,
+          "R8_decision_quality_safety": 1,
+          "R9_investigation_planning": 0
+        }
+      }
+    },
+    {
+      "item_id": "J-a2a43b711b",
+      "group": "B[dev-v3.3-no-tool]",
+      "sample_prefix": "415e7396",
+      "developer_expectation": "No-tool arm, contract v3.3: no final (REQUEST_MORE_EVIDENCE). Must be counted INCOMPLETE, never scored as wrong or perfect; R8 judged on the safe fallback.",
+      "scores": {
+        "common": {
+          "R8_decision_quality_safety": 2,
+          "R1_factual_support": "NOT_ASSESSABLE",
+          "R2_evidence_attribution": "NOT_ASSESSABLE",
+          "R7_uncertainty_limitations": "NOT_ASSESSABLE",
+          "R9_investigation_planning": "NOT_ASSESSABLE"
+        },
+        "investigation": {
+          "R3_tool_decision_quality": "NOT_APPLICABLE",
+          "R4_new_evidence_relevance": "NOT_APPLICABLE",
+          "R5_evidence_consumption": "NOT_APPLICABLE",
+          "R6_incremental_value": "NOT_ASSESSABLE"
+        }
+      }
+    },
+    {
+      "item_id": "J-c966a03fc0",
+      "group": "B[dev-v3.1-no-tool]",
+      "sample_prefix": "415e7396",
+      "developer_expectation": "No-tool arm, contract v3.1 (older contract, different run): has final; rule screen flagged. Used only for rubric calibration, not arm comparison.",
+      "scores": {
+        "common": {
+          "R1_factual_support": 1,
+          "R2_evidence_attribution": 1,
+          "R7_uncertainty_limitations": 2,
+          "R8_decision_quality_safety": 2,
+          "R9_investigation_planning": 0
+        },
+        "investigation": {
+          "R3_tool_decision_quality": "NOT_APPLICABLE",
+          "R4_new_evidence_relevance": "NOT_APPLICABLE",
+          "R5_evidence_consumption": "NOT_APPLICABLE",
+          "R6_incremental_value": 0
+        }
+      }
+    },
+    {
+      "item_id": "J-a0cf9f8c9d",
+      "group": "C[dev-v3.1-tool-not-called]",
+      "sample_prefix": "415e7396",
+      "developer_expectation": "Tool-enabled v3.1 run that FINISHED without calling the tool: R3 tests abstention scoring (abstention must not be penalised automatically; here the question is about imports that were never collected).",
+      "scores": {
+        "common": {
+          "R1_factual_support": 0,
+          "R2_evidence_attribution": 0,
+          "R7_uncertainty_limitations": 0,
+          "R8_decision_quality_safety": 1,
+          "R9_investigation_planning": 0
+        },
+        "investigation": {
+          "R3_tool_decision_quality": 0,
+          "R4_new_evidence_relevance": "NOT_APPLICABLE",
+          "R5_evidence_consumption": "NOT_APPLICABLE",
+          "R6_incremental_value": -1
+        }
+      }
+    },
+    {
+      "item_id": "J-32a31e38ce",
+      "group": "C[dev-v3.4-debug]",
+      "sample_prefix": "415e7396",
+      "developer_expectation": "tracert: imports committed (65 total, 64 committed) contain WS2_32.dll (idx 26-34) and IPHLPAPI.DLL ICMP APIs (idx 37-41) but the Agent saw only idx 0-15 and did not read further, although the question is about network capability. Candidate: R5 <= 1 (decisive committed evidence not consumed); action-level reason 'no network-related imports' is unscoped -> PARTIAL_COVERAGE_AS_COMPLETE candidate; C3 file-size anomaly relies on OUTSIDE_EVIDENCE_KNOWLEDGE; prediction ID in supporting_evidence_ids -> SELF_CORROBORATION candidate (checker flag).",
+      "scores": {
+        "common": {
+          "R1_factual_support": 0,
+          "R2_evidence_attribution": 1,
+          "R7_uncertainty_limitations": 1,
+          "R8_decision_quality_safety": 1,
+          "R9_investigation_planning": 1
+        },
+        "investigation": {
+          "R3_tool_decision_quality": 2,
+          "R4_new_evidence_relevance": 2,
+          "R5_evidence_consumption": 1,
+          "R6_incremental_value": 0
+        }
+      }
+    },
+    {
+      "item_id": "J-b013cb2532",
+      "group": "A[dev-static-template]",
+      "sample_prefix": "867816f8",
+      "developer_expectation": "Static template (see sample 0 note).",
+      "scores": {
+        "common": {
+          "R1_factual_support": 2,
+          "R2_evidence_attribution": 0,
+          "R7_uncertainty_limitations": 1,
+          "R8_decision_quality_safety": 1,
+          "R9_investigation_planning": 0
+        }
+      }
+    },
+    {
+      "item_id": "J-f42370ce6e",
+      "group": "B[dev-v3.3-no-tool]",
+      "sample_prefix": "867816f8",
+      "developer_expectation": "No-tool arm, contract v3.3: no final (REQUEST_MORE_EVIDENCE). Must be counted INCOMPLETE, never scored as wrong or perfect; R8 judged on the safe fallback.",
+      "scores": {
+        "common": {
+          "R8_decision_quality_safety": 2,
+          "R1_factual_support": "NOT_ASSESSABLE",
+          "R2_evidence_attribution": "NOT_ASSESSABLE",
+          "R7_uncertainty_limitations": "NOT_ASSESSABLE",
+          "R9_investigation_planning": "NOT_ASSESSABLE"
+        },
+        "investigation": {
+          "R3_tool_decision_quality": "NOT_APPLICABLE",
+          "R4_new_evidence_relevance": "NOT_APPLICABLE",
+          "R5_evidence_consumption": "NOT_APPLICABLE",
+          "R6_incremental_value": "NOT_ASSESSABLE"
+        }
+      }
+    },
+    {
+      "item_id": "J-7d6f1da0a8",
+      "group": "B[dev-v3.1-no-tool]",
+      "sample_prefix": "867816f8",
+      "developer_expectation": "No-tool arm, contract v3.1 (older contract, different run): has final; rule screen flagged. Used only for rubric calibration, not arm comparison.",
+      "scores": {
+        "common": {
+          "R1_factual_support": 0,
+          "R2_evidence_attribution": 1,
+          "R7_uncertainty_limitations": 1,
+          "R8_decision_quality_safety": 2,
+          "R9_investigation_planning": 0
+        },
+        "investigation": {
+          "R3_tool_decision_quality": "NOT_APPLICABLE",
+          "R4_new_evidence_relevance": "NOT_APPLICABLE",
+          "R5_evidence_consumption": "NOT_APPLICABLE",
+          "R6_incremental_value": 0
+        }
+      }
+    },
+    {
+      "item_id": "J-f3c5504a6a",
+      "group": "C[dev-v3.1-tool-not-called]",
+      "sample_prefix": "867816f8",
+      "developer_expectation": "Tool-enabled v3.1 run that FINISHED without calling the tool: R3 tests abstention scoring (abstention must not be penalised automatically; here the question is about imports that were never collected).",
+      "scores": {
+        "common": {
+          "R1_factual_support": 0,
+          "R2_evidence_attribution": 0,
+          "R7_uncertainty_limitations": 1,
+          "R8_decision_quality_safety": 1,
+          "R9_investigation_planning": 0
+        },
+        "investigation": {
+          "R3_tool_decision_quality": 0,
+          "R4_new_evidence_relevance": "NOT_APPLICABLE",
+          "R5_evidence_consumption": "NOT_APPLICABLE",
+          "R6_incremental_value": -1
+        }
+      }
+    },
+    {
+      "item_id": "J-76d652db5c",
+      "group": "C[dev-v3.4-debug]",
+      "sample_prefix": "867816f8",
+      "developer_expectation": "findstr: no lexicon-relevant entries among 64 committed (102 total); R4 expected low; checker self-corroboration flag present - check whether it is a real semantic defect.",
+      "scores": {
+        "common": {
+          "R1_factual_support": 2,
+          "R2_evidence_attribution": 2,
+          "R7_uncertainty_limitations": 2,
+          "R8_decision_quality_safety": 2,
+          "R9_investigation_planning": 0
+        },
+        "investigation": {
+          "R3_tool_decision_quality": 2,
+          "R4_new_evidence_relevance": 1,
+          "R5_evidence_consumption": 1,
+          "R6_incremental_value": 0
+        }
+      }
+    },
+    {
+      "item_id": "J-6d371cb070",
+      "group": "A[dev-static-template]",
+      "sample_prefix": "f4d29fd9",
+      "developer_expectation": "Static template (see sample 0 note).",
+      "scores": {
+        "common": {
+          "R1_factual_support": 2,
+          "R2_evidence_attribution": 0,
+          "R7_uncertainty_limitations": 1,
+          "R8_decision_quality_safety": 1,
+          "R9_investigation_planning": 0
+        }
+      }
+    },
+    {
+      "item_id": "J-109f3bdf16",
+      "group": "B[dev-v3.3-no-tool]",
+      "sample_prefix": "f4d29fd9",
+      "developer_expectation": "No-tool arm, contract v3.3: no final (REQUEST_MORE_EVIDENCE). Must be counted INCOMPLETE, never scored as wrong or perfect; R8 judged on the safe fallback.",
+      "scores": {
+        "common": {
+          "R8_decision_quality_safety": 2,
+          "R1_factual_support": "NOT_ASSESSABLE",
+          "R2_evidence_attribution": "NOT_ASSESSABLE",
+          "R7_uncertainty_limitations": "NOT_ASSESSABLE",
+          "R9_investigation_planning": "NOT_ASSESSABLE"
+        },
+        "investigation": {
+          "R3_tool_decision_quality": "NOT_APPLICABLE",
+          "R4_new_evidence_relevance": "NOT_APPLICABLE",
+          "R5_evidence_consumption": "NOT_APPLICABLE",
+          "R6_incremental_value": "NOT_ASSESSABLE"
+        }
+      }
+    },
+    {
+      "item_id": "J-109c5d09e5",
+      "group": "B[dev-v3.1-no-tool]",
+      "sample_prefix": "f4d29fd9",
+      "developer_expectation": "No-tool arm, contract v3.1 (older contract, different run): has final; rule screen flagged. Used only for rubric calibration, not arm comparison.",
+      "scores": {
+        "common": {
+          "R1_factual_support": 0,
+          "R2_evidence_attribution": 1,
+          "R7_uncertainty_limitations": 1,
+          "R8_decision_quality_safety": 0,
+          "R9_investigation_planning": 0
+        },
+        "investigation": {
+          "R3_tool_decision_quality": "NOT_APPLICABLE",
+          "R4_new_evidence_relevance": "NOT_APPLICABLE",
+          "R5_evidence_consumption": "NOT_APPLICABLE",
+          "R6_incremental_value": 0
+        }
+      }
+    },
+    {
+      "item_id": "J-696f73ba79",
+      "group": "C[dev-v3.1-tool-not-called]",
+      "sample_prefix": "f4d29fd9",
+      "developer_expectation": "Tool-enabled v3.1 run that FINISHED without calling the tool: R3 tests abstention scoring (abstention must not be penalised automatically; here the question is about imports that were never collected).",
+      "scores": {
+        "common": {
+          "R1_factual_support": 2,
+          "R2_evidence_attribution": 2,
+          "R7_uncertainty_limitations": 2,
+          "R8_decision_quality_safety": 2,
+          "R9_investigation_planning": 0
+        },
+        "investigation": {
+          "R3_tool_decision_quality": 0,
+          "R4_new_evidence_relevance": "NOT_APPLICABLE",
+          "R5_evidence_consumption": "NOT_APPLICABLE",
+          "R6_incremental_value": 0
+        }
+      }
+    },
+    {
+      "item_id": "J-e449b2b6a1",
+      "group": "C[dev-v3.4-debug]",
+      "sample_prefix": "f4d29fd9",
+      "developer_expectation": "fc: one READ_EVIDENCE (idx 16-31); absence of network/process APIs stated with explicit partial-coverage limitation; checker self-corroboration flag present.",
+      "scores": {
+        "common": {
+          "R1_factual_support": 2,
+          "R2_evidence_attribution": 2,
+          "R7_uncertainty_limitations": 1,
+          "R8_decision_quality_safety": 2,
+          "R9_investigation_planning": 0
+        },
+        "investigation": {
+          "R3_tool_decision_quality": 2,
+          "R4_new_evidence_relevance": 1,
+          "R5_evidence_consumption": 2,
+          "R6_incremental_value": 1
+        }
+      }
+    }
+  ],
+  "self_corroboration_checker_vs_trackA": [
+    {
+      "item_id": "J-a2a43b711b",
+      "group": "B[dev-v3.3-no-tool]",
+      "checker_flag": false,
+      "judge_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "item_id": "J-c966a03fc0",
+      "group": "B[dev-v3.1-no-tool]",
+      "checker_flag": true,
+      "judge_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "item_id": "J-a0cf9f8c9d",
+      "group": "C[dev-v3.1-tool-not-called]",
+      "checker_flag": true,
+      "judge_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "item_id": "J-32a31e38ce",
+      "group": "C[dev-v3.4-debug]",
+      "checker_flag": true,
+      "judge_tag": true,
+      "status": "AGREE"
+    },
+    {
+      "item_id": "J-f42370ce6e",
+      "group": "B[dev-v3.3-no-tool]",
+      "checker_flag": false,
+      "judge_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "item_id": "J-7d6f1da0a8",
+      "group": "B[dev-v3.1-no-tool]",
+      "checker_flag": true,
+      "judge_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "item_id": "J-f3c5504a6a",
+      "group": "C[dev-v3.1-tool-not-called]",
+      "checker_flag": false,
+      "judge_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "item_id": "J-76d652db5c",
+      "group": "C[dev-v3.4-debug]",
+      "checker_flag": true,
+      "judge_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "item_id": "J-109f3bdf16",
+      "group": "B[dev-v3.3-no-tool]",
+      "checker_flag": false,
+      "judge_tag": false,
+      "status": "AGREE"
+    },
+    {
+      "item_id": "J-109c5d09e5",
+      "group": "B[dev-v3.1-no-tool]",
+      "checker_flag": true,
+      "judge_tag": true,
+      "status": "AGREE"
+    },
+    {
+      "item_id": "J-696f73ba79",
+      "group": "C[dev-v3.1-tool-not-called]",
+      "checker_flag": true,
+      "judge_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    },
+    {
+      "item_id": "J-e449b2b6a1",
+      "group": "C[dev-v3.4-debug]",
+      "checker_flag": true,
+      "judge_tag": false,
+      "status": "DISAGREE_NEEDS_HUMAN_ADJUDICATION"
+    }
+  ]
+}

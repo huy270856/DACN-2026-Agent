@@ -1,0 +1,92 @@
+{
+  "item_id": "J-c966a03fc0",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 1,
+      "rationale": "C1-C3 are supported (PE32+ x64 non-DLL; benign 0.006; header limitation says imports/entropy not collected; LIEF mismatch is in the prediction limitations). Free text over-reaches: it attributes missing import data to 'evidence IDs omitted' and calls the target a 'known system utility' from the path alone.",
+      "evidence_ids": [
+        "EV-e7eb2e69d0644654aad56710a403b358",
+        "EV-480b21a3a9a4463aa4d7239a83744256",
+        "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+      ]
+    },
+    "R2_evidence_attribution": {
+      "score": 1,
+      "rationale": "Structured claims cite the right records (the prediction citation on C3 is decorative), but the report attributes the import gap to the omitted evidence IDs, which the author could not see and which nothing shows to be import records; that provenance is speculative.",
+      "evidence_ids": [
+        "EV-e7eb2e69d0644654aad56710a403b358",
+        "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 2,
+      "rationale": "Case-relevant limitations are stated and shape the conclusion: no import data for an import question, uncalibrated score, LIEF 0.15.1/0.9.0 feature mismatch, static-only; alignment is INSUFFICIENT_EVIDENCE.",
+      "evidence_ids": [
+        "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c",
+        "EV-e7eb2e69d0644654aad56710a403b358"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 2,
+      "rationale": "MONITOR with INSUFFICIENT_EVIDENCE is proportionate, explicitly refuses to treat the score as calibrated, and leaves the decision to a human.",
+      "evidence_ids": [
+        "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+      ]
+    },
+    "R9_investigation_planning": {
+      "score": 0,
+      "rationale": "Unknowns are listed but no next verification step (e.g. collecting the import table) is proposed.",
+      "evidence_ids": []
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-e7eb2e69d0644654aad56710a403b358",
+        "EV-480b21a3a9a4463aa4d7239a83744256"
+      ],
+      "rationale": "Both records show PE32+, x64, is_dll=false, executable image."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+      ],
+      "rationale": "benign, raw 0.0064."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-e7eb2e69d0644654aad56710a403b358"
+      ],
+      "rationale": "pe_header limitation: no imports, entropy collected; no dynamic evidence present. The prediction citation is decorative."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "Missing evidence IDs indicate uncollected facets regarding imports, entropy, or dynamic capabilities.",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "WRONG_ATTRIBUTION"
+      ],
+      "evidence_ids": [],
+      "rationale": "The omitted IDs were not visible to the author; nothing indicates they concern imports or entropy."
+    },
+    {
+      "text": "Target file is a known system utility (tracert.exe)",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [
+        "OUTSIDE_EVIDENCE_KNOWLEDGE"
+      ],
+      "evidence_ids": [],
+      "rationale": "The path is System32\\tracert.exe, but being a known/legitimate utility is not established by the evidence."
+    }
+  ]
+}

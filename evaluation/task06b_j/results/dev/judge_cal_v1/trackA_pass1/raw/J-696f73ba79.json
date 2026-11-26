@@ -1,0 +1,83 @@
+{
+  "item_id": "J-696f73ba79",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 2,
+      "rationale": "All material claims hold: PE32+ x64 non-DLL (pe_header/format), benign label with raw 0.0038 (prediction record), and no import bindings retrieved (no import facet; format/header limitation says imports not collected). The explanation keeps the detector as a model output ('does not appear highly suspicious based on current features').",
+      "evidence_ids": [
+        "EV-f82d740aa83144c19b08b0de3e4e0500",
+        "EV-c321d3999b58413784cb3b30d540504e",
+        "EV-5aac269c2d1b44da84d4048a59152476"
+      ]
+    },
+    "R2_evidence_attribution": {
+      "score": 2,
+      "rationale": "Each claim cites the record carrying it: C1 pe_header, C2 prediction, C3 format record whose limitation states imports are not collected. No visibility or scope misattribution.",
+      "evidence_ids": [
+        "EV-f82d740aa83144c19b08b0de3e4e0500",
+        "EV-c321d3999b58413784cb3b30d540504e",
+        "EV-5aac269c2d1b44da84d4048a59152476"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 2,
+      "rationale": "Case-specific gap (no import declarations for an import-capability question) is stated and drives alignment=INSUFFICIENT_EVIDENCE; uncalibrated score and static-only limits are stated. LIEF mismatch is omitted but does not change the conclusion.",
+      "evidence_ids": [
+        "EV-5aac269c2d1b44da84d4048a59152476",
+        "EV-c321d3999b58413784cb3b30d540504e"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 2,
+      "rationale": "MONITOR with INSUFFICIENT_EVIDENCE is proportionate; the detector is not used to confirm itself and the human decision is preserved.",
+      "evidence_ids": [
+        "EV-5aac269c2d1b44da84d4048a59152476"
+      ]
+    },
+    "R9_investigation_planning": {
+      "score": 0,
+      "rationale": "No next step; the report even states 'no further tool calls required' although the missing import table is the named unknown.",
+      "evidence_ids": []
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-f82d740aa83144c19b08b0de3e4e0500"
+      ],
+      "rationale": "pe_header: PE32+, x64, is_dll=false, classification PE_IMAGE."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-5aac269c2d1b44da84d4048a59152476"
+      ],
+      "rationale": "benign, raw 0.0038 in prediction record."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-c321d3999b58413784cb3b30d540504e"
+      ],
+      "rationale": "No import facet was collected; format limitation says imports are not collected."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "Sufficient evidence to assess declared capabilities and identify gaps; no further tool calls required.",
+      "verdict": "UNSUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-c321d3999b58413784cb3b30d540504e"
+      ],
+      "rationale": "Declared capabilities cannot be assessed without import data, which the report itself says is missing; the evidence does not justify stopping."
+    }
+  ]
+}

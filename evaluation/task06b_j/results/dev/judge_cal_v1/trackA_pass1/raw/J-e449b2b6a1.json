@@ -1,0 +1,96 @@
+{
+  "item_id": "J-e449b2b6a1",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 2,
+      "rationale": "Claims match the visible slice: entries 0-31 are msvcrt CRT functions and ulib.dll string/ARGUMENT_LEXEMIZER/STRING_ARGUMENT symbols, with no socket/process APIs; 32 of 112 total entries visible; benign raw 0.0038; PE32+ x64 non-DLL. Absence is explicitly scoped to the visible subset.",
+      "evidence_ids": [
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+        "EV-3d570d533a1f441d8ca7bd20a105a879",
+        "EV-dc6671156d134e9eb12b057cf34f6556",
+        "EV-602e48c993cb4db1842293fe7b29fc11"
+      ]
+    },
+    "R2_evidence_attribution": {
+      "score": 2,
+      "rationale": "Each claim cites the record that carries it; resolved import refs (7 _exit, 13 sprintf_s) are correct; scope is stated as 32/112 visible.",
+      "evidence_ids": [
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+        "EV-3d570d533a1f441d8ca7bd20a105a879",
+        "EV-dc6671156d134e9eb12b057cf34f6556"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 1,
+      "rationale": "Partial coverage (32/112) and static-only/dynamically resolved API limits are stated and constrain the conclusion, but the uncalibrated nature of the detector score and the LIEF mismatch are not mentioned while the score is used in the explanation.",
+      "evidence_ids": [
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+        "EV-3d570d533a1f441d8ca7bd20a105a879"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 2,
+      "rationale": "MONITOR is proportionate; the report does not let the detector confirm itself and explicitly says absence is not definitive; human decision preserved.",
+      "evidence_ids": [
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+        "EV-3d570d533a1f441d8ca7bd20a105a879"
+      ]
+    },
+    "R9_investigation_planning": {
+      "score": 0,
+      "rationale": "No next step named despite 32 committed entries left unread (next_offset=32) and 48 uncommitted entries.",
+      "evidence_ids": []
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-dc6671156d134e9eb12b057cf34f6556",
+        "EV-602e48c993cb4db1842293fe7b29fc11"
+      ],
+      "rationale": "PE32+, x64, is_dll=false."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+      ],
+      "rationale": "Visible entries 0-31 are msvcrt and ulib.dll (MBSTR compare, ARGUMENT_LEXEMIZER parsing); no network/process APIs among them; resolved refs correct."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-3d570d533a1f441d8ca7bd20a105a879"
+      ],
+      "rationale": "raw 0.0038, benign."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+      ],
+      "rationale": "provider_total_entries=112, visible_entries=32."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "Static analysis reveals a benign-looking PE with standard C runtime and utility imports.",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+        "EV-3d570d533a1f441d8ca7bd20a105a879"
+      ],
+      "rationale": "Hedged ('benign-looking'), consistent with visible imports and the model label."
+    }
+  ]
+}

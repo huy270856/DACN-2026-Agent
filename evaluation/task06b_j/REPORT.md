@@ -10,6 +10,10 @@
 - Còn thiếu: lượt Judge calibration thật (owner phải chạy), UI human grading (owner chưa yêu
   cầu), owner duyệt confirmatory.
 
+> **Cập nhật post-calibration:** Judge calibration DEV v1 đã hoàn tất (2 track, `COMPLETE_VALID`, đã lock). Xem
+> `CALIBRATION_REPORT.md`: các probe được phát hiện 4/4 ở mức claim; đề xuất rubric v2 và questions v2 trước confirmatory;
+> 6 ca bất đồng về self-corroboration cần người phân xử. Bảng gate mới nhất nằm ở CALIBRATION_REPORT §8.
+
 **RESEARCH: NOT_RUN.**
 
 - `CONFIRMATORY_NOT_RUN`.

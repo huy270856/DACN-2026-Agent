@@ -1,0 +1,62 @@
+{
+  "item_id": "J-6d371cb070",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 2,
+      "rationale": "The few material statements (static prediction only, raw score uncalibrated, concrete imports unavailable, static model labels BENIGN) all follow from the visible evidence: the prediction record has score_is_calibrated_probability=false and predicted_label=benign, and no import facet was collected. Nothing beyond the evidence is asserted.",
+      "evidence_ids": [
+        "EV-735319270c734b198bfdba0310f064e4",
+        "EV-6b04213bb5b948f2b39fb6e912e8bc80"
+      ]
+    },
+    "R2_evidence_attribution": {
+      "score": 0,
+      "rationale": "The report cites no evidence IDs at all (no claims, no supporting IDs); none of its statements are attributed to a source, so provenance and scope cannot be checked from the report itself (the listed IDs are the records the statements would have needed to cite).",
+      "evidence_ids": [
+        "EV-735319270c734b198bfdba0310f064e4",
+        "EV-6b04213bb5b948f2b39fb6e912e8bc80"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 1,
+      "rationale": "Mentions static-only, uncalibrated score and unavailable imports, which are the right limitations, but only as a terse generic line; they are not connected to what can or cannot be concluded (e.g. no statement that network/process capability is undetermined), and the LIEF version mismatch is not mentioned.",
+      "evidence_ids": [
+        "EV-735319270c734b198bfdba0310f064e4"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 1,
+      "rationale": "MONITOR is not an auto-action and is proportionate, but the only stated justification is the detector's BENIGN label; with imports uncollected the recommendation is weakly justified.",
+      "evidence_ids": [
+        "EV-735319270c734b198bfdba0310f064e4"
+      ]
+    },
+    "R9_investigation_planning": {
+      "score": 0,
+      "rationale": "No next verification step is named (e.g. collecting the import table, which is the obvious gap).",
+      "evidence_ids": []
+    }
+  },
+  "claims": [],
+  "additional_claims": [
+    {
+      "text": "Static prediction only; raw score uncalibrated; concrete imports unavailable.",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-735319270c734b198bfdba0310f064e4",
+        "EV-6b04213bb5b948f2b39fb6e912e8bc80"
+      ],
+      "rationale": "Prediction record marks the score as not a calibrated probability; no import facet exists in the visible evidence; pe_header limitation states imports are not collected."
+    },
+    {
+      "text": "Mô hình tĩnh phân loại BENIGN ... phân tích chỉ dựa trên đặc trưng tĩnh, không quan sát hành vi runtime.",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-735319270c734b198bfdba0310f064e4"
+      ],
+      "rationale": "Matches predicted_label=benign and the static-only limitation of the prediction record; correctly attributed to the model rather than stated as truth."
+    }
+  ]
+}

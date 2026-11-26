@@ -1,0 +1,96 @@
+{
+  "item_id": "J-f3c5504a6a",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 0,
+      "rationale": "The report asserts the 65KB size is 'unusually small for a standard executable' and suggests packing/obfuscation; no entropy or section evidence exists and the size norm is outside knowledge. It also relays 'no ... malware score or verdict is collected' while a malware prediction record is visible to it. C1 is supported.",
+      "evidence_ids": [
+        "EV-3e2a3257e0ca4323a24ad6ec53d734f8",
+        "EV-2d65a98bfbac40da81273f887a43d37b",
+        "EV-0cd8be0e338844a98b85b2e757cdb0f6"
+      ]
+    },
+    "R2_evidence_attribution": {
+      "score": 0,
+      "rationale": "C2 (no imports extracted) cites the prediction record, which says nothing about imports; C3 (file size) cites the format record, which contains no size. supporting_evidence_ids is empty.",
+      "evidence_ids": [
+        "EV-0cd8be0e338844a98b85b2e757cdb0f6",
+        "EV-2d65a98bfbac40da81273f887a43d37b"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 1,
+      "rationale": "States the central gap (no import table) and static-only, with LOW confidence, but ignores the detector entirely (no mention of the uncalibrated score) and presents the size-based packing suspicion without flagging it as unverified.",
+      "evidence_ids": [
+        "EV-3e2a3257e0ca4323a24ad6ec53d734f8"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 1,
+      "rationale": "MONITOR is non-automatic and not detector-driven, but it is weakly justified and sits uneasily with the report's own 'suspicion of a packed payload'.",
+      "evidence_ids": [
+        "EV-3e2a3257e0ca4323a24ad6ec53d734f8"
+      ]
+    },
+    "R9_investigation_planning": {
+      "score": 0,
+      "rationale": "No next step named; neither import-table collection nor any check of the packing hypothesis (e.g. entropy/sections) is proposed.",
+      "evidence_ids": []
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-3e2a3257e0ca4323a24ad6ec53d734f8"
+      ],
+      "rationale": "PE32+ x64 is in pe_header; its limitation says imports are not collected."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [
+        "WRONG_ATTRIBUTION"
+      ],
+      "evidence_ids": [
+        "EV-3e2a3257e0ca4323a24ad6ec53d734f8"
+      ],
+      "rationale": "True that no imports were collected, but the cited prediction record does not carry this fact."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "OUTSIDE_EVIDENCE_KNOWLEDGE",
+        "WRONG_ATTRIBUTION"
+      ],
+      "evidence_ids": [],
+      "rationale": "Size 65536 is only in the target snapshot; 'unusually small' and packing are not supported by any entropy/section evidence; cited format record has no size."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "The small file size raises suspicion of a packed payload or incomplete scan.",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "OUTSIDE_EVIDENCE_KNOWLEDGE"
+      ],
+      "evidence_ids": [],
+      "rationale": "No entropy, section or packer evidence; size norm is outside knowledge."
+    },
+    {
+      "text": "the provided evidence ... explicitly states that 'no signature trust, imports, entropy, malware score or verdict is collected.'",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [
+        "WRONG_ATTRIBUTION"
+      ],
+      "evidence_ids": [
+        "EV-3e2a3257e0ca4323a24ad6ec53d734f8",
+        "EV-0cd8be0e338844a98b85b2e757cdb0f6"
+      ],
+      "rationale": "The quote is a pe_header collector limitation; a malware prediction record was in fact visible, so it does not describe the whole evidence set."
+    }
+  ]
+}

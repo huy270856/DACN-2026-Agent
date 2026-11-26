@@ -1,0 +1,134 @@
+{
+  "item_id": "J-f44c340435",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 0,
+      "rationale": "C5 ('declares no Winsock imports at all') is contradicted by the committed import list (WS2_32.dll entries 26-34), and it treats a 16-entry slice as the full table. The free-text 'no network-related imports' is contradicted in the same way.",
+      "evidence_ids": [
+        "EV-4907d6fa745a423da9f42f227c9fbf3d",
+        "EV-485a9199a27b4e4cb7cba3611c85c06b",
+        "EV-32473c187e8e41f6ac0b143c29b94b55"
+      ]
+    },
+    "R2_evidence_attribution": {
+      "score": 0,
+      "rationale": "C5 presents the visible 16-entry slice as the full import table (scope misattribution); C3's size is attributed to records that lack it.",
+      "evidence_ids": [
+        "EV-4907d6fa745a423da9f42f227c9fbf3d",
+        "EV-32473c187e8e41f6ac0b143c29b94b55",
+        "EV-84c8ed6750144f5e93bff14b03e6a8b9"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 0,
+      "rationale": "C5 directly contradicts the report's own truncation limitation (C4: absence in the visible list does not prove absence); uncalibrated score is not mentioned.",
+      "evidence_ids": [
+        "EV-4907d6fa745a423da9f42f227c9fbf3d",
+        "EV-485a9199a27b4e4cb7cba3611c85c06b"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 1,
+      "rationale": "MONITOR is non-automatic, but it is supported by an incorrect 'no Winsock' conclusion and detector 'confirmation' while the network-relevant part of the import table is unread; weakly justified.",
+      "evidence_ids": [
+        "EV-4907d6fa745a423da9f42f227c9fbf3d",
+        "EV-485a9199a27b4e4cb7cba3611c85c06b"
+      ]
+    },
+    "R9_investigation_planning": {
+      "score": 1,
+      "rationale": "The only step is 'verification of the file's actual identity', motivated by an outside-evidence size heuristic. The real named unknown - 48 unread committed import entries (next_offset=16) and 1 uncommitted entry - gets no concrete follow-up step.",
+      "evidence_ids": [
+        "EV-4907d6fa745a423da9f42f227c9fbf3d"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-4907d6fa745a423da9f42f227c9fbf3d"
+      ],
+      "rationale": "Visible entries 0-15 are all msvcrt.dll CRT functions; resolved refs 0 exit, 1 memcpy are correct; scoped to 'visible'."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [
+        "SCORE_AS_PROBABILITY_OR_TRUTH"
+      ],
+      "evidence_ids": [
+        "EV-485a9199a27b4e4cb7cba3611c85c06b"
+      ],
+      "rationale": "benign and raw 0.006 are correct, but 'indicating low likelihood of malicious behavior' reads an uncalibrated raw score as a likelihood."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [
+        "OUTSIDE_EVIDENCE_KNOWLEDGE",
+        "WRONG_ATTRIBUTION"
+      ],
+      "evidence_ids": [
+        "EV-32473c187e8e41f6ac0b143c29b94b55",
+        "EV-84c8ed6750144f5e93bff14b03e6a8b9"
+      ],
+      "rationale": "PE32+ x64 is supported. The 40960-byte size is visible only in the target snapshot, not in the cited header/format records, and 'unusually small' for tracert.exe is outside-evidence knowledge."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-4907d6fa745a423da9f42f227c9fbf3d"
+      ],
+      "rationale": "visible_entries=16, committed_entries=64; import limitation states absence from truncated output is unknown."
+    },
+    {
+      "claim_id": "C5",
+      "verdict": "CONTRADICTED",
+      "tags": [
+        "PARTIAL_COVERAGE_AS_COMPLETE"
+      ],
+      "evidence_ids": [
+        "EV-4907d6fa745a423da9f42f227c9fbf3d"
+      ],
+      "rationale": "Only 16 of 64 committed entries were visible; the committed list contains WS2_32.dll entries 26-34 (WSAIoctl, GetNameInfoW, GetAddrInfoW, FreeAddrInfoW, ordinals). The claim generalises a partial slice and is contradicted by the reference."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "Static analysis reveals a benign executable with no network-related imports. The prediction model confirms low risk.",
+      "verdict": "CONTRADICTED",
+      "tags": [
+        "PARTIAL_COVERAGE_AS_COMPLETE",
+        "SELF_CORROBORATION"
+      ],
+      "evidence_ids": [
+        "EV-4907d6fa745a423da9f42f227c9fbf3d",
+        "EV-485a9199a27b4e4cb7cba3611c85c06b"
+      ],
+      "rationale": "The committed import list (reference, entries 26-41) contains WS2_32.dll (GetAddrInfoW, WSAIoctl, ordinals) and IPHLPAPI.DLL Icmp* functions; the visible 16-entry slice was generalised to the whole file and the detector is used to confirm its own label."
+    },
+    {
+      "text": "the target file path differs from its hash, indicating potential mismatch or sandboxed artifact",
+      "verdict": "UNSUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-4907d6fa745a423da9f42f227c9fbf3d"
+      ],
+      "rationale": "The target_ref verified digest and the imports record target_sha256 agree; nothing shows a path/hash mismatch."
+    },
+    {
+      "text": "the file size of 40KB for a System32 executable named tracert.exe is anomalous and warrants verification of the file's actual identity",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "OUTSIDE_EVIDENCE_KNOWLEDGE"
+      ],
+      "evidence_ids": [],
+      "rationale": "No evidence of expected size for tracert.exe; the anomaly judgement is external knowledge."
+    }
+  ]
+}

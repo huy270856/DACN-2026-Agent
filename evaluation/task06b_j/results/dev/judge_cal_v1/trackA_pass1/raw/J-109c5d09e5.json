@@ -1,0 +1,112 @@
+{
+  "item_id": "J-109c5d09e5",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 0,
+      "rationale": "The explanation states the analysis 'confirms the target is a benign x64 executable with no malicious indicators' and 'the raw score strongly supports this': a detector output with score_is_calibrated_probability=false is turned into a confirmed verdict. 'No evidence of network or process capability imports was found' presents uncollected imports as a negative finding (pe_header limitation: no imports collected). Structured claims C1-C3 are themselves supported or partially supported.",
+      "evidence_ids": [
+        "EV-5aac269c2d1b44da84d4048a59152476",
+        "EV-f82d740aa83144c19b08b0de3e4e0500",
+        "EV-c321d3999b58413784cb3b30d540504e"
+      ]
+    },
+    "R2_evidence_attribution": {
+      "score": 1,
+      "rationale": "C1 and C2 cite the right records. C3 (no imports observed) cites only the prediction record, which says nothing about imports; the fact actually comes from the absence of an import facet / the pe_header 'no imports collected' limitation.",
+      "evidence_ids": [
+        "EV-5aac269c2d1b44da84d4048a59152476",
+        "EV-f82d740aa83144c19b08b0de3e4e0500",
+        "EV-c321d3999b58413784cb3b30d540504e"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 1,
+      "rationale": "Uncertainty notes list the relevant limitations (uncalibrated score, static only, LIEF 0.15.1 vs 0.9.0, missing import table), but they do not constrain the conclusion: the explanation still 'confirms' benign, alignment is CONSISTENT and the network/process question is effectively answered as 'none found'.",
+      "evidence_ids": [
+        "EV-5aac269c2d1b44da84d4048a59152476"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 0,
+      "rationale": "The decision rationale ('Sufficient evidence to confirm benign classification'; 'raw score strongly supports this') uses the detector's own output to confirm the detector's label: self-corroboration. MONITOR itself is mild, but the justification is not grounded in independent evidence while imports remain uncollected.",
+      "evidence_ids": [
+        "EV-5aac269c2d1b44da84d4048a59152476"
+      ]
+    },
+    "R9_investigation_planning": {
+      "score": 0,
+      "rationale": "No next step. Missing import details are listed as a limitation but the report stops ('Sufficient evidence provided') instead of proposing import-table collection.",
+      "evidence_ids": []
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-5aac269c2d1b44da84d4048a59152476"
+      ],
+      "rationale": "predicted_label=benign, raw_score 0.0038 matches the prediction record; phrased as a classification, not truth."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-f82d740aa83144c19b08b0de3e4e0500",
+        "EV-c321d3999b58413784cb3b30d540504e"
+      ],
+      "rationale": "pe_header and format both show PE32+, x64, is_dll=false."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [
+        "WRONG_ATTRIBUTION"
+      ],
+      "evidence_ids": [
+        "EV-f82d740aa83144c19b08b0de3e4e0500"
+      ],
+      "rationale": "True that no imports appear in the visible evidence, but the cited prediction record does not carry this; the pe_header limitation (imports not collected) is the actual source."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "The static PE analysis confirms the target is a benign x64 executable with no malicious indicators.",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "SCORE_AS_PROBABILITY_OR_TRUTH",
+        "SELF_CORROBORATION"
+      ],
+      "evidence_ids": [
+        "EV-5aac269c2d1b44da84d4048a59152476",
+        "EV-f82d740aa83144c19b08b0de3e4e0500"
+      ],
+      "rationale": "Only an uncalibrated detector label exists; header evidence explicitly says no verdict is collected. Nothing confirms benignity."
+    },
+    {
+      "text": "The raw score (0.0038) strongly supports this",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "SELF_CORROBORATION",
+        "SCORE_AS_PROBABILITY_OR_TRUTH"
+      ],
+      "evidence_ids": [
+        "EV-5aac269c2d1b44da84d4048a59152476"
+      ],
+      "rationale": "The score is the detector itself; it cannot independently support the detector's label."
+    },
+    {
+      "text": "No evidence of network or process capability imports was found.",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [
+        "PARTIAL_COVERAGE_AS_COMPLETE"
+      ],
+      "evidence_ids": [
+        "EV-f82d740aa83144c19b08b0de3e4e0500"
+      ],
+      "rationale": "Literally true only because imports were never collected; worded as a negative finding rather than a gap."
+    }
+  ]
+}

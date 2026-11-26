@@ -1,0 +1,134 @@
+{
+  "item_id": "J-430b7c71be",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 0,
+      "rationale": "C5 converts the raw LightGBM score into a '99.4% probability' of benignity, contradicted by the record itself (score_is_calibrated_probability=false). The free-text 'no network-related imports' is also contradicted by WS2_32/IPHLPAPI entries in the committed list.",
+      "evidence_ids": [
+        "EV-4907d6fa745a423da9f42f227c9fbf3d",
+        "EV-485a9199a27b4e4cb7cba3611c85c06b",
+        "EV-32473c187e8e41f6ac0b143c29b94b55"
+      ]
+    },
+    "R2_evidence_attribution": {
+      "score": 0,
+      "rationale": "C5 cites the prediction record for a probability claim that the record explicitly disclaims; C3's size is attributed to header/format records that lack it.",
+      "evidence_ids": [
+        "EV-4907d6fa745a423da9f42f227c9fbf3d",
+        "EV-32473c187e8e41f6ac0b143c29b94b55",
+        "EV-84c8ed6750144f5e93bff14b03e6a8b9"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 0,
+      "rationale": "The case-relevant limitation that the score is uncalibrated is not only missing but contradicted by C5; the free-text reason also contradicts the truncation caveat.",
+      "evidence_ids": [
+        "EV-4907d6fa745a423da9f42f227c9fbf3d",
+        "EV-485a9199a27b4e4cb7cba3611c85c06b"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 1,
+      "rationale": "MONITOR is non-automatic, but its support leans on the detector read as a probability and 'confirms low risk' while most imports are unread; weakly justified.",
+      "evidence_ids": [
+        "EV-4907d6fa745a423da9f42f227c9fbf3d",
+        "EV-485a9199a27b4e4cb7cba3611c85c06b"
+      ]
+    },
+    "R9_investigation_planning": {
+      "score": 1,
+      "rationale": "The only step is 'verification of the file's actual identity', motivated by an outside-evidence size heuristic. The real named unknown - 48 unread committed import entries (next_offset=16) and 1 uncommitted entry - gets no concrete follow-up step.",
+      "evidence_ids": [
+        "EV-4907d6fa745a423da9f42f227c9fbf3d"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-4907d6fa745a423da9f42f227c9fbf3d"
+      ],
+      "rationale": "Visible entries 0-15 are all msvcrt.dll CRT functions; resolved refs 0 exit, 1 memcpy are correct; scoped to 'visible'."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [
+        "SCORE_AS_PROBABILITY_OR_TRUTH"
+      ],
+      "evidence_ids": [
+        "EV-485a9199a27b4e4cb7cba3611c85c06b"
+      ],
+      "rationale": "benign and raw 0.006 are correct, but 'indicating low likelihood of malicious behavior' reads an uncalibrated raw score as a likelihood."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [
+        "OUTSIDE_EVIDENCE_KNOWLEDGE",
+        "WRONG_ATTRIBUTION"
+      ],
+      "evidence_ids": [
+        "EV-32473c187e8e41f6ac0b143c29b94b55",
+        "EV-84c8ed6750144f5e93bff14b03e6a8b9"
+      ],
+      "rationale": "PE32+ x64 is supported. The 40960-byte size is visible only in the target snapshot, not in the cited header/format records, and 'unusually small' for tracert.exe is outside-evidence knowledge."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-4907d6fa745a423da9f42f227c9fbf3d"
+      ],
+      "rationale": "visible_entries=16, committed_entries=64; import limitation states absence from truncated output is unknown."
+    },
+    {
+      "claim_id": "C5",
+      "verdict": "CONTRADICTED",
+      "tags": [
+        "SCORE_AS_PROBABILITY_OR_TRUTH"
+      ],
+      "evidence_ids": [
+        "EV-485a9199a27b4e4cb7cba3611c85c06b"
+      ],
+      "rationale": "The prediction record states score_is_calibrated_probability=false and 'NOT a calibrated probability'; '99.4% probability benign' is directly contradicted."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "Static analysis reveals a benign executable with no network-related imports. The prediction model confirms low risk.",
+      "verdict": "CONTRADICTED",
+      "tags": [
+        "PARTIAL_COVERAGE_AS_COMPLETE",
+        "SELF_CORROBORATION"
+      ],
+      "evidence_ids": [
+        "EV-4907d6fa745a423da9f42f227c9fbf3d",
+        "EV-485a9199a27b4e4cb7cba3611c85c06b"
+      ],
+      "rationale": "The committed import list (reference, entries 26-41) contains WS2_32.dll (GetAddrInfoW, WSAIoctl, ordinals) and IPHLPAPI.DLL Icmp* functions; the visible 16-entry slice was generalised to the whole file and the detector is used to confirm its own label."
+    },
+    {
+      "text": "the target file path differs from its hash, indicating potential mismatch or sandboxed artifact",
+      "verdict": "UNSUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-4907d6fa745a423da9f42f227c9fbf3d"
+      ],
+      "rationale": "The target_ref verified digest and the imports record target_sha256 agree; nothing shows a path/hash mismatch."
+    },
+    {
+      "text": "the file size of 40KB for a System32 executable named tracert.exe is anomalous and warrants verification of the file's actual identity",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "OUTSIDE_EVIDENCE_KNOWLEDGE"
+      ],
+      "evidence_ids": [],
+      "rationale": "No evidence of expected size for tracert.exe; the anomaly judgement is external knowledge."
+    }
+  ]
+}

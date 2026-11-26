@@ -219,3 +219,58 @@ def main(argv=None):
 
 if __name__ == "__main__":
     main()
+
+
+def accessibility(cases_path: Path, out: Path) -> Dict[str, Any]:
+    """Per-case, per-assigned-question evidence accessibility (evaluator-only, static parse).
+
+    Access model of the frozen v3.4 tool path: Agent sees NO import entry before the tool;
+    after the tool the first page (entries 0-15) is visible; up to 2 READ_EVIDENCE calls of
+    <=16 entries each may reveal any other committed entries (0-63); entries >= 64 are never
+    committed (analyzer cap) and therefore inaccessible.
+    """
+    if out.exists():
+        raise FileExistsError(f"NEW_VERSION_REQUIRED: {out}")
+    man = json.loads(cases_path.read_text(encoding="utf-8"))
+    rows = []
+    for c in man["cases"]:
+        p = Path(c["source"])
+        if sha256(p) != c["sha256"]:
+            raise ValueError(f"TARGET_DRIFT {c['alias']}")
+        prof = pe_profile(p)
+        q = c["question_id"]
+        pos = questions.relevant_positions(q, prof["entries"])
+        first = [i for i in pos if i < questions.PAGE]
+        retr = [i for i in pos if questions.PAGE <= i < questions.COMMIT_CAP]
+        inacc = [i for i in pos if i >= questions.COMMIT_CAP]
+        pages = sorted({i // questions.PAGE for i in retr})
+        rel = lambda idx: [f"{prof['entries'][i]['library']}!{prof['entries'][i]['symbol'] or '#' + str(prof['entries'][i]['ordinal'])}" for i in idx]
+        if q == "Q_RUNTIME_LIMIT":
+            answerable, abstain = "NO (runtime behaviour is not observable statically)", "YES - stating the static limit is the correct answer"
+        elif q == "Q_NO_TOOL":
+            answerable, abstain = "YES from initial evidence (pe_header/format/prediction)", "A tool call is unnecessary; answering without it is correct"
+        elif first or retr:
+            answerable = "PARTIALLY (declared capability only)" + ("" if first else "; requires tool + retrieval")
+            abstain = "NO for the visible part; must still scope absence beyond what was read"
+        elif inacc:
+            answerable = "NO via current tool (relevant entries only beyond the 64-entry commit cap)"
+            abstain = "YES - correct answer is 'not found in the committed 64 entries; remaining entries unknown'"
+        else:
+            answerable = "YES as absence, but only completely if declared_entries <= 64"
+            abstain = ("Absence claim must be scoped to entries read" if prof["declared_imports"] > questions.COMMIT_CAP
+                       else "Absence over the whole table is reachable only if all 64 committed entries are read (16 + 2x16 = 48 max)")
+        rows.append({"alias": c["alias"], "question_id": q, "declared_imports": prof["declared_imports"],
+                     "relevant_reference_n": len(pos), "relevant_reference_examples": rel(pos[:6]),
+                     "in_first_64": len(first) + len(retr), "in_initial_projection_before_tool": 0,
+                     "in_first_visible_page_after_tool": len(first),
+                     "accessible_only_via_retrieval": len(retr), "retrieval_pages_needed": len(pages),
+                     "fully_reachable_within_2_reads": len(pages) <= 2,
+                     "inaccessible_beyond_cap": len(inacc),
+                     "inaccessible_examples": rel(inacc[:4]),
+                     "static_answerable": answerable, "abstention_reasonable": abstain,
+                     "filename_EVALUATOR_ONLY": c["filename_EVALUATOR_ONLY"]})
+    doc = {"audit": "task06b-j-accessibility-v1", "cases_file": cases_path.name,
+           "cases_sha256": hashlib.sha256(cases_path.read_bytes()).hexdigest(),
+           "access_model": accessibility.__doc__.strip(), "lexicon": questions.QUESTIONS_VERSION, "rows": rows}
+    out.write_text(json.dumps(doc, indent=2, ensure_ascii=False), encoding="utf-8")
+    return doc

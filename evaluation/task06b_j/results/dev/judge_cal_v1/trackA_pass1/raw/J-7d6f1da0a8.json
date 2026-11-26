@@ -1,0 +1,102 @@
+{
+  "item_id": "J-7d6f1da0a8",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 0,
+      "rationale": "Structured claims C1-C3 are supported, but the report asserts 'The target SHA256 matches a known system file (findstr.exe)' and that this suggests a legitimate utility: no hash-reputation evidence exists, only the path name. It also attributes the missing imports to 'missing evidence pages', which nothing shows (imports were simply not collected).",
+      "evidence_ids": [
+        "EV-3e2a3257e0ca4323a24ad6ec53d734f8",
+        "EV-0cd8be0e338844a98b85b2e757cdb0f6",
+        "EV-2d65a98bfbac40da81273f887a43d37b"
+      ]
+    },
+    "R2_evidence_attribution": {
+      "score": 1,
+      "rationale": "C1/C2/C3 cite existing, relevant records (C3 via the pe_header 'no imports collected' limitation). The free-text attribution of the gap to 'missing evidence pages' and of identity to a 'known system file' has no source.",
+      "evidence_ids": [
+        "EV-3e2a3257e0ca4323a24ad6ec53d734f8",
+        "EV-0cd8be0e338844a98b85b2e757cdb0f6"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 1,
+      "rationale": "States the key case gap (no import bindings) and static-only, and sets LOW confidence/INSUFFICIENT_EVIDENCE; but the uncalibrated nature of the score is not stated explicitly and the 'known system file' remark is not treated as an unverified assumption.",
+      "evidence_ids": [
+        "EV-0cd8be0e338844a98b85b2e757cdb0f6",
+        "EV-3e2a3257e0ca4323a24ad6ec53d734f8"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 2,
+      "rationale": "MONITOR with LOW confidence and INSUFFICIENT_EVIDENCE is proportionate and consistent with the stated gaps; no auto-action and no detector self-corroboration.",
+      "evidence_ids": [
+        "EV-0cd8be0e338844a98b85b2e757cdb0f6"
+      ]
+    },
+    "R9_investigation_planning": {
+      "score": 0,
+      "rationale": "No next step; the stop reason claims limitations 'prevent further tool execution' instead of proposing import-table collection.",
+      "evidence_ids": []
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-3e2a3257e0ca4323a24ad6ec53d734f8"
+      ],
+      "rationale": "pe_header: PE32+, x64, is_dll=false."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-0cd8be0e338844a98b85b2e757cdb0f6"
+      ],
+      "rationale": "model_id dacn-lgbm..., benign, raw 0.0012."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-3e2a3257e0ca4323a24ad6ec53d734f8"
+      ],
+      "rationale": "No import facet visible; pe_header limitation says imports are not collected."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "The target SHA256 matches a known system file (findstr.exe)",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "OUTSIDE_EVIDENCE_KNOWLEDGE"
+      ],
+      "evidence_ids": [],
+      "rationale": "No hash-reputation or known-good lookup exists in the evidence; only the file path is known."
+    },
+    {
+      "text": "The match to findstr.exe suggests it may be a legitimate system utility",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "OUTSIDE_EVIDENCE_KNOWLEDGE"
+      ],
+      "evidence_ids": [],
+      "rationale": "Inference from the file name/path, not from evidence."
+    },
+    {
+      "text": "failed to extract specific import bindings ... due to missing evidence pages",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "WRONG_ATTRIBUTION"
+      ],
+      "evidence_ids": [
+        "EV-3e2a3257e0ca4323a24ad6ec53d734f8"
+      ],
+      "rationale": "Imports were not collected at all (header limitation); no paging/missing-page evidence exists."
+    }
+  ]
+}
