@@ -1,0 +1,2051 @@
+{
+  "audit_version": "task06b-j-holdout-audit-v1",
+  "created_utc": "2026-11-26T04:01:58.704177+00:00",
+  "track": "RAW_PE_E2E_BENIGN_CANDIDATE_HOLDOUT",
+  "eligibility_rules": {
+    "pe": "PE32+ x64 EXE (not DLL)",
+    "signature": "Authenticode status Valid, subject contains 'Microsoft'",
+    "max_size_bytes": 8388608,
+    "sha_disjoint": "SHA-256 absent from every tracked evaluation/research/docs artifact",
+    "program_disjoint": "stem and OriginalFilename stem not previously evaluated or reserved",
+    "near_duplicate": "import-set Jaccard < 0.85 vs previously evaluated programs on disk and earlier candidates",
+    "min_declared_imports": 1
+  },
+  "prior_programs": {
+    "notepad.exe": "05D RAW_PE_E2E",
+    "regedit.exe": "05D RAW_PE_E2E",
+    "cmd.exe": "05D RAW_PE_E2E",
+    "ping.exe": "05D RAW_PE_E2E",
+    "tasklist.exe": "05D RAW_PE_E2E",
+    "where.exe": "05D RAW_PE_E2E",
+    "hostname.exe": "05D RAW_PE_E2E",
+    "xcopy.exe": "05D RAW_PE_E2E",
+    "ipconfig.exe": "05D RAW_PE_E2E",
+    "whoami.exe": "05D RAW_PE_E2E",
+    "find.exe": "05D RAW_PE_E2E",
+    "charmap.exe": "05D RAW_PE_E2E",
+    "calc.exe": "05D RAW_PE_E2E",
+    "certutil.exe": "05D RAW_PE_E2E",
+    "net.exe": "05D RAW_PE_E2E",
+    "attrib.exe": "05D RAW_PE_E2E",
+    "chkdsk.exe": "05D RAW_PE_E2E",
+    "kernel32.dll": "05D RAW_PE_E2E",
+    "user32.dll": "05D RAW_PE_E2E",
+    "gdi32.dll": "05D RAW_PE_E2E",
+    "shell32.dll": "05D RAW_PE_E2E",
+    "advapi32.dll": "05D RAW_PE_E2E",
+    "ws2_32.dll": "05D RAW_PE_E2E",
+    "ntdll.dll": "05D RAW_PE_E2E",
+    "msvcrt.dll": "05D RAW_PE_E2E",
+    "ole32.dll": "05D RAW_PE_E2E",
+    "comctl32.dll": "05D RAW_PE_E2E",
+    "schtasks.exe": "06B dev_v1 dev",
+    "curl.exe": "06B dev_v1 dev",
+    "wevtutil.exe": "06B dev_v1 dev",
+    "reg.exe": "06B dev_v1 dev",
+    "netstat.exe": "06B dev_v1 reserve_NOT_EVALUATED",
+    "route.exe": "06B dev_v1 reserve_NOT_EVALUATED",
+    "tracert.exe": "06B repair_dev_v2 dev",
+    "findstr.exe": "06B repair_dev_v2 dev",
+    "fc.exe": "06B repair_dev_v2 dev"
+  },
+  "prior_profiles_on_disk": [
+    "attrib.exe",
+    "calc.exe",
+    "certutil.exe",
+    "charmap.exe",
+    "chkdsk.exe",
+    "cmd.exe",
+    "curl.exe",
+    "fc.exe",
+    "find.exe",
+    "findstr.exe",
+    "hostname.exe",
+    "ipconfig.exe",
+    "net.exe",
+    "netstat.exe",
+    "notepad.exe",
+    "ping.exe",
+    "reg.exe",
+    "route.exe",
+    "schtasks.exe",
+    "tasklist.exe",
+    "tracert.exe",
+    "wevtutil.exe",
+    "where.exe",
+    "whoami.exe",
+    "xcopy.exe"
+  ],
+  "n_candidates": 22,
+  "n_eligible": 20,
+  "limitations": [
+    "Benign-only cohort (signed Windows utilities); no malicious, packed, third-party, DLL or detector-error strata.",
+    "Program-level independence is judged by name/version/import similarity; functional relatedness (e.g. network diagnostics family) remains possible."
+  ],
+  "candidates": [
+    {
+      "filename": "compact.exe",
+      "source": "C:\\Windows\\System32\\compact.exe",
+      "sha256": "2814b34fd2df2113774034460cbe6ed20db59a0a0c0f47caaee6ef0fc948e00c",
+      "size_bytes": 73728,
+      "machine": "AMD64",
+      "pe_kind": "PE32+",
+      "is_dll": false,
+      "declared_imports": 113,
+      "libraries": [
+        "api-ms-win-core-errorhandling-l1-1-0.dll",
+        "api-ms-win-core-file-l1-1-0.dll",
+        "api-ms-win-core-file-l1-2-1.dll",
+        "api-ms-win-core-handle-l1-1-0.dll",
+        "api-ms-win-core-heap-l1-1-0.dll",
+        "api-ms-win-core-io-l1-1-0.dll",
+        "api-ms-win-core-libraryloader-l1-2-0.dll",
+        "api-ms-win-core-libraryloader-l1-2-1.dll",
+        "api-ms-win-core-processthreads-l1-1-0.dll",
+        "api-ms-win-core-profile-l1-1-0.dll",
+        "api-ms-win-core-psapi-l1-1-0.dll",
+        "api-ms-win-core-registry-l1-1-0.dll",
+        "api-ms-win-core-synch-l1-1-0.dll",
+        "api-ms-win-core-sysinfo-l1-1-0.dll",
+        "api-ms-win-core-sysinfo-l1-2-0.dll",
+        "api-ms-win-security-base-l1-1-0.dll",
+        "api-ms-win-security-lsalookup-l2-1-0.dll",
+        "kernel32.dll",
+        "msvcrt.dll",
+        "ntdll.dll"
+      ],
+      "version": {
+        "OriginalFilename": "COMPACT.EXE",
+        "InternalName": "compact",
+        "FileDescription": "File Compress Utility",
+        "CompanyName": "Microsoft Corporation",
+        "ProductName": "Microsoft® Windows® Operating System"
+      },
+      "signature": {
+        "status": "Valid",
+        "type": "Catalog",
+        "subject": "CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+      },
+      "max_jaccard_vs_prior": 0.24,
+      "max_jaccard_prior_program": "where.exe",
+      "answerability": {
+        "Q_NET": {
+          "stratum": "NO_RELEVANT_DECLARED_IMPORTS",
+          "relevant_positions": [],
+          "n_relevant": 0,
+          "declared_entries": 113
+        },
+        "Q_FILE": {
+          "stratum": "RELEVANT_IN_FIRST_VISIBLE_PAGE",
+          "relevant_positions": [
+            2,
+            47,
+            49,
+            50,
+            52,
+            54
+          ],
+          "n_relevant": 6,
+          "declared_entries": 113
+        },
+        "Q_PROC": {
+          "stratum": "RELEVANT_ONLY_AFTER_RETRIEVAL",
+          "relevant_positions": [
+            25,
+            78
+          ],
+          "n_relevant": 2,
+          "declared_entries": 113
+        },
+        "Q_RUNTIME_LIMIT": {
+          "stratum": "NOT_ANSWERABLE_STATICALLY"
+        },
+        "Q_NO_TOOL": {
+          "stratum": "ANSWERABLE_FROM_INITIAL_EVIDENCE"
+        }
+      },
+      "eligible": true,
+      "reasons": [],
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "filename": "more.com",
+      "source": "C:\\Windows\\System32\\more.com",
+      "sha256": "dea4ed8963aef4c8ce4aa1491410f614fd6d9b0e07737a9b634612adad731630",
+      "size_bytes": 53248,
+      "machine": "AMD64",
+      "pe_kind": "PE32+",
+      "is_dll": false,
+      "declared_imports": 128,
+      "libraries": [
+        "api-ms-win-core-console-l1-1-0.dll",
+        "api-ms-win-core-console-l2-1-0.dll",
+        "api-ms-win-core-errorhandling-l1-1-0.dll",
+        "api-ms-win-core-libraryloader-l1-2-0.dll",
+        "api-ms-win-core-localization-l1-2-0.dll",
+        "api-ms-win-core-processenvironment-l1-1-0.dll",
+        "api-ms-win-core-processthreads-l1-1-0.dll",
+        "api-ms-win-core-profile-l1-1-0.dll",
+        "api-ms-win-core-registry-l1-1-0.dll",
+        "api-ms-win-core-synch-l1-1-0.dll",
+        "api-ms-win-core-synch-l1-2-0.dll",
+        "api-ms-win-core-sysinfo-l1-1-0.dll",
+        "msvcrt.dll",
+        "ntdll.dll",
+        "ulib.dll"
+      ],
+      "version": {
+        "OriginalFilename": "MORE.COM",
+        "InternalName": "more",
+        "FileDescription": "More Utility",
+        "CompanyName": "Microsoft Corporation",
+        "ProductName": "Microsoft® Windows® Operating System"
+      },
+      "signature": {
+        "status": "Valid",
+        "type": "Catalog",
+        "subject": "CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+      },
+      "max_jaccard_vs_prior": 0.419,
+      "max_jaccard_prior_program": "attrib.exe",
+      "answerability": {
+        "Q_NET": {
+          "stratum": "NO_RELEVANT_DECLARED_IMPORTS",
+          "relevant_positions": [],
+          "n_relevant": 0,
+          "declared_entries": 128
+        },
+        "Q_FILE": {
+          "stratum": "NO_RELEVANT_DECLARED_IMPORTS",
+          "relevant_positions": [],
+          "n_relevant": 0,
+          "declared_entries": 128
+        },
+        "Q_PROC": {
+          "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+          "relevant_positions": [
+            110
+          ],
+          "n_relevant": 1,
+          "declared_entries": 128
+        },
+        "Q_RUNTIME_LIMIT": {
+          "stratum": "NOT_ANSWERABLE_STATICALLY"
+        },
+        "Q_NO_TOOL": {
+          "stratum": "ANSWERABLE_FROM_INITIAL_EVIDENCE"
+        }
+      },
+      "eligible": true,
+      "reasons": [],
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "filename": "sort.exe",
+      "source": "C:\\Windows\\System32\\sort.exe",
+      "sha256": "c887e1dab6255d334254817c5b2f51c4aed2d67816c7e55d69c7759acb951c9e",
+      "size_bytes": 49152,
+      "machine": "AMD64",
+      "pe_kind": "PE32+",
+      "is_dll": false,
+      "declared_imports": 79,
+      "libraries": [
+        "advapi32.dll",
+        "kernel32.dll",
+        "msvcrt.dll",
+        "ntdll.dll"
+      ],
+      "version": {
+        "OriginalFilename": "Sort.EXE",
+        "InternalName": "Sort",
+        "FileDescription": "Sort Utility",
+        "CompanyName": "Microsoft Corporation",
+        "ProductName": "Microsoft® Windows® Operating System"
+      },
+      "signature": {
+        "status": "Valid",
+        "type": "Catalog",
+        "subject": "CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+      },
+      "max_jaccard_vs_prior": 0.271,
+      "max_jaccard_prior_program": "where.exe",
+      "answerability": {
+        "Q_NET": {
+          "stratum": "NO_RELEVANT_DECLARED_IMPORTS",
+          "relevant_positions": [],
+          "n_relevant": 0,
+          "declared_entries": 79
+        },
+        "Q_FILE": {
+          "stratum": "RELEVANT_ONLY_AFTER_RETRIEVAL",
+          "relevant_positions": [
+            60,
+            71,
+            73
+          ],
+          "n_relevant": 3,
+          "declared_entries": 79
+        },
+        "Q_PROC": {
+          "stratum": "RELEVANT_ONLY_AFTER_RETRIEVAL",
+          "relevant_positions": [
+            40
+          ],
+          "n_relevant": 1,
+          "declared_entries": 79
+        },
+        "Q_RUNTIME_LIMIT": {
+          "stratum": "NOT_ANSWERABLE_STATICALLY"
+        },
+        "Q_NO_TOOL": {
+          "stratum": "ANSWERABLE_FROM_INITIAL_EVIDENCE"
+        }
+      },
+      "eligible": true,
+      "reasons": [],
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "filename": "auditpol.exe",
+      "source": "C:\\Windows\\System32\\auditpol.exe",
+      "sha256": "f78a48acc9b61f4086b74f54dc8f4e8d0139745c4004af6c98603486d8d210d5",
+      "size_bytes": 61440,
+      "machine": "AMD64",
+      "pe_kind": "PE32+",
+      "is_dll": false,
+      "declared_imports": 112,
+      "libraries": [
+        "api-ms-win-core-console-l1-1-0.dll",
+        "api-ms-win-core-errorhandling-l1-1-0.dll",
+        "api-ms-win-core-heap-l1-1-0.dll",
+        "api-ms-win-core-heap-l2-1-0.dll",
+        "api-ms-win-core-libraryloader-l1-2-0.dll",
+        "api-ms-win-core-localization-l1-2-0.dll",
+        "api-ms-win-core-processthreads-l1-1-0.dll",
+        "api-ms-win-core-profile-l1-1-0.dll",
+        "api-ms-win-core-rtlsupport-l1-1-0.dll",
+        "api-ms-win-core-string-l1-1-0.dll",
+        "api-ms-win-core-synch-l1-2-0.dll",
+        "api-ms-win-core-sysinfo-l1-1-0.dll",
+        "api-ms-win-security-audit-l1-1-0.dll",
+        "api-ms-win-security-audit-l1-1-1.dll",
+        "api-ms-win-security-base-l1-1-0.dll",
+        "api-ms-win-security-lsalookup-l2-1-0.dll",
+        "api-ms-win-security-lsapolicy-l1-1-0.dll",
+        "api-ms-win-security-sddl-l1-1-0.dll",
+        "api-ms-win-security-sddlparsecond-l1-1-0.dll",
+        "auditpolcore.dll",
+        "msvcrt.dll",
+        "ntdll.dll"
+      ],
+      "version": {
+        "OriginalFilename": "AUDITPOL.EXE",
+        "InternalName": "auditpol",
+        "FileDescription": "Audit Policy Program",
+        "CompanyName": "Microsoft Corporation",
+        "ProductName": "Microsoft® Windows® Operating System"
+      },
+      "signature": {
+        "status": "Valid",
+        "type": "Catalog",
+        "subject": "CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+      },
+      "max_jaccard_vs_prior": 0.262,
+      "max_jaccard_prior_program": "hostname.exe",
+      "answerability": {
+        "Q_NET": {
+          "stratum": "NO_RELEVANT_DECLARED_IMPORTS",
+          "relevant_positions": [],
+          "n_relevant": 0,
+          "declared_entries": 112
+        },
+        "Q_FILE": {
+          "stratum": "NO_RELEVANT_DECLARED_IMPORTS",
+          "relevant_positions": [],
+          "n_relevant": 0,
+          "declared_entries": 112
+        },
+        "Q_PROC": {
+          "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+          "relevant_positions": [
+            91
+          ],
+          "n_relevant": 1,
+          "declared_entries": 112
+        },
+        "Q_RUNTIME_LIMIT": {
+          "stratum": "NOT_ANSWERABLE_STATICALLY"
+        },
+        "Q_NO_TOOL": {
+          "stratum": "ANSWERABLE_FROM_INITIAL_EVIDENCE"
+        }
+      },
+      "eligible": true,
+      "reasons": [],
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "filename": "bcdedit.exe",
+      "source": "C:\\Windows\\System32\\bcdedit.exe",
+      "sha256": "a4cfcc092783d30b9b1d0ac5f5004e74767f15e27504c98ac763d3e3b82fa1b5",
+      "size_bytes": 535952,
+      "machine": "AMD64",
+      "pe_kind": "PE32+",
+      "is_dll": false,
+      "declared_imports": 246,
+      "libraries": [
+        "api-ms-win-core-console-l1-1-0.dll",
+        "api-ms-win-core-debug-l1-1-0.dll",
+        "api-ms-win-core-errorhandling-l1-1-0.dll",
+        "api-ms-win-core-file-l1-1-0.dll",
+        "api-ms-win-core-file-l1-2-0.dll",
+        "api-ms-win-core-handle-l1-1-0.dll",
+        "api-ms-win-core-heap-l1-1-0.dll",
+        "api-ms-win-core-heap-obsolete-l1-1-0.dll",
+        "api-ms-win-core-interlocked-l1-1-0.dll",
+        "api-ms-win-core-io-l1-1-0.dll",
+        "api-ms-win-core-libraryloader-l1-1-0.dll",
+        "api-ms-win-core-localization-l1-2-0.dll",
+        "api-ms-win-core-localization-obsolete-l1-1-0.dll",
+        "api-ms-win-core-memory-l1-1-0.dll",
+        "api-ms-win-core-processenvironment-l1-1-0.dll",
+        "api-ms-win-core-processthreads-l1-1-0.dll",
+        "api-ms-win-core-processthreads-l1-1-1.dll",
+        "api-ms-win-core-profile-l1-1-0.dll",
+        "api-ms-win-core-registry-l1-1-0.dll",
+        "api-ms-win-core-string-l1-1-0.dll",
+        "api-ms-win-core-synch-l1-1-0.dll",
+        "api-ms-win-core-sysinfo-l1-1-0.dll",
+        "api-ms-win-crt-private-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "api-ms-win-security-base-l1-1-0.dll",
+        "cryptsp.dll",
+        "ntdll.dll"
+      ],
+      "version": {
+        "OriginalFilename": "bcdedit.exe",
+        "InternalName": "bcdedit.exe",
+        "FileDescription": "Boot Configuration Data Editor",
+        "CompanyName": "Microsoft Corporation",
+        "ProductName": "Microsoft® Windows® Operating System"
+      },
+      "signature": {
+        "status": "Valid",
+        "type": "Catalog",
+        "subject": "CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+      },
+      "max_jaccard_vs_prior": 0.221,
+      "max_jaccard_prior_program": "wevtutil.exe",
+      "answerability": {
+        "Q_NET": {
+          "stratum": "NO_RELEVANT_DECLARED_IMPORTS",
+          "relevant_positions": [],
+          "n_relevant": 0,
+          "declared_entries": 246
+        },
+        "Q_FILE": {
+          "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+          "relevant_positions": [
+            175,
+            178,
+            181,
+            183,
+            236
+          ],
+          "n_relevant": 5,
+          "declared_entries": 246
+        },
+        "Q_PROC": {
+          "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+          "relevant_positions": [
+            94,
+            192
+          ],
+          "n_relevant": 2,
+          "declared_entries": 246
+        },
+        "Q_RUNTIME_LIMIT": {
+          "stratum": "NOT_ANSWERABLE_STATICALLY"
+        },
+        "Q_NO_TOOL": {
+          "stratum": "ANSWERABLE_FROM_INITIAL_EVIDENCE"
+        }
+      },
+      "eligible": true,
+      "reasons": [],
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "filename": "bitsadmin.exe",
+      "source": "C:\\Windows\\System32\\bitsadmin.exe",
+      "sha256": "1802435c38cb9b4c4a800de3f1633f184f6105f1f72c629e2a3f359031c8bef2",
+      "size_bytes": 278528,
+      "machine": "AMD64",
+      "pe_kind": "PE32+",
+      "is_dll": false,
+      "declared_imports": 193,
+      "libraries": [
+        "api-ms-win-core-apiquery-l1-1-0.dll",
+        "api-ms-win-core-delayload-l1-1-0.dll",
+        "api-ms-win-core-delayload-l1-1-1.dll",
+        "api-ms-win-core-heap-l2-1-0.dll",
+        "api-ms-win-core-kernel32-legacy-l1-1-2.dll",
+        "api-ms-win-core-processthreads-l1-1-0.dll",
+        "api-ms-win-core-registry-l1-1-0.dll",
+        "api-ms-win-core-rtlsupport-l1-1-0.dll",
+        "api-ms-win-core-version-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-private-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "api-ms-win-downlevel-kernel32-l1-1-0.dll",
+        "api-ms-win-downlevel-ole32-l1-1-0.dll",
+        "api-ms-win-security-base-l1-1-0.dll",
+        "api-ms-win-security-lsalookup-l1-1-0.dll",
+        "api-ms-win-security-sddl-l1-1-0.dll",
+        "api-ms-win-service-management-l1-1-0.dll",
+        "api-ms-win-service-management-l2-1-0.dll",
+        "ext-ms-win-devmgmt-policy-l1-1-0.dll",
+        "ext-ms-win-ntuser-synch-l1-1-0.dll",
+        "ext-ms-win-rtcore-ntuser-window-ext-l1-1-0.dll",
+        "ext-ms-win-shell32-shellfolders-l1-1-0.dll",
+        "sspicli.dll"
+      ],
+      "version": {
+        "OriginalFilename": "bitsadmin.exe",
+        "InternalName": "bitsadmin.exe",
+        "FileDescription": "BITS administration utility",
+        "CompanyName": "Microsoft Corporation",
+        "ProductName": "Microsoft® Windows® Operating System"
+      },
+      "signature": {
+        "status": "Valid",
+        "type": "Catalog",
+        "subject": "CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+      },
+      "max_jaccard_vs_prior": 0.161,
+      "max_jaccard_prior_program": "reg.exe",
+      "answerability": {
+        "Q_NET": {
+          "stratum": "NO_RELEVANT_DECLARED_IMPORTS",
+          "relevant_positions": [],
+          "n_relevant": 0,
+          "declared_entries": 193
+        },
+        "Q_FILE": {
+          "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+          "relevant_positions": [
+            72,
+            114
+          ],
+          "n_relevant": 2,
+          "declared_entries": 193
+        },
+        "Q_PROC": {
+          "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+          "relevant_positions": [
+            74
+          ],
+          "n_relevant": 1,
+          "declared_entries": 193
+        },
+        "Q_RUNTIME_LIMIT": {
+          "stratum": "NOT_ANSWERABLE_STATICALLY"
+        },
+        "Q_NO_TOOL": {
+          "stratum": "ANSWERABLE_FROM_INITIAL_EVIDENCE"
+        }
+      },
+      "eligible": true,
+      "reasons": [],
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "filename": "makecab.exe",
+      "source": "C:\\Windows\\System32\\makecab.exe",
+      "sha256": "070a98b4f7c03f99048a10f490d5916a9a98417e0d0de2c414c76b3dd00cb35e",
+      "size_bytes": 110592,
+      "machine": "AMD64",
+      "pe_kind": "PE32+",
+      "is_dll": false,
+      "declared_imports": 101,
+      "libraries": [
+        "api-ms-win-core-versionansi-l1-1-0.dll",
+        "api-ms-win-core-versionansi-l1-1-1.dll",
+        "cabinet.dll",
+        "kernel32.dll",
+        "msvcrt.dll",
+        "user32.dll"
+      ],
+      "version": {
+        "OriginalFilename": "makecab.exe",
+        "InternalName": "makecab.exe",
+        "FileDescription": "Microsoft® Cabinet Maker",
+        "CompanyName": "Microsoft Corporation",
+        "ProductName": "Microsoft® Windows® Operating System"
+      },
+      "signature": {
+        "status": "Valid",
+        "type": "Catalog",
+        "subject": "CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+      },
+      "max_jaccard_vs_prior": 0.227,
+      "max_jaccard_prior_program": "calc.exe",
+      "answerability": {
+        "Q_NET": {
+          "stratum": "NO_RELEVANT_DECLARED_IMPORTS",
+          "relevant_positions": [],
+          "n_relevant": 0,
+          "declared_entries": 101
+        },
+        "Q_FILE": {
+          "stratum": "RELEVANT_ONLY_AFTER_RETRIEVAL",
+          "relevant_positions": [
+            24,
+            32,
+            40,
+            63,
+            80,
+            84,
+            87,
+            88,
+            92,
+            95
+          ],
+          "n_relevant": 10,
+          "declared_entries": 101
+        },
+        "Q_PROC": {
+          "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+          "relevant_positions": [
+            68
+          ],
+          "n_relevant": 1,
+          "declared_entries": 101
+        },
+        "Q_RUNTIME_LIMIT": {
+          "stratum": "NOT_ANSWERABLE_STATICALLY"
+        },
+        "Q_NO_TOOL": {
+          "stratum": "ANSWERABLE_FROM_INITIAL_EVIDENCE"
+        }
+      },
+      "eligible": true,
+      "reasons": [],
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "filename": "chcp.com",
+      "source": "C:\\Windows\\System32\\chcp.com",
+      "sha256": "8d75e783f327f899a42927fc2927f0e3d1ec62c4ca1dc88de04dd67de9ae555d",
+      "size_bytes": 36864,
+      "machine": "AMD64",
+      "pe_kind": "PE32+",
+      "is_dll": false,
+      "declared_imports": 74,
+      "libraries": [
+        "kernel32.dll",
+        "msvcrt.dll",
+        "ntdll.dll",
+        "ulib.dll"
+      ],
+      "version": {
+        "OriginalFilename": "CHCP.COM",
+        "InternalName": "chcp",
+        "FileDescription": "Change CodePage Utility",
+        "CompanyName": "Microsoft Corporation",
+        "ProductName": "Microsoft® Windows® Operating System"
+      },
+      "signature": {
+        "status": "Valid",
+        "type": "Catalog",
+        "subject": "CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+      },
+      "max_jaccard_vs_prior": 0.628,
+      "max_jaccard_prior_program": "find.exe",
+      "answerability": {
+        "Q_NET": {
+          "stratum": "NO_RELEVANT_DECLARED_IMPORTS",
+          "relevant_positions": [],
+          "n_relevant": 0,
+          "declared_entries": 74
+        },
+        "Q_FILE": {
+          "stratum": "NO_RELEVANT_DECLARED_IMPORTS",
+          "relevant_positions": [],
+          "n_relevant": 0,
+          "declared_entries": 74
+        },
+        "Q_PROC": {
+          "stratum": "NO_RELEVANT_DECLARED_IMPORTS",
+          "relevant_positions": [],
+          "n_relevant": 0,
+          "declared_entries": 74
+        },
+        "Q_RUNTIME_LIMIT": {
+          "stratum": "NOT_ANSWERABLE_STATICALLY"
+        },
+        "Q_NO_TOOL": {
+          "stratum": "ANSWERABLE_FROM_INITIAL_EVIDENCE"
+        }
+      },
+      "eligible": true,
+      "reasons": [],
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "filename": "dsregcmd.exe",
+      "source": "C:\\Windows\\System32\\dsregcmd.exe",
+      "sha256": "4bc374cb5e65f11a6c8ba5d7bbc710b0e9593237e7dc59ffd026040d83a2134f",
+      "size_bytes": 483328,
+      "machine": "AMD64",
+      "pe_kind": "PE32+",
+      "is_dll": false,
+      "declared_imports": 360,
+      "libraries": [
+        "api-ms-win-core-com-l1-1-0.dll",
+        "api-ms-win-core-debug-l1-1-0.dll",
+        "api-ms-win-core-errorhandling-l1-1-0.dll",
+        "api-ms-win-core-handle-l1-1-0.dll",
+        "api-ms-win-core-heap-l1-1-0.dll",
+        "api-ms-win-core-heap-l2-1-0.dll",
+        "api-ms-win-core-heap-obsolete-l1-1-0.dll",
+        "api-ms-win-core-interlocked-l1-1-0.dll",
+        "api-ms-win-core-kernel32-legacy-l1-1-0.dll",
+        "api-ms-win-core-largeinteger-l1-1-0.dll",
+        "api-ms-win-core-libraryloader-l1-2-0.dll",
+        "api-ms-win-core-localization-l1-2-0.dll",
+        "api-ms-win-core-memory-l1-1-0.dll",
+        "api-ms-win-core-processthreads-l1-1-0.dll",
+        "api-ms-win-core-processthreads-l1-1-1.dll",
+        "api-ms-win-core-profile-l1-1-0.dll",
+        "api-ms-win-core-registry-l1-1-0.dll",
+        "api-ms-win-core-rtlsupport-l1-1-0.dll",
+        "api-ms-win-core-string-l1-1-0.dll",
+        "api-ms-win-core-string-l2-1-0.dll",
+        "api-ms-win-core-string-obsolete-l1-1-0.dll",
+        "api-ms-win-core-synch-l1-1-0.dll",
+        "api-ms-win-core-sysinfo-l1-1-0.dll",
+        "api-ms-win-core-threadpool-l1-2-0.dll",
+        "api-ms-win-core-util-l1-1-0.dll",
+        "api-ms-win-crt-private-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "api-ms-win-crt-time-l1-1-0.dll",
+        "api-ms-win-eventing-provider-l1-1-0.dll",
+        "api-ms-win-eventlog-legacy-l1-1-0.dll",
+        "api-ms-win-rtcore-ntuser-draw-l1-1-0.dll",
+        "api-ms-win-rtcore-ntuser-window-l1-1-0.dll",
+        "api-ms-win-security-base-l1-1-0.dll",
+        "api-ms-win-security-cryptoapi-l1-1-0.dll",
+        "api-ms-win-security-lsalookup-l2-1-0.dll",
+        "bcrypt.dll",
+        "crypt32.dll",
+        "dsreg.dll",
+        "gdi32.dll",
+        "msvcp_win.dll",
+        "ncrypt.dll",
+        "netutils.dll",
+        "ole32.dll",
+        "oleaut32.dll",
+        "secur32.dll",
+        "user32.dll",
+        "userenv.dll",
+        "winhttp.dll",
+        "wininet.dll",
+        "wkscli.dll"
+      ],
+      "version": {
+        "OriginalFilename": "dsregcmd.exe",
+        "InternalName": "dsregcmd.exe",
+        "FileDescription": "DSREG commandline tool",
+        "CompanyName": "Microsoft Corporation",
+        "ProductName": "Microsoft® Windows® Operating System"
+      },
+      "signature": {
+        "status": "Valid",
+        "type": "Catalog",
+        "subject": "CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+      },
+      "max_jaccard_vs_prior": 0.249,
+      "max_jaccard_prior_program": "wevtutil.exe",
+      "answerability": {
+        "Q_NET": {
+          "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+          "relevant_positions": [
+            229,
+            230,
+            231,
+            232,
+            233,
+            234,
+            235,
+            236,
+            237,
+            238,
+            239,
+            240,
+            241,
+            242,
+            243,
+            244,
+            245
+          ],
+          "n_relevant": 17,
+          "declared_entries": 360
+        },
+        "Q_FILE": {
+          "stratum": "NO_RELEVANT_DECLARED_IMPORTS",
+          "relevant_positions": [],
+          "n_relevant": 0,
+          "declared_entries": 360
+        },
+        "Q_PROC": {
+          "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+          "relevant_positions": [
+            125,
+            128
+          ],
+          "n_relevant": 2,
+          "declared_entries": 360
+        },
+        "Q_RUNTIME_LIMIT": {
+          "stratum": "NOT_ANSWERABLE_STATICALLY"
+        },
+        "Q_NO_TOOL": {
+          "stratum": "ANSWERABLE_FROM_INITIAL_EVIDENCE"
+        }
+      },
+      "eligible": true,
+      "reasons": [],
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "filename": "esentutl.exe",
+      "source": "C:\\Windows\\System32\\esentutl.exe",
+      "sha256": "8e2e2d15f28ff45235ca8c118865609a295310072c92a2d697e2f46bdc7ec416",
+      "size_bytes": 847872,
+      "machine": "AMD64",
+      "pe_kind": "PE32+",
+      "is_dll": false,
+      "declared_imports": 247,
+      "libraries": [
+        "api-ms-win-core-console-l1-1-0.dll",
+        "api-ms-win-core-datetime-l1-1-0.dll",
+        "api-ms-win-core-debug-l1-1-0.dll",
+        "api-ms-win-core-errorhandling-l1-1-0.dll",
+        "api-ms-win-core-errorhandling-l1-1-2.dll",
+        "api-ms-win-core-errorhandling-l1-1-3.dll",
+        "api-ms-win-core-file-l1-1-0.dll",
+        "api-ms-win-core-file-l1-2-0.dll",
+        "api-ms-win-core-file-l1-2-1.dll",
+        "api-ms-win-core-file-l2-1-0.dll",
+        "api-ms-win-core-file-l2-1-1.dll",
+        "api-ms-win-core-handle-l1-1-0.dll",
+        "api-ms-win-core-heap-l1-1-0.dll",
+        "api-ms-win-core-heap-l2-1-0.dll",
+        "api-ms-win-core-interlocked-l1-1-0.dll",
+        "api-ms-win-core-io-l1-1-0.dll",
+        "api-ms-win-core-kernel32-legacy-l1-1-0.dll",
+        "api-ms-win-core-libraryloader-l1-2-0.dll",
+        "api-ms-win-core-localization-l1-2-0.dll",
+        "api-ms-win-core-memory-l1-1-0.dll",
+        "api-ms-win-core-privateprofile-l1-1-0.dll",
+        "api-ms-win-core-processthreads-l1-1-0.dll",
+        "api-ms-win-core-processthreads-l1-1-1.dll",
+        "api-ms-win-core-profile-l1-1-0.dll",
+        "api-ms-win-core-registry-l1-1-0.dll",
+        "api-ms-win-core-synch-l1-1-0.dll",
+        "api-ms-win-core-synch-l1-2-0.dll",
+        "api-ms-win-core-sysinfo-l1-1-0.dll",
+        "api-ms-win-core-sysinfo-l1-2-0.dll",
+        "api-ms-win-core-threadpool-l1-2-0.dll",
+        "api-ms-win-core-timezone-l1-1-0.dll",
+        "api-ms-win-core-wow64-l1-1-0.dll",
+        "api-ms-win-crt-private-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "api-ms-win-eventing-provider-l1-1-0.dll",
+        "api-ms-win-eventlog-legacy-l1-1-0.dll",
+        "api-ms-win-security-base-l1-1-0.dll",
+        "api-ms-win-security-lsalookup-l2-1-0.dll",
+        "bcrypt.dll",
+        "esent.dll",
+        "ntdll.dll"
+      ],
+      "version": {
+        "OriginalFilename": "esentutl.exe",
+        "InternalName": "esentutl.exe",
+        "FileDescription": "Extensible Storage Engine Utilities for Microsoft(R) Windows(R)",
+        "CompanyName": "Microsoft Corporation",
+        "ProductName": "Microsoft® Windows® Operating System"
+      },
+      "signature": {
+        "status": "Valid",
+        "type": "Catalog",
+        "subject": "CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+      },
+      "max_jaccard_vs_prior": 0.284,
+      "max_jaccard_prior_program": "cmd.exe",
+      "answerability": {
+        "Q_NET": {
+          "stratum": "NO_RELEVANT_DECLARED_IMPORTS",
+          "relevant_positions": [],
+          "n_relevant": 0,
+          "declared_entries": 247
+        },
+        "Q_FILE": {
+          "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+          "relevant_positions": [
+            98,
+            99,
+            100,
+            105,
+            110,
+            111,
+            118,
+            119,
+            120,
+            121,
+            122,
+            123,
+            125,
+            162,
+            164,
+            211
+          ],
+          "n_relevant": 16,
+          "declared_entries": 247
+        },
+        "Q_PROC": {
+          "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+          "relevant_positions": [
+            177,
+            179,
+            181
+          ],
+          "n_relevant": 3,
+          "declared_entries": 247
+        },
+        "Q_RUNTIME_LIMIT": {
+          "stratum": "NOT_ANSWERABLE_STATICALLY"
+        },
+        "Q_NO_TOOL": {
+          "stratum": "ANSWERABLE_FROM_INITIAL_EVIDENCE"
+        }
+      },
+      "eligible": true,
+      "reasons": [],
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "filename": "expand.exe",
+      "source": "C:\\Windows\\System32\\expand.exe",
+      "sha256": "e5cd2d9536b0729ce90368dce9d923dccfa6f75f2996e31bb349e6a75a2aa897",
+      "size_bytes": 73728,
+      "machine": "AMD64",
+      "pe_kind": "PE32+",
+      "is_dll": false,
+      "declared_imports": 134,
+      "libraries": [
+        "advapi32.dll",
+        "cabinet.dll",
+        "dpx.dll",
+        "ext-ms-win-feclient-encryptedfile-l1-1-0.dll",
+        "kernel32.dll",
+        "msvcrt.dll",
+        "ntdll.dll",
+        "rpcrt4.dll",
+        "user32.dll"
+      ],
+      "version": {
+        "OriginalFilename": "expand",
+        "InternalName": "expand",
+        "FileDescription": "LZ Expansion Utility",
+        "CompanyName": "Microsoft Corporation",
+        "ProductName": "Microsoft® Windows® Operating System"
+      },
+      "signature": {
+        "status": "Valid",
+        "type": "Catalog",
+        "subject": "CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+      },
+      "max_jaccard_vs_prior": 0.237,
+      "max_jaccard_prior_program": "whoami.exe",
+      "answerability": {
+        "Q_NET": {
+          "stratum": "NO_RELEVANT_DECLARED_IMPORTS",
+          "relevant_positions": [],
+          "n_relevant": 0,
+          "declared_entries": 134
+        },
+        "Q_FILE": {
+          "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+          "relevant_positions": [
+            90,
+            96,
+            97,
+            101,
+            103
+          ],
+          "n_relevant": 5,
+          "declared_entries": 134
+        },
+        "Q_PROC": {
+          "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+          "relevant_positions": [
+            120
+          ],
+          "n_relevant": 1,
+          "declared_entries": 134
+        },
+        "Q_RUNTIME_LIMIT": {
+          "stratum": "NOT_ANSWERABLE_STATICALLY"
+        },
+        "Q_NO_TOOL": {
+          "stratum": "ANSWERABLE_FROM_INITIAL_EVIDENCE"
+        }
+      },
+      "eligible": true,
+      "reasons": [],
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "filename": "ipconfig.exe",
+      "source": "C:\\Windows\\System32\\ipconfig.exe",
+      "sha256": "97e67e94e477df42cc18c6c1e489df120693364b62961f05e8be049d6917d387",
+      "size_bytes": 61440,
+      "machine": "AMD64",
+      "pe_kind": "PE32+",
+      "is_dll": false,
+      "declared_imports": 109,
+      "libraries": [
+        "api-ms-win-core-console-l1-1-0.dll",
+        "api-ms-win-core-datetime-l1-1-0.dll",
+        "api-ms-win-core-errorhandling-l1-1-0.dll",
+        "api-ms-win-core-file-l1-1-0.dll",
+        "api-ms-win-core-heap-l1-1-0.dll",
+        "api-ms-win-core-heap-l2-1-0.dll",
+        "api-ms-win-core-libraryloader-l1-2-0.dll",
+        "api-ms-win-core-localization-l1-2-0.dll",
+        "api-ms-win-core-processenvironment-l1-1-0.dll",
+        "api-ms-win-core-processthreads-l1-1-0.dll",
+        "api-ms-win-core-profile-l1-1-0.dll",
+        "api-ms-win-core-registry-l1-1-0.dll",
+        "api-ms-win-core-rtlsupport-l1-1-0.dll",
+        "api-ms-win-core-string-l1-1-0.dll",
+        "api-ms-win-core-synch-l1-2-0.dll",
+        "api-ms-win-core-sysinfo-l1-1-0.dll",
+        "api-ms-win-core-timezone-l1-1-0.dll",
+        "api-ms-win-security-base-l1-1-0.dll",
+        "dhcpcsvc.dll",
+        "dhcpcsvc6.dll",
+        "dnsapi.dll",
+        "iphlpapi.dll",
+        "msvcrt.dll",
+        "nsi.dll",
+        "ntdll.dll",
+        "ws2_32.dll"
+      ],
+      "version": {
+        "OriginalFilename": "ipconfig.exe",
+        "InternalName": "ipconfig.exe",
+        "FileDescription": "IP Configuration Utility",
+        "CompanyName": "Microsoft Corporation",
+        "ProductName": "Microsoft® Windows® Operating System"
+      },
+      "signature": {
+        "status": "Valid",
+        "type": "Catalog",
+        "subject": "CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+      },
+      "max_jaccard_vs_prior": 1.0,
+      "max_jaccard_prior_program": "ipconfig.exe",
+      "answerability": {
+        "Q_NET": {
+          "stratum": "RELEVANT_ONLY_AFTER_RETRIEVAL",
+          "relevant_positions": [
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            78,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88
+          ],
+          "n_relevant": 19,
+          "declared_entries": 109
+        },
+        "Q_FILE": {
+          "stratum": "NO_RELEVANT_DECLARED_IMPORTS",
+          "relevant_positions": [],
+          "n_relevant": 0,
+          "declared_entries": 109
+        },
+        "Q_PROC": {
+          "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+          "relevant_positions": [
+            97
+          ],
+          "n_relevant": 1,
+          "declared_entries": 109
+        },
+        "Q_RUNTIME_LIMIT": {
+          "stratum": "NOT_ANSWERABLE_STATICALLY"
+        },
+        "Q_NO_TOOL": {
+          "stratum": "ANSWERABLE_FROM_INITIAL_EVIDENCE"
+        }
+      },
+      "eligible": false,
+      "reasons": [
+        "PROGRAM_PREVIOUSLY_EVALUATED_OR_RESERVED (05D RAW_PE_E2E)",
+        "NEAR_DUPLICATE_OF_PRIOR {'ipconfig.exe': 1.0}"
+      ],
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "filename": "nslookup.exe",
+      "source": "C:\\Windows\\System32\\nslookup.exe",
+      "sha256": "64164e5267a43dddf8e08953a33d09bde359792828d7801f2d6b133b9ce183e7",
+      "size_bytes": 114688,
+      "machine": "AMD64",
+      "pe_kind": "PE32+",
+      "is_dll": false,
+      "declared_imports": 111,
+      "libraries": [
+        "api-ms-win-core-apiquery-l1-1-0.dll",
+        "api-ms-win-core-delayload-l1-1-0.dll",
+        "api-ms-win-core-delayload-l1-1-1.dll",
+        "api-ms-win-core-errorhandling-l1-1-0.dll",
+        "api-ms-win-core-heap-l1-1-0.dll",
+        "api-ms-win-core-heap-l2-1-0.dll",
+        "api-ms-win-core-libraryloader-l1-2-0.dll",
+        "api-ms-win-core-localization-l1-2-0.dll",
+        "api-ms-win-core-processenvironment-l1-1-0.dll",
+        "api-ms-win-core-processthreads-l1-1-0.dll",
+        "api-ms-win-core-profile-l1-1-0.dll",
+        "api-ms-win-core-registry-l1-1-0.dll",
+        "api-ms-win-core-rtlsupport-l1-1-0.dll",
+        "api-ms-win-core-synch-l1-2-0.dll",
+        "api-ms-win-core-sysinfo-l1-1-0.dll",
+        "crypt32.dll",
+        "dnsapi.dll",
+        "ext-ms-win-ntuser-chartranslation-l1-1-0.dll",
+        "msvcrt.dll",
+        "mswsock.dll",
+        "ntdll.dll",
+        "ws2_32.dll"
+      ],
+      "version": {
+        "OriginalFilename": "nslookup.exe",
+        "InternalName": "nslookup.exe",
+        "FileDescription": "nslookup",
+        "CompanyName": "Microsoft Corporation",
+        "ProductName": "Microsoft® Windows® Operating System"
+      },
+      "signature": {
+        "status": "Valid",
+        "type": "Catalog",
+        "subject": "CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+      },
+      "max_jaccard_vs_prior": 0.315,
+      "max_jaccard_prior_program": "route.exe",
+      "answerability": {
+        "Q_NET": {
+          "stratum": "RELEVANT_ONLY_AFTER_RETRIEVAL",
+          "relevant_positions": [
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            79,
+            80,
+            83
+          ],
+          "n_relevant": 20,
+          "declared_entries": 111
+        },
+        "Q_FILE": {
+          "stratum": "RELEVANT_ONLY_AFTER_RETRIEVAL",
+          "relevant_positions": [
+            21
+          ],
+          "n_relevant": 1,
+          "declared_entries": 111
+        },
+        "Q_PROC": {
+          "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+          "relevant_positions": [
+            90
+          ],
+          "n_relevant": 1,
+          "declared_entries": 111
+        },
+        "Q_RUNTIME_LIMIT": {
+          "stratum": "NOT_ANSWERABLE_STATICALLY"
+        },
+        "Q_NO_TOOL": {
+          "stratum": "ANSWERABLE_FROM_INITIAL_EVIDENCE"
+        }
+      },
+      "eligible": true,
+      "reasons": [],
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "filename": "arp.exe",
+      "source": "C:\\Windows\\System32\\arp.exe",
+      "sha256": "f4a4d1a8cdf1f76a5187357a1cfe8f1909dd5708758de8ef5d5033c9923519ea",
+      "size_bytes": 49152,
+      "machine": "AMD64",
+      "pe_kind": "PE32+",
+      "is_dll": false,
+      "declared_imports": 71,
+      "libraries": [
+        "api-ms-win-core-console-l1-1-0.dll",
+        "api-ms-win-core-errorhandling-l1-1-0.dll",
+        "api-ms-win-core-heap-l1-1-0.dll",
+        "api-ms-win-core-heap-l2-1-0.dll",
+        "api-ms-win-core-libraryloader-l1-2-0.dll",
+        "api-ms-win-core-localization-l1-2-0.dll",
+        "api-ms-win-core-processthreads-l1-1-0.dll",
+        "api-ms-win-core-profile-l1-1-0.dll",
+        "api-ms-win-core-rtlsupport-l1-1-0.dll",
+        "api-ms-win-core-string-l1-1-0.dll",
+        "api-ms-win-core-synch-l1-2-0.dll",
+        "api-ms-win-core-sysinfo-l1-1-0.dll",
+        "api-ms-win-security-base-l1-1-0.dll",
+        "iphlpapi.dll",
+        "msvcrt.dll",
+        "ntdll.dll",
+        "snmpapi.dll",
+        "ws2_32.dll"
+      ],
+      "version": {
+        "OriginalFilename": "arp.exe",
+        "InternalName": "arp.exe",
+        "FileDescription": "TCP/IP Arp Command",
+        "CompanyName": "Microsoft Corporation",
+        "ProductName": "Microsoft® Windows® Operating System"
+      },
+      "signature": {
+        "status": "Valid",
+        "type": "Catalog",
+        "subject": "CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+      },
+      "max_jaccard_vs_prior": 0.48,
+      "max_jaccard_prior_program": "route.exe",
+      "answerability": {
+        "Q_NET": {
+          "stratum": "RELEVANT_ONLY_AFTER_RETRIEVAL",
+          "relevant_positions": [
+            30,
+            31,
+            32,
+            33,
+            62,
+            63,
+            64,
+            65,
+            66
+          ],
+          "n_relevant": 9,
+          "declared_entries": 71
+        },
+        "Q_FILE": {
+          "stratum": "NO_RELEVANT_DECLARED_IMPORTS",
+          "relevant_positions": [],
+          "n_relevant": 0,
+          "declared_entries": 71
+        },
+        "Q_PROC": {
+          "stratum": "RELEVANT_ONLY_AFTER_RETRIEVAL",
+          "relevant_positions": [
+            47
+          ],
+          "n_relevant": 1,
+          "declared_entries": 71
+        },
+        "Q_RUNTIME_LIMIT": {
+          "stratum": "NOT_ANSWERABLE_STATICALLY"
+        },
+        "Q_NO_TOOL": {
+          "stratum": "ANSWERABLE_FROM_INITIAL_EVIDENCE"
+        }
+      },
+      "eligible": true,
+      "reasons": [],
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "filename": "pathping.exe",
+      "source": "C:\\Windows\\System32\\pathping.exe",
+      "sha256": "cf755c161116fc9c46989828b0c566573f648b9f7a13fbcaee0b3bbbb5006109",
+      "size_bytes": 45056,
+      "machine": "AMD64",
+      "pe_kind": "PE32+",
+      "is_dll": false,
+      "declared_imports": 67,
+      "libraries": [
+        "api-ms-win-core-console-l1-1-0.dll",
+        "api-ms-win-core-errorhandling-l1-1-0.dll",
+        "api-ms-win-core-file-l1-1-0.dll",
+        "api-ms-win-core-heap-l1-1-0.dll",
+        "api-ms-win-core-heap-l2-1-0.dll",
+        "api-ms-win-core-libraryloader-l1-2-0.dll",
+        "api-ms-win-core-localization-l1-2-0.dll",
+        "api-ms-win-core-processenvironment-l1-1-0.dll",
+        "api-ms-win-core-processthreads-l1-1-0.dll",
+        "api-ms-win-core-profile-l1-1-0.dll",
+        "api-ms-win-core-rtlsupport-l1-1-0.dll",
+        "api-ms-win-core-string-l1-1-0.dll",
+        "api-ms-win-core-synch-l1-1-0.dll",
+        "api-ms-win-core-synch-l1-2-0.dll",
+        "api-ms-win-core-sysinfo-l1-1-0.dll",
+        "iphlpapi.dll",
+        "msvcrt.dll",
+        "ntdll.dll",
+        "ws2_32.dll"
+      ],
+      "version": {
+        "OriginalFilename": "pathping.exe",
+        "InternalName": "pathping.exe",
+        "FileDescription": "TCP/IP PathPing Command",
+        "CompanyName": "Microsoft Corporation",
+        "ProductName": "Microsoft® Windows® Operating System"
+      },
+      "signature": {
+        "status": "Valid",
+        "type": "Catalog",
+        "subject": "CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+      },
+      "max_jaccard_vs_prior": 0.941,
+      "max_jaccard_prior_program": "tracert.exe",
+      "answerability": {
+        "Q_NET": {
+          "stratum": "RELEVANT_ONLY_AFTER_RETRIEVAL",
+          "relevant_positions": [
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43
+          ],
+          "n_relevant": 15,
+          "declared_entries": 67
+        },
+        "Q_FILE": {
+          "stratum": "NO_RELEVANT_DECLARED_IMPORTS",
+          "relevant_positions": [],
+          "n_relevant": 0,
+          "declared_entries": 67
+        },
+        "Q_PROC": {
+          "stratum": "RELEVANT_ONLY_AFTER_RETRIEVAL",
+          "relevant_positions": [
+            63
+          ],
+          "n_relevant": 1,
+          "declared_entries": 67
+        },
+        "Q_RUNTIME_LIMIT": {
+          "stratum": "NOT_ANSWERABLE_STATICALLY"
+        },
+        "Q_NO_TOOL": {
+          "stratum": "ANSWERABLE_FROM_INITIAL_EVIDENCE"
+        }
+      },
+      "eligible": false,
+      "reasons": [
+        "NEAR_DUPLICATE_OF_PRIOR {'tracert.exe': 0.941}"
+      ],
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "filename": "sc.exe",
+      "source": "C:\\Windows\\System32\\sc.exe",
+      "sha256": "a452bfcb6000d03942ddfaddcda5a7eb121447ed99b1ba090446b4a989f1f7ae",
+      "size_bytes": 102400,
+      "machine": "AMD64",
+      "pe_kind": "PE32+",
+      "is_dll": false,
+      "declared_imports": 108,
+      "libraries": [
+        "api-ms-win-core-console-l1-1-0.dll",
+        "api-ms-win-core-debug-l1-1-0.dll",
+        "api-ms-win-core-delayload-l1-1-0.dll",
+        "api-ms-win-core-delayload-l1-1-1.dll",
+        "api-ms-win-core-errorhandling-l1-1-0.dll",
+        "api-ms-win-core-file-l1-1-0.dll",
+        "api-ms-win-core-heap-l1-1-0.dll",
+        "api-ms-win-core-heap-l2-1-0.dll",
+        "api-ms-win-core-interlocked-l1-1-0.dll",
+        "api-ms-win-core-libraryloader-l1-2-0.dll",
+        "api-ms-win-core-localization-l1-2-0.dll",
+        "api-ms-win-core-processenvironment-l1-1-0.dll",
+        "api-ms-win-core-processthreads-l1-1-0.dll",
+        "api-ms-win-core-processthreads-l1-1-1.dll",
+        "api-ms-win-core-profile-l1-1-0.dll",
+        "api-ms-win-core-rtlsupport-l1-1-0.dll",
+        "api-ms-win-core-string-l1-1-0.dll",
+        "api-ms-win-core-sysinfo-l1-1-0.dll",
+        "api-ms-win-crt-private-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "api-ms-win-security-base-l1-1-0.dll",
+        "api-ms-win-security-sddl-l1-1-0.dll",
+        "api-ms-win-service-core-l1-1-1.dll",
+        "api-ms-win-service-core-l1-1-2.dll",
+        "api-ms-win-service-management-l1-1-0.dll",
+        "api-ms-win-service-management-l2-1-0.dll",
+        "api-ms-win-service-private-l1-1-0.dll",
+        "api-ms-win-service-private-l1-1-2.dll",
+        "api-ms-win-service-winsvc-l1-1-0.dll",
+        "crypt32.dll",
+        "ntdll.dll",
+        "rpcrt4.dll"
+      ],
+      "version": {
+        "OriginalFilename": "sc.exe",
+        "InternalName": "sc.exe",
+        "FileDescription": "Service Control Manager Configuration Tool",
+        "CompanyName": "Microsoft Corporation",
+        "ProductName": "Microsoft® Windows® Operating System"
+      },
+      "signature": {
+        "status": "Valid",
+        "type": "Catalog",
+        "subject": "CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+      },
+      "max_jaccard_vs_prior": 0.324,
+      "max_jaccard_prior_program": "reg.exe",
+      "answerability": {
+        "Q_NET": {
+          "stratum": "NO_RELEVANT_DECLARED_IMPORTS",
+          "relevant_positions": [],
+          "n_relevant": 0,
+          "declared_entries": 108
+        },
+        "Q_FILE": {
+          "stratum": "RELEVANT_ONLY_AFTER_RETRIEVAL",
+          "relevant_positions": [
+            47
+          ],
+          "n_relevant": 1,
+          "declared_entries": 108
+        },
+        "Q_PROC": {
+          "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+          "relevant_positions": [
+            67
+          ],
+          "n_relevant": 1,
+          "declared_entries": 108
+        },
+        "Q_RUNTIME_LIMIT": {
+          "stratum": "NOT_ANSWERABLE_STATICALLY"
+        },
+        "Q_NO_TOOL": {
+          "stratum": "ANSWERABLE_FROM_INITIAL_EVIDENCE"
+        }
+      },
+      "eligible": true,
+      "reasons": [],
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "filename": "robocopy.exe",
+      "source": "C:\\Windows\\System32\\robocopy.exe",
+      "sha256": "e9062b9f540aaf5a557c9d4877410d4d0dcf8cbec126f42b58d0c71d178fcad9",
+      "size_bytes": 192512,
+      "machine": "AMD64",
+      "pe_kind": "PE32+",
+      "is_dll": false,
+      "declared_imports": 234,
+      "libraries": [
+        "advapi32.dll",
+        "kernel32.dll",
+        "msvcrt.dll",
+        "ntdll.dll",
+        "user32.dll",
+        "ws2_32.dll"
+      ],
+      "version": {
+        "OriginalFilename": "robocopy.exe",
+        "InternalName": "robocopy",
+        "FileDescription": "Microsoft Robocopy",
+        "CompanyName": "Microsoft Corporation",
+        "ProductName": "Microsoft® Windows® Operating System"
+      },
+      "signature": {
+        "status": "Valid",
+        "type": "Catalog",
+        "subject": "CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+      },
+      "max_jaccard_vs_prior": 0.271,
+      "max_jaccard_prior_program": "whoami.exe",
+      "answerability": {
+        "Q_NET": {
+          "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+          "relevant_positions": [
+            213
+          ],
+          "n_relevant": 1,
+          "declared_entries": 234
+        },
+        "Q_FILE": {
+          "stratum": "RELEVANT_ONLY_AFTER_RETRIEVAL",
+          "relevant_positions": [
+            44,
+            147,
+            148,
+            175,
+            178,
+            180,
+            182,
+            185,
+            190
+          ],
+          "n_relevant": 9,
+          "declared_entries": 234
+        },
+        "Q_PROC": {
+          "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+          "relevant_positions": [
+            75,
+            150,
+            210
+          ],
+          "n_relevant": 3,
+          "declared_entries": 234
+        },
+        "Q_RUNTIME_LIMIT": {
+          "stratum": "NOT_ANSWERABLE_STATICALLY"
+        },
+        "Q_NO_TOOL": {
+          "stratum": "ANSWERABLE_FROM_INITIAL_EVIDENCE"
+        }
+      },
+      "eligible": true,
+      "reasons": [],
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "filename": "icacls.exe",
+      "source": "C:\\Windows\\System32\\icacls.exe",
+      "sha256": "cb9e55d4c02f4e55100724d2da9a1267f49e196bd39fcdf36cec6ea6314fad2a",
+      "size_bytes": 61440,
+      "machine": "AMD64",
+      "pe_kind": "PE32+",
+      "is_dll": false,
+      "declared_imports": 103,
+      "libraries": [
+        "api-ms-win-core-console-l1-1-0.dll",
+        "api-ms-win-core-errorhandling-l1-1-0.dll",
+        "api-ms-win-core-file-l1-1-0.dll",
+        "api-ms-win-core-handle-l1-1-0.dll",
+        "api-ms-win-core-heap-l1-1-0.dll",
+        "api-ms-win-core-heap-l2-1-0.dll",
+        "api-ms-win-core-heap-obsolete-l1-1-0.dll",
+        "api-ms-win-core-libraryloader-l1-2-0.dll",
+        "api-ms-win-core-localization-l1-2-0.dll",
+        "api-ms-win-core-processenvironment-l1-1-0.dll",
+        "api-ms-win-core-processthreads-l1-1-0.dll",
+        "api-ms-win-core-profile-l1-1-0.dll",
+        "api-ms-win-core-string-l1-1-0.dll",
+        "api-ms-win-core-synch-l1-2-0.dll",
+        "api-ms-win-core-sysinfo-l1-1-0.dll",
+        "api-ms-win-security-base-l1-1-0.dll",
+        "api-ms-win-security-lsalookup-l2-1-0.dll",
+        "api-ms-win-security-provider-l1-1-0.dll",
+        "api-ms-win-security-sddl-l1-1-0.dll",
+        "msvcrt.dll",
+        "ntdll.dll"
+      ],
+      "version": {
+        "OriginalFilename": "iCACLS.EXE",
+        "InternalName": "icacls",
+        "CompanyName": "Microsoft Corporation",
+        "ProductName": "Microsoft® Windows® Operating System"
+      },
+      "signature": {
+        "status": "Valid",
+        "type": "Catalog",
+        "subject": "CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+      },
+      "max_jaccard_vs_prior": 0.281,
+      "max_jaccard_prior_program": "hostname.exe",
+      "answerability": {
+        "Q_NET": {
+          "stratum": "NO_RELEVANT_DECLARED_IMPORTS",
+          "relevant_positions": [],
+          "n_relevant": 0,
+          "declared_entries": 103
+        },
+        "Q_FILE": {
+          "stratum": "RELEVANT_ONLY_AFTER_RETRIEVAL",
+          "relevant_positions": [
+            20,
+            52,
+            54,
+            55,
+            58
+          ],
+          "n_relevant": 5,
+          "declared_entries": 103
+        },
+        "Q_PROC": {
+          "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+          "relevant_positions": [
+            79,
+            80
+          ],
+          "n_relevant": 2,
+          "declared_entries": 103
+        },
+        "Q_RUNTIME_LIMIT": {
+          "stratum": "NOT_ANSWERABLE_STATICALLY"
+        },
+        "Q_NO_TOOL": {
+          "stratum": "ANSWERABLE_FROM_INITIAL_EVIDENCE"
+        }
+      },
+      "eligible": true,
+      "reasons": [],
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "filename": "takeown.exe",
+      "source": "C:\\Windows\\System32\\takeown.exe",
+      "sha256": "9b2f62598734608f0c6bfa65756627d42bbcfa0c233ec9633ff18ef4842b00e3",
+      "size_bytes": 90112,
+      "machine": "AMD64",
+      "pe_kind": "PE32+",
+      "is_dll": false,
+      "declared_imports": 130,
+      "libraries": [
+        "api-ms-win-core-console-l1-1-0.dll",
+        "api-ms-win-core-console-l2-1-0.dll",
+        "api-ms-win-core-delayload-l1-1-0.dll",
+        "api-ms-win-core-delayload-l1-1-1.dll",
+        "api-ms-win-core-errorhandling-l1-1-0.dll",
+        "api-ms-win-core-file-l1-1-0.dll",
+        "api-ms-win-core-handle-l1-1-0.dll",
+        "api-ms-win-core-heap-l1-1-0.dll",
+        "api-ms-win-core-heap-l2-1-0.dll",
+        "api-ms-win-core-kernel32-legacy-l1-1-0.dll",
+        "api-ms-win-core-libraryloader-l1-2-0.dll",
+        "api-ms-win-core-localization-l1-2-0.dll",
+        "api-ms-win-core-localization-obsolete-l1-2-0.dll",
+        "api-ms-win-core-processenvironment-l1-1-0.dll",
+        "api-ms-win-core-processthreads-l1-1-0.dll",
+        "api-ms-win-core-processthreads-l1-1-1.dll",
+        "api-ms-win-core-profile-l1-1-0.dll",
+        "api-ms-win-core-rtlsupport-l1-1-0.dll",
+        "api-ms-win-core-string-l1-1-0.dll",
+        "api-ms-win-core-string-l2-1-0.dll",
+        "api-ms-win-core-string-obsolete-l1-1-0.dll",
+        "api-ms-win-core-synch-l1-2-0.dll",
+        "api-ms-win-core-sysinfo-l1-1-0.dll",
+        "api-ms-win-core-version-l1-1-0.dll",
+        "api-ms-win-security-base-l1-1-0.dll",
+        "api-ms-win-security-lsalookup-l2-1-0.dll",
+        "api-ms-win-security-provider-l1-1-0.dll",
+        "mpr.dll",
+        "msvcrt.dll",
+        "netutils.dll",
+        "ntdll.dll",
+        "srvcli.dll",
+        "sspicli.dll",
+        "ws2_32.dll"
+      ],
+      "version": {
+        "OriginalFilename": "takeown.exe",
+        "InternalName": "takeown.exe",
+        "FileDescription": "Takes ownership of a file",
+        "CompanyName": "Microsoft Corporation",
+        "ProductName": "Microsoft® Windows® Operating System"
+      },
+      "signature": {
+        "status": "Valid",
+        "type": "Catalog",
+        "subject": "CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+      },
+      "max_jaccard_vs_prior": 0.409,
+      "max_jaccard_prior_program": "schtasks.exe",
+      "answerability": {
+        "Q_NET": {
+          "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+          "relevant_positions": [
+            122,
+            123,
+            124,
+            125,
+            126,
+            127
+          ],
+          "n_relevant": 6,
+          "declared_entries": 130
+        },
+        "Q_FILE": {
+          "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+          "relevant_positions": [
+            66,
+            68,
+            70,
+            73,
+            74
+          ],
+          "n_relevant": 5,
+          "declared_entries": 130
+        },
+        "Q_PROC": {
+          "stratum": "RELEVANT_ONLY_AFTER_RETRIEVAL",
+          "relevant_positions": [
+            43,
+            45,
+            89
+          ],
+          "n_relevant": 3,
+          "declared_entries": 130
+        },
+        "Q_RUNTIME_LIMIT": {
+          "stratum": "NOT_ANSWERABLE_STATICALLY"
+        },
+        "Q_NO_TOOL": {
+          "stratum": "ANSWERABLE_FROM_INITIAL_EVIDENCE"
+        }
+      },
+      "eligible": true,
+      "reasons": [],
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "filename": "systeminfo.exe",
+      "source": "C:\\Windows\\System32\\systeminfo.exe",
+      "sha256": "a220a85750588f5b231ff8cb106ba5409eaabb85e3dd7278a98fca907e171ed2",
+      "size_bytes": 126976,
+      "machine": "AMD64",
+      "pe_kind": "PE32+",
+      "is_dll": false,
+      "declared_imports": 148,
+      "libraries": [
+        "api-ms-win-core-com-l1-1-0.dll",
+        "api-ms-win-core-console-l1-1-0.dll",
+        "api-ms-win-core-console-l2-1-0.dll",
+        "api-ms-win-core-datetime-l1-1-0.dll",
+        "api-ms-win-core-errorhandling-l1-1-0.dll",
+        "api-ms-win-core-file-l1-1-0.dll",
+        "api-ms-win-core-heap-l1-1-0.dll",
+        "api-ms-win-core-heap-l2-1-0.dll",
+        "api-ms-win-core-libraryloader-l1-2-0.dll",
+        "api-ms-win-core-localization-l1-2-0.dll",
+        "api-ms-win-core-localization-obsolete-l1-2-0.dll",
+        "api-ms-win-core-processenvironment-l1-1-0.dll",
+        "api-ms-win-core-processthreads-l1-1-0.dll",
+        "api-ms-win-core-profile-l1-1-0.dll",
+        "api-ms-win-core-registry-l1-1-0.dll",
+        "api-ms-win-core-registry-l2-1-0.dll",
+        "api-ms-win-core-rtlsupport-l1-1-0.dll",
+        "api-ms-win-core-string-l1-1-0.dll",
+        "api-ms-win-core-string-l2-1-0.dll",
+        "api-ms-win-core-string-l2-1-1.dll",
+        "api-ms-win-core-string-obsolete-l1-1-0.dll",
+        "api-ms-win-core-synch-l1-2-0.dll",
+        "api-ms-win-core-sysinfo-l1-1-0.dll",
+        "api-ms-win-core-sysinfo-l1-2-0.dll",
+        "api-ms-win-core-timezone-l1-1-0.dll",
+        "api-ms-win-core-version-l1-1-0.dll",
+        "framedynos.dll",
+        "mpr.dll",
+        "msvcrt.dll",
+        "ntdll.dll",
+        "oleaut32.dll",
+        "sspicli.dll",
+        "ws2_32.dll"
+      ],
+      "version": {
+        "OriginalFilename": "sysinfo.exe",
+        "InternalName": "systeminfo.exe",
+        "FileDescription": "Displays system information",
+        "CompanyName": "Microsoft Corporation",
+        "ProductName": "Microsoft® Windows® Operating System"
+      },
+      "signature": {
+        "status": "Valid",
+        "type": "Catalog",
+        "subject": "CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+      },
+      "max_jaccard_vs_prior": 0.459,
+      "max_jaccard_prior_program": "schtasks.exe",
+      "answerability": {
+        "Q_NET": {
+          "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+          "relevant_positions": [
+            122,
+            123,
+            124,
+            125,
+            126,
+            127
+          ],
+          "n_relevant": 6,
+          "declared_entries": 148
+        },
+        "Q_FILE": {
+          "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+          "relevant_positions": [
+            132
+          ],
+          "n_relevant": 1,
+          "declared_entries": 148
+        },
+        "Q_PROC": {
+          "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+          "relevant_positions": [
+            90
+          ],
+          "n_relevant": 1,
+          "declared_entries": 148
+        },
+        "Q_RUNTIME_LIMIT": {
+          "stratum": "NOT_ANSWERABLE_STATICALLY"
+        },
+        "Q_NO_TOOL": {
+          "stratum": "ANSWERABLE_FROM_INITIAL_EVIDENCE"
+        }
+      },
+      "eligible": true,
+      "reasons": [],
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "filename": "driverquery.exe",
+      "source": "C:\\Windows\\System32\\driverquery.exe",
+      "sha256": "84b5a5ebdc2cf3f4e76ecb4c76de2fe082efa48ca0e7897aab4780c033008f9d",
+      "size_bytes": 106496,
+      "machine": "AMD64",
+      "pe_kind": "PE32+",
+      "is_dll": false,
+      "declared_imports": 153,
+      "libraries": [
+        "api-ms-win-core-com-l1-1-0.dll",
+        "api-ms-win-core-errorhandling-l1-1-0.dll",
+        "api-ms-win-core-heap-l2-1-0.dll",
+        "api-ms-win-core-processthreads-l1-1-0.dll",
+        "api-ms-win-core-profile-l1-1-0.dll",
+        "api-ms-win-core-rtlsupport-l1-1-0.dll",
+        "api-ms-win-core-synch-l1-2-0.dll",
+        "api-ms-win-core-sysinfo-l1-1-0.dll",
+        "framedynos.dll",
+        "kernel32.dll",
+        "mpr.dll",
+        "msvcrt.dll",
+        "netutils.dll",
+        "ntdll.dll",
+        "oleaut32.dll",
+        "shlwapi.dll",
+        "srvcli.dll",
+        "sspicli.dll",
+        "user32.dll",
+        "version.dll",
+        "ws2_32.dll"
+      ],
+      "version": {
+        "OriginalFilename": "drvqry.exe",
+        "InternalName": "driverquery.exe",
+        "FileDescription": "Queries the drivers on a system",
+        "CompanyName": "Microsoft Corporation",
+        "ProductName": "Microsoft® Windows® Operating System"
+      },
+      "signature": {
+        "status": "Valid",
+        "type": "Catalog",
+        "subject": "CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+      },
+      "max_jaccard_vs_prior": 0.6,
+      "max_jaccard_prior_program": "tasklist.exe",
+      "answerability": {
+        "Q_NET": {
+          "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+          "relevant_positions": [
+            142,
+            143,
+            144,
+            145,
+            146,
+            147
+          ],
+          "n_relevant": 6,
+          "declared_entries": 153
+        },
+        "Q_FILE": {
+          "stratum": "RELEVANT_IN_FIRST_VISIBLE_PAGE",
+          "relevant_positions": [
+            1,
+            2,
+            30
+          ],
+          "n_relevant": 3,
+          "declared_entries": 153
+        },
+        "Q_PROC": {
+          "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+          "relevant_positions": [
+            112
+          ],
+          "n_relevant": 1,
+          "declared_entries": 153
+        },
+        "Q_RUNTIME_LIMIT": {
+          "stratum": "NOT_ANSWERABLE_STATICALLY"
+        },
+        "Q_NO_TOOL": {
+          "stratum": "ANSWERABLE_FROM_INITIAL_EVIDENCE"
+        }
+      },
+      "eligible": true,
+      "reasons": [],
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "filename": "cmdkey.exe",
+      "source": "C:\\Windows\\System32\\cmdkey.exe",
+      "sha256": "4125cd7966810cdfafb18157c276a88e6ac443c7c98d42593c70247045815028",
+      "size_bytes": 49152,
+      "machine": "AMD64",
+      "pe_kind": "PE32+",
+      "is_dll": false,
+      "declared_imports": 60,
+      "libraries": [
+        "api-ms-win-core-apiquery-l1-1-0.dll",
+        "api-ms-win-core-console-l1-1-0.dll",
+        "api-ms-win-core-delayload-l1-1-0.dll",
+        "api-ms-win-core-delayload-l1-1-1.dll",
+        "api-ms-win-core-errorhandling-l1-1-0.dll",
+        "api-ms-win-core-file-l1-1-0.dll",
+        "api-ms-win-core-heap-l1-1-0.dll",
+        "api-ms-win-core-heap-l2-1-0.dll",
+        "api-ms-win-core-libraryloader-l1-2-0.dll",
+        "api-ms-win-core-localization-l1-2-0.dll",
+        "api-ms-win-core-processenvironment-l1-1-0.dll",
+        "api-ms-win-core-processthreads-l1-1-0.dll",
+        "api-ms-win-core-profile-l1-1-0.dll",
+        "api-ms-win-core-registry-l1-1-0.dll",
+        "api-ms-win-core-rtlsupport-l1-1-0.dll",
+        "api-ms-win-core-string-l1-1-0.dll",
+        "api-ms-win-core-synch-l1-2-0.dll",
+        "api-ms-win-core-sysinfo-l1-1-0.dll",
+        "api-ms-win-security-credentials-l1-1-0.dll",
+        "ext-ms-win-security-credui-l1-1-0.dll",
+        "msvcrt.dll"
+      ],
+      "version": {
+        "OriginalFilename": "cmdkey.exe",
+        "InternalName": "cmdkey.exe",
+        "FileDescription": "Credential Manager Command Line Utility",
+        "CompanyName": "Microsoft Corporation",
+        "ProductName": "Microsoft® Windows® Operating System"
+      },
+      "signature": {
+        "status": "Valid",
+        "type": "Catalog",
+        "subject": "CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+      },
+      "max_jaccard_vs_prior": 0.436,
+      "max_jaccard_prior_program": "hostname.exe",
+      "answerability": {
+        "Q_NET": {
+          "stratum": "NO_RELEVANT_DECLARED_IMPORTS",
+          "relevant_positions": [],
+          "n_relevant": 0,
+          "declared_entries": 60
+        },
+        "Q_FILE": {
+          "stratum": "RELEVANT_ONLY_AFTER_RETRIEVAL",
+          "relevant_positions": [
+            43
+          ],
+          "n_relevant": 1,
+          "declared_entries": 60
+        },
+        "Q_PROC": {
+          "stratum": "RELEVANT_ONLY_AFTER_RETRIEVAL",
+          "relevant_positions": [
+            54
+          ],
+          "n_relevant": 1,
+          "declared_entries": 60
+        },
+        "Q_RUNTIME_LIMIT": {
+          "stratum": "NOT_ANSWERABLE_STATICALLY"
+        },
+        "Q_NO_TOOL": {
+          "stratum": "ANSWERABLE_FROM_INITIAL_EVIDENCE"
+        }
+      },
+      "eligible": true,
+      "reasons": [],
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    }
+  ]
+}

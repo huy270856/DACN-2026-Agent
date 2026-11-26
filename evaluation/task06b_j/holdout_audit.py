@@ -1,0 +1,221 @@
+"""Candidate holdout audit (evaluator-only; read-only static parsing, never executes targets).
+
+Checks SHA overlap AND program identity: filename stem, OriginalFilename/InternalName,
+previously evaluated/reserved program names, different builds of the same program, and
+near-duplicate import profiles (Jaccard) against previously evaluated programs present on
+disk and among candidates. Eligibility rules are fixed in ELIGIBILITY before results exist.
+No detector or Agent inference is run here.
+"""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import re
+import subprocess
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any, Dict, List
+
+from evaluation.task06b_j import leakage, questions
+
+ROOT = Path(__file__).resolve().parents[2]
+SYSTEM32 = Path("C:/Windows/System32")
+AUDIT_VERSION = "task06b-j-holdout-audit-v1"
+ELIGIBILITY = {
+    "pe": "PE32+ x64 EXE (not DLL)",
+    "signature": "Authenticode status Valid, subject contains 'Microsoft'",
+    "max_size_bytes": 8 * 1024 * 1024,
+    "sha_disjoint": "SHA-256 absent from every tracked evaluation/research/docs artifact",
+    "program_disjoint": "stem and OriginalFilename stem not previously evaluated or reserved",
+    "near_duplicate": "import-set Jaccard < 0.85 vs previously evaluated programs on disk and earlier candidates",
+    "min_declared_imports": 1,
+}
+JACCARD_MAX = 0.85
+
+CANDIDATES_V1 = ["compact.exe", "more.com", "sort.exe", "auditpol.exe", "bcdedit.exe", "bitsadmin.exe",
+                 "makecab.exe", "chcp.com", "dsregcmd.exe", "esentutl.exe", "expand.exe", "ipconfig.exe",
+                 "nslookup.exe", "arp.exe", "pathping.exe", "sc.exe", "robocopy.exe", "icacls.exe",
+                 "takeown.exe", "systeminfo.exe", "driverquery.exe", "cmdkey.exe"]
+
+
+def sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def tracked_sha_set() -> set:
+    files = subprocess.check_output(["git", "ls-files", "evaluation", "research", "docs", "benchmarks", "examples"],
+                                    cwd=ROOT, text=True).split()
+    out = set()
+    for f in files:
+        if f.endswith((".json", ".jsonl", ".md", ".csv", ".txt", ".log", ".xml")) and "task06b_j" not in f:
+            out |= set(re.findall(r"\b[0-9a-f]{64}\b", (ROOT / f).read_text(encoding="utf-8", errors="ignore")))
+    return out
+
+
+def prior_programs() -> Dict[str, str]:
+    """name(lower) -> where it was evaluated or reserved."""
+    out: Dict[str, str] = {}
+    d5 = ROOT / "evaluation/task05d/results"
+    for p in [d5 / "sample_manifest_full.json", d5 / "sample_manifest.json", *sorted((d5 / "samples").glob("*.json"))]:
+        if p.exists():
+            obj = json.loads(p.read_text(encoding="utf-8"))
+            for s in obj.get("samples", [obj]):
+                if s.get("filename"):
+                    out.setdefault(s["filename"].lower(), "05D RAW_PE_E2E")
+    for m in sorted((ROOT / "evaluation/task06b/results").glob("*/manifest_EVALUATOR_ONLY.json")):
+        obj = json.loads(m.read_text(encoding="utf-8"))
+        for key in ("dev", "reserve_NOT_EVALUATED"):
+            for s in obj.get(key) or []:
+                out.setdefault(s["filename"].lower(), f"06B {m.parent.name} {key}")
+    return out
+
+
+def pe_profile(path: Path) -> Dict[str, Any]:
+    import lief
+    b = lief.parse(str(path))
+    if b is None:
+        return {"parse": "FAILED"}
+    entries = []
+    for delay, table in ((False, b.imports), (True, b.delay_imports)):
+        for lib in table:
+            for it in lib.entries:
+                entries.append({"library": lib.name, "symbol": None if it.is_ordinal else it.name,
+                                "ordinal": int(it.ordinal) if it.is_ordinal else None, "delay": delay})
+    hdr = b.header
+    return {"parse": "OK", "machine": str(hdr.machine).split(".")[-1],
+            "pe_kind": "PE32+" if b.optional_header.magic == lief.PE.PE_TYPE.PE32_PLUS else "PE32",
+            "is_dll": bool(b.header.has_characteristic(lief.PE.Header.CHARACTERISTICS.DLL)),
+            "declared_imports": len(entries), "libraries": sorted({e["library"].lower() for e in entries}),
+            "import_set": sorted({f"{e['library'].lower()}!{e['symbol'] or '#' + str(e['ordinal'])}" for e in entries}),
+            "entries": entries}
+
+
+def jaccard(a: List[str], b: List[str]) -> float:
+    sa, sb = set(a), set(b)
+    return len(sa & sb) / len(sa | sb) if sa | sb else 0.0
+
+
+def audit(names: List[str], out: Path, *, system32: Path = SYSTEM32) -> Dict[str, Any]:
+    if out.exists():
+        raise FileExistsError(f"NEW_VERSION_REQUIRED: {out}")
+    shas = tracked_sha_set()
+    prior = prior_programs()
+    prior_profiles = {}
+    for name in sorted(prior):
+        p = system32 / name
+        if p.exists() and p.suffix.lower() in (".exe", ".com"):
+            prof = pe_profile(p)
+            if prof.get("parse") == "OK":
+                prior_profiles[name] = prof["import_set"]
+    paths = [system32 / n for n in names if (system32 / n).exists()]
+    sigs = leakage.authenticode(paths)
+    rows, accepted_sets = [], {}
+    for n in names:
+        p = system32 / n
+        row: Dict[str, Any] = {"filename": n, "source": str(p)}
+        if not p.exists():
+            rows.append(dict(row, eligible=False, reasons=["MISSING"])); continue
+        prof = pe_profile(p)
+        ver = leakage.version_strings(p)
+        sig = sigs.get(str(p), {"status": "UNKNOWN", "subject": ""})
+        h = sha256(p)
+        orig_stem = Path(ver.get("OriginalFilename", n)).stem.lower()
+        reasons = []
+        if prof.get("parse") != "OK" or prof["pe_kind"] != "PE32+" or prof["machine"] != "AMD64" or prof["is_dll"]:
+            reasons.append("NOT_PE32PLUS_X64_EXE")
+        if sig.get("status") != "Valid" or "microsoft" not in str(sig.get("subject", "")).lower():
+            reasons.append("SIGNATURE_NOT_VALID_MICROSOFT")
+        if p.stat().st_size > ELIGIBILITY["max_size_bytes"]:
+            reasons.append("TOO_LARGE")
+        if h in shas:
+            reasons.append("SHA_OVERLAP")
+        stems = {Path(k).stem for k in prior}
+        if Path(n).stem.lower() in stems or orig_stem in stems:
+            reasons.append("PROGRAM_PREVIOUSLY_EVALUATED_OR_RESERVED (" +
+                           prior.get(n.lower(), prior.get(orig_stem + ".exe", "name match")) + ")")
+        near = {k: round(jaccard(prof.get("import_set", []), v), 3) for k, v in prior_profiles.items()}
+        near_hit = {k: v for k, v in near.items() if v >= JACCARD_MAX}
+        if near_hit:
+            reasons.append(f"NEAR_DUPLICATE_OF_PRIOR {near_hit}")
+        cand_hit = {k: round(jaccard(prof.get("import_set", []), v), 3) for k, v in accepted_sets.items()
+                    if jaccard(prof.get("import_set", []), v) >= JACCARD_MAX}
+        if cand_hit:
+            reasons.append(f"NEAR_DUPLICATE_OF_EARLIER_CANDIDATE {cand_hit}")
+        if prof.get("declared_imports", 0) < ELIGIBILITY["min_declared_imports"]:
+            reasons.append("NO_DECLARED_IMPORTS")
+        eligible = not reasons
+        if eligible:
+            accepted_sets[n] = prof["import_set"]
+        rows.append(dict(row, sha256=h, size_bytes=p.stat().st_size, machine=prof.get("machine"),
+                         pe_kind=prof.get("pe_kind"), is_dll=prof.get("is_dll"),
+                         declared_imports=prof.get("declared_imports"), libraries=prof.get("libraries"),
+                         version=ver, signature=sig,
+                         max_jaccard_vs_prior=max(near.values()) if near else None,
+                         max_jaccard_prior_program=max(near, key=near.get) if near else None,
+                         answerability={q: questions.answerability(q, prof.get("entries", [])) for q in questions.QUESTIONS},
+                         eligible=eligible, reasons=reasons,
+                         true_label_EVALUATOR_ONLY="benign", label_basis="OS provenance + valid Microsoft signature"))
+    doc = {"audit_version": AUDIT_VERSION, "created_utc": datetime.now(timezone.utc).isoformat(),
+           "track": "RAW_PE_E2E_BENIGN_CANDIDATE_HOLDOUT", "eligibility_rules": ELIGIBILITY,
+           "prior_programs": prior, "prior_profiles_on_disk": sorted(prior_profiles),
+           "n_candidates": len(names), "n_eligible": sum(r["eligible"] for r in rows),
+           "limitations": ["Benign-only cohort (signed Windows utilities); no malicious, packed, third-party, DLL or "
+                           "detector-error strata.",
+                           "Program-level independence is judged by name/version/import similarity; functional "
+                           "relatedness (e.g. network diagnostics family) remains possible."],
+           "candidates": rows}
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(doc, indent=2, ensure_ascii=False), encoding="utf-8")
+    return doc
+
+
+def make_cases(audit_path: Path, out: Path, seed: str, track: str) -> Dict[str, Any]:
+    """Freeze the candidate case manifest BEFORE any inference: neutral aliases (seeded order, so
+    aliases do not reveal names) and a balanced, predeclared question per case."""
+    if out.exists():
+        raise FileExistsError(f"NEW_VERSION_REQUIRED: {out}")
+    import random
+    doc = json.loads(audit_path.read_text(encoding="utf-8"))
+    eligible = [r for r in doc["candidates"] if r["eligible"]]
+    order = sorted(eligible, key=lambda r: r["sha256"])
+    random.Random(seed + "|alias").shuffle(order)
+    aliases = {r["sha256"]: f"sample_{i + 1:04d}" for i, r in enumerate(order)}
+    qmap = questions.assign(list(aliases.values()), seed + "|questions")
+    cases = []
+    for r in order:
+        alias = aliases[r["sha256"]]
+        qid = qmap[alias]
+        cases.append({"alias": alias, "source": r["source"], "filename_EVALUATOR_ONLY": r["filename"],
+                      "sha256": r["sha256"], "size_bytes": r["size_bytes"], "question_id": qid,
+                      "answerability_EVALUATOR_ONLY": r["answerability"][qid],
+                      "true_label_EVALUATOR_ONLY": r["true_label_EVALUATOR_ONLY"], "label_basis": r["label_basis"]})
+    man = {"track": track, "seed": seed, "created_utc": datetime.now(timezone.utc).isoformat(),
+           "audit_file": audit_path.name, "audit_sha256": hashlib.sha256(audit_path.read_bytes()).hexdigest(),
+           "questions_version": questions.QUESTIONS_VERSION, "questions_sha256": questions.questions_sha256(),
+           "status": "CANDIDATE_PENDING_OWNER_APPROVAL", "confirmatory": "NOT_RUN",
+           "selection_rule": "all eligible candidates; no model output used", "cases": cases}
+    out.write_text(json.dumps(man, indent=2, ensure_ascii=False), encoding="utf-8")
+    return man
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(description="Audit candidate holdout PEs (evaluator-only)")
+    sub = ap.add_subparsers(dest="cmd", required=True)
+    a1 = sub.add_parser("audit"); a1.add_argument("--out", type=Path, required=True)
+    a2 = sub.add_parser("cases"); a2.add_argument("--audit", type=Path, required=True)
+    a2.add_argument("--out", type=Path, required=True); a2.add_argument("--seed", required=True)
+    a = ap.parse_args(argv)
+    if a.cmd == "audit":
+        doc = audit(CANDIDATES_V1, a.out)
+        for r in doc["candidates"]:
+            print(f"{r['filename']:16s} {'ELIGIBLE' if r['eligible'] else 'EXCLUDED'} {r['reasons']}")
+        print("eligible:", doc["n_eligible"], "/", doc["n_candidates"])
+    else:
+        man = make_cases(a.audit, a.out, a.seed, "RAW_PE_E2E_BENIGN_CANDIDATE_HOLDOUT")
+        for c in man["cases"]:
+            print(c["alias"], c["question_id"], c["answerability_EVALUATOR_ONLY"]["stratum"])
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,341 @@
+{
+  "track": "RAW_PE_E2E_BENIGN_CANDIDATE_HOLDOUT",
+  "seed": "task06b-j-holdout-v1",
+  "created_utc": "2026-11-26T04:03:42.981337+00:00",
+  "audit_file": "candidate_audit_v1_EVALUATOR_ONLY.json",
+  "audit_sha256": "e6ed5d8ef40988842f5e27960daeab1f2af4a8394a3c6f32fb3794aba0c2536b",
+  "questions_version": "task06b-j-questions-v1",
+  "questions_sha256": "4f3aee3d85bd8ac8499aaa86120409ed5951daa602a0d4aefe1c4e6f3cc60ed7",
+  "status": "CANDIDATE_PENDING_OWNER_APPROVAL",
+  "confirmatory": "NOT_RUN",
+  "selection_rule": "all eligible candidates; no model output used",
+  "cases": [
+    {
+      "alias": "sample_0001",
+      "source": "C:\\Windows\\System32\\robocopy.exe",
+      "filename_EVALUATOR_ONLY": "robocopy.exe",
+      "sha256": "e9062b9f540aaf5a557c9d4877410d4d0dcf8cbec126f42b58d0c71d178fcad9",
+      "size_bytes": 192512,
+      "question_id": "Q_RUNTIME_LIMIT",
+      "answerability_EVALUATOR_ONLY": {
+        "stratum": "NOT_ANSWERABLE_STATICALLY"
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0002",
+      "source": "C:\\Windows\\System32\\bitsadmin.exe",
+      "filename_EVALUATOR_ONLY": "bitsadmin.exe",
+      "sha256": "1802435c38cb9b4c4a800de3f1633f184f6105f1f72c629e2a3f359031c8bef2",
+      "size_bytes": 278528,
+      "question_id": "Q_RUNTIME_LIMIT",
+      "answerability_EVALUATOR_ONLY": {
+        "stratum": "NOT_ANSWERABLE_STATICALLY"
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0003",
+      "source": "C:\\Windows\\System32\\arp.exe",
+      "filename_EVALUATOR_ONLY": "arp.exe",
+      "sha256": "f4a4d1a8cdf1f76a5187357a1cfe8f1909dd5708758de8ef5d5033c9923519ea",
+      "size_bytes": 49152,
+      "question_id": "Q_NET",
+      "answerability_EVALUATOR_ONLY": {
+        "stratum": "RELEVANT_ONLY_AFTER_RETRIEVAL",
+        "relevant_positions": [
+          30,
+          31,
+          32,
+          33,
+          62,
+          63,
+          64,
+          65,
+          66
+        ],
+        "n_relevant": 9,
+        "declared_entries": 71
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0004",
+      "source": "C:\\Windows\\System32\\chcp.com",
+      "filename_EVALUATOR_ONLY": "chcp.com",
+      "sha256": "8d75e783f327f899a42927fc2927f0e3d1ec62c4ca1dc88de04dd67de9ae555d",
+      "size_bytes": 36864,
+      "question_id": "Q_FILE",
+      "answerability_EVALUATOR_ONLY": {
+        "stratum": "NO_RELEVANT_DECLARED_IMPORTS",
+        "relevant_positions": [],
+        "n_relevant": 0,
+        "declared_entries": 74
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0005",
+      "source": "C:\\Windows\\System32\\compact.exe",
+      "filename_EVALUATOR_ONLY": "compact.exe",
+      "sha256": "2814b34fd2df2113774034460cbe6ed20db59a0a0c0f47caaee6ef0fc948e00c",
+      "size_bytes": 73728,
+      "question_id": "Q_NET",
+      "answerability_EVALUATOR_ONLY": {
+        "stratum": "NO_RELEVANT_DECLARED_IMPORTS",
+        "relevant_positions": [],
+        "n_relevant": 0,
+        "declared_entries": 113
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0006",
+      "source": "C:\\Windows\\System32\\cmdkey.exe",
+      "filename_EVALUATOR_ONLY": "cmdkey.exe",
+      "sha256": "4125cd7966810cdfafb18157c276a88e6ac443c7c98d42593c70247045815028",
+      "size_bytes": 49152,
+      "question_id": "Q_NO_TOOL",
+      "answerability_EVALUATOR_ONLY": {
+        "stratum": "ANSWERABLE_FROM_INITIAL_EVIDENCE"
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0007",
+      "source": "C:\\Windows\\System32\\more.com",
+      "filename_EVALUATOR_ONLY": "more.com",
+      "sha256": "dea4ed8963aef4c8ce4aa1491410f614fd6d9b0e07737a9b634612adad731630",
+      "size_bytes": 53248,
+      "question_id": "Q_RUNTIME_LIMIT",
+      "answerability_EVALUATOR_ONLY": {
+        "stratum": "NOT_ANSWERABLE_STATICALLY"
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0008",
+      "source": "C:\\Windows\\System32\\bcdedit.exe",
+      "filename_EVALUATOR_ONLY": "bcdedit.exe",
+      "sha256": "a4cfcc092783d30b9b1d0ac5f5004e74767f15e27504c98ac763d3e3b82fa1b5",
+      "size_bytes": 535952,
+      "question_id": "Q_PROC",
+      "answerability_EVALUATOR_ONLY": {
+        "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+        "relevant_positions": [
+          94,
+          192
+        ],
+        "n_relevant": 2,
+        "declared_entries": 246
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0009",
+      "source": "C:\\Windows\\System32\\esentutl.exe",
+      "filename_EVALUATOR_ONLY": "esentutl.exe",
+      "sha256": "8e2e2d15f28ff45235ca8c118865609a295310072c92a2d697e2f46bdc7ec416",
+      "size_bytes": 847872,
+      "question_id": "Q_PROC",
+      "answerability_EVALUATOR_ONLY": {
+        "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+        "relevant_positions": [
+          177,
+          179,
+          181
+        ],
+        "n_relevant": 3,
+        "declared_entries": 247
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0010",
+      "source": "C:\\Windows\\System32\\systeminfo.exe",
+      "filename_EVALUATOR_ONLY": "systeminfo.exe",
+      "sha256": "a220a85750588f5b231ff8cb106ba5409eaabb85e3dd7278a98fca907e171ed2",
+      "size_bytes": 126976,
+      "question_id": "Q_PROC",
+      "answerability_EVALUATOR_ONLY": {
+        "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+        "relevant_positions": [
+          90
+        ],
+        "n_relevant": 1,
+        "declared_entries": 148
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0011",
+      "source": "C:\\Windows\\System32\\dsregcmd.exe",
+      "filename_EVALUATOR_ONLY": "dsregcmd.exe",
+      "sha256": "4bc374cb5e65f11a6c8ba5d7bbc710b0e9593237e7dc59ffd026040d83a2134f",
+      "size_bytes": 483328,
+      "question_id": "Q_FILE",
+      "answerability_EVALUATOR_ONLY": {
+        "stratum": "NO_RELEVANT_DECLARED_IMPORTS",
+        "relevant_positions": [],
+        "n_relevant": 0,
+        "declared_entries": 360
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0012",
+      "source": "C:\\Windows\\System32\\nslookup.exe",
+      "filename_EVALUATOR_ONLY": "nslookup.exe",
+      "sha256": "64164e5267a43dddf8e08953a33d09bde359792828d7801f2d6b133b9ce183e7",
+      "size_bytes": 114688,
+      "question_id": "Q_NO_TOOL",
+      "answerability_EVALUATOR_ONLY": {
+        "stratum": "ANSWERABLE_FROM_INITIAL_EVIDENCE"
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0013",
+      "source": "C:\\Windows\\System32\\sort.exe",
+      "filename_EVALUATOR_ONLY": "sort.exe",
+      "sha256": "c887e1dab6255d334254817c5b2f51c4aed2d67816c7e55d69c7759acb951c9e",
+      "size_bytes": 49152,
+      "question_id": "Q_FILE",
+      "answerability_EVALUATOR_ONLY": {
+        "stratum": "RELEVANT_ONLY_AFTER_RETRIEVAL",
+        "relevant_positions": [
+          60,
+          71,
+          73
+        ],
+        "n_relevant": 3,
+        "declared_entries": 79
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0014",
+      "source": "C:\\Windows\\System32\\driverquery.exe",
+      "filename_EVALUATOR_ONLY": "driverquery.exe",
+      "sha256": "84b5a5ebdc2cf3f4e76ecb4c76de2fe082efa48ca0e7897aab4780c033008f9d",
+      "size_bytes": 106496,
+      "question_id": "Q_PROC",
+      "answerability_EVALUATOR_ONLY": {
+        "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+        "relevant_positions": [
+          112
+        ],
+        "n_relevant": 1,
+        "declared_entries": 153
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0015",
+      "source": "C:\\Windows\\System32\\icacls.exe",
+      "filename_EVALUATOR_ONLY": "icacls.exe",
+      "sha256": "cb9e55d4c02f4e55100724d2da9a1267f49e196bd39fcdf36cec6ea6314fad2a",
+      "size_bytes": 61440,
+      "question_id": "Q_NO_TOOL",
+      "answerability_EVALUATOR_ONLY": {
+        "stratum": "ANSWERABLE_FROM_INITIAL_EVIDENCE"
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0016",
+      "source": "C:\\Windows\\System32\\makecab.exe",
+      "filename_EVALUATOR_ONLY": "makecab.exe",
+      "sha256": "070a98b4f7c03f99048a10f490d5916a9a98417e0d0de2c414c76b3dd00cb35e",
+      "size_bytes": 110592,
+      "question_id": "Q_NO_TOOL",
+      "answerability_EVALUATOR_ONLY": {
+        "stratum": "ANSWERABLE_FROM_INITIAL_EVIDENCE"
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0017",
+      "source": "C:\\Windows\\System32\\auditpol.exe",
+      "filename_EVALUATOR_ONLY": "auditpol.exe",
+      "sha256": "f78a48acc9b61f4086b74f54dc8f4e8d0139745c4004af6c98603486d8d210d5",
+      "size_bytes": 61440,
+      "question_id": "Q_NET",
+      "answerability_EVALUATOR_ONLY": {
+        "stratum": "NO_RELEVANT_DECLARED_IMPORTS",
+        "relevant_positions": [],
+        "n_relevant": 0,
+        "declared_entries": 112
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0018",
+      "source": "C:\\Windows\\System32\\sc.exe",
+      "filename_EVALUATOR_ONLY": "sc.exe",
+      "sha256": "a452bfcb6000d03942ddfaddcda5a7eb121447ed99b1ba090446b4a989f1f7ae",
+      "size_bytes": 102400,
+      "question_id": "Q_NET",
+      "answerability_EVALUATOR_ONLY": {
+        "stratum": "NO_RELEVANT_DECLARED_IMPORTS",
+        "relevant_positions": [],
+        "n_relevant": 0,
+        "declared_entries": 108
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0019",
+      "source": "C:\\Windows\\System32\\takeown.exe",
+      "filename_EVALUATOR_ONLY": "takeown.exe",
+      "sha256": "9b2f62598734608f0c6bfa65756627d42bbcfa0c233ec9633ff18ef4842b00e3",
+      "size_bytes": 90112,
+      "question_id": "Q_FILE",
+      "answerability_EVALUATOR_ONLY": {
+        "stratum": "RELEVANT_ONLY_BEYOND_COMMIT_CAP",
+        "relevant_positions": [
+          66,
+          68,
+          70,
+          73,
+          74
+        ],
+        "n_relevant": 5,
+        "declared_entries": 130
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0020",
+      "source": "C:\\Windows\\System32\\expand.exe",
+      "filename_EVALUATOR_ONLY": "expand.exe",
+      "sha256": "e5cd2d9536b0729ce90368dce9d923dccfa6f75f2996e31bb349e6a75a2aa897",
+      "size_bytes": 73728,
+      "question_id": "Q_RUNTIME_LIMIT",
+      "answerability_EVALUATOR_ONLY": {
+        "stratum": "NOT_ANSWERABLE_STATICALLY"
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    }
+  ]
+}

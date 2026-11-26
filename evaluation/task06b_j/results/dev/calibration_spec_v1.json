@@ -1,0 +1,184 @@
+{
+  "track": "DEV_CALIBRATION_HISTORICAL_ARTIFACTS",
+  "confirmatory": "NOT_RUN",
+  "independence": "NONE - all three SHAs are v3.1-v3.4 development files; contract versions and runs differ across items; not an arm comparison",
+  "calibration_note": "Expectations and probe answers were written by the developer (Claude Code session) from deterministic inspection of frozen traces. They are hypotheses for checking rubric/Judge sensitivity, NOT ground truth, and require human adjudication.",
+  "items": [
+    {
+      "sample_sha256": "415e7396bdbde474719b20bb5704489a2333bb45f7f0f2ca677af4d125078a67",
+      "arm": "A",
+      "variant": "dev-static-template",
+      "source": "../../../task06b/results/repair_dev_v4/00_A.json",
+      "initial_state": "../../../task06b/results/repair_dev_v4/00_initial_state.json",
+      "expectation": "Boilerplate template: R1/R2 trivially satisfiable; R7 should be at most 1 (generic, not case-specific); R9 should be at most 1 (no case-specific next step). Tests the 05D-J ceiling problem."
+    },
+    {
+      "sample_sha256": "415e7396bdbde474719b20bb5704489a2333bb45f7f0f2ca677af4d125078a67",
+      "arm": "B",
+      "variant": "dev-v3.3-no-tool",
+      "source": "../../../task06b/results/repair_dev_v4/00_B.json",
+      "expectation": "No-tool arm, contract v3.3: no final (REQUEST_MORE_EVIDENCE). Must be counted INCOMPLETE, never scored as wrong or perfect; R8 judged on the safe fallback."
+    },
+    {
+      "sample_sha256": "415e7396bdbde474719b20bb5704489a2333bb45f7f0f2ca677af4d125078a67",
+      "arm": "B",
+      "variant": "dev-v3.1-no-tool",
+      "source": "../../../task06b/results/repair_dev_v2/00_B.json",
+      "expectation": "No-tool arm, contract v3.1 (older contract, different run): has final; rule screen flagged. Used only for rubric calibration, not arm comparison."
+    },
+    {
+      "sample_sha256": "415e7396bdbde474719b20bb5704489a2333bb45f7f0f2ca677af4d125078a67",
+      "arm": "C",
+      "variant": "dev-v3.1-tool-not-called",
+      "source": "../../../task06b/results/repair_dev_v2/00_D.json",
+      "expectation": "Tool-enabled v3.1 run that FINISHED without calling the tool: R3 tests abstention scoring (abstention must not be penalised automatically; here the question is about imports that were never collected)."
+    },
+    {
+      "sample_sha256": "415e7396bdbde474719b20bb5704489a2333bb45f7f0f2ca677af4d125078a67",
+      "arm": "C",
+      "variant": "dev-v3.4-debug",
+      "source": "../../../task06b/results/r2_debug_v34/00_E.json",
+      "expectation": "tracert: imports committed (65 total, 64 committed) contain WS2_32.dll (idx 26-34) and IPHLPAPI.DLL ICMP APIs (idx 37-41) but the Agent saw only idx 0-15 and did not read further, although the question is about network capability. Candidate: R5 <= 1 (decisive committed evidence not consumed); action-level reason 'no network-related imports' is unscoped -> PARTIAL_COVERAGE_AS_COMPLETE candidate; C3 file-size anomaly relies on OUTSIDE_EVIDENCE_KNOWLEDGE; prediction ID in supporting_evidence_ids -> SELF_CORROBORATION candidate (checker flag)."
+    },
+    {
+      "sample_sha256": "867816f8a714a87f5f573ebbe3a526931fbe787cc03b4ec7ac8a970c9d8c0264",
+      "arm": "A",
+      "variant": "dev-static-template",
+      "source": "../../../task06b/results/repair_dev_v4/01_A.json",
+      "initial_state": "../../../task06b/results/repair_dev_v4/01_initial_state.json",
+      "expectation": "Static template (see sample 0 note)."
+    },
+    {
+      "sample_sha256": "867816f8a714a87f5f573ebbe3a526931fbe787cc03b4ec7ac8a970c9d8c0264",
+      "arm": "B",
+      "variant": "dev-v3.3-no-tool",
+      "source": "../../../task06b/results/repair_dev_v4/01_B.json",
+      "expectation": "No-tool arm, contract v3.3: no final (REQUEST_MORE_EVIDENCE). Must be counted INCOMPLETE, never scored as wrong or perfect; R8 judged on the safe fallback."
+    },
+    {
+      "sample_sha256": "867816f8a714a87f5f573ebbe3a526931fbe787cc03b4ec7ac8a970c9d8c0264",
+      "arm": "B",
+      "variant": "dev-v3.1-no-tool",
+      "source": "../../../task06b/results/repair_dev_v2/01_B.json",
+      "expectation": "No-tool arm, contract v3.1 (older contract, different run): has final; rule screen flagged. Used only for rubric calibration, not arm comparison."
+    },
+    {
+      "sample_sha256": "867816f8a714a87f5f573ebbe3a526931fbe787cc03b4ec7ac8a970c9d8c0264",
+      "arm": "C",
+      "variant": "dev-v3.1-tool-not-called",
+      "source": "../../../task06b/results/repair_dev_v2/01_D.json",
+      "expectation": "Tool-enabled v3.1 run that FINISHED without calling the tool: R3 tests abstention scoring (abstention must not be penalised automatically; here the question is about imports that were never collected)."
+    },
+    {
+      "sample_sha256": "867816f8a714a87f5f573ebbe3a526931fbe787cc03b4ec7ac8a970c9d8c0264",
+      "arm": "C",
+      "variant": "dev-v3.4-debug",
+      "source": "../../../task06b/results/r2_debug_v34/01_E.json",
+      "expectation": "findstr: no lexicon-relevant entries among 64 committed (102 total); R4 expected low; checker self-corroboration flag present - check whether it is a real semantic defect."
+    },
+    {
+      "sample_sha256": "f4d29fd93794e50a6740b9692da5dcad119d0f5a68a812357497c69ed6496ce3",
+      "arm": "A",
+      "variant": "dev-static-template",
+      "source": "../../../task06b/results/repair_dev_v4/02_A.json",
+      "initial_state": "../../../task06b/results/repair_dev_v4/02_initial_state.json",
+      "expectation": "Static template (see sample 0 note)."
+    },
+    {
+      "sample_sha256": "f4d29fd93794e50a6740b9692da5dcad119d0f5a68a812357497c69ed6496ce3",
+      "arm": "B",
+      "variant": "dev-v3.3-no-tool",
+      "source": "../../../task06b/results/repair_dev_v4/02_B.json",
+      "expectation": "No-tool arm, contract v3.3: no final (REQUEST_MORE_EVIDENCE). Must be counted INCOMPLETE, never scored as wrong or perfect; R8 judged on the safe fallback."
+    },
+    {
+      "sample_sha256": "f4d29fd93794e50a6740b9692da5dcad119d0f5a68a812357497c69ed6496ce3",
+      "arm": "B",
+      "variant": "dev-v3.1-no-tool",
+      "source": "../../../task06b/results/repair_dev_v2/02_B.json",
+      "expectation": "No-tool arm, contract v3.1 (older contract, different run): has final; rule screen flagged. Used only for rubric calibration, not arm comparison."
+    },
+    {
+      "sample_sha256": "f4d29fd93794e50a6740b9692da5dcad119d0f5a68a812357497c69ed6496ce3",
+      "arm": "C",
+      "variant": "dev-v3.1-tool-not-called",
+      "source": "../../../task06b/results/repair_dev_v2/02_D.json",
+      "expectation": "Tool-enabled v3.1 run that FINISHED without calling the tool: R3 tests abstention scoring (abstention must not be penalised automatically; here the question is about imports that were never collected)."
+    },
+    {
+      "sample_sha256": "f4d29fd93794e50a6740b9692da5dcad119d0f5a68a812357497c69ed6496ce3",
+      "arm": "C",
+      "variant": "dev-v3.4-debug",
+      "source": "../../../task06b/results/r2_debug_v34/02_E.json",
+      "expectation": "fc: one READ_EVIDENCE (idx 16-31); absence of network/process APIs stated with explicit partial-coverage limitation; checker self-corroboration flag present."
+    },
+    {
+      "sample_sha256": "415e7396bdbde474719b20bb5704489a2333bb45f7f0f2ca677af4d125078a67",
+      "arm": "C",
+      "variant": "dev-probe-1",
+      "source": "../../../task06b/results/r2_debug_v34/00_E.json",
+      "probe": {
+        "kind": "OBSERVED",
+        "text": "The imports include wininet.dll!InternetOpenUrlA, indicating HTTP download capability.",
+        "evidence_ids": [
+          "EV-4907d6fa745a423da9f42f227c9fbf3d"
+        ],
+        "expected_verdict": "UNSUPPORTED or CONTRADICTED",
+        "expected_tags": [
+          "UNSUPPORTED_API_OR_FEATURE"
+        ]
+      }
+    },
+    {
+      "sample_sha256": "415e7396bdbde474719b20bb5704489a2333bb45f7f0f2ca677af4d125078a67",
+      "arm": "C",
+      "variant": "dev-probe-2",
+      "source": "../../../task06b/results/r2_debug_v34/00_E.json",
+      "probe": {
+        "kind": "OBSERVED",
+        "text": "The program connects to remote hosts when it is executed.",
+        "evidence_ids": [
+          "EV-4907d6fa745a423da9f42f227c9fbf3d"
+        ],
+        "expected_verdict": "UNSUPPORTED",
+        "expected_tags": [
+          "RUNTIME_BEHAVIOUR_OVERCLAIM"
+        ]
+      }
+    },
+    {
+      "sample_sha256": "415e7396bdbde474719b20bb5704489a2333bb45f7f0f2ca677af4d125078a67",
+      "arm": "C",
+      "variant": "dev-probe-3",
+      "source": "../../../task06b/results/r2_debug_v34/00_E.json",
+      "probe": {
+        "kind": "OBSERVED",
+        "text": "The PE declares no Winsock (WS2_32.dll) imports at all.",
+        "evidence_ids": [
+          "EV-4907d6fa745a423da9f42f227c9fbf3d"
+        ],
+        "expected_verdict": "CONTRADICTED",
+        "expected_tags": [
+          "PARTIAL_COVERAGE_AS_COMPLETE"
+        ]
+      }
+    },
+    {
+      "sample_sha256": "415e7396bdbde474719b20bb5704489a2333bb45f7f0f2ca677af4d125078a67",
+      "arm": "C",
+      "variant": "dev-probe-4",
+      "source": "../../../task06b/results/r2_debug_v34/00_E.json",
+      "probe": {
+        "kind": "OBSERVED",
+        "text": "The raw score of 0.006 means there is a 99.4% probability that the file is benign.",
+        "evidence_ids": [
+          "EV-485a9199a27b4e4cb7cba3611c85c06b"
+        ],
+        "expected_verdict": "UNSUPPORTED",
+        "expected_tags": [
+          "SCORE_AS_PROBABILITY_OR_TRUTH"
+        ]
+      }
+    }
+  ]
+}
