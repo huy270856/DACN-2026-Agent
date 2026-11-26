@@ -189,3 +189,26 @@ def test_holdout_manifest_v2_shape():
     assert m["allocation"]["feasible_target_met"] and sum(m["allocation"]["counts"].values()) == 20
     for c in m["cases"]:
         assert c["question_text"] and c["filename_EVALUATOR_ONLY" if False else "program_identity_EVALUATOR_ONLY"]["filename"].split(".")[0].lower() not in c["question_text"].lower()
+
+
+def test_final_report_aggregates_two_passes_two_tracks(pkgs, tmp_path):
+    from evaluation.task06b_j import final_report
+    files, views = [], {}
+    for p, pkg in pkgs.items():
+        for name in ("common", "investigation"):
+            v = _view(pkg, name)
+            j = fill_v2(v)
+            j["pass_id"] = f"conf-P{p}-track{'A' if name == 'common' else 'B'}"
+            f = tmp_path / f"p{p}{name}.json"
+            f.write_text(json.dumps(j), encoding="utf-8")
+            files.append(f)
+            views[(v["package_id"], name)] = pkg / f"grader/items_{name}.json"
+    lock = tmp_path / "lock.json"
+    analysis.lock(files, views, lock)
+    det = tmp_path / "det.json"
+    det.write_text(json.dumps({"by_arm": {"A": {}}, "by_class": {}}), encoding="utf-8")
+    doc = final_report.build(lock, list(pkgs.values()), det)
+    assert set(doc["per_pass"]) == {"P1", "P2"}
+    assert "R2_evidence_traceability" in doc["self_consistency"] and "R6_incremental_value" in doc["self_consistency"]
+    md = final_report.markdown(doc)
+    assert "PRIMARY" in md and "EXPLORATORY" in md and "not accuracy" in md

@@ -45,3 +45,26 @@ Mỗi sự kiện có ảnh hưởng tới tính hợp lệ của lượt chấm
 14. Session note P1-A ghi rằng response được ghi qua "a local helper script". Trong kit không còn file script nào, nên provenance chưa xác minh được. P1-A không bị loại, chỉ ghi nhận như một giới hạn.
 15. Lock (`judge_cal_v2/LOCK.json`) trước khi mở mapping. Quy tắc dừng đã khóa được áp đúng nguyên văn; R1 (0.75), R5 (0.667, n=3), R8 (0.733) = UNRELIABLE. Không sửa rubric, không mở v3, không thêm probe hay phiên Judge.
 16. Khuyến nghị CONDITIONAL GO (CALIBRATION_V2_REPORT §10). Confirmatory chưa chạy.
+
+## 2026-11-26 — CONFIRMATORY AUTHORIZATION và thực thi
+
+17. **Owner authorization:** `DACN_PROJECT_OWNER_06BJ_CONDITIONAL_GO` (CONDITIONAL GO).
+    - Phạm vi: **một** lượt confirmatory đóng băng của protocol 20 case × 3 arm (A static, B v3.4 no-tool, C v3.4 tool-enabled), questions v2 (2/6/4/4/4).
+    - Primary: verdict mức claim, R2, R3, R4, R6, R7, cùng metrics tất định.
+    - Exploratory: R1, R5, R8, R9 và `evidence_access` do Judge gán.
+    - Owner đã chấp nhận các giới hạn ở CALIBRATION_V2_REPORT §10.
+    - Phân loại self-corroboration do **AI reviewer** đề xuất (không phải human adjudication): #4 AMBIGUOUS, #6 STRUCTURAL_ONLY, #5 NOT_SEMANTIC (giả định prediction dùng để triage). Judgment gốc và flag của checker giữ nguyên.
+18. **Sai khác về lệnh:** REPORT §7 viết `--cases ...candidate_cases_v1_EVALUATOR_ONLY.json` (viết trước khi questions v2 được duyệt). Protocol được duyệt dùng questions v2, nên lượt chạy dùng `candidate_cases_v2_EVALUATOR_ONLY.json`. Mọi tham số khác giữ đúng như §7.
+19. **Pre-inference:**
+    - Manifest v2: 20 case, phân bổ 2/6/4/4/4, 0 SHA drift, questions sha khớp code, không có tên hay path trong câu hỏi.
+    - Rubric v2 `dbb791cd…`. LightGBM `5db192ec…`, threshold 0.83219 (không đổi).
+    - CFG giống 06B-R2.
+    - Test 06B-J 45/45 (gồm MOCK isolation).
+    - Ollama ban đầu **UNAVAILABLE** (không có process). Developer đã khởi động `ollama serve` với `OLLAMA_HOST=127.0.0.1:11434` (loopback). Sau đó `qwen3.5:4b` digest `d8b0f5e9…`, Ollama 0.40.16, giống DEV smoke và R2 DEBUG.
+20. **Freeze** `results/confirmatory/run_v1/freeze.json`:
+    - mode CONFIRMATORY, base 60f58b97, Ollama AVAILABLE, digest d8b0f5e9…, questions v2 c70aa8a6…, LightGBM 5db192ec…, 19 source hash.
+    - Prepare 20/20; leakage context ban đầu: 0 hit tình cờ ở mọi case.
+    - **Đính chính metadata (không sửa freeze):** trường `rubric_id` trong freeze ghi `task06b-j-rubric-v1`, vì runner import module rubric mặc định. Rubric không tham gia vào inference của Agent. Việc chấm confirmatory dùng rubric **v2** (`dbb791cd…`) như đã duyệt.
+21. **Thực thi confirmatory run_v1:** đúng **một** lượt, runner exit 0. 40 lượt Agent (20 B + 20 C) và 20 report static A; isolation 40/40 PASS, target SHA 40/40, 0 leak tình cờ (mọi turn). Không chạy lại case nào. Stdout lưu ở `run_v1_stdout.log`.
+22. Package chấm semantic `package_conf_p1/p2` (rubric v2 `dbb791cd…`, 2 seed). Đã export 4 kit ngoài repo, `kit_audit=PASS`. Developer **không** chấm. Trạng thái: SEMANTIC_GRADING_PENDING. Hướng dẫn: OWNER_FINAL_JUDGE_COMMANDS.md.
+23. Bản `package_v1` (id `06BJ-CONF-v1`) dựng trước đó đã bị thay bằng `package_conf_p1/p2` để đặt tên pass rõ ràng; bản cũ chưa được giao, chấm hay commit.

@@ -197,3 +197,12 @@ SELF_CORROBORATION_ADJUDICATION.md, OWNER_JUDGE_COMMANDS.md, EVALUATION_LOG.md.
   verification planning và semantic evidence consumption.
 - Khuyến nghị: **CONDITIONAL GO**, chờ owner chấp nhận các điều kiện và cấp authorization.
   Confirmatory chưa chạy.
+
+
+---
+
+## 12. Confirmatory (run_v1): đã thực thi; chấm semantic PENDING
+
+Xem `CONFIRMATORY_REPORT.md`. Lượt chạy duy nhất đã hoàn tất (60 report). 4 kit Judge cuối đang
+chờ owner chấm theo `OWNER_FINAL_JUDGE_COMMANDS.md`. **SEMANTIC_GRADING_PENDING**: research
+chưa hoàn tất.
