@@ -31,3 +31,10 @@ Mỗi sự kiện có ảnh hưởng tới tính hợp lệ của lượt chấm
    `calibration_key.json` (xem `results/dev/judge_cal_v1/LOCK.json`).
 7. Sau lock: `analysis.json` và `calibration_summary.json` được tạo; `CALIBRATION_REPORT.md` được viết. Phần so sánh checker/evaluator cho Track B trong `analysis.json` **không có ý nghĩa** (claim verdict ở Track B là tùy chọn), nên chỉ dùng số liệu Track A trong `calibration_summary.json`.
 8. Không có điểm nào bị sửa, tự điền hay chấm lại. Đề xuất rubric v2 và questions v2 đang chờ owner duyệt; v1 cùng toàn bộ judgment v1 được giữ nguyên.
+
+## 2026-11-26 — Rubric v2, questions v2, calibration v2 preparation (owner-approved redesign)
+
+9. Tạo `rubric_v2.py` (`task06b-j-rubric-v2`). v1 cùng mọi judgment, lock và mapping v1 được giữ nguyên. Validator mới đã được kiểm lại trên 2 file judgment v1 đã lock: vẫn hợp lệ (0 lỗi).
+10. Questions v2 dựa trên accessibility tĩnh (không dùng output của model hay Judge). Phân bổ khả thi 2/6/4/4/4 so với target 4/4/4/4/4, theo quy tắc thiếu hụt khai báo trước (chỉ 2 mẫu có entry liên quan trong trang đầu).
+11. Package calibration v2 lần đầu được dựng rồi **dựng lại trước khi giao** (chưa kit nào được dùng): cần thêm `access_limits` vào reference sheet để grader phân loại được `evidence_access`. Bản build bị thay thế chưa từng được chấm hay commit.
+12. Đã export 4 kit (P1/P2 × Track A/B) ngoài repo, `kit_audit=PASS`. Developer **không** chạy Judge vì đã biết đáp án probe.

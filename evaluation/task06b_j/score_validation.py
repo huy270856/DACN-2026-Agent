@@ -12,7 +12,7 @@ import json
 from pathlib import Path
 from typing import Any, Dict, List
 
-from evaluation.task06b_j import rubric
+from evaluation.task06b_j import rubric, rubrics
 
 JUDGMENT_SCHEMA = "task06b-j-judgments-v1"
 EVALUATOR_KINDS = ("HUMAN", "LLM_JUDGE", "MOCK_JUDGE_TEST_ONLY")
@@ -30,14 +30,38 @@ def _known_evidence_ids(item: Dict[str, Any]) -> set:
     return ids
 
 
+def _claim_checks(iid: str, cid: str, cv: Dict[str, Any], R, known: set) -> List[str]:
+    errs = []
+    if cv.get("verdict") not in R.CLAIM_VERDICTS:
+        errs.append(f"{iid}.{cid}: bad verdict {cv.get('verdict')!r}")
+    bad_tags = set(cv.get("tags", [])) - set(R.CLAIM_TAGS)
+    if bad_tags:
+        errs.append(f"{iid}.{cid}: unknown tags {sorted(bad_tags)}")
+    if not str(cv.get("rationale") or "").strip():
+        errs.append(f"{iid}.{cid}: empty claim rationale")
+    if set(cv.get("evidence_ids") or []) - known:
+        errs.append(f"{iid}.{cid}: cites unknown evidence")
+    access = getattr(R, "EVIDENCE_ACCESS", None)
+    if access is not None:
+        if cv.get("verdict") in R.ACCESS_REQUIRED_FOR and cv.get("evidence_access") not in access:
+            errs.append(f"{iid}.{cid}: evidence_access required for {cv.get('verdict')} (one of {access})")
+        elif cv.get("evidence_access") is not None and cv.get("evidence_access") not in access:
+            errs.append(f"{iid}.{cid}: bad evidence_access {cv.get('evidence_access')!r}")
+    return errs
+
+
 def validate(judgments: Dict[str, Any], package_view: Dict[str, Any]) -> List[str]:
     errs: List[str] = []
+    try:
+        R = rubrics.get(package_view.get("rubric_id"))
+    except KeyError as exc:
+        return [str(exc)]
     if judgments.get("schema_version") != JUDGMENT_SCHEMA:
         errs.append(f"bad schema_version {judgments.get('schema_version')!r}")
     for k in ("rubric_id", "rubric_sha256", "package_id", "view"):
         if judgments.get(k) != package_view.get(k):
             errs.append(f"{k} mismatch: {judgments.get(k)!r} != package {package_view.get(k)!r}")
-    if judgments.get("rubric_sha256") != rubric.rubric_sha256():
+    if judgments.get("rubric_sha256") != R.rubric_sha256():
         errs.append("rubric_sha256 does not match the locked rubric in code")
     ev = judgments.get("evaluator") or {}
     if ev.get("kind") not in EVALUATOR_KINDS:
@@ -80,7 +104,7 @@ def validate(judgments: Dict[str, Any], package_view: Dict[str, Any]) -> List[st
                 if score != rubric.NX:
                     errs.append(f"{iid}.{name}: incomplete report -> must be {rubric.NX}, got {score!r}")
                 continue
-            scale = rubric.CRITERIA[name]["scale"]
+            scale = R.CRITERIA[name]["scale"]
             if score == rubric.NA:
                 errs.append(f"{iid}.{name}: {rubric.NA} not allowed where rubric requires a judgment")
             elif score != rubric.NX and (isinstance(score, bool) or score not in scale):
@@ -90,7 +114,7 @@ def validate(judgments: Dict[str, Any], package_view: Dict[str, Any]) -> List[st
             cited = c.get("evidence_ids") or []
             if set(cited) - known:
                 errs.append(f"{iid}.{name}: rationale cites unknown evidence {sorted(set(cited) - known)}")
-            if name in rubric.RATIONALE_NEEDS_EVIDENCE and score in scale and not cited:
+            if name in R.RATIONALE_NEEDS_EVIDENCE and score in scale and not cited:
                 errs.append(f"{iid}.{name}: numeric score needs evidence_ids in the rationale")
         # claim level
         claim_ids = {c["claim_id"] for c in item["report"].get("claims", [])}
@@ -102,21 +126,14 @@ def validate(judgments: Dict[str, Any], package_view: Dict[str, Any]) -> List[st
             got[cid] = cv
             if cid not in claim_ids:
                 errs.append(f"{iid}: verdict for unknown claim {cid!r}")
-            if cv.get("verdict") not in rubric.CLAIM_VERDICTS:
-                errs.append(f"{iid}.{cid}: bad verdict {cv.get('verdict')!r}")
-            bad_tags = set(cv.get("tags", [])) - set(rubric.CLAIM_TAGS)
-            if bad_tags:
-                errs.append(f"{iid}.{cid}: unknown tags {sorted(bad_tags)}")
-            if not str(cv.get("rationale") or "").strip():
-                errs.append(f"{iid}.{cid}: empty claim rationale")
-            if set(cv.get("evidence_ids") or []) - known:
-                errs.append(f"{iid}.{cid}: cites unknown evidence")
+            errs += _claim_checks(iid, cid, cv, R, known)
         missing = claim_ids - set(got)
         if missing and judgments.get("view") == "common":
             errs.append(f"{iid}: missing claim verdicts {sorted(missing)}")
         for k, ac in enumerate(j.get("additional_claims", [])):
-            if not ac.get("text") or ac.get("verdict") not in rubric.CLAIM_VERDICTS:
-                errs.append(f"{iid}: additional_claims[{k}] needs text and a valid verdict")
+            if not ac.get("text"):
+                errs.append(f"{iid}: additional_claims[{k}] needs text")
+            errs += _claim_checks(iid, f"additional_claims[{k}]", ac, R, known)
     missing_items = set(items) - seen
     if missing_items:
         errs.append(f"incomplete coverage: {len(missing_items)} item(s) not judged")

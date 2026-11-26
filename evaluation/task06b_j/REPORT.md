@@ -161,3 +161,26 @@ Tất cả là *candidate* trong `calibration_key.json`, cần Judge hoặc ngư
 - Full regression: xem tin nhắn bàn giao và commit.
 - Live Qwen: **chỉ** DEV smoke 2 file × 2 arm (A không gọi LLM). Không chạy confirmatory.
 - Không sửa source Agent, D1–D9, LightGBM/threshold, README gốc hay artifact đóng băng nào.
+
+
+---
+
+## 10. Checklist sẵn sàng cho confirmatory (cập nhật sau rubric v2 / questions v2)
+
+| # | Điều kiện | Trạng thái |
+|---|---|---|
+| 1 | Runner 3 arm đã kiểm chứng (kể cả `question_text` của v2) | PASS (MOCK integration; đã có live DEV smoke) |
+| 2 | Manifest holdout đủ điều kiện | READY: 20 mẫu giữ nguyên, questions v2 (`candidate_cases_v2_EVALUATOR_ONLY.json`), **chờ owner duyệt** |
+| 3 | Audit overlap mức chương trình | PASS |
+| 4 | Giảm leakage, ghi residual | PASS (mitigated); residual: nhận diện qua import |
+| 5 | Rubric đóng băng | v2 **DRAFT-LOCKED**: hash `dbb791cd…`; khóa chính thức sau calibration v2 theo RUBRIC_V2 §3 |
+| 6 | Judge calibration | v1 DONE (provisional); **v2 PENDING**: 4 kit đã sẵn (`OWNER_JUDGE_COMMANDS.md`) |
+| 7 | Validation khi import Judge | PASS (đã chạy trên dữ liệu thật ở v1; v2 đã test, gồm `evidence_access`) |
+| 8 | Freeze Agent/model/config | READY_NOT_FROZEN; Agent source không đổi |
+| 9 | Ollama | Phải kiểm lại lúc chạy |
+| 10 | Owner authorization | NOT_GRANTED |
+| 11 | Phân xử self-corroboration | PENDING (đề xuất: SELF_CORROBORATION_ADJUDICATION.md) |
+| 12 | Xác định tiêu chí UNRELIABLE sau calibration v2 | PENDING |
+
+Tài liệu của vòng này: RUBRIC_V2.md (kèm change log và quy tắc dừng), QUESTIONS_V2.md,
+SELF_CORROBORATION_ADJUDICATION.md, OWNER_JUDGE_COMMANDS.md, EVALUATION_LOG.md.

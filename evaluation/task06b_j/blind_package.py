@@ -21,7 +21,7 @@ import json
 from pathlib import Path
 from typing import Any, Dict, List
 
-from evaluation.task06b_j import rubric
+from evaluation.task06b_j import rubric, rubrics
 
 PACKAGE_SCHEMA = "task06b-j-package-v1"
 IMPORTS_FACET = "static.pe_imports_detail"
@@ -109,6 +109,15 @@ def reference_sheet(state: Dict[str, Any], visible: Dict[str, Any]) -> Dict[str,
             row["value"] = dict(row["value"], entries=[dict(x, entry_index=i) for i, x in enumerate(entries)])
             shown = {x.get("entry_index") for x in ((seen or {}).get("value") or {}).get("entries", [])}
             row["entry_indices_visible_to_agent"] = sorted(i for i in shown if i is not None)
+            committed = len(entries)
+            total = e["value"].get("total_entries")
+            row["access_limits"] = {
+                "provider_total_entries": total, "committed_entries": committed,
+                "never_committed_entries": max(0, (total or committed) - committed),
+                "note": "Entries beyond committed_entries were never available to the author (analyzer cap). "
+                        "Committed entries not visible to the author could only be reached by an explicit "
+                        "bounded page read (at most 2 reads of 16 entries within a 5-turn budget, when that "
+                        "read action was offered to the author)."}
         rows.append(row)
     return {"origin": "COMMITTED_CASESTATE_EVALUATOR_REFERENCE",
             "note": "Reference for checking claims; entries not visible to the Agent cannot support its "
@@ -205,7 +214,9 @@ def leakage_scan(obj: Any) -> List[str]:
 
 
 # ----------------------------------------------------------------------------- build
-def build(spec_path: Path, out_dir: Path, seed: str, package_id: str) -> Dict[str, Any]:
+def build(spec_path: Path, out_dir: Path, seed: str, package_id: str,
+          rubric_id: str = rubric.RUBRIC_ID) -> Dict[str, Any]:
+    R = rubrics.get(rubric_id)
     if out_dir.exists():
         raise FileExistsError(f"NEW_VERSION_REQUIRED: {out_dir} exists")
     spec = _read(spec_path)
@@ -239,13 +250,13 @@ def build(spec_path: Path, out_dir: Path, seed: str, package_id: str) -> Dict[st
         ref = reference_sheet(state, visible)
         base = {"item_id": item_id, "sample": sample_alias, "report": report,
                 "agent_visible_evidence": visible, "reference_evidence": ref}
-        app_c = rubric.applicability("common", {"has_final": report["has_final"], "tool_available": False,
+        app_c = R.applicability("common", {"has_final": report["has_final"], "tool_available": False,
                                                 "tool_evidence_committed": False})
         common.append(dict(base, applicability=app_c))
         if s["arm"] != "A":
             props = {"has_final": report["has_final"], "tool_available": trace["tool_available"],
                      "tool_evidence_committed": committed}
-            invest.append(dict(base, trace=trace, applicability=rubric.applicability("investigation", props)))
+            invest.append(dict(base, trace=trace, applicability=R.applicability("investigation", props)))
         mapping.append({"item_id": item_id, "sample": sample_alias, "sample_sha256": s["sample_sha256"],
                         "arm": s["arm"], "variant": s.get("variant"), "source": s["source"],
                         "source_sha256": inputs[s["source"]], "deterministic_checker": flags,
@@ -256,7 +267,7 @@ def build(spec_path: Path, out_dir: Path, seed: str, package_id: str) -> Dict[st
     order = lambda x: _blind_id(seed, "order", x["item_id"], prefix="")
     common.sort(key=order); invest.sort(key=order)
     instructions = {
-        "rubric_id": rubric.RUBRIC_ID, "rubric_sha256": rubric.rubric_sha256(),
+        "rubric_id": R.RUBRIC_ID, "rubric_sha256": R.rubric_sha256(),
         "instructions": [
             "Score each item independently using RUBRIC.md; do not compare items to each other.",
             "The static detector prediction is a MODEL OUTPUT, not ground truth; its raw score is not a probability.",
@@ -283,7 +294,7 @@ def build(spec_path: Path, out_dir: Path, seed: str, package_id: str) -> Dict[st
             {"package_id": package_id, "note": spec.get("calibration_note"), "items": key})
     manifest = {"schema_version": PACKAGE_SCHEMA, "package_id": package_id, "track": spec.get("track"),
                 "confirmatory": spec.get("confirmatory", "NOT_RUN"), "seed": seed,
-                "rubric_id": rubric.RUBRIC_ID, "rubric_sha256": rubric.rubric_sha256(),
+                "rubric_id": R.RUBRIC_ID, "rubric_sha256": R.rubric_sha256(),
                 "spec_sha256": sha256_file(spec_path), "input_sha256": inputs, "output_sha256": outputs,
                 "counts": {"common": len(common), "investigation": len(invest),
                            "probes": sum(m["is_probe"] for m in mapping)},
@@ -298,8 +309,9 @@ def main(argv=None):
     ap.add_argument("--out", type=Path, required=True)
     ap.add_argument("--seed", required=True)
     ap.add_argument("--package-id", required=True)
+    ap.add_argument("--rubric-id", default=rubric.RUBRIC_ID)
     a = ap.parse_args(argv)
-    print(json.dumps(build(a.spec, a.out, a.seed, a.package_id), indent=2))
+    print(json.dumps(build(a.spec, a.out, a.seed, a.package_id, a.rubric_id), indent=2))
 
 
 if __name__ == "__main__":

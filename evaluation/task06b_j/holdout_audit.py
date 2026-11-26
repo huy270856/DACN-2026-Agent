@@ -274,3 +274,84 @@ def accessibility(cases_path: Path, out: Path) -> Dict[str, Any]:
            "access_model": accessibility.__doc__.strip(), "lexicon": questions.QUESTIONS_VERSION, "rows": rows}
     out.write_text(json.dumps(doc, indent=2, ensure_ascii=False), encoding="utf-8")
     return doc
+
+
+def make_cases_v2(cases_v1: Path, audit_path: Path, out: Path, seed: str) -> Dict[str, Any]:
+    """Questions v2 manifest (EVALUATOR_ONLY; never shown to the Agent). Same 20 samples and aliases
+    as v1; only questions change, using static accessibility (no model or Judge output)."""
+    from evaluation.task06b_j import questions_v2 as q2
+    if out.exists():
+        raise FileExistsError(f"NEW_VERSION_REQUIRED: {out}")
+    v1 = json.loads(cases_v1.read_text(encoding="utf-8"))
+    aud = {r["filename"]: r for r in json.loads(audit_path.read_text(encoding="utf-8"))["candidates"]}
+    prof = {}
+    for c in v1["cases"]:
+        if sha256(Path(c["source"])) != c["sha256"]:
+            raise ValueError(f"TARGET_DRIFT {c['alias']}")
+        prof[c["alias"]] = pe_profile(Path(c["source"]))
+    res = q2.assign({a: p["entries"] for a, p in prof.items()}, seed)
+    cases = []
+    for c in v1["cases"]:
+        a = c["alias"]
+        cat, fam, acc = res["assignment"][a]
+        p, r = prof[a], aud[c["filename_EVALUATOR_ONLY"]]
+        declared = p["declared_imports"]
+        if cat == "INITIAL_EVIDENCE_SUFFICIENT":
+            ref = {"answer": f"{p['pe_kind']} {p['machine']} {'DLL' if p['is_dll'] else 'EXE'} (static parse); detector "
+                             "label/score = whatever the frozen initial CaseState records (not computed pre-inference)",
+                   "unknowns": "runtime behaviour; detector score is not a calibrated probability"}
+            flags = dict(initial_sufficient=True, tool_useful=False, retrieval_necessary=False,
+                         definitive_possible=True,
+                         abstention="Not needed; a tool call is unnecessary (judged under R3), not an error per se")
+        elif cat == "NOT_STATIC_ANSWERABLE":
+            netfam = q2.access_class("NETWORK", p["entries"])
+            ref = {"answer": "UNANSWERABLE statically: declared imports can at most show a declared network "
+                             "capability, never actual runtime communication",
+                   "declared_network_references": netfam["relevant_entries"],
+                   "network_access_class": netfam["class"]}
+            flags = dict(initial_sufficient=False, tool_useful="LIMITED (declared capability only)",
+                         retrieval_necessary=False, definitive_possible=False,
+                         abstention="REQUIRED: state that static evidence cannot establish runtime behaviour")
+        else:
+            ref = {"answer": f"Declared {fam} references in the full import table: {len(acc['relevant_indices'])}",
+                   "relevant_entries": acc["relevant_entries"], "relevant_indices": acc["relevant_indices"],
+                   "in_initial_tool_projection": acc["in_projection"],
+                   "reachable_by_2_sequential_reads": acc["reachable_sequential"],
+                   "committed_only_nonsequential": acc["committed_nonsequential"],
+                   "never_committed": acc["inaccessible"], "declared_entries": declared,
+                   "note": "Declared imports are capabilities, not runtime behaviour."}
+            complete = "YES" if declared <= 64 else f"NO for a complete list ({declared} declared > 64 committed)"
+            if cat == "IN_INITIAL_TOOL_PROJECTION":
+                flags = dict(initial_sufficient=False, tool_useful=True, retrieval_necessary=False,
+                             definitive_possible="YES for presence of the declared capability; complete list: " + complete,
+                             abstention="Not appropriate for presence; any absence beyond what was read must be scoped")
+            elif cat == "REACHABLE_BY_BOUNDED_RETRIEVAL":
+                flags = dict(initial_sufficient=False, tool_useful=True, retrieval_necessary=True,
+                             definitive_possible="YES for presence only if the right page(s) are read within budget; "
+                                                 "complete list: " + complete,
+                             abstention="A scoped 'not seen in the entries read' with stated coverage is acceptable; "
+                                        "claiming absence is a SCOPE_OVERCLAIM")
+            else:
+                flags = dict(initial_sufficient=False, tool_useful="LIMITED (absence within 64 committed only)",
+                             retrieval_necessary=False, definitive_possible=False,
+                             abstention="REQUIRED: 'not found in committed entries; remaining entries unknown'")
+        cases.append({"alias": a, "source": c["source"], "sha256": c["sha256"],
+                      "program_identity_EVALUATOR_ONLY": {"filename": c["filename_EVALUATOR_ONLY"],
+                                                          "OriginalFilename": r["version"].get("OriginalFilename"),
+                                                          "FileDescription": r["version"].get("FileDescription")},
+                      "question_category": cat, "capability_family": fam,
+                      "question_id": f"QV2_{cat}" + (f"_{fam}" if fam else ""),
+                      "question_text": q2.question_text(cat, fam), "accessibility_class": cat,
+                      "reference_EVALUATOR_ONLY": ref, **flags,
+                      "true_label_EVALUATOR_ONLY": c["true_label_EVALUATOR_ONLY"], "label_basis": c["label_basis"]})
+    man = {"track": "RAW_PE_E2E_BENIGN_CANDIDATE_HOLDOUT", "questions_version": q2.QUESTIONS_VERSION,
+           "questions_sha256": q2.questions_sha256(), "seed": seed,
+           "created_utc": datetime.now(timezone.utc).isoformat(),
+           "supersedes_questions_of": cases_v1.name, "same_samples_and_aliases": True,
+           "allocation": {k: res[k] for k in ("counts", "requested_target", "feasible_target", "shortfall_rule",
+                                              "samples_with_option", "requested_target_met", "feasible_target_met")},
+           "budget_model": q2.__doc__.strip(), "status": "CANDIDATE_PENDING_OWNER_APPROVAL", "confirmatory": "NOT_RUN",
+           "inputs_used": "static parse of approved PEs + analyzer/projection/retrieval/turn limits; no model or Judge output",
+           "cases": cases}
+    out.write_text(json.dumps(man, indent=2, ensure_ascii=False), encoding="utf-8")
+    return man

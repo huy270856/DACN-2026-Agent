@@ -51,6 +51,7 @@ AGENT_SOURCES = ["investigation_v3/final_v34.py", "investigation_v3/workflow_v34
                  "investigation_v3/schema.py", "investigation_v3/application.py",
                  "agent/planner.py", "agent/controller.py", "agent/config.py"]
 HARNESS_SOURCES = ["evaluation/task06b_j/runner.py", "evaluation/task06b_j/questions.py",
+                   "evaluation/task06b_j/questions_v2.py",
                    "evaluation/task06b_j/leakage.py", "evaluation/task06b_j/rubric.py"]
 
 
@@ -149,7 +150,7 @@ def prepare(cases_manifest: Path, out: Path, *, mode: str, runtime_root: Path = 
         clone = cm.case_path(homes["B"].cases_dir, state["case_id"])
         clone.parent.mkdir(parents=True, exist_ok=True)
         clone.write_bytes(path.read_bytes())
-        q = questions.QUESTIONS[c["question_id"]]
+        q = c.get("question_text") or questions.QUESTIONS[c["question_id"]]
         write_new(out / f"{alias}_initial_state.json", state)
         write_new(out / f"{alias}_initial_trusted_trace.json", events)
         write_new(out / f"{alias}_A.json", static_report(state, q, static_latency))
@@ -163,7 +164,7 @@ def prepare(cases_manifest: Path, out: Path, *, mode: str, runtime_root: Path = 
         write_new(out / "EVALUATOR_ONLY" / f"{alias}_leakage.json",
                   {"alias": alias, "original": str(src), "tokens": tokens, "initial_context": leak,
                    "staging": st})
-        rows.append({"alias": alias, "sha256": c["sha256"], "question_id": c["question_id"],
+        rows.append({"alias": alias, "sha256": c["sha256"], "question_id": c["question_id"], "question": q,
                      "question_sha256": hashlib.sha256(q.encode("utf-8")).hexdigest(),
                      "case_id": state["case_id"], "initial_file": f"{alias}_initial_state.json",
                      "case_paths": {"B": str(clone), "C": str(path)},
@@ -176,7 +177,8 @@ def prepare(cases_manifest: Path, out: Path, *, mode: str, runtime_root: Path = 
               "mode": mode, "confirmatory": "NOT_RUN", "base_commit": _git_head(),
               "agent_contract": final_v34.VERSION, "system_prompt_sha256": hashlib.sha256(final_v34.SYSTEM.encode()).hexdigest(),
               "source_hashes": source_hashes(), "config": asdict(CFG),
-              "questions_version": questions.QUESTIONS_VERSION, "questions_sha256": questions.questions_sha256(),
+              "questions_version": man.get("questions_version", questions.QUESTIONS_VERSION),
+              "questions_sha256": man.get("questions_sha256", questions.questions_sha256()),
               "rubric_id": rubric.RUBRIC_ID, "rubric_sha256": rubric.rubric_sha256(),
               "model_sha256": mm["model_sha256"], "threshold": mm["threshold_selection"]["primary_threshold"],
               "ollama": ollama_info, "cases_manifest_sha256": file_sha(cases_manifest),
@@ -246,7 +248,7 @@ def run(out: Path, *, planner_factory: Optional[Callable[[str], Any]] = None,
     cases = read(out / "cases.json")
     done = []
     for i, row in enumerate(cases):
-        q = questions.QUESTIONS[row["question_id"]]
+        q = row.get("question") or questions.QUESTIONS[row["question_id"]]
         for arm in (("B", "C") if i % 2 == 0 else ("C", "B")):
             dest = out / f"{row['alias']}_{arm}.json"
             if dest.exists():

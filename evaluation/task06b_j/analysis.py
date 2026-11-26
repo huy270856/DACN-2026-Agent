@@ -16,7 +16,7 @@ from statistics import mean, median
 from typing import Any, Dict, List
 
 from evaluation.task05d.grading_import import _cohen_kappa  # reused 05D-J agreement code
-from evaluation.task06b_j import rubric
+from evaluation.task06b_j import rubric, rubrics
 from evaluation.task06b_j.blind_package import sha256_file
 from evaluation.task06b_j.score_validation import validate
 
@@ -35,7 +35,8 @@ def lock(judgment_files: List[Path], package_views: Dict[str, Path], lock_path: 
     entries = []
     for jf in judgment_files:
         j = json.loads(jf.read_text(encoding="utf-8"))
-        view = package_views[j.get("view")]
+        key = (j.get("package_id"), j.get("view"))
+        view = package_views[key] if key in package_views else package_views[j.get("view")]
         errs = validate(j, json.loads(view.read_text(encoding="utf-8")))
         if errs:
             raise ValueError(f"{jf.name}: invalid judgments, not locked: {errs[:5]}")
@@ -56,22 +57,36 @@ def _bootstrap_ci(diffs: List[float], seed: int = 0, n: int = 2000):
     return [round(stats[int(0.025 * n)], 3), round(stats[int(0.975 * n) - 1], 3)]
 
 
-def analyze(lock_path: Path, mapping_path: Path) -> Dict[str, Any]:
+def canonical(m: Dict[str, Any]) -> str:
+    """Package-independent identity of a graded report, so passes built with different seeds
+    (different blind IDs/order) can be aligned for self-consistency."""
+    return "|".join([m["sample_sha256"], m["arm"], str(m.get("variant")), m["source"]])
+
+
+def analyze(lock_path: Path, mapping_path) -> Dict[str, Any]:
     lk = json.loads(lock_path.read_text(encoding="utf-8"))
     for e in lk["judgments"]:
         if sha256_file(Path(e["file"])) != e["sha256"]:
             raise ValueError(f"judgment file changed after lock: {e['file']}")
-    mapping = {m["item_id"]: m for m in json.loads(mapping_path.read_text(encoding="utf-8"))["items"]}
+    paths = mapping_path if isinstance(mapping_path, (list, tuple)) else [mapping_path]
+    mapping = {}
+    for mp in paths:
+        for m in json.loads(Path(mp).read_text(encoding="utf-8"))["items"]:
+            if m["item_id"] in mapping:
+                raise ValueError(f"duplicate blind item id across packages: {m['item_id']}")
+            mapping[m["item_id"]] = m
 
     per_eval: Dict[str, Dict[str, Any]] = {}
     for e in lk["judgments"]:
         j = json.loads(Path(e["file"]).read_text(encoding="utf-8"))
         who = f"{j['evaluator']['kind']}:{j['evaluator']['evaluator_id']}:{j['pass_id']}"
-        bucket = per_eval.setdefault(who, {"evaluator": j["evaluator"], "scores": {}, "claims": []})
+        bucket = per_eval.setdefault(who, {"evaluator": j["evaluator"], "scores": {}, "canon": {}, "claims": [],
+                                           "rubric_id": j["rubric_id"]})
         for jj in j["judgments"]:
             m = mapping[jj["item_id"]]
             for c, v in jj["criteria"].items():
                 bucket["scores"][(jj["item_id"], c)] = v["score"]
+                bucket["canon"][(canonical(m), c)] = v["score"]
             for cv in jj.get("claims", []) + [dict(x, claim_id="extra") for x in jj.get("additional_claims", [])]:
                 bucket["claims"].append({"item_id": jj["item_id"], "arm": arm_key(m), "probe": m["is_probe"], **cv})
 
@@ -99,8 +114,10 @@ def analyze(lock_path: Path, mapping_path: Path) -> Dict[str, Any]:
                            "NA": v["NA"], "NOT_ASSESSABLE": v["NOT_ASSESSABLE"]}
                        for c, v in crits.items()} for a, crits in arms.items()}
         paired = {}
+        rb = rubrics.get(b["rubric_id"])
+        comparable = [c for c, sp in rb.CRITERIA.items() if sp["view"] == "common"] + ["R6_incremental_value"]
         for x, y in PAIRS:
-            for c in COMMON + ["R6_incremental_value"]:
+            for c in comparable:
                 diffs = [d[x] - d[y] for (sha, cc), d in by_sample.items() if cc == c and x in d and y in d]
                 if diffs:
                     paired[f"{x}-{y}:{c}"] = {"n_pairs": len(diffs), "mean_diff": round(mean(diffs), 3),
@@ -113,7 +130,8 @@ def analyze(lock_path: Path, mapping_path: Path) -> Dict[str, Any]:
             claims[key][cv["verdict"]] += 1
             for t in cv.get("tags", []):
                 tags[key][t] += 1
-        report["evaluators"][who] = {"evaluator": b["evaluator"], "per_arm": per_arm, "paired": paired,
+        report["evaluators"][who] = {"evaluator": b["evaluator"], "rubric_id": b["rubric_id"],
+                                     "per_arm": per_arm, "paired": paired,
                                      "claim_verdicts": {k: dict(v) for k, v in claims.items()},
                                      "claim_tags": {k: dict(v) for k, v in tags.items()}}
     report["agreement"] = agreement(per_eval)
@@ -129,17 +147,20 @@ def agreement(per_eval: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
         for b in keys[i + 1:]:
             ea, eb = per_eval[a]["evaluator"], per_eval[b]["evaluator"]
             same = (ea["kind"], ea["evaluator_id"]) == (eb["kind"], eb["evaluator_id"])
-            for c in rubric.CRITERIA:
+            if per_eval[a]["rubric_id"] != per_eval[b]["rubric_id"]:
+                continue  # never compare scores across rubric versions
+            crits = sorted({c for (_k, c) in per_eval[a]["canon"]})
+            for c in crits:
                 xs, ys = [], []
-                for (iid, cc), s in per_eval[a]["scores"].items():
-                    t = per_eval[b]["scores"].get((iid, cc))
-                    if cc == c and s in (0, 1, 2) and t in (0, 1, 2):
+                for (key, cc), s in per_eval[a]["canon"].items():
+                    t = per_eval[b]["canon"].get((key, cc))
+                    if cc == c and isinstance(s, int) and isinstance(t, int):
                         xs.append(s); ys.append(t)
                 if xs:
                     out[f"{a} vs {b}:{c}"] = {
                         "relation": "SELF_CONSISTENCY_NOT_CORRECTNESS" if same else "INTER_EVALUATOR",
                         "n": len(xs), "percent_agreement": round(sum(x == y for x, y in zip(xs, ys)) / len(xs), 3),
-                        "cohen_kappa": round(_cohen_kappa(xs, ys), 3)}
+                        "cohen_kappa": round(_cohen_kappa(xs, ys, cats=tuple(sorted(set(xs) | set(ys) | {0, 1, 2}))), 3)}
     return out
 
 
@@ -149,7 +170,8 @@ def checker_comparison(per_eval: Dict[str, Dict[str, Any]], mapping: Dict[str, A
     rows = []
     for who, b in per_eval.items():
         judged = {iid for (iid, _c) in b["scores"]}
-        tagged = {cv["item_id"] for cv in b["claims"] if "SELF_CORROBORATION" in cv.get("tags", [])}
+        tagged = {cv["item_id"] for cv in b["claims"]
+                  if {"SELF_CORROBORATION", "SEMANTIC_SELF_CORROBORATION"} & set(cv.get("tags", []))}
         for iid in sorted(judged):
             m = mapping[iid]
             if m["arm"] == "A" or m["is_probe"]:
@@ -168,20 +190,24 @@ def main(argv=None):
     sub = ap.add_subparsers(dest="cmd", required=True)
     lk = sub.add_parser("lock")
     lk.add_argument("--judgments", type=Path, nargs="+", required=True)
-    lk.add_argument("--package", type=Path, required=True)
+    lk.add_argument("--package", type=Path, nargs="+", required=True)
     lk.add_argument("--lock", type=Path, required=True)
     an = sub.add_parser("analyze")
     an.add_argument("--lock", type=Path, required=True)
-    an.add_argument("--package", type=Path, required=True)
+    an.add_argument("--package", type=Path, nargs="+", required=True)
     an.add_argument("--out", type=Path, required=True)
     a = ap.parse_args(argv)
     if a.cmd == "lock":
-        views = {v: a.package / "grader" / f"items_{v}.json" for v in ("common", "investigation")}
+        views = {}
+        for pkg in a.package:
+            pid = json.loads((pkg / "package_manifest.json").read_text(encoding="utf-8"))["package_id"]
+            for v in ("common", "investigation"):
+                views[(pid, v)] = pkg / "grader" / f"items_{v}.json"
         print(json.dumps(lock(a.judgments, views, a.lock), indent=2, ensure_ascii=False))
     else:
         if a.out.exists():
             raise FileExistsError(f"NEW_VERSION_REQUIRED: {a.out}")
-        rep = analyze(a.lock, a.package / "EVALUATOR_ONLY" / "mapping.json")
+        rep = analyze(a.lock, [pkg / "EVALUATOR_ONLY" / "mapping.json" for pkg in a.package])
         a.out.write_text(json.dumps(rep, indent=2, ensure_ascii=False), encoding="utf-8")
         print(f"wrote {a.out}")
 

@@ -99,7 +99,8 @@ def mock_run(tmp_path_factory):
     cases = base / "cases.json"
     cases.write_text(json.dumps({"cases": [
         {"alias": "sample_0001", "source": str(PE_A), "sha256": runner.file_sha(PE_A), "question_id": "Q_NET"},
-        {"alias": "sample_0002", "source": str(PE_B), "sha256": runner.file_sha(PE_B), "question_id": "Q_FILE"}]}),
+        {"alias": "sample_0002", "source": str(PE_B), "sha256": runner.file_sha(PE_B), "question_id": "QV2_TEST",
+         "question_text": "What does the available static evidence indicate about this file's capability for file-system access?"}]}),
         encoding="utf-8")
     out = base / "run"
     runner.prepare(cases, out, mode="DEV_SMOKE", runtime_root=base / "runtime",
@@ -119,7 +120,9 @@ def test_three_arm_initial_equivalence(mock_run):
         assert b["initial_state"] == c["initial_state"] == init
         pred = [e for e in init["evidence"] if e["facet"] == "static.pe_malware_prediction"][0]["value"]
         assert a["model_prediction"]["raw_score"] == pred["raw_score"] == b["model_prediction"]["raw_score"] == c["model_prediction"]["raw_score"]
-        assert a["question"] == b["question"] == c["question"] == questions.QUESTIONS[row["question_id"]]
+        expected_q = questions.QUESTIONS.get(row["question_id"]) or "What does the available static evidence indicate about this file's capability for file-system access?"
+        assert a["question"] == b["question"] == c["question"] == row["question"] == expected_q
+        assert all(t["context"]["facts"]["question"] == expected_q for t in b["turns"] + c["turns"])
         assert row["case_paths"]["B"] != row["case_paths"]["C"] and row["homes"]["B"] != row["homes"]["C"]
         assert init["target_ref"]["verified_digest"]["value"] == row["sha256"]
 
