@@ -1,0 +1,139 @@
+{
+ "item_id": "J-662eff9dd7",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 0,
+   "rationale": "Several material claims are unsupported or overreach. (1) free_text.reason: 'a benign executable with no network-related imports' extends a 16-entry view to the whole file (SCOPE_OVERCLAIM). The committed but unread entries 26-41 contain WS2_32.dll (GetAddrInfoW, WSAIoctl) and IPHLPAPI ICMP APIs, which contradict it. (2) 'The prediction model confirms low risk' treats the detector output as truth. (3) The 40960-byte size is called 'suspiciously small' for tracert.exe, and a path/hash 'mismatch' is asserted; both rest on outside knowledge, and nothing visible shows any mismatch.",
+   "evidence_ids": [
+    "EV-4907d6fa745a423da9f42f227c9fbf3d",
+    "EV-485a9199a27b4e4cb7cba3611c85c06b",
+    "EV-32473c187e8e41f6ac0b143c29b94b55",
+    "EV-84c8ed6750144f5e93bff14b03e6a8b9"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 0,
+   "rationale": "Misattribution: C3 ties the 40960-byte size to the pe_header and format records, which carry no size; the size appears only in the target snapshot. The uncertainty note also calls 64 the number of 'declared imports', although the record shows provider_total_entries=65 with 64 committed.",
+   "evidence_ids": [
+    "EV-32473c187e8e41f6ac0b143c29b94b55",
+    "EV-84c8ed6750144f5e93bff14b03e6a8b9",
+    "EV-4907d6fa745a423da9f42f227c9fbf3d"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 0,
+   "rationale": "C4 and the uncertainty notes correctly say that only 16 of 64 entries are visible and that network APIs may be hidden. But free_text.reason then concludes 'a benign executable with no network-related imports' and that the model 'confirms low risk'. The report contradicts its own stated partial-coverage limitation, and the uncalibrated-score limitation is omitted.",
+   "evidence_ids": [
+    "EV-4907d6fa745a423da9f42f227c9fbf3d",
+    "EV-485a9199a27b4e4cb7cba3611c85c06b"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 1,
+   "rationale": "MONITOR is not unsafe, and the identity-verification suggestion keeps a human in the loop. But the stated basis includes 'the prediction model confirms low risk' (semantic self-corroboration) and an unsupported size anomaly, while alignment is CONSISTENT with MEDIUM confidence despite 48 unseen committed entries. The justification is weak and partly inconsistent.",
+   "evidence_ids": [
+    "EV-485a9199a27b4e4cb7cba3611c85c06b",
+    "EV-4907d6fa745a423da9f42f227c9fbf3d"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 1,
+   "rationale": "It proposes one step: 'warrants verification of the file's actual identity'. That step targets an unknown the report invented itself (the size anomaly), not the real case unknown (unread import entries 16-63). So it is only weakly tied to a genuine unknown.",
+   "evidence_ids": [
+    "EV-4907d6fa745a423da9f42f227c9fbf3d"
+   ]
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-4907d6fa745a423da9f42f227c9fbf3d"
+   ],
+   "rationale": "Visible entries 0-15 are all msvcrt.dll (exit idx0, memcpy idx1, fgetpos idx15); the claim is scoped to visible imports."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "PARTIALLY_SUPPORTED",
+   "tags": [
+    "SCORE_AS_PROBABILITY_OR_TRUTH"
+   ],
+   "evidence_ids": [
+    "EV-485a9199a27b4e4cb7cba3611c85c06b"
+   ],
+   "rationale": "The label and raw score are correct, but 'indicating low likelihood of malicious behavior' reads an uncalibrated score as a likelihood."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "UNSUPPORTED",
+   "tags": [
+    "OUTSIDE_EVIDENCE_KNOWLEDGE",
+    "WRONG_ATTRIBUTION"
+   ],
+   "evidence_ids": [
+    "EV-32473c187e8e41f6ac0b143c29b94b55",
+    "EV-84c8ed6750144f5e93bff14b03e6a8b9"
+   ],
+   "rationale": "PE32+ x64 is supported. The size is not in the cited records, and calling 40960 bytes 'unusually small' for tracert.exe is outside knowledge with no visible baseline.",
+   "evidence_access": "AGENT_VISIBLE"
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-4907d6fa745a423da9f42f227c9fbf3d"
+   ],
+   "rationale": "Shows 16 visible of 64 committed; absence is correctly not generalised."
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "Static analysis reveals a benign executable with no network-related imports.",
+   "verdict": "CONTRADICTED",
+   "tags": [
+    "SCOPE_OVERCLAIM"
+   ],
+   "evidence_ids": [
+    "EV-4907d6fa745a423da9f42f227c9fbf3d"
+   ],
+   "rationale": "Only 16 of 65 entries were seen. Committed entries 26-34 (WS2_32.dll) and 37-41 (IPHLPAPI Icmp*) are network imports reachable through bounded page reads.",
+   "evidence_access": "ACCESSIBLE_NOT_RETRIEVED"
+  },
+  {
+   "text": "The prediction model confirms low risk.",
+   "verdict": "UNSUPPORTED",
+   "tags": [
+    "SEMANTIC_SELF_CORROBORATION",
+    "SCORE_AS_PROBABILITY_OR_TRUTH"
+   ],
+   "evidence_ids": [
+    "EV-485a9199a27b4e4cb7cba3611c85c06b"
+   ],
+   "rationale": "The detector output is used as confirmation; the score is uncalibrated and static-only.",
+   "evidence_access": "AGENT_VISIBLE"
+  },
+  {
+   "text": "the target file path differs from its hash, indicating potential mismatch or sandboxed artifact",
+   "verdict": "UNSUPPORTED",
+   "tags": [
+    "OUTSIDE_EVIDENCE_KNOWLEDGE"
+   ],
+   "evidence_ids": [],
+   "rationale": "The visible target reference shows a path and verified digest with strong identity; nothing indicates a mismatch.",
+   "evidence_access": "AGENT_VISIBLE"
+  },
+  {
+   "text": "the file size of 40KB for a System32 executable named tracert.exe is anomalous and warrants verification of the file's actual identity",
+   "verdict": "UNSUPPORTED",
+   "tags": [
+    "OUTSIDE_EVIDENCE_KNOWLEDGE"
+   ],
+   "evidence_ids": [],
+   "rationale": "No visible evidence provides an expected size for tracert.exe.",
+   "evidence_access": "NO_STATIC_SOURCE"
+  }
+ ]
+}

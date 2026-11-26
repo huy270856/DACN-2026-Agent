@@ -1,0 +1,115 @@
+{
+  "item_id": "J-0832ac2fe0",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 0,
+      "rationale": "C5 asserts that the visible imports include ws2_32.dll!connect. The author's visible slice of EV-b625416e0e5044b99ac9f8f7ab2ec5e4 (entries 0-31) holds only msvcrt.dll and ulib.dll, and no ws2_32.dll entry appears in the full committed 64 either. The claim is contradicted by evidence the author saw. The other claims (C1-C4) are supported by EV-dc6671156d134e9eb12b057cf34f6556, EV-602e48c993cb4db1842293fe7b29fc11, EV-3d570d533a1f441d8ca7bd20a105a879 and the visible import slice.",
+      "evidence_ids": [
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+        "EV-dc6671156d134e9eb12b057cf34f6556",
+        "EV-602e48c993cb4db1842293fe7b29fc11",
+        "EV-3d570d533a1f441d8ca7bd20a105a879"
+      ]
+    },
+    "R2_evidence_traceability": {
+      "score": 0,
+      "rationale": "C5 ties 'ws2_32.dll!connect' to EV-b625416e0e5044b99ac9f8f7ab2ec5e4, and that source does not carry it. This is a misattribution, separate from the factual error under R1: the citation points to a source that lacks the stated entry. The other statements trace correctly. The import counts (32 visible of 112) are scoped correctly to EV-b625416e0e5044b99ac9f8f7ab2ec5e4, and the score goes to EV-3d570d533a1f441d8ca7bd20a105a879.",
+      "evidence_ids": [
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+        "EV-3d570d533a1f441d8ca7bd20a105a879"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 1,
+      "rationale": "Case-specific limitations are stated: 32 of 112 entries visible, absence not definitive, and dynamically resolved APIs and runtime behaviour not covered. Partial coverage tempers the main conclusion (MEDIUM confidence, MONITOR). The report never says the raw score is not a calibrated probability, but it doesn't treat the score as a probability either, so this is a missing limitation without overreach.",
+      "evidence_ids": [
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+        "EV-3d570d533a1f441d8ca7bd20a105a879"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 2,
+      "rationale": "MONITOR with MEDIUM confidence is proportionate: the score is far below threshold, the visible imports are benign-looking CRT/ulib entries, and coverage is partial. The decision leans on the import review and stated coverage limits, not on the label confirming itself. The human decision is preserved. The C5 error is scored under R1/R2. The real visible evidence does not change the proportionality of the action.",
+      "evidence_ids": [
+        "EV-3d570d533a1f441d8ca7bd20a105a879",
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+      ]
+    },
+    "R9_next_step_planning": {
+      "score": 0,
+      "rationale": "No text anywhere proposes a next step, such as reading the remaining import entries or doing dynamic analysis. The report only restates limitations and says 'Sufficient evidence reviewed'.",
+      "evidence_ids": []
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-dc6671156d134e9eb12b057cf34f6556",
+        "EV-602e48c993cb4db1842293fe7b29fc11"
+      ],
+      "rationale": "The PE header and format records show PE32+, x64, is_dll false, and the executable image flag set."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+      ],
+      "rationale": "Visible entries 7 (_exit) and 13 (sprintf_s) come from msvcrt.dll. The ulib.dll entries 15-31 are MBSTR string comparisons and ARGUMENT_LEXEMIZER/STRING_ARGUMENT parsing. No network or process APIs appear among the 32 visible entries, and the claim is scoped to visible imports."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-3d570d533a1f441d8ca7bd20a105a879"
+      ],
+      "rationale": "The raw score is 0.003809 and the label is benign. The claim reports this as model output."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+      ],
+      "rationale": "visible_entries is 32 and provider_total_entries is 112. The coverage limitation is accurate."
+    },
+    {
+      "claim_id": "C5",
+      "verdict": "CONTRADICTED",
+      "tags": [
+        "WRONG_ATTRIBUTION"
+      ],
+      "evidence_ids": [
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+      ],
+      "rationale": "No visible entry (0-31) is from ws2_32.dll. All visible entries are msvcrt.dll or ulib.dll, so the cited record contradicts the claim. The rest of the report itself says no network APIs are visible.",
+      "evidence_access": "AGENT_VISIBLE"
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "No network sockets, process creation, or memory manipulation APIs are present in the 32 visible entries.",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+      ],
+      "rationale": "This is correctly scoped to the visible slice, and it matches entries 0-31."
+    },
+    {
+      "text": "Network/process capabilities are not explicitly declared in the visible import table.",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+      ],
+      "rationale": "This is scoped to the visible table and matches the entries."
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "item_id": "J-6da22391fd",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 0,
+      "rationale": "C1 and the explanation say the PE has 'no declared imports' / 'no imports are declared'. No import data was collected at all: the visible header and format records cover only the minimum headers and state that imports are not collected. Asserting import absence across the whole file from no view is a SCOPE_OVERCLAIM. C2 is supported by EV-ab7fd294bc1c4b2d87d8c4fa58165e9c, and the 'cannot confirm or deny' statement is supported.",
+      "evidence_ids": [
+        "EV-e7eb2e69d0644654aad56710a403b358",
+        "EV-480b21a3a9a4463aa4d7239a83744256",
+        "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+      ]
+    },
+    "R2_evidence_traceability": {
+      "score": 0,
+      "rationale": "C1 ties 'no imports are declared' to the header and format records, EV-e7eb2e69d0644654aad56710a403b358 and EV-480b21a3a9a4463aa4d7239a83744256. Neither carries any import information; their limitations say imports are not collected. This misattributes a statement to sources that don't carry it, a separate violation from the factual overclaim under R1. C2 traces correctly to the prediction record.",
+      "evidence_ids": [
+        "EV-e7eb2e69d0644654aad56710a403b358",
+        "EV-480b21a3a9a4463aa4d7239a83744256",
+        "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 0,
+      "rationale": "The uncertainty notes correctly state that import bindings are unavailable, the score is uncalibrated, and there is no runtime validation. The report then contradicts that limitation by asserting the file has no declared imports (C1, explanation). It contradicts its own stated limitation, which is why R7 is lowered alongside R1.",
+      "evidence_ids": [
+        "EV-e7eb2e69d0644654aad56710a403b358",
+        "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 2,
+      "rationale": "MONITOR with alignment INSUFFICIENT_EVIDENCE is proportionate to a low-score, no-import-data case. The report explicitly says it cannot confirm or deny capabilities, and the score is not used as independent proof of the label. The human decision is preserved.",
+      "evidence_ids": [
+        "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+      ]
+    },
+    "R9_next_step_planning": {
+      "score": 0,
+      "rationale": "The report names the missing import evidence as the key unknown but never proposes a step to obtain it. The stop_reason claims sufficiency, and no next-step reasoning appears.",
+      "evidence_ids": []
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "SCOPE_OVERCLAIM",
+        "WRONG_ATTRIBUTION"
+      ],
+      "evidence_ids": [
+        "EV-e7eb2e69d0644654aad56710a403b358",
+        "EV-480b21a3a9a4463aa4d7239a83744256"
+      ],
+      "rationale": "The PE32+/x64/valid-structure part is supported. 'No imports are declared' is not: imports were never collected, and the cited header/format records explicitly exclude imports. The material does not show whether an import read was reachable, so the conservative access value is used.",
+      "evidence_access": "INACCESSIBLE_BEYOND_LIMITS"
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+      ],
+      "rationale": "Raw score 0.00638 and label benign, reported as model output."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-e7eb2e69d0644654aad56710a403b358"
+      ],
+      "rationale": "It is correct that no import bindings are available in the evidence. The wording 'No import bindings exist' can be read as asserting absence from the file, and C3 cites no evidence."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "The target is a benign-looking PE32+ executable with no declared imports.",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "SCOPE_OVERCLAIM"
+      ],
+      "evidence_ids": [
+        "EV-e7eb2e69d0644654aad56710a403b358",
+        "EV-480b21a3a9a4463aa4d7239a83744256"
+      ],
+      "rationale": "Import absence is asserted although imports were never collected. The material does not show whether import data was reachable.",
+      "evidence_access": "INACCESSIBLE_BEYOND_LIMITS"
+    },
+    {
+      "text": "Without import data, we cannot confirm or deny specific network/process capabilities.",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-e7eb2e69d0644654aad56710a403b358"
+      ],
+      "rationale": "This is an accurate limitation, since no import record is visible."
+    },
+    {
+      "text": "[raw score] is not a calibrated probability and relies on static features",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+      ],
+      "rationale": "This matches the record's limitations."
+    }
+  ]
+}

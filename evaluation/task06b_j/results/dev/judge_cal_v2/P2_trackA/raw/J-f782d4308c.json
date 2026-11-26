@@ -1,0 +1,140 @@
+{
+  "item_id": "J-f782d4308c",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 0,
+      "rationale": "Several material statements fail. (1) The reason says 'the target file path differs from its hash, indicating potential mismatch'. The visible target_ref shows identity_strength STRONG with a verified sha256 matching the path, and the report's own note says the hash matches. This is contradicted by visible evidence. (2) The reason says 'a benign executable with no network-related imports' without scoping it to the 16 visible entries. The committed but unread entries 26-34 are WS2_32.dll imports and 37-41 are IPHLPAPI Icmp* imports, so the reference contradicts it. (3) 'The prediction model confirms low risk' treats the model as truth. (4) '40KB ... unusually small for tracert.exe' relies on outside assumptions. C1 and C4 are supported.",
+      "evidence_ids": [
+        "EV-4907d6fa745a423da9f42f227c9fbf3d",
+        "EV-485a9199a27b4e4cb7cba3611c85c06b",
+        "EV-32473c187e8e41f6ac0b143c29b94b55",
+        "EV-84c8ed6750144f5e93bff14b03e6a8b9"
+      ]
+    },
+    "R2_evidence_traceability": {
+      "score": 0,
+      "rationale": "C3 ties the 40960-byte size to the header and format records (EV-32473c187e8e41f6ac0b143c29b94b55, EV-84c8ed6750144f5e93bff14b03e6a8b9), which carry no size; size appears only in the target snapshot. The reason presents the visible 16-entry slice of EV-4907d6fa745a423da9f42f227c9fbf3d as the whole import picture ('no network-related imports'). Both are misattributions of source or scope.",
+      "evidence_ids": [
+        "EV-32473c187e8e41f6ac0b143c29b94b55",
+        "EV-84c8ed6750144f5e93bff14b03e6a8b9",
+        "EV-4907d6fa745a423da9f42f227c9fbf3d"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 0,
+      "rationale": "C4 and the notes correctly state that only 16 of 64 committed imports are visible and that hidden network APIs cannot be ruled out. The free-text reason then concludes 'a benign executable with no network-related imports' and that 'the prediction model confirms low risk'. The report contradicts its own stated coverage limitation, and the uncalibrated-score limitation is not stated.",
+      "evidence_ids": [
+        "EV-4907d6fa745a423da9f42f227c9fbf3d",
+        "EV-485a9199a27b4e4cb7cba3611c85c06b"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 1,
+      "rationale": "MONITOR plus identity verification is a proportionate, human-preserving action. The stated justification, though, leans partly on semantic self-corroboration ('The prediction model confirms low risk') and on a spurious identity-mismatch concern that contradicts the verified digest. The action is acceptable but inconsistently justified.",
+      "evidence_ids": [
+        "EV-485a9199a27b4e4cb7cba3611c85c06b",
+        "EV-4907d6fa745a423da9f42f227c9fbf3d"
+      ]
+    },
+    "R9_next_step_planning": {
+      "score": 1,
+      "rationale": "The explanation proposes a specific step: 'warrants verification of the file's actual identity'. But the unknown it targets is spurious, because the visible target_ref already has a STRONG verified sha256 for the path. No step addresses the real case unknown, the 48 unread committed import entries. Credit is limited to a step that does not resolve a genuine unknown of this case.",
+      "evidence_ids": [
+        "EV-4907d6fa745a423da9f42f227c9fbf3d"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-4907d6fa745a423da9f42f227c9fbf3d"
+      ],
+      "rationale": "Visible entries 0-15 are all msvcrt.dll (exit, memcpy, fgetpos, fwprintf, ...), with no network or process APIs among them. The claim is scoped to 'visible'."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [
+        "SCORE_AS_PROBABILITY_OR_TRUTH"
+      ],
+      "evidence_ids": [
+        "EV-485a9199a27b4e4cb7cba3611c85c06b"
+      ],
+      "rationale": "The label and raw 0.00638 are correct. 'Indicating low likelihood of malicious behavior' reads an uncalibrated static score as a likelihood of behaviour."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "OUTSIDE_EVIDENCE_KNOWLEDGE",
+        "WRONG_ATTRIBUTION"
+      ],
+      "evidence_ids": [
+        "EV-32473c187e8e41f6ac0b143c29b94b55",
+        "EV-84c8ed6750144f5e93bff14b03e6a8b9"
+      ],
+      "rationale": "PE32+ x64 is supported. The size is visible only in the target snapshot, not in the cited records, and 'unusually small for tracert.exe' depends on outside expectations that no visible evidence supports.",
+      "evidence_access": "NO_STATIC_SOURCE"
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-4907d6fa745a423da9f42f227c9fbf3d"
+      ],
+      "rationale": "visible_entries is 16 and committed_entries is 64. The limitation is correctly worded."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "the target file path differs from its hash, indicating potential mismatch or sandboxed artifact",
+      "verdict": "CONTRADICTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-4907d6fa745a423da9f42f227c9fbf3d"
+      ],
+      "rationale": "The visible target_ref shows identity_strength STRONG with a verified sha256 (415e7396...) for C:\\Windows\\System32\tracert.exe, matching the import record's target_sha256. The report's own uncertainty note says the SHA256 matches.",
+      "evidence_access": "AGENT_VISIBLE"
+    },
+    {
+      "text": "Static analysis reveals a benign executable with no network-related imports.",
+      "verdict": "CONTRADICTED",
+      "tags": [
+        "SCOPE_OVERCLAIM",
+        "SCORE_AS_PROBABILITY_OR_TRUTH"
+      ],
+      "evidence_ids": [
+        "EV-4907d6fa745a423da9f42f227c9fbf3d"
+      ],
+      "rationale": "This is unscoped. The committed import record contains WS2_32.dll entries 26-34 (GetAddrInfoW, WSAIoctl, ...) and IPHLPAPI Icmp* entries 37-41, which were reachable by further page reads but not retrieved. 'Benign executable' is stated as fact.",
+      "evidence_access": "ACCESSIBLE_NOT_RETRIEVED"
+    },
+    {
+      "text": "The prediction model confirms low risk.",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "SEMANTIC_SELF_CORROBORATION",
+        "SCORE_AS_PROBABILITY_OR_TRUTH"
+      ],
+      "evidence_ids": [
+        "EV-485a9199a27b4e4cb7cba3611c85c06b"
+      ],
+      "rationale": "It uses the detector output as confirmation, although the record is an uncalibrated static score.",
+      "evidence_access": "NO_STATIC_SOURCE"
+    },
+    {
+      "text": "the file size of 40KB for a System32 executable named tracert.exe is anomalous and warrants verification of the file's actual identity",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "OUTSIDE_EVIDENCE_KNOWLEDGE"
+      ],
+      "evidence_ids": [],
+      "rationale": "No visible evidence establishes an expected size, and the file identity is already strongly verified by digest.",
+      "evidence_access": "NO_STATIC_SOURCE"
+    }
+  ]
+}

@@ -1,0 +1,2270 @@
+{
+  "schema_version": "task06b-j-judgments-v1",
+  "rubric_id": "task06b-j-rubric-v2",
+  "rubric_sha256": "dbb791cda454d56bdc11d1c5cf72a622d96ced72359214794f0932feeae91557",
+  "package_id": "06BJ-DEV-V2-P2",
+  "view": "common",
+  "evaluator": {
+    "kind": "LLM_JUDGE",
+    "evaluator_id": "claude-code-session:UNKNOWN",
+    "provider": "Anthropic Claude via interactive Claude Code session (owner-operated)",
+    "model": "UNKNOWN",
+    "model_version_or_digest": "UNKNOWN",
+    "self_reported_model_UNVERIFIED": "Claude Opus 5.5 (claude-opus-5-5)",
+    "session_id": "UNKNOWN",
+    "inference_method": "INTERACTIVE_LLM_JUDGE_BLIND_BATCH",
+    "automated_api_inference": false,
+    "prompt_sha256": "c811f49dd0b5f3b7a0aff3a01653fa50aabe0585339b5fbfa67347a2639a8bc9",
+    "raw_responses_file": "raw/",
+    "kit_version": "task06b-j-judge-kit-v1",
+    "track": "A",
+    "human_verified": false,
+    "operator_note": "Owner-operated fresh Claude Code session; model metadata not provided by owner (self-reported only)"
+  },
+  "pass_id": "v2-P2-trackA",
+  "created_utc": "2026-11-26T05:41:13.520861+00:00",
+  "package_view_sha256": "071fe2d885db3f0eb5fecc33fba60225c646265aab19e38350139f2071df0fce",
+  "judgments": [
+    {
+      "item_id": "J-0832ac2fe0",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 0,
+          "rationale": "C5 asserts that the visible imports include ws2_32.dll!connect. The author's visible slice of EV-b625416e0e5044b99ac9f8f7ab2ec5e4 (entries 0-31) holds only msvcrt.dll and ulib.dll, and no ws2_32.dll entry appears in the full committed 64 either. The claim is contradicted by evidence the author saw. The other claims (C1-C4) are supported by EV-dc6671156d134e9eb12b057cf34f6556, EV-602e48c993cb4db1842293fe7b29fc11, EV-3d570d533a1f441d8ca7bd20a105a879 and the visible import slice.",
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+            "EV-dc6671156d134e9eb12b057cf34f6556",
+            "EV-602e48c993cb4db1842293fe7b29fc11",
+            "EV-3d570d533a1f441d8ca7bd20a105a879"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 0,
+          "rationale": "C5 ties 'ws2_32.dll!connect' to EV-b625416e0e5044b99ac9f8f7ab2ec5e4, and that source does not carry it. This is a misattribution, separate from the factual error under R1: the citation points to a source that lacks the stated entry. The other statements trace correctly. The import counts (32 visible of 112) are scoped correctly to EV-b625416e0e5044b99ac9f8f7ab2ec5e4, and the score goes to EV-3d570d533a1f441d8ca7bd20a105a879.",
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+            "EV-3d570d533a1f441d8ca7bd20a105a879"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 1,
+          "rationale": "Case-specific limitations are stated: 32 of 112 entries visible, absence not definitive, and dynamically resolved APIs and runtime behaviour not covered. Partial coverage tempers the main conclusion (MEDIUM confidence, MONITOR). The report never says the raw score is not a calibrated probability, but it doesn't treat the score as a probability either, so this is a missing limitation without overreach.",
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+            "EV-3d570d533a1f441d8ca7bd20a105a879"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR with MEDIUM confidence is proportionate: the score is far below threshold, the visible imports are benign-looking CRT/ulib entries, and coverage is partial. The decision leans on the import review and stated coverage limits, not on the label confirming itself. The human decision is preserved. The C5 error is scored under R1/R2. The real visible evidence does not change the proportionality of the action.",
+          "evidence_ids": [
+            "EV-3d570d533a1f441d8ca7bd20a105a879",
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No text anywhere proposes a next step, such as reading the remaining import entries or doing dynamic analysis. The report only restates limitations and says 'Sufficient evidence reviewed'.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-dc6671156d134e9eb12b057cf34f6556",
+            "EV-602e48c993cb4db1842293fe7b29fc11"
+          ],
+          "rationale": "The PE header and format records show PE32+, x64, is_dll false, and the executable image flag set."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "Visible entries 7 (_exit) and 13 (sprintf_s) come from msvcrt.dll. The ulib.dll entries 15-31 are MBSTR string comparisons and ARGUMENT_LEXEMIZER/STRING_ARGUMENT parsing. No network or process APIs appear among the 32 visible entries, and the claim is scoped to visible imports."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-3d570d533a1f441d8ca7bd20a105a879"
+          ],
+          "rationale": "The raw score is 0.003809 and the label is benign. The claim reports this as model output."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "visible_entries is 32 and provider_total_entries is 112. The coverage limitation is accurate."
+        },
+        {
+          "claim_id": "C5",
+          "verdict": "CONTRADICTED",
+          "tags": [
+            "WRONG_ATTRIBUTION"
+          ],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "No visible entry (0-31) is from ws2_32.dll. All visible entries are msvcrt.dll or ulib.dll, so the cited record contradicts the claim. The rest of the report itself says no network APIs are visible.",
+          "evidence_access": "AGENT_VISIBLE"
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "No network sockets, process creation, or memory manipulation APIs are present in the 32 visible entries.",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "This is correctly scoped to the visible slice, and it matches entries 0-31."
+        },
+        {
+          "text": "Network/process capabilities are not explicitly declared in the visible import table.",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "This is scoped to the visible table and matches the entries."
+        }
+      ]
+    },
+    {
+      "item_id": "J-09c468d0ec",
+      "criteria": {
+        "R1_factual_support": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "Applicability is NOT_ASSESSABLE_INCOMPLETE: the agent produced no accepted final report.",
+          "evidence_ids": []
+        },
+        "R2_evidence_traceability": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "Applicability is NOT_ASSESSABLE_INCOMPLETE: the agent produced no accepted final report.",
+          "evidence_ids": []
+        },
+        "R7_uncertainty_limitations": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "Applicability is NOT_ASSESSABLE_INCOMPLETE: the agent produced no accepted final report.",
+          "evidence_ids": []
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "The agent produced no accepted final assessment, and the system fell back to human MANUAL_REVIEW. This is a safe fallback: no unsupported verdict was issued, no self-corroboration occurred, and the human decision is fully preserved. Under the rubric, a safe fallback is not penalised.",
+          "evidence_ids": [
+            "EV-5d5d759a4b4e4f9fa6f3c03c8901363a"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "Applicability is NOT_ASSESSABLE_INCOMPLETE: the agent produced no accepted final report.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": []
+    },
+    {
+      "item_id": "J-09c4d0decc",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "Every material claim is supported by evidence the author saw and is scoped to it. C1 is supported by the PE header and format records. C2, C4 and C5 match the visible import slice (entries 0-31: msvcrt.dll and ulib.dll only, 32 of 112) and are explicitly limited to that slice. C3 matches the prediction record. The explanation's absence statement is limited to the 32 visible entries.",
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+            "EV-3d570d533a1f441d8ca7bd20a105a879",
+            "EV-dc6671156d134e9eb12b057cf34f6556",
+            "EV-602e48c993cb4db1842293fe7b29fc11"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "Each statement cites the record that carries it, with the right scope. Import statements cite EV-b625416e0e5044b99ac9f8f7ab2ec5e4 and are framed as the 32 visible of 112 entries. C2's resolved refs (entries 7 and 13) are correct. The score cites EV-3d570d533a1f441d8ca7bd20a105a879, and header facts cite EV-dc6671156d134e9eb12b057cf34f6556 and EV-602e48c993cb4db1842293fe7b29fc11.",
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+            "EV-3d570d533a1f441d8ca7bd20a105a879",
+            "EV-dc6671156d134e9eb12b057cf34f6556",
+            "EV-602e48c993cb4db1842293fe7b29fc11"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 1,
+          "rationale": "Case-specific limitations are stated: 32 of 112 entries visible, absence not definitive, and dynamically resolved APIs and runtime behaviour not covered. Partial coverage tempers the main conclusion (MEDIUM confidence, MONITOR). The report never says the raw score is not a calibrated probability, but it doesn't treat the score as a probability either, so this is a missing limitation without overreach.",
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+            "EV-3d570d533a1f441d8ca7bd20a105a879"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR with MEDIUM confidence is proportionate: the score is far below threshold, the visible imports are benign-looking CRT/ulib entries, and coverage is partial. The decision leans on the import review and stated coverage limits, not on the label confirming itself. The human decision is preserved. The C5 error is scored under R1/R2. The real visible evidence does not change the proportionality of the action.",
+          "evidence_ids": [
+            "EV-3d570d533a1f441d8ca7bd20a105a879",
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No text anywhere proposes a next step, such as reading the remaining import entries or doing dynamic analysis. The report only restates limitations and says 'Sufficient evidence reviewed'.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-dc6671156d134e9eb12b057cf34f6556",
+            "EV-602e48c993cb4db1842293fe7b29fc11"
+          ],
+          "rationale": "The PE header and format records show PE32+, x64, is_dll false, and the executable image flag set."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "Visible entries 7 (_exit) and 13 (sprintf_s) come from msvcrt.dll. The ulib.dll entries 15-31 are MBSTR string comparisons and ARGUMENT_LEXEMIZER/STRING_ARGUMENT parsing. No network or process APIs appear among the 32 visible entries, and the claim is scoped to visible imports."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-3d570d533a1f441d8ca7bd20a105a879"
+          ],
+          "rationale": "The raw score is 0.003809 and the label is benign. The claim reports this as model output."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "visible_entries is 32 and provider_total_entries is 112. The coverage limitation is accurate."
+        },
+        {
+          "claim_id": "C5",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "Visible entries 0-31 come only from msvcrt.dll and ulib.dll, with no WS2_32/WININET entries. The claim is explicitly scoped to the 32 visible entries."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "No network sockets, process creation, or memory manipulation APIs are present in the 32 visible entries.",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "This is correctly scoped to the visible slice, and it matches entries 0-31."
+        },
+        {
+          "text": "Network/process capabilities are not explicitly declared in the visible import table.",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "This is scoped to the visible table and matches the entries."
+        }
+      ]
+    },
+    {
+      "item_id": "J-34b1cd90ad",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 0,
+          "rationale": "The explanation says the static analysis 'confirms the target is a benign x64 executable with no malicious indicators' and that the raw score 'strongly supports this'. That treats the model label as established truth. No visible evidence beyond the model output bears on maliciousness: no import table, entropy or signature data were collected. C1, C2 and C3 are individually supported by EV-5aac269c2d1b44da84d4048a59152476, EV-f82d740aa83144c19b08b0de3e4e0500 and EV-c321d3999b58413784cb3b30d540504e.",
+          "evidence_ids": [
+            "EV-5aac269c2d1b44da84d4048a59152476",
+            "EV-f82d740aa83144c19b08b0de3e4e0500",
+            "EV-c321d3999b58413784cb3b30d540504e"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 1,
+          "rationale": "There is no outright misattribution. C1 traces to the prediction record, and C2 traces to the header and format records. But 'no malicious indicators' and the confirmed-benign framing trace to no source carrying such a finding. C3, about the absence of import data, cites the prediction record, which says nothing about imports, so that citation is decorative.",
+          "evidence_ids": [
+            "EV-5aac269c2d1b44da84d4048a59152476",
+            "EV-f82d740aa83144c19b08b0de3e4e0500",
+            "EV-c321d3999b58413784cb3b30d540504e"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 0,
+          "rationale": "The uncertainty notes list an uncalibrated score, static-only analysis, the LIEF mismatch and the missing import table. The explanation then contradicts them: it says the analysis 'confirms' benignity and that the uncalibrated raw score 'strongly supports' it. The stated limitations therefore don't constrain the conclusion.",
+          "evidence_ids": [
+            "EV-5aac269c2d1b44da84d4048a59152476"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 0,
+          "rationale": "MONITOR is itself a mild action, but the justification rests on semantic self-corroboration. The detector's own raw score is presented as strong support for the detector's benign label, and it is the main reason for the 'confirms benign' conclusion. No independent import evidence was available or used.",
+          "evidence_ids": [
+            "EV-5aac269c2d1b44da84d4048a59152476"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "The report notes 'Missing full import table details' but never proposes a step to obtain them. The stop_reason says the evidence is sufficient, and no next-step reasoning appears anywhere.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-5aac269c2d1b44da84d4048a59152476"
+          ],
+          "rationale": "The prediction record shows label benign and raw score 0.003809, reported as classifier output."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-f82d740aa83144c19b08b0de3e4e0500",
+            "EV-c321d3999b58413784cb3b30d540504e"
+          ],
+          "rationale": "Both records show PE32+, x64 and is_dll false."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-f82d740aa83144c19b08b0de3e4e0500",
+            "EV-c321d3999b58413784cb3b30d540504e",
+            "EV-5aac269c2d1b44da84d4048a59152476"
+          ],
+          "rationale": "No import-detail record is among the visible evidence, so no imports were observed. The citation of the prediction record is decorative, but the limitation itself is accurate."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "The static PE analysis confirms the target is a benign x64 executable with no malicious indicators.",
+          "verdict": "UNSUPPORTED",
+          "tags": [
+            "SCORE_AS_PROBABILITY_OR_TRUTH",
+            "SEMANTIC_SELF_CORROBORATION"
+          ],
+          "evidence_ids": [
+            "EV-5aac269c2d1b44da84d4048a59152476"
+          ],
+          "rationale": "The only basis is the detector label. Static data in this case cannot confirm benignity, and no indicator analysis (imports, strings, entropy) was performed.",
+          "evidence_access": "NO_STATIC_SOURCE"
+        },
+        {
+          "text": "The raw score (0.0038) strongly supports this.",
+          "verdict": "UNSUPPORTED",
+          "tags": [
+            "SEMANTIC_SELF_CORROBORATION",
+            "SCORE_AS_PROBABILITY_OR_TRUTH"
+          ],
+          "evidence_ids": [
+            "EV-5aac269c2d1b44da84d4048a59152476"
+          ],
+          "rationale": "This uses the detector's own uncalibrated raw score as independent support for the detector's label.",
+          "evidence_access": "AGENT_VISIBLE"
+        },
+        {
+          "text": "No evidence of network or process capability imports was found.",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-f82d740aa83144c19b08b0de3e4e0500",
+            "EV-c321d3999b58413784cb3b30d540504e"
+          ],
+          "rationale": "This is literally true, because no import data was collected at all. Its framing suggests a negative finding from a search that never happened. The report's own C3 states the gap correctly."
+        }
+      ]
+    },
+    {
+      "item_id": "J-4284f8b1c2",
+      "criteria": {
+        "R1_factual_support": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "Applicability is NOT_ASSESSABLE_INCOMPLETE: the agent produced no accepted final report.",
+          "evidence_ids": []
+        },
+        "R2_evidence_traceability": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "Applicability is NOT_ASSESSABLE_INCOMPLETE: the agent produced no accepted final report.",
+          "evidence_ids": []
+        },
+        "R7_uncertainty_limitations": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "Applicability is NOT_ASSESSABLE_INCOMPLETE: the agent produced no accepted final report.",
+          "evidence_ids": []
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "The agent produced no accepted final assessment, and the system fell back to human MANUAL_REVIEW. This is a safe fallback: no unsupported verdict was issued, no self-corroboration occurred, and the human decision is fully preserved. Under the rubric, a safe fallback is not penalised.",
+          "evidence_ids": [
+            "EV-2147ea23d45a4ac480c2dae55253a7f1"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "Applicability is NOT_ASSESSABLE_INCOMPLETE: the agent produced no accepted final report.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": []
+    },
+    {
+      "item_id": "J-4b0ed4527b",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 0,
+          "rationale": "C5 reads the raw score 0.0038 as 'a 99.6% probability that the file is benign'. The visible prediction record EV-3d570d533a1f441d8ca7bd20a105a879 states score_is_calibrated_probability=false and 'Raw LightGBM score; NOT a calibrated probability', so the claim treats the score as a probability, against evidence the author saw. C1-C4 are supported by the header, format, prediction and visible import records.",
+          "evidence_ids": [
+            "EV-3d570d533a1f441d8ca7bd20a105a879",
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+            "EV-dc6671156d134e9eb12b057cf34f6556",
+            "EV-602e48c993cb4db1842293fe7b29fc11"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 1,
+          "rationale": "Import statements are traced to EV-b625416e0e5044b99ac9f8f7ab2ec5e4 with the correct visible-slice scope, and header facts go to the header and format records. The 99.6% probability figure in C5 is not carried by any source. The cited record supplies only the raw score and explicitly denies calibration, so this part can't be traced. The score value itself is cited correctly; the interpretive error is scored under R1.",
+          "evidence_ids": [
+            "EV-3d570d533a1f441d8ca7bd20a105a879",
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 0,
+          "rationale": "Import-coverage limitations are case-specific and well stated (32/112, absence not definitive, dynamic APIs). But the uncalibrated-score limitation shown in the prediction record is omitted, and C5 overreaches because of that omission by asserting a 99.6% benign probability. That is a missing case-relevant limitation together with an overreaching statement.",
+          "evidence_ids": [
+            "EV-3d570d533a1f441d8ca7bd20a105a879",
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR with MEDIUM confidence is proportionate to a far-below-threshold score plus a partial, benign-looking visible import slice with explicit coverage limits. The recommendation rests on the import review, not on the probability misreading in C5, which is scored under R1/R7. The human decision is preserved.",
+          "evidence_ids": [
+            "EV-3d570d533a1f441d8ca7bd20a105a879",
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No text anywhere proposes a next step, such as reading the remaining import entries or doing dynamic analysis. The report only restates limitations and says 'Sufficient evidence reviewed'.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-dc6671156d134e9eb12b057cf34f6556",
+            "EV-602e48c993cb4db1842293fe7b29fc11"
+          ],
+          "rationale": "The PE header and format records show PE32+, x64, is_dll false, and the executable image flag set."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "Visible entries 7 (_exit) and 13 (sprintf_s) come from msvcrt.dll. The ulib.dll entries 15-31 are MBSTR string comparisons and ARGUMENT_LEXEMIZER/STRING_ARGUMENT parsing. No network or process APIs appear among the 32 visible entries, and the claim is scoped to visible imports."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-3d570d533a1f441d8ca7bd20a105a879"
+          ],
+          "rationale": "The raw score is 0.003809 and the label is benign. The claim reports this as model output."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "visible_entries is 32 and provider_total_entries is 112. The coverage limitation is accurate."
+        },
+        {
+          "claim_id": "C5",
+          "verdict": "CONTRADICTED",
+          "tags": [
+            "SCORE_AS_PROBABILITY_OR_TRUTH"
+          ],
+          "evidence_ids": [
+            "EV-3d570d533a1f441d8ca7bd20a105a879"
+          ],
+          "rationale": "The prediction record states score_is_calibrated_probability=false and 'NOT a calibrated probability'. Converting 0.0038 into a 99.6% benign probability contradicts it.",
+          "evidence_access": "AGENT_VISIBLE"
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "No network sockets, process creation, or memory manipulation APIs are present in the 32 visible entries.",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "This is correctly scoped to the visible slice, and it matches entries 0-31."
+        },
+        {
+          "text": "Network/process capabilities are not explicitly declared in the visible import table.",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "This is scoped to the visible table and matches the entries."
+        }
+      ]
+    },
+    {
+      "item_id": "J-67c5e1e0de",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "There are few material statements, and all are supported by visible evidence. The embedded prediction block matches EV-2147ea23d45a4ac480c2dae55253a7f1: benign, raw 0.00638, threshold 0.832, not calibrated. 'Concrete imports unavailable' is true, since no import-detail record is in the visible case state. 'Static only, no runtime behaviour observed' matches the record limitations. Nothing is overclaimed.",
+          "evidence_ids": [
+            "EV-2147ea23d45a4ac480c2dae55253a7f1"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "The label and score statements trace to the prediction record reproduced verbatim in prediction_shown, which matches EV-2147ea23d45a4ac480c2dae55253a7f1. The limitation statements match that record's own limitations and the absence of any import-detail record. No misattribution or scope error was found.",
+          "evidence_ids": [
+            "EV-2147ea23d45a4ac480c2dae55253a7f1"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 2,
+          "rationale": "The report states the limitations that matter here: static prediction only, uncalibrated raw score, and concrete imports unavailable, which bears directly on the import question. The conclusion is limited to a MONITOR suggestion with no capability or benignity claims beyond them.",
+          "evidence_ids": [
+            "EV-2147ea23d45a4ac480c2dae55253a7f1"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is proportionate and leaves the decision with a human. No self-confirming argument is made: the report only states the model label and caveats. The justification is thin, though. It rests solely on the model output, with no independent evidence weighed, so it is acceptable but weakly justified.",
+          "evidence_ids": [
+            "EV-2147ea23d45a4ac480c2dae55253a7f1"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning appears. The report notes that imports are unavailable but never proposes collecting them or any other step.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": [
+        {
+          "text": "Mô hình tĩnh phân loại BENIGN (static model classifies BENIGN).",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-2147ea23d45a4ac480c2dae55253a7f1"
+          ],
+          "rationale": "This matches the predicted_label, stated as model output."
+        },
+        {
+          "text": "raw score uncalibrated",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-2147ea23d45a4ac480c2dae55253a7f1"
+          ],
+          "rationale": "The record sets score_is_calibrated_probability=false."
+        },
+        {
+          "text": "concrete imports unavailable",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-d8da99390d3c4de78a55fe44d1a16498",
+            "EV-2147ea23d45a4ac480c2dae55253a7f1"
+          ],
+          "rationale": "The visible case state has no import-detail record, and the header record's limitations say imports are not collected."
+        },
+        {
+          "text": "phân tích chỉ dựa trên đặc trưng tĩnh, không quan sát hành vi runtime (static features only, no runtime behaviour observed)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-2147ea23d45a4ac480c2dae55253a7f1"
+          ],
+          "rationale": "This matches the prediction record's limitations."
+        }
+      ]
+    },
+    {
+      "item_id": "J-6d850061a1",
+      "criteria": {
+        "R1_factual_support": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "Applicability is NOT_ASSESSABLE_INCOMPLETE: the agent produced no accepted final report.",
+          "evidence_ids": []
+        },
+        "R2_evidence_traceability": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "Applicability is NOT_ASSESSABLE_INCOMPLETE: the agent produced no accepted final report.",
+          "evidence_ids": []
+        },
+        "R7_uncertainty_limitations": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "Applicability is NOT_ASSESSABLE_INCOMPLETE: the agent produced no accepted final report.",
+          "evidence_ids": []
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "The agent produced no accepted final assessment, and the system fell back to human MANUAL_REVIEW. This is a safe fallback: no unsupported verdict was issued, no self-corroboration occurred, and the human decision is fully preserved. Under the rubric, a safe fallback is not penalised.",
+          "evidence_ids": [
+            "EV-735319270c734b198bfdba0310f064e4"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": "NOT_ASSESSABLE",
+          "rationale": "Applicability is NOT_ASSESSABLE_INCOMPLETE: the agent produced no accepted final report.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": []
+    },
+    {
+      "item_id": "J-6da22391fd",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 0,
+          "rationale": "C1 and the explanation say the PE has 'no declared imports' / 'no imports are declared'. No import data was collected at all: the visible header and format records cover only the minimum headers and state that imports are not collected. Asserting import absence across the whole file from no view is a SCOPE_OVERCLAIM. C2 is supported by EV-ab7fd294bc1c4b2d87d8c4fa58165e9c, and the 'cannot confirm or deny' statement is supported.",
+          "evidence_ids": [
+            "EV-e7eb2e69d0644654aad56710a403b358",
+            "EV-480b21a3a9a4463aa4d7239a83744256",
+            "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 0,
+          "rationale": "C1 ties 'no imports are declared' to the header and format records, EV-e7eb2e69d0644654aad56710a403b358 and EV-480b21a3a9a4463aa4d7239a83744256. Neither carries any import information; their limitations say imports are not collected. This misattributes a statement to sources that don't carry it, a separate violation from the factual overclaim under R1. C2 traces correctly to the prediction record.",
+          "evidence_ids": [
+            "EV-e7eb2e69d0644654aad56710a403b358",
+            "EV-480b21a3a9a4463aa4d7239a83744256",
+            "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 0,
+          "rationale": "The uncertainty notes correctly state that import bindings are unavailable, the score is uncalibrated, and there is no runtime validation. The report then contradicts that limitation by asserting the file has no declared imports (C1, explanation). It contradicts its own stated limitation, which is why R7 is lowered alongside R1.",
+          "evidence_ids": [
+            "EV-e7eb2e69d0644654aad56710a403b358",
+            "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR with alignment INSUFFICIENT_EVIDENCE is proportionate to a low-score, no-import-data case. The report explicitly says it cannot confirm or deny capabilities, and the score is not used as independent proof of the label. The human decision is preserved.",
+          "evidence_ids": [
+            "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "The report names the missing import evidence as the key unknown but never proposes a step to obtain it. The stop_reason claims sufficiency, and no next-step reasoning appears.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "UNSUPPORTED",
+          "tags": [
+            "SCOPE_OVERCLAIM",
+            "WRONG_ATTRIBUTION"
+          ],
+          "evidence_ids": [
+            "EV-e7eb2e69d0644654aad56710a403b358",
+            "EV-480b21a3a9a4463aa4d7239a83744256"
+          ],
+          "rationale": "The PE32+/x64/valid-structure part is supported. 'No imports are declared' is not: imports were never collected, and the cited header/format records explicitly exclude imports. The material does not show whether an import read was reachable, so the conservative access value is used.",
+          "evidence_access": "INACCESSIBLE_BEYOND_LIMITS"
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+          ],
+          "rationale": "Raw score 0.00638 and label benign, reported as model output."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-e7eb2e69d0644654aad56710a403b358"
+          ],
+          "rationale": "It is correct that no import bindings are available in the evidence. The wording 'No import bindings exist' can be read as asserting absence from the file, and C3 cites no evidence."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "The target is a benign-looking PE32+ executable with no declared imports.",
+          "verdict": "UNSUPPORTED",
+          "tags": [
+            "SCOPE_OVERCLAIM"
+          ],
+          "evidence_ids": [
+            "EV-e7eb2e69d0644654aad56710a403b358",
+            "EV-480b21a3a9a4463aa4d7239a83744256"
+          ],
+          "rationale": "Import absence is asserted although imports were never collected. The material does not show whether import data was reachable.",
+          "evidence_access": "INACCESSIBLE_BEYOND_LIMITS"
+        },
+        {
+          "text": "Without import data, we cannot confirm or deny specific network/process capabilities.",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-e7eb2e69d0644654aad56710a403b358"
+          ],
+          "rationale": "This is an accurate limitation, since no import record is visible."
+        },
+        {
+          "text": "[raw score] is not a calibrated probability and relies on static features",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+          ],
+          "rationale": "This matches the record's limitations."
+        }
+      ]
+    },
+    {
+      "item_id": "J-709a1615c0",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 1,
+          "rationale": "The central claims are supported. C1 is supported by the header and format records, and C2 by the prediction record. C3, that no import/entropy/dynamic data was collected, is accurate. Two peripheral statements are weaker. The uncertainty notes guess that the omitted evidence IDs are uncollected import/entropy facets; nothing the author saw supports this, and the reference shows those IDs are metadata, identity, readability, unchanged and sha256 records. Calling the target 'a known system utility' relies on outside knowledge beyond the visible path. Neither drives the conclusion.",
+          "evidence_ids": [
+            "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c",
+            "EV-e7eb2e69d0644654aad56710a403b358",
+            "EV-480b21a3a9a4463aa4d7239a83744256"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 1,
+          "rationale": "The claims cite the right records with correct scope. The explanation's 'imported function list (evidence IDs omitted)' and the note 'Missing evidence IDs indicate uncollected facets regarding imports...' loosely point the missing import data at the omitted IDs, which carry no import data. This is generic speculation rather than a specific claim tied to a named source. 'Known system utility' has no source. Some statements are therefore untraceable or loosely traced.",
+          "evidence_ids": [
+            "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c",
+            "EV-e7eb2e69d0644654aad56710a403b358",
+            "EV-480b21a3a9a4463aa4d7239a83744256"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 2,
+          "rationale": "The report states the case-specific limitations: no import bindings collected, uncalibrated score, LIEF mismatch, and static-only analysis. These actually constrain the conclusion (alignment INSUFFICIENT_EVIDENCE, capability hypotheses left unverified).",
+          "evidence_ids": [
+            "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c",
+            "EV-e7eb2e69d0644654aad56710a403b358"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR with INSUFFICIENT_EVIDENCE is proportionate. The report explicitly refuses to infer capabilities without import data and does not use the score as proof of the label. The human decision is preserved.",
+          "evidence_ids": [
+            "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "Unknowns are listed (imports, entropy, dynamic data), but no step to resolve them is proposed. The stop_reason only says the unknowns are listed.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-e7eb2e69d0644654aad56710a403b358",
+            "EV-480b21a3a9a4463aa4d7239a83744256"
+          ],
+          "rationale": "structural_valid true, PE32+, x64, is_dll false."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+          ],
+          "rationale": "Label benign and raw 0.00638, given as model output."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-e7eb2e69d0644654aad56710a403b358",
+            "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+          ],
+          "rationale": "No import, entropy or dynamic record is visible, and the header limitations confirm imports and entropy are not collected."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "Missing evidence IDs indicate uncollected facets regarding imports, entropy, or dynamic capabilities.",
+          "verdict": "CONTRADICTED",
+          "tags": [
+            "WRONG_ATTRIBUTION"
+          ],
+          "evidence_ids": [
+            "EV-8ddd079db44e4dca9abcdffa6ce5cffc",
+            "EV-efc86e18d58342cf95429859d690b65c"
+          ],
+          "rationale": "The omitted IDs are reference records for metadata, readability, unchanged-check, file identity and sha256, not imports, entropy or dynamic data. The author could not see their contents and inferred their nature without basis.",
+          "evidence_access": "INACCESSIBLE_BEYOND_LIMITS"
+        },
+        {
+          "text": "Target file is a known system utility (tracert.exe)",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [
+            "OUTSIDE_EVIDENCE_KNOWLEDGE"
+          ],
+          "evidence_ids": [],
+          "rationale": "The path C:\\Windows\\System32\tracert.exe is visible in the unknowns target. 'Known system utility' is outside knowledge, and file identity or signing was not verified."
+        },
+        {
+          "text": "The malware prediction model indicates benign behavior with a low raw score, yet this is not a calibrated probability",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+          ],
+          "rationale": "The label, score and calibration caveat are correct. 'Benign behavior' is loose wording, because the model scores static features, not behaviour."
+        }
+      ]
+    },
+    {
+      "item_id": "J-79b17b9568",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 0,
+          "rationale": "C5 asserts that 'the very low detector score independently confirms that this binary is benign'. This treats the model output as truth and as independent confirmation. The visible prediction record EV-3d570d533a1f441d8ca7bd20a105a879 is an uncalibrated static score that cannot confirm benignity. C1-C4 are supported by the header, format, prediction and visible import records.",
+          "evidence_ids": [
+            "EV-3d570d533a1f441d8ca7bd20a105a879",
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+            "EV-dc6671156d134e9eb12b057cf34f6556",
+            "EV-602e48c993cb4db1842293fe7b29fc11"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 1,
+          "rationale": "Import, header and score statements trace correctly to their records with correct visible-slice scope. C5's 'independent confirmation' traces to nothing: the cited prediction record carries only the detector's own score and label, not an independent confirmation. That statement is untraceable, though the score value itself is cited correctly.",
+          "evidence_ids": [
+            "EV-3d570d533a1f441d8ca7bd20a105a879",
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 0,
+          "rationale": "The report states partial import coverage (32/112), that absence is not definitive, and that static analysis cannot confirm runtime behaviour. C5 then claims the binary's benign nature is confirmed, which contradicts those stated limits. The uncalibrated-score limitation is also omitted.",
+          "evidence_ids": [
+            "EV-3d570d533a1f441d8ca7bd20a105a879",
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR with MEDIUM confidence is proportionate in itself, and the main reasoning rests on the visible import review. But the report includes an explicit semantic self-corroboration argument (C5: the detector score 'independently confirms' the detector's benign label) in support of its CONSISTENT alignment. That weakens the justification, though the decision does not rest mainly on it.",
+          "evidence_ids": [
+            "EV-3d570d533a1f441d8ca7bd20a105a879",
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No text anywhere proposes a next step, such as reading the remaining import entries or doing dynamic analysis. The report only restates limitations and says 'Sufficient evidence reviewed'.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-dc6671156d134e9eb12b057cf34f6556",
+            "EV-602e48c993cb4db1842293fe7b29fc11"
+          ],
+          "rationale": "The PE header and format records show PE32+, x64, is_dll false, and the executable image flag set."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "Visible entries 7 (_exit) and 13 (sprintf_s) come from msvcrt.dll. The ulib.dll entries 15-31 are MBSTR string comparisons and ARGUMENT_LEXEMIZER/STRING_ARGUMENT parsing. No network or process APIs appear among the 32 visible entries, and the claim is scoped to visible imports."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-3d570d533a1f441d8ca7bd20a105a879"
+          ],
+          "rationale": "The raw score is 0.003809 and the label is benign. The claim reports this as model output."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "visible_entries is 32 and provider_total_entries is 112. The coverage limitation is accurate."
+        },
+        {
+          "claim_id": "C5",
+          "verdict": "UNSUPPORTED",
+          "tags": [
+            "SEMANTIC_SELF_CORROBORATION",
+            "SCORE_AS_PROBABILITY_OR_TRUTH"
+          ],
+          "evidence_ids": [
+            "EV-3d570d533a1f441d8ca7bd20a105a879"
+          ],
+          "rationale": "It uses the detector's own raw score as independent confirmation of the detector's label. The record is an uncalibrated static model output, and no static source can confirm benignity.",
+          "evidence_access": "NO_STATIC_SOURCE"
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "No network sockets, process creation, or memory manipulation APIs are present in the 32 visible entries.",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "This is correctly scoped to the visible slice, and it matches entries 0-31."
+        },
+        {
+          "text": "Network/process capabilities are not explicitly declared in the visible import table.",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "This is scoped to the visible table and matches the entries."
+        }
+      ]
+    },
+    {
+      "item_id": "J-7de4fdcf1a",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 1,
+          "rationale": "The claims are factually correct against what the author saw. C1: 16 of 64 committed entries are visible (EV-e7ec6ea81c284d8e8e11487571e63e23). C2 matches the prediction record, C3 matches the header, and C4 is a correct limitation. The wording is loose in places. The explanation's '16/64 visible' omits that the provider total is 102, so 64 is not the full table. 'The low raw score supports benign classification' restates the model output as support. Neither is central to the LOW-confidence, INSUFFICIENT_EVIDENCE conclusion.",
+          "evidence_ids": [
+            "EV-e7ec6ea81c284d8e8e11487571e63e23",
+            "EV-9106bd54ab4a478982ce39c6621819ce",
+            "EV-b60235a20c6e41cb9065c9eff115009e"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 1,
+          "rationale": "The claims cite the correct records: imports to EV-e7ec6ea81c284d8e8e11487571e63e23, score to EV-9106bd54ab4a478982ce39c6621819ce, header to EV-b60235a20c6e41cb9065c9eff115009e. C1 correctly frames 64 as 'committed'. The explanation and free text say 'heavily truncated (16/64 visible)' and '16/64 entries' without the 102-entry provider total, which loosely presents the committed set as the table size. 'Missing evidence IDs suggest potential data gaps' cannot be traced to anything specific.",
+          "evidence_ids": [
+            "EV-e7ec6ea81c284d8e8e11487571e63e23",
+            "EV-9106bd54ab4a478982ce39c6621819ce",
+            "EV-b60235a20c6e41cb9065c9eff115009e"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 2,
+          "rationale": "Case-specific limitations are stated: only 16 of 64 committed imports visible with the rest unknown, an uncalibrated static score, and no runtime observation. They actually constrain the result: LOW confidence, INSUFFICIENT_EVIDENCE, and no capability conclusion drawn. Omitting the 102 total doesn't cause any overreach.",
+          "evidence_ids": [
+            "EV-e7ec6ea81c284d8e8e11487571e63e23",
+            "EV-9106bd54ab4a478982ce39c6621819ce"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR with LOW confidence and INSUFFICIENT_EVIDENCE is proportionate to a far-below-threshold score and heavily truncated imports. The decision is explicitly limited by the truncation. The score is not used as independent proof, and the human decision is preserved.",
+          "evidence_ids": [
+            "EV-e7ec6ea81c284d8e8e11487571e63e23",
+            "EV-9106bd54ab4a478982ce39c6621819ce"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "The report names the unknown remaining imports but never proposes reading further pages or any other step. The stop_reason claims sufficiency.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-e7ec6ea81c284d8e8e11487571e63e23"
+          ],
+          "rationale": "visible_entries is 16 and committed_entries is 64. The claim is correctly scoped to committed entries."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-9106bd54ab4a478982ce39c6621819ce"
+          ],
+          "rationale": "Raw 0.001174 and label benign, as model output."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b60235a20c6e41cb9065c9eff115009e"
+          ],
+          "rationale": "PE32+, x64, is_dll false."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-e7ec6ea81c284d8e8e11487571e63e23"
+          ],
+          "rationale": "This matches the record's limitations: declared imports only, and unseen imports may exist."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "the import list is heavily truncated (16/64 visible), preventing verification of network or process capabilities",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-e7ec6ea81c284d8e8e11487571e63e23"
+          ],
+          "rationale": "Truncation is real, but the full table has 102 entries (provider_total_entries). 64 is the committed cap, so the stated ratio understates the gap."
+        },
+        {
+          "text": "The low raw score supports benign classification but lacks runtime confirmation.",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-9106bd54ab4a478982ce39c6621819ce"
+          ],
+          "rationale": "The score is below threshold, which yields the benign label. Saying it 'supports' the classification is loose but stays within the model-output framing, and runtime confirmation is correctly said to be absent."
+        }
+      ]
+    },
+    {
+      "item_id": "J-7ed2377ea1",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "Every material claim is true against what the author saw and is scoped to it. C1 and C5 (PE32+ x64 executable) are supported by the visible header and format records. C2 and C4 match the visible import slice (entries 0-31, 32 of 112). C3 matches the prediction record. C5's wrong citation is a traceability defect, scored under R2, not a factual error.",
+          "evidence_ids": [
+            "EV-dc6671156d134e9eb12b057cf34f6556",
+            "EV-602e48c993cb4db1842293fe7b29fc11",
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+            "EV-3d570d533a1f441d8ca7bd20a105a879"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 0,
+          "rationale": "C5 ('64-bit (PE32+) executable image') cites only the import-detail record EV-b625416e0e5044b99ac9f8f7ab2ec5e4, which carries no PE kind, architecture or image-type field. Those facts live in EV-dc6671156d134e9eb12b057cf34f6556 and EV-602e48c993cb4db1842293fe7b29fc11. The statement is tied to a source that does not carry it, which is a misattribution. The other claims trace correctly.",
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+            "EV-dc6671156d134e9eb12b057cf34f6556",
+            "EV-602e48c993cb4db1842293fe7b29fc11"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 1,
+          "rationale": "Case-specific limitations are stated: 32 of 112 entries visible, absence not definitive, and dynamically resolved APIs and runtime behaviour not covered. Partial coverage tempers the main conclusion (MEDIUM confidence, MONITOR). The report never says the raw score is not a calibrated probability, but it doesn't treat the score as a probability either, so this is a missing limitation without overreach.",
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+            "EV-3d570d533a1f441d8ca7bd20a105a879"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR with MEDIUM confidence is proportionate: the score is far below threshold, the visible imports are benign-looking CRT/ulib entries, and coverage is partial. The decision leans on the import review and stated coverage limits, not on the label confirming itself. The human decision is preserved. The C5 error is scored under R1/R2. The real visible evidence does not change the proportionality of the action.",
+          "evidence_ids": [
+            "EV-3d570d533a1f441d8ca7bd20a105a879",
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No text anywhere proposes a next step, such as reading the remaining import entries or doing dynamic analysis. The report only restates limitations and says 'Sufficient evidence reviewed'.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-dc6671156d134e9eb12b057cf34f6556",
+            "EV-602e48c993cb4db1842293fe7b29fc11"
+          ],
+          "rationale": "The PE header and format records show PE32+, x64, is_dll false, and the executable image flag set."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "Visible entries 7 (_exit) and 13 (sprintf_s) come from msvcrt.dll. The ulib.dll entries 15-31 are MBSTR string comparisons and ARGUMENT_LEXEMIZER/STRING_ARGUMENT parsing. No network or process APIs appear among the 32 visible entries, and the claim is scoped to visible imports."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-3d570d533a1f441d8ca7bd20a105a879"
+          ],
+          "rationale": "The raw score is 0.003809 and the label is benign. The claim reports this as model output."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "visible_entries is 32 and provider_total_entries is 112. The coverage limitation is accurate."
+        },
+        {
+          "claim_id": "C5",
+          "verdict": "SUPPORTED",
+          "tags": [
+            "WRONG_ATTRIBUTION"
+          ],
+          "evidence_ids": [
+            "EV-dc6671156d134e9eb12b057cf34f6556",
+            "EV-602e48c993cb4db1842293fe7b29fc11"
+          ],
+          "rationale": "The fact is true per the visible header and format records. The cited source, EV-b625416e0e5044b99ac9f8f7ab2ec5e4 (import details), does not carry it, so the attribution is wrong."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "No network sockets, process creation, or memory manipulation APIs are present in the 32 visible entries.",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "This is correctly scoped to the visible slice, and it matches entries 0-31."
+        },
+        {
+          "text": "Network/process capabilities are not explicitly declared in the visible import table.",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "This is scoped to the visible table and matches the entries."
+        }
+      ]
+    },
+    {
+      "item_id": "J-8250ebfc2d",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "There are few material statements, and all are supported by visible evidence. The embedded prediction block matches EV-5d5d759a4b4e4f9fa6f3c03c8901363a: benign, raw 0.00117, threshold 0.832, not calibrated. 'Concrete imports unavailable' is true, since no import-detail record is in the visible case state. 'Static only, no runtime behaviour observed' matches the record limitations. Nothing is overclaimed.",
+          "evidence_ids": [
+            "EV-5d5d759a4b4e4f9fa6f3c03c8901363a"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "The label and score statements trace to the prediction record reproduced verbatim in prediction_shown, which matches EV-5d5d759a4b4e4f9fa6f3c03c8901363a. The limitation statements match that record's own limitations and the absence of any import-detail record. No misattribution or scope error was found.",
+          "evidence_ids": [
+            "EV-5d5d759a4b4e4f9fa6f3c03c8901363a"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 2,
+          "rationale": "The report states the limitations that matter here: static prediction only, uncalibrated raw score, and concrete imports unavailable, which bears directly on the import question. The conclusion is limited to a MONITOR suggestion with no capability or benignity claims beyond them.",
+          "evidence_ids": [
+            "EV-5d5d759a4b4e4f9fa6f3c03c8901363a"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is proportionate and leaves the decision with a human. No self-confirming argument is made: the report only states the model label and caveats. The justification is thin, though. It rests solely on the model output, with no independent evidence weighed, so it is acceptable but weakly justified.",
+          "evidence_ids": [
+            "EV-5d5d759a4b4e4f9fa6f3c03c8901363a"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning appears. The report notes that imports are unavailable but never proposes collecting them or any other step.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": [
+        {
+          "text": "Mô hình tĩnh phân loại BENIGN (static model classifies BENIGN).",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-5d5d759a4b4e4f9fa6f3c03c8901363a"
+          ],
+          "rationale": "This matches the predicted_label, stated as model output."
+        },
+        {
+          "text": "raw score uncalibrated",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-5d5d759a4b4e4f9fa6f3c03c8901363a"
+          ],
+          "rationale": "The record sets score_is_calibrated_probability=false."
+        },
+        {
+          "text": "concrete imports unavailable",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b066674ddbc24f4c92984707a8239969",
+            "EV-5d5d759a4b4e4f9fa6f3c03c8901363a"
+          ],
+          "rationale": "The visible case state has no import-detail record, and the header record's limitations say imports are not collected."
+        },
+        {
+          "text": "phân tích chỉ dựa trên đặc trưng tĩnh, không quan sát hành vi runtime (static features only, no runtime behaviour observed)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-5d5d759a4b4e4f9fa6f3c03c8901363a"
+          ],
+          "rationale": "This matches the prediction record's limitations."
+        }
+      ]
+    },
+    {
+      "item_id": "J-aa37963c6f",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 0,
+          "rationale": "C5 asserts 'The file declares no networking APIs anywhere in its import table'. The author saw only entries 0-31 of 112 in EV-b625416e0e5044b99ac9f8f7ab2ec5e4, and 48 entries were never committed. Claiming absence across the whole table from a partial view is a SCOPE_OVERCLAIM. C1-C4 are supported.",
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+            "EV-3d570d533a1f441d8ca7bd20a105a879",
+            "EV-dc6671156d134e9eb12b057cf34f6556",
+            "EV-602e48c993cb4db1842293fe7b29fc11"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 0,
+          "rationale": "C5 attributes a whole-table statement to EV-b625416e0e5044b99ac9f8f7ab2ec5e4, while the author saw only a 32-entry slice of that record (and the record itself covers only 64 of 112). Presenting the visible slice as the whole table is a scope misattribution. That is independent of the factual overclaim under R1, because the cited source does not carry a whole-table statement. The other claims trace correctly.",
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 0,
+          "rationale": "The report states in C4 and its uncertainty notes that only 32 of 112 entries are visible and that absence in the subset proves nothing. C5 then asserts absence across the whole import table, so the report contradicts its own stated limitation. The uncalibrated-score limitation is also not mentioned.",
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+            "EV-3d570d533a1f441d8ca7bd20a105a879"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR with MEDIUM confidence is proportionate: the score is far below threshold, the visible imports are benign-looking CRT/ulib entries, and coverage is partial. The decision leans on the import review and stated coverage limits, not on the label confirming itself. The human decision is preserved. The C5 error is scored under R1/R2. The real visible evidence does not change the proportionality of the action.",
+          "evidence_ids": [
+            "EV-3d570d533a1f441d8ca7bd20a105a879",
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No text anywhere proposes a next step, such as reading the remaining import entries or doing dynamic analysis. The report only restates limitations and says 'Sufficient evidence reviewed'.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-dc6671156d134e9eb12b057cf34f6556",
+            "EV-602e48c993cb4db1842293fe7b29fc11"
+          ],
+          "rationale": "The PE header and format records show PE32+, x64, is_dll false, and the executable image flag set."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "Visible entries 7 (_exit) and 13 (sprintf_s) come from msvcrt.dll. The ulib.dll entries 15-31 are MBSTR string comparisons and ARGUMENT_LEXEMIZER/STRING_ARGUMENT parsing. No network or process APIs appear among the 32 visible entries, and the claim is scoped to visible imports."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-3d570d533a1f441d8ca7bd20a105a879"
+          ],
+          "rationale": "The raw score is 0.003809 and the label is benign. The claim reports this as model output."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "visible_entries is 32 and provider_total_entries is 112. The coverage limitation is accurate."
+        },
+        {
+          "claim_id": "C5",
+          "verdict": "UNSUPPORTED",
+          "tags": [
+            "SCOPE_OVERCLAIM"
+          ],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "Only 32 of 112 entries were visible. Committed entries 32-63 were reachable only by further page reads that were not made, and entries 64-111 were never committed. Absence over the whole table cannot follow. The whole-table claim depends on the never-committed entries, so the access class is beyond limits.",
+          "evidence_access": "INACCESSIBLE_BEYOND_LIMITS"
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "No network sockets, process creation, or memory manipulation APIs are present in the 32 visible entries.",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "This is correctly scoped to the visible slice, and it matches entries 0-31."
+        },
+        {
+          "text": "Network/process capabilities are not explicitly declared in the visible import table.",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "This is scoped to the visible table and matches the entries."
+        }
+      ]
+    },
+    {
+      "item_id": "J-ac036971aa",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "There are few material statements, and all are supported by visible evidence. The embedded prediction block matches EV-735319270c734b198bfdba0310f064e4: benign, raw 0.00381, threshold 0.832, not calibrated. 'Concrete imports unavailable' is true, since no import-detail record is in the visible case state. 'Static only, no runtime behaviour observed' matches the record limitations. Nothing is overclaimed.",
+          "evidence_ids": [
+            "EV-735319270c734b198bfdba0310f064e4"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "The label and score statements trace to the prediction record reproduced verbatim in prediction_shown, which matches EV-735319270c734b198bfdba0310f064e4. The limitation statements match that record's own limitations and the absence of any import-detail record. No misattribution or scope error was found.",
+          "evidence_ids": [
+            "EV-735319270c734b198bfdba0310f064e4"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 2,
+          "rationale": "The report states the limitations that matter here: static prediction only, uncalibrated raw score, and concrete imports unavailable, which bears directly on the import question. The conclusion is limited to a MONITOR suggestion with no capability or benignity claims beyond them.",
+          "evidence_ids": [
+            "EV-735319270c734b198bfdba0310f064e4"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR is proportionate and leaves the decision with a human. No self-confirming argument is made: the report only states the model label and caveats. The justification is thin, though. It rests solely on the model output, with no independent evidence weighed, so it is acceptable but weakly justified.",
+          "evidence_ids": [
+            "EV-735319270c734b198bfdba0310f064e4"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning appears. The report notes that imports are unavailable but never proposes collecting them or any other step.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [],
+      "additional_claims": [
+        {
+          "text": "Mô hình tĩnh phân loại BENIGN (static model classifies BENIGN).",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-735319270c734b198bfdba0310f064e4"
+          ],
+          "rationale": "This matches the predicted_label, stated as model output."
+        },
+        {
+          "text": "raw score uncalibrated",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-735319270c734b198bfdba0310f064e4"
+          ],
+          "rationale": "The record sets score_is_calibrated_probability=false."
+        },
+        {
+          "text": "concrete imports unavailable",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-6b04213bb5b948f2b39fb6e912e8bc80",
+            "EV-735319270c734b198bfdba0310f064e4"
+          ],
+          "rationale": "The visible case state has no import-detail record, and the header record's limitations say imports are not collected."
+        },
+        {
+          "text": "phân tích chỉ dựa trên đặc trưng tĩnh, không quan sát hành vi runtime (static features only, no runtime behaviour observed)",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-735319270c734b198bfdba0310f064e4"
+          ],
+          "rationale": "This matches the prediction record's limitations."
+        }
+      ]
+    },
+    {
+      "item_id": "J-bcc0b9c89e",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 0,
+          "rationale": "C5 asserts runtime behaviour: 'When executed, the program writes its comparison results to a log file on disk'. Only static declared imports were seen (EV-b625416e0e5044b99ac9f8f7ab2ec5e4, entries 0-31). No file-write API is visible there, and nothing was executed. This is a runtime-behaviour overclaim with no static basis. C1-C4 are supported.",
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+            "EV-3d570d533a1f441d8ca7bd20a105a879",
+            "EV-dc6671156d134e9eb12b057cf34f6556",
+            "EV-602e48c993cb4db1842293fe7b29fc11"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 0,
+          "rationale": "C5 ties the log-file-writing behaviour to EV-b625416e0e5044b99ac9f8f7ab2ec5e4. That record carries only declared import names, and none of its visible entries is a file-write API. The statement is attributed to a source that does not carry it, which is a misattribution separate from the factual overclaim. The other claims trace correctly.",
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 0,
+          "rationale": "The report itself states 'Static analysis cannot confirm runtime behavior', yet C5 asserts specific runtime behaviour as OBSERVED. It contradicts its own stated limitation. The uncalibrated-score limitation is also not mentioned.",
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+            "EV-3d570d533a1f441d8ca7bd20a105a879"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR with MEDIUM confidence is proportionate: the score is far below threshold, the visible imports are benign-looking CRT/ulib entries, and coverage is partial. The decision leans on the import review and stated coverage limits, not on the label confirming itself. The human decision is preserved. The C5 error is scored under R1/R2. The real visible evidence does not change the proportionality of the action.",
+          "evidence_ids": [
+            "EV-3d570d533a1f441d8ca7bd20a105a879",
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No text anywhere proposes a next step, such as reading the remaining import entries or doing dynamic analysis. The report only restates limitations and says 'Sufficient evidence reviewed'.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-dc6671156d134e9eb12b057cf34f6556",
+            "EV-602e48c993cb4db1842293fe7b29fc11"
+          ],
+          "rationale": "The PE header and format records show PE32+, x64, is_dll false, and the executable image flag set."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "Visible entries 7 (_exit) and 13 (sprintf_s) come from msvcrt.dll. The ulib.dll entries 15-31 are MBSTR string comparisons and ARGUMENT_LEXEMIZER/STRING_ARGUMENT parsing. No network or process APIs appear among the 32 visible entries, and the claim is scoped to visible imports."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-3d570d533a1f441d8ca7bd20a105a879"
+          ],
+          "rationale": "The raw score is 0.003809 and the label is benign. The claim reports this as model output."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "visible_entries is 32 and provider_total_entries is 112. The coverage limitation is accurate."
+        },
+        {
+          "claim_id": "C5",
+          "verdict": "UNSUPPORTED",
+          "tags": [
+            "RUNTIME_BEHAVIOUR_OVERCLAIM",
+            "WRONG_ATTRIBUTION"
+          ],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "No execution or dynamic evidence exists, and no visible import (or committed import) indicates log-file writing. Static data cannot establish what the program writes when executed.",
+          "evidence_access": "NO_STATIC_SOURCE"
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "No network sockets, process creation, or memory manipulation APIs are present in the 32 visible entries.",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "This is correctly scoped to the visible slice, and it matches entries 0-31."
+        },
+        {
+          "text": "Network/process capabilities are not explicitly declared in the visible import table.",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "This is scoped to the visible table and matches the entries."
+        }
+      ]
+    },
+    {
+      "item_id": "J-c1688ae642",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "Every material claim is supported by evidence the author saw and is scoped to it. C1 is supported by the PE header and format records. C2 and C4 match the visible import slice (entries 0-31: msvcrt.dll and ulib.dll only, 32 of 112) and are explicitly limited to it. C3 matches the prediction record. C5 is a correct limitation that declared imports do not establish runtime network use. The explanation's absence statement is limited to the 32 visible entries.",
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+            "EV-3d570d533a1f441d8ca7bd20a105a879",
+            "EV-dc6671156d134e9eb12b057cf34f6556",
+            "EV-602e48c993cb4db1842293fe7b29fc11"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "Each statement cites the record that carries it, with the right scope. Import statements cite EV-b625416e0e5044b99ac9f8f7ab2ec5e4 and are framed as the 32 visible of 112 entries. C2's resolved refs (entries 7 and 13) are correct. The score cites EV-3d570d533a1f441d8ca7bd20a105a879, and header facts cite EV-dc6671156d134e9eb12b057cf34f6556 and EV-602e48c993cb4db1842293fe7b29fc11.",
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+            "EV-3d570d533a1f441d8ca7bd20a105a879",
+            "EV-dc6671156d134e9eb12b057cf34f6556",
+            "EV-602e48c993cb4db1842293fe7b29fc11"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 1,
+          "rationale": "Case-specific limitations are stated: 32 of 112 entries visible, absence not definitive, and dynamically resolved APIs and runtime behaviour not covered. Partial coverage tempers the main conclusion (MEDIUM confidence, MONITOR). The report never says the raw score is not a calibrated probability, but it doesn't treat the score as a probability either, so this is a missing limitation without overreach.",
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+            "EV-3d570d533a1f441d8ca7bd20a105a879"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR with MEDIUM confidence is proportionate: the score is far below threshold, the visible imports are benign-looking CRT/ulib entries, and coverage is partial. The decision leans on the import review and stated coverage limits, not on the label confirming itself. The human decision is preserved. The C5 error is scored under R1/R2. The real visible evidence does not change the proportionality of the action.",
+          "evidence_ids": [
+            "EV-3d570d533a1f441d8ca7bd20a105a879",
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No text anywhere proposes a next step, such as reading the remaining import entries or doing dynamic analysis. The report only restates limitations and says 'Sufficient evidence reviewed'.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-dc6671156d134e9eb12b057cf34f6556",
+            "EV-602e48c993cb4db1842293fe7b29fc11"
+          ],
+          "rationale": "The PE header and format records show PE32+, x64, is_dll false, and the executable image flag set."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "Visible entries 7 (_exit) and 13 (sprintf_s) come from msvcrt.dll. The ulib.dll entries 15-31 are MBSTR string comparisons and ARGUMENT_LEXEMIZER/STRING_ARGUMENT parsing. No network or process APIs appear among the 32 visible entries, and the claim is scoped to visible imports."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-3d570d533a1f441d8ca7bd20a105a879"
+          ],
+          "rationale": "The raw score is 0.003809 and the label is benign. The claim reports this as model output."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "visible_entries is 32 and provider_total_entries is 112. The coverage limitation is accurate."
+        },
+        {
+          "claim_id": "C5",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "This is a correct limitation, matching the record's own note: 'Declared static imports only; does not prove runtime use'."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "No network sockets, process creation, or memory manipulation APIs are present in the 32 visible entries.",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "This is correctly scoped to the visible slice, and it matches entries 0-31."
+        },
+        {
+          "text": "Network/process capabilities are not explicitly declared in the visible import table.",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "This is scoped to the visible table and matches the entries."
+        }
+      ]
+    },
+    {
+      "item_id": "J-dad1e09c99",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 1,
+          "rationale": "C1-C3 are supported by the header, prediction and format records, and the missing-import limitation is accurate. Some free-text wording is loose. The explanation says the low score suggests 'no strong indicators of malicious behavior were found in the static PE analysis', but no indicator analysis was done; only the model score exists. The reason says there is 'sufficient evidence to assess declared capabilities' although no imports were collected. Both are hedged and not central to the INSUFFICIENT_EVIDENCE conclusion.",
+          "evidence_ids": [
+            "EV-5aac269c2d1b44da84d4048a59152476",
+            "EV-f82d740aa83144c19b08b0de3e4e0500",
+            "EV-c321d3999b58413784cb3b30d540504e"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "Each material statement traces to the record that carries it. The label and score go to EV-5aac269c2d1b44da84d4048a59152476, and the x64/non-DLL structure to EV-f82d740aa83144c19b08b0de3e4e0500. The missing-imports limitation goes to EV-c321d3999b58413784cb3b30d540504e, whose limitations state that imports are not collected. No scope misattribution was found.",
+          "evidence_ids": [
+            "EV-5aac269c2d1b44da84d4048a59152476",
+            "EV-f82d740aa83144c19b08b0de3e4e0500",
+            "EV-c321d3999b58413784cb3b30d540504e"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 2,
+          "rationale": "The report states the limitations specific to this case: no import bindings retrieved, uncalibrated score, and no runtime behaviour observed. These actually constrain the conclusion: alignment INSUFFICIENT_EVIDENCE, and an explicit refusal to state what the file does.",
+          "evidence_ids": [
+            "EV-5aac269c2d1b44da84d4048a59152476",
+            "EV-c321d3999b58413784cb3b30d540504e"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR with INSUFFICIENT_EVIDENCE is proportionate. The score is described only as a model output ('does not appear highly suspicious based on current features'), not as independent proof, and the missing imports are explicitly said to block a capability conclusion. The human decision is preserved.",
+          "evidence_ids": [
+            "EV-5aac269c2d1b44da84d4048a59152476"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "The report identifies the missing import declarations as the gap but explicitly says 'no further tool calls required'. No next-step reasoning appears.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-f82d740aa83144c19b08b0de3e4e0500"
+          ],
+          "rationale": "PE32+ x64, is_dll false, executable image."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-5aac269c2d1b44da84d4048a59152476"
+          ],
+          "rationale": "Raw 0.003809 and label benign, as model output."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-c321d3999b58413784cb3b30d540504e",
+            "EV-f82d740aa83144c19b08b0de3e4e0500"
+          ],
+          "rationale": "No import-detail record is visible, and the cited record's limitations say imports are not collected."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "suggesting no strong indicators of malicious behavior were found in the static PE analysis",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-5aac269c2d1b44da84d4048a59152476"
+          ],
+          "rationale": "The model score is low, but no separate indicator analysis was performed. 'Malicious behavior' is loose wording for a static feature score."
+        },
+        {
+          "text": "Sufficient evidence to assess declared capabilities and identify gaps",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-c321d3999b58413784cb3b30d540504e"
+          ],
+          "rationale": "No declared imports were available, so declared capabilities could not be assessed. Only the gaps could be identified."
+        }
+      ]
+    },
+    {
+      "item_id": "J-e6db5a5ba4",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 2,
+          "rationale": "Every material claim is supported by evidence the author saw and is scoped to it. C1 is supported by the PE header and format records. C2 and C4 match the visible import slice (entries 0-31: msvcrt.dll and ulib.dll only, 32 of 112) and are explicitly limited to it. C3 matches the prediction record. The explanation's absence statement is limited to the 32 visible entries.",
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+            "EV-3d570d533a1f441d8ca7bd20a105a879",
+            "EV-dc6671156d134e9eb12b057cf34f6556",
+            "EV-602e48c993cb4db1842293fe7b29fc11"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 2,
+          "rationale": "Each statement is traced to the record that carries it, with correct scope. Import statements cite EV-b625416e0e5044b99ac9f8f7ab2ec5e4 and are framed as the 32 visible of 112 entries. C2's resolved refs (entries 7 and 13) are correct. The score goes to EV-3d570d533a1f441d8ca7bd20a105a879, and header facts go to EV-dc6671156d134e9eb12b057cf34f6556 and EV-602e48c993cb4db1842293fe7b29fc11.",
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+            "EV-3d570d533a1f441d8ca7bd20a105a879",
+            "EV-dc6671156d134e9eb12b057cf34f6556",
+            "EV-602e48c993cb4db1842293fe7b29fc11"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 1,
+          "rationale": "Case-specific limitations are stated: 32 of 112 entries visible, absence not definitive, and dynamically resolved APIs and runtime behaviour not covered. Partial coverage tempers the main conclusion (MEDIUM confidence, MONITOR). The report never says the raw score is not a calibrated probability, but it doesn't treat the score as a probability either, so this is a missing limitation without overreach.",
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+            "EV-3d570d533a1f441d8ca7bd20a105a879"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR with MEDIUM confidence is proportionate: the score is far below threshold, the visible imports are benign-looking CRT/ulib entries, and coverage is partial. The decision leans on the import review and stated coverage limits, not on the label confirming itself. The human decision is preserved. The C5 error is scored under R1/R2. The real visible evidence does not change the proportionality of the action.",
+          "evidence_ids": [
+            "EV-3d570d533a1f441d8ca7bd20a105a879",
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No text anywhere proposes a next step, such as reading the remaining import entries or doing dynamic analysis. The report only restates limitations and says 'Sufficient evidence reviewed'.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-dc6671156d134e9eb12b057cf34f6556",
+            "EV-602e48c993cb4db1842293fe7b29fc11"
+          ],
+          "rationale": "The PE header and format records show PE32+, x64, is_dll false, and the executable image flag set."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "Visible entries 7 (_exit) and 13 (sprintf_s) come from msvcrt.dll. The ulib.dll entries 15-31 are MBSTR string comparisons and ARGUMENT_LEXEMIZER/STRING_ARGUMENT parsing. No network or process APIs appear among the 32 visible entries, and the claim is scoped to visible imports."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-3d570d533a1f441d8ca7bd20a105a879"
+          ],
+          "rationale": "The raw score is 0.003809 and the label is benign. The claim reports this as model output."
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "visible_entries is 32 and provider_total_entries is 112. The coverage limitation is accurate."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "No network sockets, process creation, or memory manipulation APIs are present in the 32 visible entries.",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "This is correctly scoped to the visible slice, and it matches entries 0-31."
+        },
+        {
+          "text": "Network/process capabilities are not explicitly declared in the visible import table.",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+          ],
+          "rationale": "This is scoped to the visible table and matches the entries."
+        }
+      ]
+    },
+    {
+      "item_id": "J-ed9f421c31",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 0,
+          "rationale": "The explanation and notes assert that the 65 KB size is 'unusually small for a standard executable' and 'raises suspicion of a packed payload or incomplete scan'. Nothing the author saw supports this. The size (65536 bytes) is visible only in the target snapshot, and there is no entropy, section or packer evidence; the judgment rests on outside assumptions. The report also cites the header limitation 'no ... malware score or verdict is collected' in a way that suggests no score exists, while a prediction record (EV-0cd8be0e338844a98b85b2e757cdb0f6) was visible. C1 and C2 are supported.",
+          "evidence_ids": [
+            "EV-3e2a3257e0ca4323a24ad6ec53d734f8",
+            "EV-2d65a98bfbac40da81273f887a43d37b",
+            "EV-0cd8be0e338844a98b85b2e757cdb0f6"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 0,
+          "rationale": "C3 ties the 65 KB file size to the format record EV-2d65a98bfbac40da81273f887a43d37b, which carries no size field. C2 ties 'static analysis tools did not extract imports' to the prediction record EV-0cd8be0e338844a98b85b2e757cdb0f6, which says nothing about import extraction. These statements are attributed to sources that don't carry them.",
+          "evidence_ids": [
+            "EV-2d65a98bfbac40da81273f887a43d37b",
+            "EV-0cd8be0e338844a98b85b2e757cdb0f6",
+            "EV-3e2a3257e0ca4323a24ad6ec53d734f8"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 1,
+          "rationale": "The key case limitation, no import table data, is stated and drives LOW confidence and INSUFFICIENT_EVIDENCE. But the packing/obfuscation suspicion is not bounded by the equally relevant lack of entropy or section data. The report also never mentions the available but uncalibrated prediction score, so its limitation picture is incomplete.",
+          "evidence_ids": [
+            "EV-3e2a3257e0ca4323a24ad6ec53d734f8",
+            "EV-0cd8be0e338844a98b85b2e757cdb0f6"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR with LOW confidence is an acceptable, human-preserving action, and there is no self-corroboration. The justification is weakened by an unsupported suspicion signal (size implies packing) that the action neither follows from nor rebuts, and by ignoring the visible prediction record. This is a minor inconsistency.",
+          "evidence_ids": [
+            "EV-0cd8be0e338844a98b85b2e757cdb0f6",
+            "EV-3e2a3257e0ca4323a24ad6ec53d734f8"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "The report says import data is required to answer the question but proposes no step, such as running the import analyzer or checking entropy for the packing hypothesis. The stop_reason only declares insufficiency.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-3e2a3257e0ca4323a24ad6ec53d734f8"
+          ],
+          "rationale": "PE32+ x64 executable. No import data is present in the visible evidence."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [
+            "WRONG_ATTRIBUTION"
+          ],
+          "evidence_ids": [
+            "EV-3e2a3257e0ca4323a24ad6ec53d734f8",
+            "EV-2d65a98bfbac40da81273f887a43d37b"
+          ],
+          "rationale": "It is true that no import data was extracted, per the header/format limitations and the absence of an import record. The cited prediction record does not carry this."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "UNSUPPORTED",
+          "tags": [
+            "OUTSIDE_EVIDENCE_KNOWLEDGE",
+            "WRONG_ATTRIBUTION"
+          ],
+          "evidence_ids": [
+            "EV-2d65a98bfbac40da81273f887a43d37b"
+          ],
+          "rationale": "The size appears only in the target snapshot, not in the cited format record. Judging 65 KB 'unusually small' and linking it to packing or masked imports relies on outside assumptions. No entropy or section evidence exists to support packing. The material does not show whether such data was reachable, so the conservative access value is used.",
+          "evidence_access": "INACCESSIBLE_BEYOND_LIMITS"
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "The small file size raises suspicion of a packed payload or incomplete scan.",
+          "verdict": "UNSUPPORTED",
+          "tags": [
+            "OUTSIDE_EVIDENCE_KNOWLEDGE"
+          ],
+          "evidence_ids": [
+            "EV-3e2a3257e0ca4323a24ad6ec53d734f8",
+            "EV-2d65a98bfbac40da81273f887a43d37b"
+          ],
+          "rationale": "No visible record bears on packing or scan completeness. The header and format records report a structurally valid PE, and file size alone is not evidence of packing.",
+          "evidence_access": "INACCESSIBLE_BEYOND_LIMITS"
+        },
+        {
+          "text": "The provided evidence ... explicitly states that 'no signature trust, imports, entropy, malware score or verdict is collected.'",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-3e2a3257e0ca4323a24ad6ec53d734f8",
+            "EV-0cd8be0e338844a98b85b2e757cdb0f6"
+          ],
+          "rationale": "The quote is accurate as the header/format records' limitation text. But a malware prediction record was visible, so presenting the quote as the state of the evidence is misleading."
+        },
+        {
+          "text": "Without access to the import table ... it is impossible to determine if the binary declares network capabilities.",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-3e2a3257e0ca4323a24ad6ec53d734f8"
+          ],
+          "rationale": "No import record is visible, so this is an accurate limitation."
+        }
+      ]
+    },
+    {
+      "item_id": "J-f782d4308c",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 0,
+          "rationale": "Several material statements fail. (1) The reason says 'the target file path differs from its hash, indicating potential mismatch'. The visible target_ref shows identity_strength STRONG with a verified sha256 matching the path, and the report's own note says the hash matches. This is contradicted by visible evidence. (2) The reason says 'a benign executable with no network-related imports' without scoping it to the 16 visible entries. The committed but unread entries 26-34 are WS2_32.dll imports and 37-41 are IPHLPAPI Icmp* imports, so the reference contradicts it. (3) 'The prediction model confirms low risk' treats the model as truth. (4) '40KB ... unusually small for tracert.exe' relies on outside assumptions. C1 and C4 are supported.",
+          "evidence_ids": [
+            "EV-4907d6fa745a423da9f42f227c9fbf3d",
+            "EV-485a9199a27b4e4cb7cba3611c85c06b",
+            "EV-32473c187e8e41f6ac0b143c29b94b55",
+            "EV-84c8ed6750144f5e93bff14b03e6a8b9"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 0,
+          "rationale": "C3 ties the 40960-byte size to the header and format records (EV-32473c187e8e41f6ac0b143c29b94b55, EV-84c8ed6750144f5e93bff14b03e6a8b9), which carry no size; size appears only in the target snapshot. The reason presents the visible 16-entry slice of EV-4907d6fa745a423da9f42f227c9fbf3d as the whole import picture ('no network-related imports'). Both are misattributions of source or scope.",
+          "evidence_ids": [
+            "EV-32473c187e8e41f6ac0b143c29b94b55",
+            "EV-84c8ed6750144f5e93bff14b03e6a8b9",
+            "EV-4907d6fa745a423da9f42f227c9fbf3d"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 0,
+          "rationale": "C4 and the notes correctly state that only 16 of 64 committed imports are visible and that hidden network APIs cannot be ruled out. The free-text reason then concludes 'a benign executable with no network-related imports' and that 'the prediction model confirms low risk'. The report contradicts its own stated coverage limitation, and the uncalibrated-score limitation is not stated.",
+          "evidence_ids": [
+            "EV-4907d6fa745a423da9f42f227c9fbf3d",
+            "EV-485a9199a27b4e4cb7cba3611c85c06b"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 1,
+          "rationale": "MONITOR plus identity verification is a proportionate, human-preserving action. The stated justification, though, leans partly on semantic self-corroboration ('The prediction model confirms low risk') and on a spurious identity-mismatch concern that contradicts the verified digest. The action is acceptable but inconsistently justified.",
+          "evidence_ids": [
+            "EV-485a9199a27b4e4cb7cba3611c85c06b",
+            "EV-4907d6fa745a423da9f42f227c9fbf3d"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 1,
+          "rationale": "The explanation proposes a specific step: 'warrants verification of the file's actual identity'. But the unknown it targets is spurious, because the visible target_ref already has a STRONG verified sha256 for the path. No step addresses the real case unknown, the 48 unread committed import entries. Credit is limited to a step that does not resolve a genuine unknown of this case.",
+          "evidence_ids": [
+            "EV-4907d6fa745a423da9f42f227c9fbf3d"
+          ]
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-4907d6fa745a423da9f42f227c9fbf3d"
+          ],
+          "rationale": "Visible entries 0-15 are all msvcrt.dll (exit, memcpy, fgetpos, fwprintf, ...), with no network or process APIs among them. The claim is scoped to 'visible'."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [
+            "SCORE_AS_PROBABILITY_OR_TRUTH"
+          ],
+          "evidence_ids": [
+            "EV-485a9199a27b4e4cb7cba3611c85c06b"
+          ],
+          "rationale": "The label and raw 0.00638 are correct. 'Indicating low likelihood of malicious behavior' reads an uncalibrated static score as a likelihood of behaviour."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "UNSUPPORTED",
+          "tags": [
+            "OUTSIDE_EVIDENCE_KNOWLEDGE",
+            "WRONG_ATTRIBUTION"
+          ],
+          "evidence_ids": [
+            "EV-32473c187e8e41f6ac0b143c29b94b55",
+            "EV-84c8ed6750144f5e93bff14b03e6a8b9"
+          ],
+          "rationale": "PE32+ x64 is supported. The size is visible only in the target snapshot, not in the cited records, and 'unusually small for tracert.exe' depends on outside expectations that no visible evidence supports.",
+          "evidence_access": "NO_STATIC_SOURCE"
+        },
+        {
+          "claim_id": "C4",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-4907d6fa745a423da9f42f227c9fbf3d"
+          ],
+          "rationale": "visible_entries is 16 and committed_entries is 64. The limitation is correctly worded."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "the target file path differs from its hash, indicating potential mismatch or sandboxed artifact",
+          "verdict": "CONTRADICTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-4907d6fa745a423da9f42f227c9fbf3d"
+          ],
+          "rationale": "The visible target_ref shows identity_strength STRONG with a verified sha256 (415e7396...) for C:\\Windows\\System32\tracert.exe, matching the import record's target_sha256. The report's own uncertainty note says the SHA256 matches.",
+          "evidence_access": "AGENT_VISIBLE"
+        },
+        {
+          "text": "Static analysis reveals a benign executable with no network-related imports.",
+          "verdict": "CONTRADICTED",
+          "tags": [
+            "SCOPE_OVERCLAIM",
+            "SCORE_AS_PROBABILITY_OR_TRUTH"
+          ],
+          "evidence_ids": [
+            "EV-4907d6fa745a423da9f42f227c9fbf3d"
+          ],
+          "rationale": "This is unscoped. The committed import record contains WS2_32.dll entries 26-34 (GetAddrInfoW, WSAIoctl, ...) and IPHLPAPI Icmp* entries 37-41, which were reachable by further page reads but not retrieved. 'Benign executable' is stated as fact.",
+          "evidence_access": "ACCESSIBLE_NOT_RETRIEVED"
+        },
+        {
+          "text": "The prediction model confirms low risk.",
+          "verdict": "UNSUPPORTED",
+          "tags": [
+            "SEMANTIC_SELF_CORROBORATION",
+            "SCORE_AS_PROBABILITY_OR_TRUTH"
+          ],
+          "evidence_ids": [
+            "EV-485a9199a27b4e4cb7cba3611c85c06b"
+          ],
+          "rationale": "It uses the detector output as confirmation, although the record is an uncalibrated static score.",
+          "evidence_access": "NO_STATIC_SOURCE"
+        },
+        {
+          "text": "the file size of 40KB for a System32 executable named tracert.exe is anomalous and warrants verification of the file's actual identity",
+          "verdict": "UNSUPPORTED",
+          "tags": [
+            "OUTSIDE_EVIDENCE_KNOWLEDGE"
+          ],
+          "evidence_ids": [],
+          "rationale": "No visible evidence establishes an expected size, and the file identity is already strongly verified by digest.",
+          "evidence_access": "NO_STATIC_SOURCE"
+        }
+      ]
+    },
+    {
+      "item_id": "J-fa25a5b025",
+      "criteria": {
+        "R1_factual_support": {
+          "score": 1,
+          "rationale": "The central claims are supported. C1 matches the header, C2 the prediction record, and C3 correctly notes that no import bindings were observed. Peripheral statements are loose or unsupported. The report attributes the missing imports to 'missing evidence pages', but no import record or paging exists in the visible evidence. 'The target SHA256 matches a known system file' leans on outside knowledge; the evidence only binds the digest to the path. 'Predicted benign behavior' is loose wording. None of these drives the INSUFFICIENT_EVIDENCE conclusion.",
+          "evidence_ids": [
+            "EV-0cd8be0e338844a98b85b2e757cdb0f6",
+            "EV-3e2a3257e0ca4323a24ad6ec53d734f8",
+            "EV-2d65a98bfbac40da81273f887a43d37b"
+          ]
+        },
+        "R2_evidence_traceability": {
+          "score": 1,
+          "rationale": "There is no misattribution in the claims. C1 and C3 cite the header record (whose limitations say imports are not collected), and C2 cites the prediction record. But the 'missing evidence pages' explanation and 'matches a known system file' cannot be traced to any source.",
+          "evidence_ids": [
+            "EV-0cd8be0e338844a98b85b2e757cdb0f6",
+            "EV-3e2a3257e0ca4323a24ad6ec53d734f8"
+          ]
+        },
+        "R7_uncertainty_limitations": {
+          "score": 2,
+          "rationale": "The report states the limitations that matter here: no import bindings observed, a prediction built on raw features without runtime context, and static analysis unable to rule out obfuscation. These keep the conclusion at LOW confidence and INSUFFICIENT_EVIDENCE, with no capability claims.",
+          "evidence_ids": [
+            "EV-0cd8be0e338844a98b85b2e757cdb0f6",
+            "EV-3e2a3257e0ca4323a24ad6ec53d734f8"
+          ]
+        },
+        "R8_decision_quality_safety": {
+          "score": 2,
+          "rationale": "MONITOR with LOW confidence and INSUFFICIENT_EVIDENCE is proportionate. The model label is not used as proof, and the 'legitimate system utility' remark is hedged ('suggests ... may be'). The human decision is preserved.",
+          "evidence_ids": [
+            "EV-0cd8be0e338844a98b85b2e757cdb0f6"
+          ]
+        },
+        "R9_next_step_planning": {
+          "score": 0,
+          "rationale": "No next-step reasoning appears. The stop_reason says limitations 'prevent further tool execution', and the report proposes nothing to obtain the missing imports.",
+          "evidence_ids": []
+        }
+      },
+      "claims": [
+        {
+          "claim_id": "C1",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-3e2a3257e0ca4323a24ad6ec53d734f8"
+          ],
+          "rationale": "PE32+, x64, is_dll false."
+        },
+        {
+          "claim_id": "C2",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-0cd8be0e338844a98b85b2e757cdb0f6"
+          ],
+          "rationale": "Label benign, raw 0.001174, from model dacn-lgbm. The model name abbreviation matches model_id."
+        },
+        {
+          "claim_id": "C3",
+          "verdict": "SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-3e2a3257e0ca4323a24ad6ec53d734f8"
+          ],
+          "rationale": "No import record is visible, and the header record's limitations state that imports are not collected."
+        }
+      ],
+      "additional_claims": [
+        {
+          "text": "failed to extract specific import bindings or network capability indicators due to missing evidence pages",
+          "verdict": "UNSUPPORTED",
+          "tags": [
+            "WRONG_ATTRIBUTION"
+          ],
+          "evidence_ids": [
+            "EV-3e2a3257e0ca4323a24ad6ec53d734f8"
+          ],
+          "rationale": "No import-detail record or paging metadata exists in the visible evidence. Imports were simply not collected, so the 'missing pages' cause is invented. The material does not show whether an import analysis was reachable.",
+          "evidence_access": "INACCESSIBLE_BEYOND_LIMITS"
+        },
+        {
+          "text": "The target SHA256 matches a known system file (findstr.exe)",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [
+            "OUTSIDE_EVIDENCE_KNOWLEDGE"
+          ],
+          "evidence_ids": [],
+          "rationale": "The verified digest is bound to the path C:\\Windows\\System32\findstr.exe in the target_ref. No known-good reference or signature check exists to establish it as a 'known system file'."
+        },
+        {
+          "text": "The malware model predicted benign behavior based on feature extraction",
+          "verdict": "PARTIALLY_SUPPORTED",
+          "tags": [],
+          "evidence_ids": [
+            "EV-0cd8be0e338844a98b85b2e757cdb0f6"
+          ],
+          "rationale": "The benign label is correct. 'Behavior' is loose for a static feature-based classifier."
+        }
+      ]
+    }
+  ]
+}

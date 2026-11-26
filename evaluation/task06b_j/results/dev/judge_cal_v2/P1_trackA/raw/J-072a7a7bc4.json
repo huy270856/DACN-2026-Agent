@@ -1,0 +1,107 @@
+{
+ "item_id": "J-072a7a7bc4",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 2,
+   "rationale": "The header facts (PE32+, x64, not a DLL) match EV-dc66/EV-602e. The listed msvcrt/ulib imports (_exit idx 7, sprintf_s idx 13, MBSTR string compares, ARGUMENT_LEXEMIZER) are in the 32 visible entries. The prediction is quoted correctly. The absence of network/process APIs is explicitly limited to the visible 32 entries.",
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+    "EV-3d570d533a1f441d8ca7bd20a105a879",
+    "EV-dc6671156d134e9eb12b057cf34f6556",
+    "EV-602e48c993cb4db1842293fe7b29fc11"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 2,
+   "rationale": "Each claim cites the record that carries it, with the right scope: imports are framed as the 32 visible of 112 entries, and the header and prediction are cited to their own records. There is no misattribution.",
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+    "EV-3d570d533a1f441d8ca7bd20a105a879",
+    "EV-dc6671156d134e9eb12b057cf34f6556",
+    "EV-602e48c993cb4db1842293fe7b29fc11"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 2,
+   "rationale": "The limitations are case-specific: partial coverage (32/112), no proof of absence, static-only, and dynamically resolved APIs. They keep the conclusion at MONITOR with MEDIUM confidence. Score calibration is not stated, but the score is not used as a probability.",
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+    "EV-3d570d533a1f441d8ca7bd20a105a879"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 2,
+   "rationale": "MONITOR is proportionate for benign-looking visible imports with partial coverage. The conclusion rests on the import content, not on the label confirming itself, and the human decision is preserved.",
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+    "EV-3d570d533a1f441d8ca7bd20a105a879"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 0,
+   "rationale": "It names the unknown (the 80 entries it has not seen) but gives no next-step reasoning anywhere. It does not mention reading the remaining committed entries 32-63 or anything else.",
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ]
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-dc6671156d134e9eb12b057cf34f6556",
+    "EV-602e48c993cb4db1842293fe7b29fc11"
+   ],
+   "rationale": "Both records show PE32+, x64, is_dll false, and an executable image."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ],
+   "rationale": "Visible entries 0-31 are msvcrt CRT functions and ulib string/argument helpers. No socket or process APIs appear among them, and the claim is scoped to the visible imports."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-3d570d533a1f441d8ca7bd20a105a879"
+   ],
+   "rationale": "The raw score is 0.0038 with the label benign."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ],
+   "rationale": "visible_entries is 32 and provider_total_entries is 112, and the absence is correctly not generalised."
+  },
+  {
+   "claim_id": "C5",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ],
+   "rationale": "A correct limitation: declared imports are capabilities, not runtime behaviour."
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "No network sockets, process creation, or memory manipulation APIs are present in the 32 visible entries.",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ],
+   "rationale": "Correct for entries 0-31 (memmove is a CRT copy, not a memory-manipulation API in this sense)."
+  }
+ ]
+}

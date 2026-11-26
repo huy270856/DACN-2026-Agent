@@ -1,0 +1,83 @@
+{
+ "item_id": "J-564b48c9bf",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 2,
+   "rationale": "There are few claims and each is supported. The shown prediction block matches EV-2147 exactly (benign, raw 0.00638, uncalibrated). 'Concrete imports unavailable' matches the evidence: there is no import facet, and the header/format limitations say imports are not collected. 'Static features only, no runtime behaviour observed' matches the prediction limitations.",
+   "evidence_ids": [
+    "EV-2147ea23d45a4ac480c2dae55253a7f1",
+    "EV-d8da99390d3c4de78a55fe44d1a16498",
+    "EV-77661acbfd2549029103c101fa51b878"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 2,
+   "rationale": "The prediction is reproduced verbatim as an embedded record, so it is traceable. The limitation statements (uncalibrated, static-only, imports unavailable) are carried by the prediction and header/format records, and nothing is misattributed.",
+   "evidence_ids": [
+    "EV-2147ea23d45a4ac480c2dae55253a7f1",
+    "EV-d8da99390d3c4de78a55fe44d1a16498",
+    "EV-77661acbfd2549029103c101fa51b878"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 2,
+   "rationale": "It states the limitations that matter here: static prediction only, an uncalibrated raw score, no concrete imports, and no runtime observation. The conclusion stays a monitoring recommendation without claiming capabilities.",
+   "evidence_ids": [
+    "EV-2147ea23d45a4ac480c2dae55253a7f1",
+    "EV-d8da99390d3c4de78a55fe44d1a16498"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 2,
+   "rationale": "MONITOR is a safe, proportionate fallback given only a static prediction. The text reports the model classification without claiming it proves benignness, and the human decision is preserved.",
+   "evidence_ids": [
+    "EV-2147ea23d45a4ac480c2dae55253a7f1"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 0,
+   "rationale": "There is no next-step reasoning anywhere in the explanation or recommendation text.",
+   "evidence_ids": []
+  }
+ },
+ "claims": [],
+ "additional_claims": [
+  {
+   "text": "Mô hình tĩnh phân loại BENIGN (static model classifies BENIGN)",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-2147ea23d45a4ac480c2dae55253a7f1"
+   ],
+   "rationale": "predicted_label is benign."
+  },
+  {
+   "text": "raw score uncalibrated",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-2147ea23d45a4ac480c2dae55253a7f1"
+   ],
+   "rationale": "score_is_calibrated_probability is false."
+  },
+  {
+   "text": "concrete imports unavailable",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-d8da99390d3c4de78a55fe44d1a16498",
+    "EV-77661acbfd2549029103c101fa51b878"
+   ],
+   "rationale": "There is no import evidence, and the header/format limitations say imports are not collected."
+  },
+  {
+   "text": "phân tích chỉ dựa trên đặc trưng tĩnh, không quan sát hành vi runtime (static features only, no runtime behaviour observed)",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-2147ea23d45a4ac480c2dae55253a7f1"
+   ],
+   "rationale": "Matches the prediction limitation 'Static analysis only; no runtime/dynamic behaviour observed'."
+  }
+ ]
+}

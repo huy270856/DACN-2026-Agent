@@ -1,0 +1,114 @@
+{
+ "item_id": "J-0b6a6ceaa9",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 0,
+   "rationale": "C1 and the explanation say the PE has 'no declared imports' / 'no imports are declared'. The visible evidence has no import facet at all, and the header/format limitations say imports are not collected. Turning missing data into absence over the whole file is a SCOPE_OVERCLAIM.",
+   "evidence_ids": [
+    "EV-e7eb2e69d0644654aad56710a403b358",
+    "EV-480b21a3a9a4463aa4d7239a83744256"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 0,
+   "rationale": "C1 ties 'no imports are declared' to the pe_header and format records. Those records do not carry that statement; they state that imports were not collected. This is misattribution.",
+   "evidence_ids": [
+    "EV-e7eb2e69d0644654aad56710a403b358",
+    "EV-480b21a3a9a4463aa4d7239a83744256"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 0,
+   "rationale": "The uncertainty notes say no import bindings are available, yet the report also asserts there are no declared imports. Its stop/reason text says it has 'sufficient static evidence to assess declared capabilities'. Both contradict its own stated limitation, which is an independent failure from the factual error.",
+   "evidence_ids": [
+    "EV-e7eb2e69d0644654aad56710a403b358",
+    "EV-480b21a3a9a4463aa4d7239a83744256",
+    "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 1,
+   "rationale": "MONITOR is a safe fallback and preserves human review. But MEDIUM confidence and 'sufficient evidence' are inconsistent with having no import data. The only supporting ID is the prediction, though the report does not argue that the label confirms itself, so this is acceptable but weakly justified.",
+   "evidence_ids": [
+    "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 0,
+   "rationale": "There is no next-step reasoning anywhere; the text only says capabilities cannot be confirmed.",
+   "evidence_ids": []
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "UNSUPPORTED",
+   "tags": [
+    "SCOPE_OVERCLAIM",
+    "WRONG_ATTRIBUTION"
+   ],
+   "evidence_ids": [
+    "EV-e7eb2e69d0644654aad56710a403b358",
+    "EV-480b21a3a9a4463aa4d7239a83744256"
+   ],
+   "rationale": "The PE32+/x64 part is supported. 'No imports are declared' is not: imports were never collected (stated in the visible header/format limitations).",
+   "evidence_access": "AGENT_VISIBLE"
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+   ],
+   "rationale": "The raw score is 0.00638 with the label benign."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "PARTIALLY_SUPPORTED",
+   "tags": [
+    "SCOPE_OVERCLAIM"
+   ],
+   "evidence_ids": [
+    "EV-e7eb2e69d0644654aad56710a403b358",
+    "EV-480b21a3a9a4463aa4d7239a83744256"
+   ],
+   "rationale": "It is true that no import data is available. The wording 'no import bindings exist' suggests the bindings are absent from the file rather than not collected."
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "The target is a benign-looking PE32+ executable with no declared imports.",
+   "verdict": "UNSUPPORTED",
+   "tags": [
+    "SCOPE_OVERCLAIM"
+   ],
+   "evidence_ids": [
+    "EV-e7eb2e69d0644654aad56710a403b358",
+    "EV-480b21a3a9a4463aa4d7239a83744256"
+   ],
+   "rationale": "Imports were not collected, so their absence cannot be asserted.",
+   "evidence_access": "AGENT_VISIBLE"
+  },
+  {
+   "text": "Sufficient static evidence to assess declared capabilities and limitations; no new facts required.",
+   "verdict": "CONTRADICTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-e7eb2e69d0644654aad56710a403b358",
+    "EV-480b21a3a9a4463aa4d7239a83744256"
+   ],
+   "rationale": "The visible evidence contains no import data, which contradicts sufficiency; the report's own uncertainty notes say the same.",
+   "evidence_access": "AGENT_VISIBLE"
+  },
+  {
+   "text": "this is not a calibrated probability and relies on static features",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+   ],
+   "rationale": "Matches the prediction record's limitations."
+  }
+ ]
+}

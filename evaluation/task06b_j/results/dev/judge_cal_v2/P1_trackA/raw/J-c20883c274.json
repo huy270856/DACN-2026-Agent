@@ -1,0 +1,104 @@
+{
+ "item_id": "J-c20883c274",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 0,
+   "rationale": "C5 says 'When executed, the program writes its comparison results to a log file on disk'. This asserts runtime behaviour from static data. Nothing visible supports it: there is no file-write or log API among the visible entries 0-31, and no dynamic evidence exists. C1-C4 are supported.",
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 0,
+   "rationale": "C5 ties the log-file-writing behaviour to the import record EV-b625, which carries no such information (only msvcrt CRT and ulib helper declarations). This is misattribution to a source that does not carry the statement, independent of the factual error.",
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 0,
+   "rationale": "The report's own uncertainty note says 'Static analysis cannot confirm runtime behavior', yet C5 asserts specific runtime behaviour ('when executed ... writes ... to a log file'). The report contradicts its own stated limitation.",
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 2,
+   "rationale": "MONITOR is proportionate. It is justified by visible import content with acknowledged partial coverage, and the spurious log-writing claim does not change the decision. There is no self-corroboration, and the human decision is preserved.",
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+    "EV-3d570d533a1f441d8ca7bd20a105a879"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 0,
+   "rationale": "There is no next-step reasoning anywhere in the text.",
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ]
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-dc6671156d134e9eb12b057cf34f6556",
+    "EV-602e48c993cb4db1842293fe7b29fc11"
+   ],
+   "rationale": "Shows PE32+, x64, is_dll false."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ],
+   "rationale": "Visible entries are msvcrt/ulib helpers, scoped to the visible imports."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-3d570d533a1f441d8ca7bd20a105a879"
+   ],
+   "rationale": "The raw score is 0.0038 with the label benign."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ],
+   "rationale": "Shows 32 visible of 112."
+  },
+  {
+   "claim_id": "C5",
+   "verdict": "UNSUPPORTED",
+   "tags": [
+    "RUNTIME_BEHAVIOUR_OVERCLAIM",
+    "WRONG_ATTRIBUTION"
+   ],
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ],
+   "rationale": "Runtime file output cannot be established from declared imports. No visible import even declares file-write/log capability, and no runtime evidence exists.",
+   "evidence_access": "NO_STATIC_SOURCE"
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "No network sockets, process creation, or memory manipulation APIs are present in the 32 visible entries.",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ],
+   "rationale": "Correct for visible entries 0-31."
+  }
+ ]
+}

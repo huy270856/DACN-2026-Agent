@@ -1,0 +1,109 @@
+{
+ "item_id": "J-5919b10813",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 0,
+   "rationale": "C5 says 'The very low detector score independently confirms that this binary is benign'. This treats the detector output as truth and as independent confirmation of its own label. The visible prediction record says the score is NOT a calibrated probability and the analysis is static-only. C1-C4 (header, visible imports, score value, 32/112 coverage) are supported.",
+   "evidence_ids": [
+    "EV-3d570d533a1f441d8ca7bd20a105a879",
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+    "EV-dc6671156d134e9eb12b057cf34f6556",
+    "EV-602e48c993cb4db1842293fe7b29fc11"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 1,
+   "rationale": "The factual claims are traced to the correct records with correct scope (32 of 112 visible import entries). C5's 'independently confirms benign' cannot be traced to any source: the cited prediction record carries only the raw score and label. That is an untraceable statement, not a scope misattribution.",
+   "evidence_ids": [
+    "EV-3d570d533a1f441d8ca7bd20a105a879",
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 0,
+   "rationale": "The report says absence of APIs in the 32/112 slice 'is not definitive' and that 'missing imports cannot be ruled out'. C5 then claims the binary is confirmed benign. That contradicts its own stated limitation, independently of the factual error, and it also ignores the uncalibrated-score limitation.",
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+    "EV-3d570d533a1f441d8ca7bd20a105a879"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 1,
+   "rationale": "MONITOR is a safe, proportionate action, and the explanation also reasons from the visible imports. But the report contains a semantic self-corroboration claim (C5) and lists the prediction first among its supporting IDs. The justification is weakened and inconsistent with the stated uncertainty, though the decision does not rest solely on it.",
+   "evidence_ids": [
+    "EV-3d570d533a1f441d8ca7bd20a105a879",
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 0,
+   "rationale": "There is no next-step reasoning anywhere in the text.",
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ]
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-dc6671156d134e9eb12b057cf34f6556",
+    "EV-602e48c993cb4db1842293fe7b29fc11"
+   ],
+   "rationale": "Shows PE32+, x64, is_dll false."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ],
+   "rationale": "Visible entries 0-31 are msvcrt/ulib helpers, scoped to the visible imports."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-3d570d533a1f441d8ca7bd20a105a879"
+   ],
+   "rationale": "The raw score is 0.0038 with the label benign."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ],
+   "rationale": "Shows 32 visible of 112."
+  },
+  {
+   "claim_id": "C5",
+   "verdict": "UNSUPPORTED",
+   "tags": [
+    "SEMANTIC_SELF_CORROBORATION",
+    "SCORE_AS_PROBABILITY_OR_TRUTH"
+   ],
+   "evidence_ids": [
+    "EV-3d570d533a1f441d8ca7bd20a105a879"
+   ],
+   "rationale": "The detector score cannot independently confirm the detector's own label, and the record states the score is uncalibrated and static-only.",
+   "evidence_access": "AGENT_VISIBLE"
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "No network sockets, process creation, or memory manipulation APIs are present in the 32 visible entries.",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ],
+   "rationale": "Correct for visible entries 0-31."
+  }
+ ]
+}

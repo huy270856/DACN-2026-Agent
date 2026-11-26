@@ -1,0 +1,110 @@
+{
+ "item_id": "J-39753a59d1",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 0,
+   "rationale": "C5 says the raw score 0.0038 'means there is a 99.6% probability that the file is benign'. The cited prediction record says score_is_calibrated_probability=false, and its limitations say it is NOT a calibrated probability. This treats the score as a probability and is contradicted by evidence the author saw. The other claims (header, visible msvcrt/ulib imports, 32/112 coverage) are supported.",
+   "evidence_ids": [
+    "EV-3d570d533a1f441d8ca7bd20a105a879",
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+    "EV-dc6671156d134e9eb12b057cf34f6556",
+    "EV-602e48c993cb4db1842293fe7b29fc11"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 1,
+   "rationale": "The header, import and prediction facts are cited to their correct records, and the import scope is correctly 32 of 112 visible. The '99.6% probability' statement cannot be traced to any source: the cited record carries only the raw score and explicitly denies calibration. That is an untraceable statement rather than a separate scope misattribution.",
+   "evidence_ids": [
+    "EV-3d570d533a1f441d8ca7bd20a105a879",
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+    "EV-dc6671156d134e9eb12b057cf34f6556",
+    "EV-602e48c993cb4db1842293fe7b29fc11"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 1,
+   "rationale": "It states the case-specific limitations: partial import coverage (32/112), static-only, and dynamically resolved APIs. But it omits the uncalibrated-score limitation, and C5 contradicts that limitation from the evidence. The overall recommendation stays bounded (MONITOR, MEDIUM), so this is one missing case-specific limitation, not a conclusion-level overreach.",
+   "evidence_ids": [
+    "EV-3d570d533a1f441d8ca7bd20a105a879",
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 2,
+   "rationale": "MONITOR is proportionate. It is justified mainly by the visible import content under stated partial coverage, not by the probability claim or by the label confirming itself, and the human decision is preserved.",
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+    "EV-3d570d533a1f441d8ca7bd20a105a879"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 0,
+   "rationale": "There is no next-step reasoning anywhere in the text, e.g. nothing about reading the remaining import entries.",
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ]
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-dc6671156d134e9eb12b057cf34f6556",
+    "EV-602e48c993cb4db1842293fe7b29fc11"
+   ],
+   "rationale": "Shows PE32+, x64, is_dll false."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ],
+   "rationale": "Visible entries 0-31 are msvcrt/ulib helpers with no network or process APIs; the claim is scoped to the visible imports."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-3d570d533a1f441d8ca7bd20a105a879"
+   ],
+   "rationale": "The raw score is 0.0038 with the label benign."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ],
+   "rationale": "Shows 32 visible of 112 total, with the absence correctly not generalised."
+  },
+  {
+   "claim_id": "C5",
+   "verdict": "CONTRADICTED",
+   "tags": [
+    "SCORE_AS_PROBABILITY_OR_TRUTH"
+   ],
+   "evidence_ids": [
+    "EV-3d570d533a1f441d8ca7bd20a105a879"
+   ],
+   "rationale": "The prediction record states score_is_calibrated_probability=false and 'NOT a calibrated probability'.",
+   "evidence_access": "AGENT_VISIBLE"
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "No network sockets, process creation, or memory manipulation APIs are present in the 32 visible entries.",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ],
+   "rationale": "Correct for the visible entries 0-31."
+  }
+ ]
+}

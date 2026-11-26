@@ -1,0 +1,74 @@
+{
+  "item_id": "J-4b3c889396",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": "NOT_APPLICABLE"
+    },
+    "R4_new_evidence_relevance": {
+      "score": "NOT_APPLICABLE"
+    },
+    "R5_new_evidence_consumption": {
+      "score": "NOT_APPLICABLE"
+    },
+    "R6_incremental_value": {
+      "score": 0,
+      "rationale": "No tool was available and nothing beyond the initial evidence was added; the report correctly says import bindings were not observed. The 'known system file' remark is hedged and does not change the conclusion.",
+      "evidence_ids": [
+        "EV-0cd8be0e338844a98b85b2e757cdb0f6",
+        "EV-3e2a3257e0ca4323a24ad6ec53d734f8"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-3e2a3257e0ca4323a24ad6ec53d734f8"
+      ],
+      "rationale": "pe_header: PE32+, x64, is_dll false."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-0cd8be0e338844a98b85b2e757cdb0f6"
+      ],
+      "rationale": "benign, very low raw score 0.00117."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-3e2a3257e0ca4323a24ad6ec53d734f8"
+      ],
+      "rationale": "The pe_header limitation states imports are not collected."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "The target SHA256 matches a known system file (findstr.exe)",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "OUTSIDE_EVIDENCE_KNOWLEDGE"
+      ],
+      "evidence_ids": [],
+      "rationale": "The visible target_ref only ties the digest to the path C:\\Windows\\System32\\findstr.exe; no evidence compares it to a known-good reference hash.",
+      "evidence_access": "NO_STATIC_SOURCE"
+    },
+    {
+      "text": "Static analysis tools ... failed to extract specific import bindings ... due to missing evidence pages.",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [
+        "WRONG_ATTRIBUTION"
+      ],
+      "evidence_ids": [
+        "EV-3e2a3257e0ca4323a24ad6ec53d734f8"
+      ],
+      "rationale": "Imports were not collected according to the header limitation, but not because of 'missing evidence pages'; no import tool was offered."
+    }
+  ]
+}

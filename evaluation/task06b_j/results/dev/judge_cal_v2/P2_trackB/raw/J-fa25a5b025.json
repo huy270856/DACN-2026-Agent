@@ -1,0 +1,72 @@
+{
+  "item_id": "J-fa25a5b025",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability marked NOT_APPLICABLE for this item.",
+      "evidence_ids": []
+    },
+    "R4_new_evidence_relevance": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability marked NOT_APPLICABLE for this item.",
+      "evidence_ids": []
+    },
+    "R5_new_evidence_consumption": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability marked NOT_APPLICABLE for this item.",
+      "evidence_ids": []
+    },
+    "R6_incremental_value": {
+      "score": 0,
+      "rationale": "No tool was available and no new evidence was obtained. The report correctly says no import bindings were observed and capabilities stay unknown. It adds nothing beyond the initial evidence, and the vague 'missing evidence pages' rationale does not materially mislead.",
+      "evidence_ids": [
+        "EV-0cd8be0e338844a98b85b2e757cdb0f6",
+        "EV-3e2a3257e0ca4323a24ad6ec53d734f8",
+        "EV-2d65a98bfbac40da81273f887a43d37b"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-3e2a3257e0ca4323a24ad6ec53d734f8"
+      ],
+      "rationale": "PE32+, x64, is_dll false."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-0cd8be0e338844a98b85b2e757cdb0f6"
+      ],
+      "rationale": "benign, very low raw score (0.00117), model dacn-lgbm."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-3e2a3257e0ca4323a24ad6ec53d734f8",
+        "EV-2d65a98bfbac40da81273f887a43d37b"
+      ],
+      "rationale": "No import data in visible evidence; header limitations say imports are not collected."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "failed to extract specific import bindings or network capability indicators due to missing evidence pages",
+      "verdict": "UNSUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-3e2a3257e0ca4323a24ad6ec53d734f8",
+        "EV-2d65a98bfbac40da81273f887a43d37b"
+      ],
+      "rationale": "Imports were never collected because no import tool was available, as the header/format limitations say. Nothing shows 'missing evidence pages'.",
+      "evidence_access": "AGENT_VISIBLE"
+    }
+  ]
+}

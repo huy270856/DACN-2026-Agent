@@ -1,0 +1,106 @@
+{
+ "item_id": "J-5681269033",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 2,
+   "rationale": "The material claims are supported. 16 of 64 committed entries are visible, and the remaining imports are honestly called unknown. The raw score is 0.00117 with the label benign. The header shows PE32+ x64, not a DLL. Static analysis cannot prove runtime behaviour. No claim asserts absence beyond what was seen. The report does not use the visible entries (msvcrt file/string CRT), but that omission is not a factual error.",
+   "evidence_ids": [
+    "EV-e7ec6ea81c284d8e8e11487571e63e23",
+    "EV-9106bd54ab4a478982ce39c6621819ce",
+    "EV-b60235a20c6e41cb9065c9eff115009e"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 1,
+   "rationale": "The claims are cited to the correct records. The explanation's 'the import list is heavily truncated (16/64 visible)' frames the 64 committed entries as the whole list, but the record shows provider_total_entries=102. 'Missing evidence IDs suggest potential data gaps' cannot be traced to any source. C1's own wording ('out of 64 committed') is accurate, so this is not outright misattribution.",
+   "evidence_ids": [
+    "EV-e7ec6ea81c284d8e8e11487571e63e23",
+    "EV-9106bd54ab4a478982ce39c6621819ce",
+    "EV-b60235a20c6e41cb9065c9eff115009e"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 2,
+   "rationale": "The limitations are case-specific: 16/64 visible with the rest unknown, an uncalibrated static-only score, and no runtime observation. They hold the conclusion at INSUFFICIENT_EVIDENCE with LOW confidence. It does not mention the 102 provider total, but that causes no overreach.",
+   "evidence_ids": [
+    "EV-e7ec6ea81c284d8e8e11487571e63e23",
+    "EV-9106bd54ab4a478982ce39c6621819ce"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 2,
+   "rationale": "MONITOR with LOW confidence is proportionate to the truncated import view. 'Low raw score supports benign classification' only restates that the score is below the threshold and is not the basis of the decision, so the human decision is preserved.",
+   "evidence_ids": [
+    "EV-e7ec6ea81c284d8e8e11487571e63e23",
+    "EV-9106bd54ab4a478982ce39c6621819ce"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 0,
+   "rationale": "There is no next-step reasoning anywhere: the text names the unread remaining imports as unknown but proposes no action.",
+   "evidence_ids": [
+    "EV-e7ec6ea81c284d8e8e11487571e63e23"
+   ]
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-e7ec6ea81c284d8e8e11487571e63e23"
+   ],
+   "rationale": "visible_entries is 16 and committed_entries is 64; the remaining entries are not visible."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-9106bd54ab4a478982ce39c6621819ce"
+   ],
+   "rationale": "The raw score is 0.0011738 with the label benign."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-b60235a20c6e41cb9065c9eff115009e"
+   ],
+   "rationale": "Shows PE32+, x64, is_dll false."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-e7ec6ea81c284d8e8e11487571e63e23"
+   ],
+   "rationale": "Matches the import record's partial coverage and the static-only nature."
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "the import list is heavily truncated (16/64 visible)",
+   "verdict": "PARTIALLY_SUPPORTED",
+   "tags": [
+    "SCOPE_OVERCLAIM"
+   ],
+   "evidence_ids": [
+    "EV-e7ec6ea81c284d8e8e11487571e63e23"
+   ],
+   "rationale": "16 visible of 64 committed is correct, but the full import list has 102 entries per provider_total_entries."
+  },
+  {
+   "text": "Raw prediction score (0.001) is uncalibrated and static-only.",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-9106bd54ab4a478982ce39c6621819ce"
+   ],
+   "rationale": "Matches score_is_calibrated_probability=false."
+  }
+ ]
+}

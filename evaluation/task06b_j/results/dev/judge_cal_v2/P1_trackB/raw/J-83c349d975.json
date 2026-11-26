@@ -1,0 +1,78 @@
+{
+  "item_id": "J-83c349d975",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": "NOT_APPLICABLE"
+    },
+    "R4_new_evidence_relevance": {
+      "score": "NOT_APPLICABLE"
+    },
+    "R5_new_evidence_consumption": {
+      "score": "NOT_APPLICABLE"
+    },
+    "R6_incremental_value": {
+      "score": -1,
+      "rationale": "No tool was available, so there is no new evidence. The report adds misleading content: it says the analysis 'confirms the target is a benign x64 executable with no malicious indicators', that the raw score 'strongly supports this', and that no network/process imports were found, although imports were never collected.",
+      "evidence_ids": [
+        "EV-5aac269c2d1b44da84d4048a59152476",
+        "EV-f82d740aa83144c19b08b0de3e4e0500"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-5aac269c2d1b44da84d4048a59152476"
+      ],
+      "rationale": "benign, raw_score 0.0038."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-f82d740aa83144c19b08b0de3e4e0500",
+        "EV-c321d3999b58413784cb3b30d540504e"
+      ],
+      "rationale": "PE32+ x64, is_dll false."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-f82d740aa83144c19b08b0de3e4e0500"
+      ],
+      "rationale": "The header limitation says imports were not collected. The cited prediction record does not carry this, but the statement is accurate."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "The static PE analysis confirms the target is a benign x64 executable with no malicious indicators. The raw score (0.0038) strongly supports this",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "SEMANTIC_SELF_CORROBORATION",
+        "SCORE_AS_PROBABILITY_OR_TRUTH"
+      ],
+      "evidence_ids": [
+        "EV-5aac269c2d1b44da84d4048a59152476"
+      ],
+      "rationale": "Treats the uncalibrated detector output as confirmation of its own label; no other evidence bears on maliciousness.",
+      "evidence_access": "NO_STATIC_SOURCE"
+    },
+    {
+      "text": "No evidence of network or process capability imports was found.",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [
+        "SCOPE_OVERCLAIM"
+      ],
+      "evidence_ids": [
+        "EV-f82d740aa83144c19b08b0de3e4e0500"
+      ],
+      "rationale": "Literally true, but imports were never collected, so the sentence implies a negative finding the evidence cannot provide."
+    }
+  ]
+}

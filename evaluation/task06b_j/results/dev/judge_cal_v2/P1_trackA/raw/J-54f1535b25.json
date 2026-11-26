@@ -1,0 +1,97 @@
+{
+ "item_id": "J-54f1535b25",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 2,
+   "rationale": "Every claim is supported and scoped to what was seen: the header facts, the visible msvcrt/ulib imports (idx 7 _exit, idx 13 sprintf_s), the raw score and label, 32/112 coverage, and no WS2_32/WININET library among the 32 visible entries.",
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+    "EV-3d570d533a1f441d8ca7bd20a105a879",
+    "EV-dc6671156d134e9eb12b057cf34f6556",
+    "EV-602e48c993cb4db1842293fe7b29fc11"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 2,
+   "rationale": "Each claim is cited to the record that carries it. The import absence is explicitly scoped to the 32 visible entries out of 112, so the scope is correct.",
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+    "EV-3d570d533a1f441d8ca7bd20a105a879",
+    "EV-dc6671156d134e9eb12b057cf34f6556",
+    "EV-602e48c993cb4db1842293fe7b29fc11"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 2,
+   "rationale": "The limitations are case-specific: 32/112 partial coverage, absence not proven, static-only, and dynamically resolved APIs. They constrain the conclusion to MONITOR with MEDIUM confidence, and the score is not treated as a probability.",
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+    "EV-3d570d533a1f441d8ca7bd20a105a879"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 2,
+   "rationale": "MONITOR is proportionate and rests on the visible import content under stated partial coverage. There is no self-corroboration, and the human decision is preserved.",
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+    "EV-3d570d533a1f441d8ca7bd20a105a879"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 0,
+   "rationale": "There is no next-step reasoning anywhere; the missing entries are named as unknown, but no action is suggested.",
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ]
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-dc6671156d134e9eb12b057cf34f6556",
+    "EV-602e48c993cb4db1842293fe7b29fc11"
+   ],
+   "rationale": "Shows PE32+, x64, is_dll false."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ],
+   "rationale": "Visible entries are msvcrt CRT and ulib string/argument helpers; the claim is scoped to the visible imports."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-3d570d533a1f441d8ca7bd20a105a879"
+   ],
+   "rationale": "The raw score is 0.0038 with the label benign."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ],
+   "rationale": "Shows 32 visible of 112 total."
+  },
+  {
+   "claim_id": "C5",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ],
+   "rationale": "Visible entries 0-31 come only from msvcrt.dll and ulib.dll, and the claim is explicitly scoped to those 32."
+  }
+ ],
+ "additional_claims": []
+}

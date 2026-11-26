@@ -1,0 +1,102 @@
+{
+  "item_id": "J-7de4fdcf1a",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 1,
+      "rationale": "The claims are factually correct against what the author saw. C1: 16 of 64 committed entries are visible (EV-e7ec6ea81c284d8e8e11487571e63e23). C2 matches the prediction record, C3 matches the header, and C4 is a correct limitation. The wording is loose in places. The explanation's '16/64 visible' omits that the provider total is 102, so 64 is not the full table. 'The low raw score supports benign classification' restates the model output as support. Neither is central to the LOW-confidence, INSUFFICIENT_EVIDENCE conclusion.",
+      "evidence_ids": [
+        "EV-e7ec6ea81c284d8e8e11487571e63e23",
+        "EV-9106bd54ab4a478982ce39c6621819ce",
+        "EV-b60235a20c6e41cb9065c9eff115009e"
+      ]
+    },
+    "R2_evidence_traceability": {
+      "score": 1,
+      "rationale": "The claims cite the correct records: imports to EV-e7ec6ea81c284d8e8e11487571e63e23, score to EV-9106bd54ab4a478982ce39c6621819ce, header to EV-b60235a20c6e41cb9065c9eff115009e. C1 correctly frames 64 as 'committed'. The explanation and free text say 'heavily truncated (16/64 visible)' and '16/64 entries' without the 102-entry provider total, which loosely presents the committed set as the table size. 'Missing evidence IDs suggest potential data gaps' cannot be traced to anything specific.",
+      "evidence_ids": [
+        "EV-e7ec6ea81c284d8e8e11487571e63e23",
+        "EV-9106bd54ab4a478982ce39c6621819ce",
+        "EV-b60235a20c6e41cb9065c9eff115009e"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 2,
+      "rationale": "Case-specific limitations are stated: only 16 of 64 committed imports visible with the rest unknown, an uncalibrated static score, and no runtime observation. They actually constrain the result: LOW confidence, INSUFFICIENT_EVIDENCE, and no capability conclusion drawn. Omitting the 102 total doesn't cause any overreach.",
+      "evidence_ids": [
+        "EV-e7ec6ea81c284d8e8e11487571e63e23",
+        "EV-9106bd54ab4a478982ce39c6621819ce"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 2,
+      "rationale": "MONITOR with LOW confidence and INSUFFICIENT_EVIDENCE is proportionate to a far-below-threshold score and heavily truncated imports. The decision is explicitly limited by the truncation. The score is not used as independent proof, and the human decision is preserved.",
+      "evidence_ids": [
+        "EV-e7ec6ea81c284d8e8e11487571e63e23",
+        "EV-9106bd54ab4a478982ce39c6621819ce"
+      ]
+    },
+    "R9_next_step_planning": {
+      "score": 0,
+      "rationale": "The report names the unknown remaining imports but never proposes reading further pages or any other step. The stop_reason claims sufficiency.",
+      "evidence_ids": []
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-e7ec6ea81c284d8e8e11487571e63e23"
+      ],
+      "rationale": "visible_entries is 16 and committed_entries is 64. The claim is correctly scoped to committed entries."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-9106bd54ab4a478982ce39c6621819ce"
+      ],
+      "rationale": "Raw 0.001174 and label benign, as model output."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b60235a20c6e41cb9065c9eff115009e"
+      ],
+      "rationale": "PE32+, x64, is_dll false."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-e7ec6ea81c284d8e8e11487571e63e23"
+      ],
+      "rationale": "This matches the record's limitations: declared imports only, and unseen imports may exist."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "the import list is heavily truncated (16/64 visible), preventing verification of network or process capabilities",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-e7ec6ea81c284d8e8e11487571e63e23"
+      ],
+      "rationale": "Truncation is real, but the full table has 102 entries (provider_total_entries). 64 is the committed cap, so the stated ratio understates the gap."
+    },
+    {
+      "text": "The low raw score supports benign classification but lacks runtime confirmation.",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-9106bd54ab4a478982ce39c6621819ce"
+      ],
+      "rationale": "The score is below threshold, which yields the benign label. Saying it 'supports' the classification is loose but stays within the model-output framing, and runtime confirmation is correctly said to be absent."
+    }
+  ]
+}

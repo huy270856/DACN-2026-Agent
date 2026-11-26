@@ -38,3 +38,10 @@ Mỗi sự kiện có ảnh hưởng tới tính hợp lệ của lượt chấm
 10. Questions v2 dựa trên accessibility tĩnh (không dùng output của model hay Judge). Phân bổ khả thi 2/6/4/4/4 so với target 4/4/4/4/4, theo quy tắc thiếu hụt khai báo trước (chỉ 2 mẫu có entry liên quan trong trang đầu).
 11. Package calibration v2 lần đầu được dựng rồi **dựng lại trước khi giao** (chưa kit nào được dùng): cần thêm `access_limits` vào reference sheet để grader phân loại được `evidence_access`. Bản build bị thay thế chưa từng được chấm hay commit.
 12. Đã export 4 kit (P1/P2 × Track A/B) ngoài repo, `kit_audit=PASS`. Developer **không** chạy Judge vì đã biết đáp án probe.
+
+## 2026-11-26 — Calibration v2: import, lock, phân tích (lượt tổng hợp cuối)
+
+13. Trên đĩa có 86 judgment và 4 session note. Cả 4 kit import `COMPLETE_VALID` (import chạy ngay trước khi owner yêu cầu "stop"; lượt này giữ nguyên output đó và kiểm lại hash). Model = UNKNOWN; chỉ có self-reported "Claude Opus 5.5", UNVERIFIED.
+14. Session note P1-A ghi rằng response được ghi qua "a local helper script". Trong kit không còn file script nào, nên provenance chưa xác minh được. P1-A không bị loại, chỉ ghi nhận như một giới hạn.
+15. Lock (`judge_cal_v2/LOCK.json`) trước khi mở mapping. Quy tắc dừng đã khóa được áp đúng nguyên văn; R1 (0.75), R5 (0.667, n=3), R8 (0.733) = UNRELIABLE. Không sửa rubric, không mở v3, không thêm probe hay phiên Judge.
+16. Khuyến nghị CONDITIONAL GO (CALIBRATION_V2_REPORT §10). Confirmatory chưa chạy.

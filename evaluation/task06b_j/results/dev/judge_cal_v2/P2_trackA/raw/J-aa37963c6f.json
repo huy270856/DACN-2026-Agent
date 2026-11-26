@@ -1,0 +1,114 @@
+{
+  "item_id": "J-aa37963c6f",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 0,
+      "rationale": "C5 asserts 'The file declares no networking APIs anywhere in its import table'. The author saw only entries 0-31 of 112 in EV-b625416e0e5044b99ac9f8f7ab2ec5e4, and 48 entries were never committed. Claiming absence across the whole table from a partial view is a SCOPE_OVERCLAIM. C1-C4 are supported.",
+      "evidence_ids": [
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+        "EV-3d570d533a1f441d8ca7bd20a105a879",
+        "EV-dc6671156d134e9eb12b057cf34f6556",
+        "EV-602e48c993cb4db1842293fe7b29fc11"
+      ]
+    },
+    "R2_evidence_traceability": {
+      "score": 0,
+      "rationale": "C5 attributes a whole-table statement to EV-b625416e0e5044b99ac9f8f7ab2ec5e4, while the author saw only a 32-entry slice of that record (and the record itself covers only 64 of 112). Presenting the visible slice as the whole table is a scope misattribution. That is independent of the factual overclaim under R1, because the cited source does not carry a whole-table statement. The other claims trace correctly.",
+      "evidence_ids": [
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 0,
+      "rationale": "The report states in C4 and its uncertainty notes that only 32 of 112 entries are visible and that absence in the subset proves nothing. C5 then asserts absence across the whole import table, so the report contradicts its own stated limitation. The uncalibrated-score limitation is also not mentioned.",
+      "evidence_ids": [
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+        "EV-3d570d533a1f441d8ca7bd20a105a879"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 2,
+      "rationale": "MONITOR with MEDIUM confidence is proportionate: the score is far below threshold, the visible imports are benign-looking CRT/ulib entries, and coverage is partial. The decision leans on the import review and stated coverage limits, not on the label confirming itself. The human decision is preserved. The C5 error is scored under R1/R2. The real visible evidence does not change the proportionality of the action.",
+      "evidence_ids": [
+        "EV-3d570d533a1f441d8ca7bd20a105a879",
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+      ]
+    },
+    "R9_next_step_planning": {
+      "score": 0,
+      "rationale": "No text anywhere proposes a next step, such as reading the remaining import entries or doing dynamic analysis. The report only restates limitations and says 'Sufficient evidence reviewed'.",
+      "evidence_ids": []
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-dc6671156d134e9eb12b057cf34f6556",
+        "EV-602e48c993cb4db1842293fe7b29fc11"
+      ],
+      "rationale": "The PE header and format records show PE32+, x64, is_dll false, and the executable image flag set."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+      ],
+      "rationale": "Visible entries 7 (_exit) and 13 (sprintf_s) come from msvcrt.dll. The ulib.dll entries 15-31 are MBSTR string comparisons and ARGUMENT_LEXEMIZER/STRING_ARGUMENT parsing. No network or process APIs appear among the 32 visible entries, and the claim is scoped to visible imports."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-3d570d533a1f441d8ca7bd20a105a879"
+      ],
+      "rationale": "The raw score is 0.003809 and the label is benign. The claim reports this as model output."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+      ],
+      "rationale": "visible_entries is 32 and provider_total_entries is 112. The coverage limitation is accurate."
+    },
+    {
+      "claim_id": "C5",
+      "verdict": "UNSUPPORTED",
+      "tags": [
+        "SCOPE_OVERCLAIM"
+      ],
+      "evidence_ids": [
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+      ],
+      "rationale": "Only 32 of 112 entries were visible. Committed entries 32-63 were reachable only by further page reads that were not made, and entries 64-111 were never committed. Absence over the whole table cannot follow. The whole-table claim depends on the never-committed entries, so the access class is beyond limits.",
+      "evidence_access": "INACCESSIBLE_BEYOND_LIMITS"
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "No network sockets, process creation, or memory manipulation APIs are present in the 32 visible entries.",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+      ],
+      "rationale": "This is correctly scoped to the visible slice, and it matches entries 0-31."
+    },
+    {
+      "text": "Network/process capabilities are not explicitly declared in the visible import table.",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+      ],
+      "rationale": "This is scoped to the visible table and matches the entries."
+    }
+  ]
+}

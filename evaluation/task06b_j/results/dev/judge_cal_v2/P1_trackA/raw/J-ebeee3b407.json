@@ -1,0 +1,97 @@
+{
+ "item_id": "J-ebeee3b407",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 1,
+   "rationale": "C1-C3 are supported: PE32+ x64, not a DLL; benign at raw 0.00638; and no imports, entropy or dynamic data collected, per the header limitations. A few non-central free-text statements are loosely supported. 'Target file is a known system utility (tracert.exe)' rests only on the file name/path plus outside knowledge. 'analysis was not performed on its internal structure' ignores the header/format analysis that was done. 'Without access to the imported function list (evidence IDs omitted)' implies the import list sits in the omitted IDs. None of these drives the INSUFFICIENT_EVIDENCE conclusion.",
+   "evidence_ids": [
+    "EV-e7eb2e69d0644654aad56710a403b358",
+    "EV-480b21a3a9a4463aa4d7239a83744256",
+    "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 1,
+   "rationale": "The cited claims trace to the correct records; C3's import/entropy limitation is carried by the cited pe_header record. But 'known system utility' has no source, and the import data is vaguely attributed to unspecified 'omitted evidence IDs'. Those IDs are not cited and their content was not visible, so these statements cannot be traced. There is no explicit citation of a wrong record.",
+   "evidence_ids": [
+    "EV-e7eb2e69d0644654aad56710a403b358",
+    "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 2,
+   "rationale": "The limitations are case-specific: no import bindings, entropy or dynamic data, an uncalibrated score, and the LIEF feature mismatch. They constrain the conclusion to INSUFFICIENT_EVIDENCE with MONITOR, and no capability claims are made.",
+   "evidence_ids": [
+    "EV-e7eb2e69d0644654aad56710a403b358",
+    "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 2,
+   "rationale": "MONITOR with INSUFFICIENT_EVIDENCE is proportionate. The prediction is explicitly described as uncalibrated and not used to confirm itself, and the human decision is preserved.",
+   "evidence_ids": [
+    "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 0,
+   "rationale": "There is no next-step reasoning. Unknowns are listed (imports, entropy, dynamic data), but no action to resolve them is proposed.",
+   "evidence_ids": []
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-e7eb2e69d0644654aad56710a403b358",
+    "EV-480b21a3a9a4463aa4d7239a83744256"
+   ],
+   "rationale": "Shows PE32+, x64, is_dll false, and structurally valid."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+   ],
+   "rationale": "The raw score is 0.00638 with the label benign."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-e7eb2e69d0644654aad56710a403b358",
+    "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+   ],
+   "rationale": "The header limitation says no imports or entropy are collected, and the prediction limitation says no runtime behaviour was observed."
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "Target file is a known system utility (tracert.exe) but analysis was not performed on its internal structure.",
+   "verdict": "PARTIALLY_SUPPORTED",
+   "tags": [
+    "OUTSIDE_EVIDENCE_KNOWLEDGE"
+   ],
+   "evidence_ids": [
+    "EV-e7eb2e69d0644654aad56710a403b358"
+   ],
+   "rationale": "The target path names tracert.exe, but being a 'known system utility' is outside knowledge. Header/format structure analysis was in fact performed."
+  },
+  {
+   "text": "Without access to the imported function list (evidence IDs omitted)",
+   "verdict": "PARTIALLY_SUPPORTED",
+   "tags": [
+    "WRONG_ATTRIBUTION"
+   ],
+   "evidence_ids": [
+    "EV-e7eb2e69d0644654aad56710a403b358"
+   ],
+   "rationale": "It is true that no import list was available, because imports were not collected. Attributing it to the omitted IDs is unfounded: those are metadata/readable/identity/sha256 records."
+  }
+ ]
+}

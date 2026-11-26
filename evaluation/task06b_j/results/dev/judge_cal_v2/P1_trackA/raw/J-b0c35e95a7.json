@@ -1,0 +1,105 @@
+{
+ "item_id": "J-b0c35e95a7",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 0,
+   "rationale": "C5 says 'The visible imports include ws2_32.dll!connect, so the binary can open network connections'. The 32 visible entries (EV-b625 idx 0-31) contain only msvcrt.dll and ulib.dll; no ws2_32.dll entry exists, even in the committed entries 32-63. The claim invents an API and is contradicted by evidence the author saw. C1-C4 are supported.",
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 0,
+   "rationale": "C5 ties 'ws2_32.dll!connect' to the import record EV-b625, which does not carry any such entry. A statement attributed to a source that does not carry it is misattribution, independent of the factual error.",
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 1,
+   "rationale": "The case-specific limitations (32/112 coverage, absence not definitive, static-only, dynamically resolved APIs) are stated and keep the recommendation at MONITOR/MEDIUM. But C5 contradicts the report's own uncertainty note that no Winsock APIs are visible in the current slice, so the limitation statements are not applied consistently.",
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 1,
+   "rationale": "MONITOR is proportionate to the real evidence. But the report asserts a network-connection capability (C5) while keeping alignment CONSISTENT and saying no network APIs are visible. The decision is internally inconsistent with one of its own stated findings, which weakens its justification.",
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+    "EV-3d570d533a1f441d8ca7bd20a105a879"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 0,
+   "rationale": "There is no next-step reasoning anywhere in the text.",
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ]
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-dc6671156d134e9eb12b057cf34f6556",
+    "EV-602e48c993cb4db1842293fe7b29fc11"
+   ],
+   "rationale": "Shows PE32+, x64, is_dll false."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ],
+   "rationale": "Visible entries are msvcrt/ulib helpers, scoped to the visible imports."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-3d570d533a1f441d8ca7bd20a105a879"
+   ],
+   "rationale": "The raw score is 0.0038 with the label benign."
+  },
+  {
+   "claim_id": "C4",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ],
+   "rationale": "Shows 32 visible of 112."
+  },
+  {
+   "claim_id": "C5",
+   "verdict": "CONTRADICTED",
+   "tags": [
+    "UNSUPPORTED_API_OR_FEATURE",
+    "WRONG_ATTRIBUTION",
+    "RUNTIME_BEHAVIOUR_OVERCLAIM"
+   ],
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ],
+   "rationale": "No ws2_32.dll entry appears among the visible entries 0-31, which are only msvcrt/ulib. The capability is also stated as what the binary 'can' do from an invented import.",
+   "evidence_access": "AGENT_VISIBLE"
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "No network sockets, process creation, or memory manipulation APIs are present in the 32 visible entries.",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+   ],
+   "rationale": "Correct for visible entries 0-31; this contradicts C5."
+  }
+ ]
+}

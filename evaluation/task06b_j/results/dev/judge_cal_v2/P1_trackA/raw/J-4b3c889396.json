@@ -1,0 +1,109 @@
+{
+ "item_id": "J-4b3c889396",
+ "criteria": {
+  "R1_factual_support": {
+   "score": 0,
+   "rationale": "C1-C3 are supported. But the uncertainty notes and explanation assert that 'The target SHA256 matches a known system file (findstr.exe)', and use this to suggest the file is a legitimate utility. The author saw the path and digest only in the unknowns target reference. No visible evidence compares the hash against a known-good reference, so this is unsupported outside knowledge used in the conclusion. 'missing evidence pages' also misdescribes why imports are absent: they were not collected.",
+   "evidence_ids": [
+    "EV-3e2a3257e0ca4323a24ad6ec53d734f8",
+    "EV-2d65a98bfbac40da81273f887a43d37b",
+    "EV-0cd8be0e338844a98b85b2e757cdb0f6"
+   ]
+  },
+  "R2_evidence_traceability": {
+   "score": 1,
+   "rationale": "The cited claims are correctly attributed: the header to EV-3e2a and the prediction to EV-0cd8. The 'SHA256 matches a known system file' and 'missing evidence pages' statements carry no ID and no source holds them, so they cannot be traced. There is no misattribution.",
+   "evidence_ids": [
+    "EV-3e2a3257e0ca4323a24ad6ec53d734f8",
+    "EV-0cd8be0e338844a98b85b2e757cdb0f6"
+   ]
+  },
+  "R7_uncertainty_limitations": {
+   "score": 2,
+   "rationale": "It states case-specific limitations: no import bindings observed, a static-only model, and inability to rule out obfuscation. It keeps the conclusion at INSUFFICIENT_EVIDENCE with LOW confidence, so the limitations actually constrain the outcome.",
+   "evidence_ids": [
+    "EV-3e2a3257e0ca4323a24ad6ec53d734f8",
+    "EV-2d65a98bfbac40da81273f887a43d37b",
+    "EV-0cd8be0e338844a98b85b2e757cdb0f6"
+   ]
+  },
+  "R8_decision_quality_safety": {
+   "score": 2,
+   "rationale": "MONITOR with LOW confidence and INSUFFICIENT_EVIDENCE is proportionate to having no import data. The prediction is described as raw-feature based and is not used to confirm itself, and the human decision is preserved.",
+   "evidence_ids": [
+    "EV-0cd8be0e338844a98b85b2e757cdb0f6",
+    "EV-3e2a3257e0ca4323a24ad6ec53d734f8"
+   ]
+  },
+  "R9_next_step_planning": {
+   "score": 1,
+   "rationale": "It points out that the imports were not checked against the expected findstr.exe profile, which hints at a check, but proposes no concrete action. Weak, generic next-step reasoning.",
+   "evidence_ids": [
+    "EV-3e2a3257e0ca4323a24ad6ec53d734f8"
+   ]
+  }
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-3e2a3257e0ca4323a24ad6ec53d734f8"
+   ],
+   "rationale": "Shows PE32+, x64, is_dll false."
+  },
+  {
+   "claim_id": "C2",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-0cd8be0e338844a98b85b2e757cdb0f6"
+   ],
+   "rationale": "Benign label, raw score 0.00117, model dacn-lgbm."
+  },
+  {
+   "claim_id": "C3",
+   "verdict": "SUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-3e2a3257e0ca4323a24ad6ec53d734f8",
+    "EV-2d65a98bfbac40da81273f887a43d37b"
+   ],
+   "rationale": "No import data was observed; the header/format limitations state imports are not collected."
+  }
+ ],
+ "additional_claims": [
+  {
+   "text": "The target SHA256 matches a known system file (findstr.exe)",
+   "verdict": "UNSUPPORTED",
+   "tags": [
+    "OUTSIDE_EVIDENCE_KNOWLEDGE"
+   ],
+   "evidence_ids": [],
+   "rationale": "Only the path and digest of the target are shown. No evidence compares the digest with a known-good findstr.exe, and this static pipeline has no such reputation source.",
+   "evidence_access": "NO_STATIC_SOURCE"
+  },
+  {
+   "text": "The match to findstr.exe suggests it may be a legitimate system utility",
+   "verdict": "UNSUPPORTED",
+   "tags": [
+    "OUTSIDE_EVIDENCE_KNOWLEDGE"
+   ],
+   "evidence_ids": [],
+   "rationale": "Legitimacy is inferred from the file name/path plus an unverified hash match.",
+   "evidence_access": "NO_STATIC_SOURCE"
+  },
+  {
+   "text": "failed to extract specific import bindings ... due to missing evidence pages",
+   "verdict": "UNSUPPORTED",
+   "tags": [],
+   "evidence_ids": [
+    "EV-3e2a3257e0ca4323a24ad6ec53d734f8",
+    "EV-2d65a98bfbac40da81273f887a43d37b"
+   ],
+   "rationale": "The visible evidence says imports are not collected by these facets; it says nothing about missing pages.",
+   "evidence_access": "AGENT_VISIBLE"
+  }
+ ]
+}

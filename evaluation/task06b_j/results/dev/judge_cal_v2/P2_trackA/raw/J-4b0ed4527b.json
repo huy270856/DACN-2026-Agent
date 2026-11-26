@@ -1,0 +1,115 @@
+{
+  "item_id": "J-4b0ed4527b",
+  "criteria": {
+    "R1_factual_support": {
+      "score": 0,
+      "rationale": "C5 reads the raw score 0.0038 as 'a 99.6% probability that the file is benign'. The visible prediction record EV-3d570d533a1f441d8ca7bd20a105a879 states score_is_calibrated_probability=false and 'Raw LightGBM score; NOT a calibrated probability', so the claim treats the score as a probability, against evidence the author saw. C1-C4 are supported by the header, format, prediction and visible import records.",
+      "evidence_ids": [
+        "EV-3d570d533a1f441d8ca7bd20a105a879",
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4",
+        "EV-dc6671156d134e9eb12b057cf34f6556",
+        "EV-602e48c993cb4db1842293fe7b29fc11"
+      ]
+    },
+    "R2_evidence_traceability": {
+      "score": 1,
+      "rationale": "Import statements are traced to EV-b625416e0e5044b99ac9f8f7ab2ec5e4 with the correct visible-slice scope, and header facts go to the header and format records. The 99.6% probability figure in C5 is not carried by any source. The cited record supplies only the raw score and explicitly denies calibration, so this part can't be traced. The score value itself is cited correctly; the interpretive error is scored under R1.",
+      "evidence_ids": [
+        "EV-3d570d533a1f441d8ca7bd20a105a879",
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+      ]
+    },
+    "R7_uncertainty_limitations": {
+      "score": 0,
+      "rationale": "Import-coverage limitations are case-specific and well stated (32/112, absence not definitive, dynamic APIs). But the uncalibrated-score limitation shown in the prediction record is omitted, and C5 overreaches because of that omission by asserting a 99.6% benign probability. That is a missing case-relevant limitation together with an overreaching statement.",
+      "evidence_ids": [
+        "EV-3d570d533a1f441d8ca7bd20a105a879",
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+      ]
+    },
+    "R8_decision_quality_safety": {
+      "score": 2,
+      "rationale": "MONITOR with MEDIUM confidence is proportionate to a far-below-threshold score plus a partial, benign-looking visible import slice with explicit coverage limits. The recommendation rests on the import review, not on the probability misreading in C5, which is scored under R1/R7. The human decision is preserved.",
+      "evidence_ids": [
+        "EV-3d570d533a1f441d8ca7bd20a105a879",
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+      ]
+    },
+    "R9_next_step_planning": {
+      "score": 0,
+      "rationale": "No text anywhere proposes a next step, such as reading the remaining import entries or doing dynamic analysis. The report only restates limitations and says 'Sufficient evidence reviewed'.",
+      "evidence_ids": []
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-dc6671156d134e9eb12b057cf34f6556",
+        "EV-602e48c993cb4db1842293fe7b29fc11"
+      ],
+      "rationale": "The PE header and format records show PE32+, x64, is_dll false, and the executable image flag set."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+      ],
+      "rationale": "Visible entries 7 (_exit) and 13 (sprintf_s) come from msvcrt.dll. The ulib.dll entries 15-31 are MBSTR string comparisons and ARGUMENT_LEXEMIZER/STRING_ARGUMENT parsing. No network or process APIs appear among the 32 visible entries, and the claim is scoped to visible imports."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-3d570d533a1f441d8ca7bd20a105a879"
+      ],
+      "rationale": "The raw score is 0.003809 and the label is benign. The claim reports this as model output."
+    },
+    {
+      "claim_id": "C4",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+      ],
+      "rationale": "visible_entries is 32 and provider_total_entries is 112. The coverage limitation is accurate."
+    },
+    {
+      "claim_id": "C5",
+      "verdict": "CONTRADICTED",
+      "tags": [
+        "SCORE_AS_PROBABILITY_OR_TRUTH"
+      ],
+      "evidence_ids": [
+        "EV-3d570d533a1f441d8ca7bd20a105a879"
+      ],
+      "rationale": "The prediction record states score_is_calibrated_probability=false and 'NOT a calibrated probability'. Converting 0.0038 into a 99.6% benign probability contradicts it.",
+      "evidence_access": "AGENT_VISIBLE"
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "No network sockets, process creation, or memory manipulation APIs are present in the 32 visible entries.",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+      ],
+      "rationale": "This is correctly scoped to the visible slice, and it matches entries 0-31."
+    },
+    {
+      "text": "Network/process capabilities are not explicitly declared in the visible import table.",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-b625416e0e5044b99ac9f8f7ab2ec5e4"
+      ],
+      "rationale": "This is scoped to the visible table and matches the entries."
+    }
+  ]
+}

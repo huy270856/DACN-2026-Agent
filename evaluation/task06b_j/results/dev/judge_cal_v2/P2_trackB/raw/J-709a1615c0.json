@@ -1,0 +1,71 @@
+{
+  "item_id": "J-709a1615c0",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability marked NOT_APPLICABLE for this item.",
+      "evidence_ids": []
+    },
+    "R4_new_evidence_relevance": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability marked NOT_APPLICABLE for this item.",
+      "evidence_ids": []
+    },
+    "R5_new_evidence_consumption": {
+      "score": "NOT_APPLICABLE",
+      "rationale": "Applicability marked NOT_APPLICABLE for this item.",
+      "evidence_ids": []
+    },
+    "R6_incremental_value": {
+      "score": 0,
+      "rationale": "No tool was available and no new evidence was obtained. The report accurately says no import data exists and that capabilities remain unverified, which restates the initial evidence limitations. It is accurate but adds nothing beyond the initial evidence.",
+      "evidence_ids": [
+        "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c",
+        "EV-e7eb2e69d0644654aad56710a403b358",
+        "EV-480b21a3a9a4463aa4d7239a83744256"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-e7eb2e69d0644654aad56710a403b358",
+        "EV-480b21a3a9a4463aa4d7239a83744256"
+      ],
+      "rationale": "PE32+, x64, is_dll false, structural_valid."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+      ],
+      "rationale": "benign, raw score 0.006."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-e7eb2e69d0644654aad56710a403b358",
+        "EV-480b21a3a9a4463aa4d7239a83744256"
+      ],
+      "rationale": "Header/format limitations state imports and entropy are not collected; no dynamic data."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "Target file is a known system utility (tracert.exe)",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [
+        "OUTSIDE_EVIDENCE_KNOWLEDGE"
+      ],
+      "evidence_ids": [],
+      "rationale": "The path C:\\Windows\\System32\\tracert.exe and its verified digest are visible in the target_ref. That it is a 'known system utility' is mild outside knowledge and is not central."
+    }
+  ]
+}

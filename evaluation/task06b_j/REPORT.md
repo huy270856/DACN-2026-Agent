@@ -184,3 +184,16 @@ Tất cả là *candidate* trong `calibration_key.json`, cần Judge hoặc ngư
 
 Tài liệu của vòng này: RUBRIC_V2.md (kèm change log và quy tắc dừng), QUESTIONS_V2.md,
 SELF_CORROBORATION_ADJUDICATION.md, OWNER_JUDGE_COMMANDS.md, EVALUATION_LOG.md.
+
+
+---
+
+## 11. Calibration v2: kết quả cuối (xem CALIBRATION_V2_REPORT.md)
+
+- Đã import và lock 86 judgment.
+- Tiêu chí RELIABLE: R2, R7, R3, R4, R6 (cộng verdict mức claim). UNRELIABLE: R1, R5, R8. R9
+  là exploratory.
+- Primary outcome đo được ở dạng thu hẹp. Không trả lời được một cách đáng tin cậy các phần
+  verification planning và semantic evidence consumption.
+- Khuyến nghị: **CONDITIONAL GO**, chờ owner chấp nhận các điều kiện và cấp authorization.
+  Confirmatory chưa chạy.

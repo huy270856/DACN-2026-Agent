@@ -1,0 +1,64 @@
+{
+  "item_id": "J-ebeee3b407",
+  "criteria": {
+    "R3_tool_decision_quality": {
+      "score": "NOT_APPLICABLE"
+    },
+    "R4_new_evidence_relevance": {
+      "score": "NOT_APPLICABLE"
+    },
+    "R5_new_evidence_consumption": {
+      "score": "NOT_APPLICABLE"
+    },
+    "R6_incremental_value": {
+      "score": 0,
+      "rationale": "No tool was available. The report accurately restates the prediction and header evidence and states that import data is absent; nothing is added beyond the initial evidence.",
+      "evidence_ids": [
+        "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c",
+        "EV-e7eb2e69d0644654aad56710a403b358"
+      ]
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C1",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-e7eb2e69d0644654aad56710a403b358",
+        "EV-480b21a3a9a4463aa4d7239a83744256"
+      ],
+      "rationale": "PE32+ x64 executable, is_dll false."
+    },
+    {
+      "claim_id": "C2",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c"
+      ],
+      "rationale": "benign, raw_score 0.006."
+    },
+    {
+      "claim_id": "C3",
+      "verdict": "SUPPORTED",
+      "tags": [],
+      "evidence_ids": [
+        "EV-ab7fd294bc1c4b2d87d8c4fa58165e9c",
+        "EV-e7eb2e69d0644654aad56710a403b358"
+      ],
+      "rationale": "The header limitation says no imports or entropy were collected; the prediction limitation says static only."
+    }
+  ],
+  "additional_claims": [
+    {
+      "text": "Target file is a known system utility (tracert.exe)",
+      "verdict": "PARTIALLY_SUPPORTED",
+      "tags": [
+        "OUTSIDE_EVIDENCE_KNOWLEDGE"
+      ],
+      "evidence_ids": [],
+      "rationale": "The path C:\\Windows\\System32\\tracert.exe is visible in the unknowns target_ref, but calling it a 'known system utility' relies on outside knowledge; no identity verification is in evidence."
+    }
+  ]
+}
