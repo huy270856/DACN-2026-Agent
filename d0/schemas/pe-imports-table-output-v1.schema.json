@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/dacn/d0/pe-imports-table-output-v1.schema.json",
+  "$comment": "TASK 07B compact full import table. entries[i] = [library_block_index, symbol|null, ordinal|null, delay, resolved_symbol|null]; i is the declaration-order index. Truncation: at most 1024 entries (truncation_reason MAX_ENTRIES); if the compact encoding would exceed the analyzer byte budget the analyzer returns fewer entries (truncation_reason OUTPUT_BYTES). resolved_symbol is an analyzer annotation from the pinned ordinal table, never the original symbol.",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "target_sha256", "parser", "total_entries", "returned_entries", "truncated",
+               "truncation_reason", "libraries", "entries", "resolution_source", "ordinal_table_version",
+               "ordinal_table_sha256", "limitations"],
+  "properties": {
+    "schema_version": {"const": "pe-imports-table-output-v1"},
+    "target_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "parser": {"type": "string", "minLength": 1, "maxLength": 64},
+    "total_entries": {"type": "integer", "minimum": 0, "maximum": 100000},
+    "returned_entries": {"type": "integer", "minimum": 0, "maximum": 1024},
+    "truncated": {"type": "boolean"},
+    "truncation_reason": {"enum": [null, "MAX_ENTRIES", "OUTPUT_BYTES"]},
+    "libraries": {"type": "array", "maxItems": 4096, "items": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "delay", "declared_count", "returned_count", "first_index", "last_index"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1, "maxLength": 128},
+        "delay": {"type": "boolean"},
+        "declared_count": {"type": "integer", "minimum": 0, "maximum": 100000},
+        "returned_count": {"type": "integer", "minimum": 0, "maximum": 1024},
+        "first_index": {"type": ["integer", "null"], "minimum": 0, "maximum": 1023},
+        "last_index": {"type": ["integer", "null"], "minimum": 0, "maximum": 1023}
+      }
+    }},
+    "entries": {"type": "array", "maxItems": 1024, "items": {
+      "type": "array", "minItems": 5, "maxItems": 5,
+      "prefixItems": [
+        {"type": "integer", "minimum": 0, "maximum": 4095},
+        {"type": ["string", "null"], "minLength": 1, "maxLength": 160},
+        {"type": ["integer", "null"], "minimum": 0, "maximum": 65535},
+        {"type": "boolean"},
+        {"type": ["string", "null"], "minLength": 1, "maxLength": 160}
+      ],
+      "items": false
+    }},
+    "resolution_source": {"type": ["string", "null"], "maxLength": 200},
+    "ordinal_table_version": {"type": "string", "minLength": 1, "maxLength": 64},
+    "ordinal_table_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "limitations": {"type": "array", "maxItems": 8, "items": {"type": "string", "maxLength": 300}}
+  }
+}

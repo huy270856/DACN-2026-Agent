@@ -86,7 +86,8 @@ def _tool_spec(provider: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def build_detector_backend(config: AppConfig, manifest: Optional[Dict[str, Any]] = None, *, include_imports=False):
+def build_detector_backend(config: AppConfig, manifest: Optional[Dict[str, Any]] = None, *, include_imports=False,
+                           include_imports_table=False):
     """Assemble D2/D3/D4/D5/D7/D8/D9 with the REAL detector as the only tool.
 
     Windows-only (imports the D5 executor). The model artifact, its digest, id and
@@ -133,6 +134,12 @@ def build_detector_backend(config: AppConfig, manifest: Optional[Dict[str, Any]]
         extra_spec = imports_tool.install(registry, installation)
         identities.add((extra_spec["tool_id"], extra_spec["tool_version"], extra_spec["provider"]["id"]))
         adapters[extra_spec["tool_id"]] = imports_tool.from_execution
+    if include_imports_table:
+        # TASK 07B opt-in: explicit D4 allowlist entry for the v4 full-table analyzer only.
+        from investigation_v4 import imports_table_tool
+        table_spec = imports_table_tool.install(registry, installation)
+        identities.add((table_spec["tool_id"], table_spec["tool_version"], table_spec["provider"]["id"]))
+        adapters[table_spec["tool_id"]] = imports_table_tool.from_execution
     policy = PolicyEngine(PolicyConfig(
         tool_allowlist=frozenset(identities),
         budget_caps={"timeout_ms": 120000, "max_output_bytes": 262144,

@@ -41,3 +41,24 @@ Ràng buộc kèm theo (nguyên văn):
 - Limitation: bảng phản ánh build Windows của host; target có thể bind bản ws2_32 khác.
 - Ghi chú hash: `MANIFEST_SHA256.json` ở gốc liệt kê file trong `d0/`, nhưng không code/test nào
   đọc nó; thêm schema mới ở S2 không đổi entry cũ.
+
+## 2026-11-27 — S2: analyzer `static.pe_imports_table` 0.1.0
+
+- Schema D0 mới `pe-imports-table-input-v1` (`max_entries` const 1024) và
+  `pe-imports-table-output-v1` (mã hóa gọn `[lib_idx, symbol, ordinal, delay, resolved_symbol]`,
+  library index theo **từng block khai báo** gồm cả block nằm ngoài phần trả về,
+  `truncation_reason ∈ {null, MAX_ENTRIES, OUTPUT_BYTES}`).
+- Adapter mới `investigation_v4/imports_table_adapter.py`; tool/validator
+  `investigation_v4/imports_table_tool.py`; controller `investigation_v4/controller.py`
+  (`V4Controller` + `ToolBinding`, không import TOOL_ID/FACET của v3).
+- Hành vi biên (ghi trong `$comment` của schema): tối đa 1024 entry; nếu bản mã hóa gọn vượt
+  `OUTPUT_BUDGET = 120000` byte thì adapter **tự giảm** số entry một cách tất định (binary search),
+  đặt `truncation_reason = OUTPUT_BYTES` và thêm limitation. Spec `max_output_bytes = 131072`,
+  `max_artifact_bytes = 262144`; trần chung của backend (262144) không đổi.
+- Đo thực tế trên cohort DEV 06B-J (20 PE): lớn nhất 360 entry / 22 442 byte (sample_0011);
+  không case nào truncated. Cohort mới sẽ đo lại ở S7.
+- `dacn/investigation.py::build_detector_backend` thêm `include_imports_table=False` (additive;
+  mặc định không đăng ký tool mới — có test). Allowlist D4 tường minh chỉ khi bật cờ.
+- Test: `tests/test_task07b_imports_table.py` (27 test: adapter, mỗi luật D7, schema, E2E D1–D9 thật
+  trên whoami.exe, default-deny, dedupe, tamper). Unit/integration, không có model.
+- Full regression: `774 passed, 0 failed, 4 skipped` (+83 subtests).
