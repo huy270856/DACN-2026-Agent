@@ -316,7 +316,7 @@ def test_format_repair_once_then_exhausted(case):
 def test_absence_covered_by_complete_prefix_query_or_fully_viewed_dll():
     v = _payload()
     zero = [{"by": "SYMBOL_PREFIX", "value": "CreateProcess", "page": 0, "total_matches": 0, "indices": []}]
-    s = _final(["I21"], text="No import starts with CreateProcess in the table.")
+    s = _final(["I21"], text="No import name starting with CreateProcess was found by the prefix query.")
     h = P.HandleMap()
     base = dict(shown_handles=("I21",), handles=h, table_value=v, viewed_indices={21})
     assert "absence_beyond_coverage_suspected" in V.verify(s, **base)["flags"]
@@ -325,8 +325,22 @@ def test_absence_covered_by_complete_prefix_query_or_fully_viewed_dll():
     s2 = _final(["I21"], text="No Get APIs beyond these are imported.")
     assert "absence_beyond_coverage_suspected" in V.verify(s2, **base, query_log=partial)["flags"]
     # Fully viewed DLL named in the sentence (WS2_32 = entries 21-23).
-    s3 = _final(["I21"], text="WS2_32.dll does not import any send function.")
+    s3 = _final(["I21"], text="No send import is listed in WS2_32.dll.")
     full = dict(base, viewed_indices={21, 22, 23})
     assert "absence_beyond_coverage_suspected" not in V.verify(s3, **full)["flags"]
     trunc = dict(v, truncated=True)
     assert "absence_beyond_coverage_suspected" in V.verify(s, **dict(base, table_value=trunc), query_log=zero)["flags"]
+
+
+def test_broad_absence_claim_not_exempted_by_narrow_query():
+    v = _payload()
+    zero = [{"by": "SYMBOL_PREFIX", "value": "socket", "page": 0, "total_matches": 0, "indices": []}]
+    base = dict(shown_handles=("I21",), handles=P.HandleMap(), table_value=v, viewed_indices={21}, query_log=zero)
+    for text in ("The file has no network APIs.",
+                 "The prefix query for socket found no matches, so there are no network APIs.",
+                 "No socket or network capability imports appear (prefix query socket returned 0 matches)."):
+        assert "absence_beyond_coverage_suspected" in V.verify(_final(["I21"], text=text), **base)["flags"], text
+    narrow = _final(["I21"], text="No import name starting with socket was found by the prefix query.")
+    assert "absence_beyond_coverage_suspected" not in V.verify(narrow, **base)["flags"]
+    no_cue = _final(["I21"], text="No socket APIs exist.")  # names the value but no scope cue
+    assert "absence_beyond_coverage_suspected" in V.verify(no_cue, **base)["flags"]

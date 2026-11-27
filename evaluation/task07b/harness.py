@@ -38,7 +38,7 @@ DEV_MANIFEST = ROOT / "evaluation/task06b_j/results/holdout/candidate_cases_v2_E
 V4_SOURCES = sorted(p.relative_to(ROOT).as_posix() for p in (ROOT / "investigation_v4").glob("*.py")) + [
     "investigation_v4/ordinal_table.json", "d0/schemas/pe-imports-table-input-v1.schema.json",
     "d0/schemas/pe-imports-table-output-v1.schema.json", "dacn/investigation.py"]
-HARNESS_FILES = ["evaluation/task07b/harness.py"]
+HARNESS_FILES = ["evaluation/task07b/harness.py", "evaluation/task07b/metrics.py", "evaluation/task07b/cohort_audit.py"]
 
 # BASE = 07A V0 (= task06b_j.runner.CFG); V4 arms share one budget/decoding config.
 V4_AGENT = dict(max_iterations=8, max_tool_calls=1, max_context_chars=24000, num_predict=3072,

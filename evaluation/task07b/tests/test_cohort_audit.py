@@ -54,7 +54,8 @@ def test_allocation_targets_and_beyond_v3():
     cnt = Counter(c["accessibility_class"] for c in a["cases"])
     assert cnt == CA.TARGETS and not a["notes"]
     rp = [c for c in a["cases"] if c["accessibility_class"] == "RELEVANT_PRESENT"]
-    assert sum(c["reference_EVALUATOR_ONLY"]["beyond_v3_reach"] for c in rp) >= CA.MIN_BEYOND_V3
+    assert sum(c["reference_EVALUATOR_ONLY"]["beyond_v3_reach"] for c in rp) == CA.MIN_BEYOND_V3
+    assert sum(not c["reference_EVALUATOR_ONLY"]["beyond_v3_reach"] for c in rp) == CA.WITHIN_V3
     assert len({c["source"] for c in a["cases"]}) == 20  # each program once
     assert [c["alias"] for c in a["cases"]] == [f"sample_{i:04d}" for i in range(1, 21)]
     ra = [c for c in a["cases"] if c["accessibility_class"] == "RELEVANT_ABSENT"]
@@ -83,3 +84,8 @@ def test_make_cases_write_once(tmp_path):
         CA.make_cases(p, out)
     with pytest.raises(FileExistsError):
         CA.audit(out)
+
+
+def test_within_v3_shortfall_recorded():
+    a = CA.allocate(_doc(n_low=1))
+    assert any("Only 1 RELEVANT_PRESENT cases with first relevant index < 48" in n for n in a["notes"])

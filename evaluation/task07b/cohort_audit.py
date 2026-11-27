@@ -32,6 +32,8 @@ JACCARD_MAX = 0.85
 V3_REACH = 48          # v3.4 BASE can see entries 0-47 at most (first page + 2 reads)
 TARGETS = {"RELEVANT_PRESENT": 8, "RELEVANT_ABSENT": 4, "NOT_STATIC_ANSWERABLE": 4, "INITIAL_EVIDENCE_SUFFICIENT": 4}
 MIN_BEYOND_V3 = 5      # RELEVANT_PRESENT cases whose first relevant entry index >= 48
+WITHIN_V3 = 3          # RELEVANT_PRESENT cases whose first relevant entry index < 48 (owner decision 2026-11-27)
+ALLOCATION_VERSION = "task07b-allocation-v2 (5 beyond + 3 within v3.4 reach)"
 FAMILIES = ("FILE", "NETWORK", "PROCESS", "REGISTRY", "SERVICE")
 ELIGIBILITY = {"pe": "PE32+ x64 EXE (not DLL)", "signature": "Authenticode Valid, subject contains 'Microsoft'",
                "max_size_bytes": 8 * 1024 * 1024, "min_declared_imports": 1,
@@ -201,7 +203,12 @@ def allocate(audit_doc: Dict[str, Any]) -> Dict[str, Any]:
     if len(rp) < MIN_BEYOND_V3:
         notes.append(f"Only {len(rp)} RELEVANT_PRESENT cases with first relevant index >= {V3_REACH} available "
                      f"(target {MIN_BEYOND_V3}); using what exists (recorded before inference).")
-    rp += take([c for c in present if c[0]["filename"] not in used], TARGETS["RELEVANT_PRESENT"] - len(rp), "RP_ANY")
+    within = [(r, f) for r, f in present if r["family_relevant"][f]["indices"][0] < V3_REACH and r["filename"] not in used]
+    rw = take(within, WITHIN_V3, "RP_WITHIN")
+    if len(rw) < WITHIN_V3:
+        notes.append(f"Only {len(rw)} RELEVANT_PRESENT cases with first relevant index < {V3_REACH} available "
+                     f"(target {WITHIN_V3}); recorded before inference.")
+    rp += rw
     absent = [(r, f) for r in pool for f in FAMILIES if not r["family_relevant"][f]["indices"]]
     ra = take(absent, TARGETS["RELEVANT_ABSENT"], "RA")
     rest = [(r, "-") for r in pool if r["filename"] not in used]
@@ -257,7 +264,8 @@ def make_cases(audit_path: Path, out: Path) -> Dict[str, Any]:
            "audit_sha256": sha256(audit_path), "created_utc": datetime.now(timezone.utc).isoformat(),
            "questions_version": "task07b-questions (06B-J v2 templates + lexicon)",
            "questions_sha256": hashlib.sha256(json.dumps(qv2.TEMPLATES, sort_keys=True).encode()).hexdigest(),
-           "targets": TARGETS, "min_beyond_v3": MIN_BEYOND_V3, "v3_reach": V3_REACH,
+           "targets": TARGETS, "min_beyond_v3": MIN_BEYOND_V3, "within_v3": WITHIN_V3, "v3_reach": V3_REACH,
+           "allocation_version": ALLOCATION_VERSION,
            "allocation_notes": alloc["notes"], "evaluation_kind": "DEV_EVALUATION_FRESH_COHORT",
            "confirmatory": "NOT_RUN", "cases": alloc["cases"]}
     out.parent.mkdir(parents=True, exist_ok=True)

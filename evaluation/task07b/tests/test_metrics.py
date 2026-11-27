@@ -1,0 +1,77 @@
+"""TASK 07B metrics: exercised on committed DEV_DEBUG r3 traces (mechanism only, not results)."""
+import json
+from pathlib import Path
+
+import pytest
+
+from evaluation.task07b import metrics as M
+
+ROOT = Path(__file__).resolve().parents[3]
+DEV = ROOT / "evaluation/task07b/results/dev_debug"
+MAP = {"IN_INITIAL_TOOL_PROJECTION": M.RP, "REACHABLE_BY_BOUNDED_RETRIEVAL": M.RP, "INACCESSIBLE_UNDER_LIMITS": M.RP,
+       "NOT_STATIC_ANSWERABLE": M.NS, "INITIAL_EVIDENCE_SUFFICIENT": M.IS}
+
+
+@pytest.fixture(scope="module")
+def doc(tmp_path_factory):
+    if not (DEV / "V4_s42_r3").exists():
+        pytest.skip("DEV r3 traces not present")
+    src = json.loads((ROOT / "evaluation/task06b_j/results/holdout/candidate_cases_v2_EVALUATOR_ONLY.json").read_text(encoding="utf-8"))
+    for c in src["cases"]:
+        c["accessibility_class"] = MAP[c["accessibility_class"]]
+    base = tmp_path_factory.mktemp("m")
+    man = base / "man.json"
+    man.write_text(json.dumps(src), encoding="utf-8")
+    view = base / "view"
+    view.mkdir()
+    import shutil
+    for g in ("V4_s42_r3", "V4_NOQ_s42_r3"):
+        shutil.copytree(DEV / g, view / g)
+    return M.collect(view, man)
+
+
+def test_full_denominators_and_fields(doc):
+    for g in ("V4_s42_r3", "V4_NOQ_s42_r3"):
+        s = doc["groups"][g]["summary"]
+        assert s["n_runs"] == 20 and s["M10_final_present"]["d"] == 20
+        assert s["M1_relevant_seen"]["d"] == 12 and s["M2_unnecessary_tool"]["d"] == 8
+        assert s["M9_answer_status_fit"]["d"] == 8
+        assert s["M1_relevant_seen_within_v3"]["d"] + s["M1_relevant_seen_beyond_v3"]["d"] == s["M1_relevant_seen"]["d"]
+        assert s["M5_structural_self_corroboration"]["n"] == 0
+        assert doc["groups"][g]["missing_runs"] == []
+    assert isinstance(doc["groups"]["V4_s42_r3"]["summary"]["M8_query_hit"], dict)
+
+
+def test_run_without_final_fails_good_metrics():
+    case = {"accessibility_class": M.RP, "reference_EVALUATOR_ONLY": {"relevant_entries": ["A.dll!X"]}}
+    r = {"schema_version": "investigation-v4.0", "alias": "s", "status": "INVESTIGATION_INCOMPLETE", "final": None,
+         "turns": [{"error": "Ollama returned empty content", "error_payload": {"thinking": "x"}}],
+         "trusted_metadata": {"viewed_literals": {"0": "A.dll!X"}, "resolved_sources": [{"literal": "A.dll!X"}]},
+         "failure": "Ollama returned empty content"}
+    row = M.run_row(r, case, 12288)
+    assert row["M1_relevant_seen"] and not row["M1b_relevant_cited"] and not row["M10_final_present"]
+    assert row["truncations"] == 1 and not row["infra_error"]
+    infra = dict(r, failure="Ollama inference failed: URLError: x", turns=[])
+    assert M.run_row(infra, case, 12288)["infra_error"]
+
+
+def test_m4_independent_of_verifier_exemptions():
+    case = {"accessibility_class": M.RA, "reference_EVALUATOR_ONLY": {"relevant_entries": []}}
+    final = {"answer": "No import name starting with socket was found by the prefix query.", "findings": []}
+    r = {"schema_version": "investigation-v4.0", "alias": "s", "status": "FINISHED", "final": final, "turns": [],
+         "trusted_metadata": {}, "verification": {"flags": []}}
+    row = M.run_row(r, case, 12288)
+    assert row["M4_absence_sentences"]  # counted by the 07A screen even though the verifier exempts it
+
+
+def test_base_v34_trace_shape():
+    case = {"accessibility_class": M.RP, "reference_EVALUATOR_ONLY": {"relevant_entries": ["KERNEL32.dll!WriteFile"]}}
+    r = {"schema_version": "investigation-v3.4", "alias": "s", "status": "FINISHED_FLAGGED",
+         "final": {"assessment": {"explanation": "x", "claims": []}},
+         "turns": [{"proposal": {"action": "TOOL_CALL"}, "context": {"facts": {"evidence": [
+             {"facet": "static.pe_imports_detail", "value": {"entries": [{"library": "KERNEL32.dll", "symbol": "WriteFile", "ordinal": None}]}}]}}}],
+         "trusted_metadata": {"resolved_import_refs": [{"library": "KERNEL32.dll", "symbol": "WriteFile", "ordinal": None}]},
+         "verification": {"flags": ["prediction_used_as_own_corroboration"]}}
+    row = M.run_row(r, case, 8192)
+    assert row["engine"] == "v3.4" and row["M1_relevant_seen"] and row["M1b_relevant_cited"]
+    assert row["M5_structural_self_corroboration"] and row["M2_tool_proposed"] and row["M9_answer_status_fit"] is None

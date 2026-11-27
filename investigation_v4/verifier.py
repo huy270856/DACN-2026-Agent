@@ -35,12 +35,22 @@ def resolve(handle: str, handles, table_value: Optional[Dict[str, Any]]) -> Opti
     return {"handle": handle, **r}
 
 
+# Conservative exemption: the sentence must stay within the queried scope.
+SCOPE_CUE_RE = re.compile(r"\b(?:quer(?:y|ied|ies)|prefix|starting with|start with|named|match(?:es|ing)?|in [\w.\-]+\.dll)\b", re.I)
+BROAD_RE = re.compile(r"\b(?:network|networking|file[- ]system|file|files|process|processes|registry|service|services|"
+                      r"capabilit(?:y|ies)|communicat\w*|internet|socket[- ]?level)\b", re.I)
+
+
 def _covered(sentence: str, table_value: Dict[str, Any], viewed: set, query_log: List[Dict[str, Any]]) -> bool:
-    """An absence sentence is in coverage when it names a DLL whose returned entries were all viewed,
-    or a query value whose matches were all viewed (incl. zero matches), on a non-truncated table."""
+    """An absence sentence is in coverage only if (a) the table is not truncated, (b) it names a DLL whose
+    returned entries were all viewed, or a query value whose matches were all viewed (incl. zero
+    matches), (c) it carries an explicit query/DLL scope cue, and (d) it does not generalise to a whole
+    capability family (network/file/process/registry/service/capability...). Broader claims stay flagged."""
     if table_value["truncated"]:
         return False
     low = sentence.lower()
+    if not SCOPE_CUE_RE.search(sentence) or BROAD_RE.search(sentence):
+        return False
     for d in query.dll_summary(table_value):
         if d["dll"].lower() in low and set(query.dll_indices(table_value, d["dll"])) <= viewed:
             return True

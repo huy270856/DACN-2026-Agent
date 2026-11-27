@@ -167,3 +167,59 @@ Ràng buộc kèm theo (nguyên văn):
   token (< 0.8 × 12 288); không tràn context; isolation PASS.
 - `pattern` (handle) và `multipleOf` (offset) trong schema decode: Ollama 0.40.16 chấp nhận, không
   lỗi, không output sai (từ S5 r1 tới G3). Validate sau decode vẫn dùng đủ schema.
+
+## 2026-11-27 — Trả lời Planner về quy tắc absence (sau G3, trước freeze)
+
+- (a) Lỗ hổng đã xác nhận: chỉnh DEV 2 miễn flag chỉ cần câu chứa giá trị query/tên DLL. Đã siết:
+  chỉ miễn khi bảng không truncated **và** câu nêu DLL đã xem hết hoặc query đã phủ đủ match **và**
+  có từ chỉ phạm vi (query/prefix/starting with/named/match/"in X.dll") **và** không chứa từ khái
+  quát họ (network, file(-system), process, registry, service, capability, communicat*, internet).
+  Có test cho câu rộng sau query hẹp 0 match.
+- (b) M4 của `evaluation/task07b/metrics.py` dùng regex 07A trực tiếp trên văn bản final của cả 3
+  arm, độc lập với miễn trừ/flag của verifier v4 (ghi trong PROTOCOL §3).
+
+## 2026-11-27 — S7: cohort mới, metrics, PROTOCOL
+
+- `python -m evaluation.task07b.cohort_audit audit` → `results/cohort/audit_v1_EVALUATOR_ONLY.json`
+  (xét 132 exe, pool 120; loại: 9 EXCLUDED_PROGRAM, 1 near-duplicate, 1 quá lớn, 1 không có import;
+  0 lỗi chữ ký). `cases` → `results/cohort/cases_v1_EVALUATOR_ONLY.json`: 8 RELEVANT_PRESENT (8/8
+  first relevant ≥ 48), 4 RELEVANT_ABSENT, 4 NOT_STATIC, 4 INITIAL_SUFFICIENT; không có
+  allocation_notes (đủ chỉ tiêu).
+- Đặc tính ghi trước: BASE gần như không thể thấy entry liên quan ở RELEVANT_PRESENT theo thiết kế
+  (đều ≥ 48); phép đo đóng góp của query là V4 vs V4_NOQ.
+- Payload cohort mới: lớn nhất 458 entry / ~25 KB; không truncated.
+- `evaluation/task07b/metrics.py` (`task07b-metrics-v1`) + test trên trace DEV r3 thật.
+  `HARNESS_FILES` của harness thêm `metrics.py` và `cohort_audit.py` (drift chặn run).
+- `PROTOCOL.md` và `run_s8.ps1` (Owner chạy ngoài session; kiểm Ollama 0.40.16; dừng khi lỗi).
+- Dry-run MOCK_LLM (thư mục tạm, không có LLM) BASE/V4 trên 2 case của manifest mới: chạy đúng.
+
+## 2026-11-27 — Quyết định Owner cho S7 (qua Planner), trước freeze
+
+Ghi nguyên văn 4 điểm:
+
+> 1. Cân lại cohort trước freeze. RELEVANT_PRESENT gồm 5 case có entry liên quan đầu tiên ở index ≥ 48 và 3 case < 48 (trong tầm 0–47 của BASE).
+>    - Sửa allocate tất định theo seed rồi dựng lại cases, viết thành manifest mới (không ghi đè).
+>    - Lý do: kiểm xem V4 có kém v3.4 không khi evidence nằm trong tầm của cả hai. Chưa ai thấy kết quả trên cohort này.
+>    - Cập nhật PROTOCOL: báo M1/M1b tách riêng theo hai tầng ≥ 48 và < 48.
+>    - Nếu không đủ 3 case < 48 thì ghi allocation_notes và báo Planner.
+> 2. Sau khi xong (1): KHÔNG commit freeze ngay.
+>    - Báo Planner commit hoặc diff hiện tại (để review đọc được, có thể là commit WIP chưa freeze) và số regression CHÍNH XÁC (passed/failed/skipped, không ghi "834+").
+>    - Planner sẽ chuyển cho session review kiểm độc lập PROTOCOL, cohort, harness và metrics. Chỉ freeze sau khi review PASS.
+> 3. Chuỗi authorization S8: DACN_OWNER_07B_EVAL_GO. Đưa chuỗi này vào run_s8.ps1 hoặc lệnh hướng dẫn cho Owner.
+> 4. S8 do Owner tự chạy run_s8.ps1 ngoài session, chỉ bắt đầu sau khi đã freeze.
+
+Thực hiện:
+
+- (1) `cohort_audit.allocate` (`task07b-allocation-v2`): RELEVANT_PRESENT = 5 case ≥ 48 + 3 case < 48,
+  tất định theo seed; thiếu thì ghi `allocation_notes`. Manifest **mới**
+  `results/cohort/cases_v2_EVALUATOR_ONLY.json` (canonical digest `f984cc7f…`); không có
+  allocation_notes (đủ chỉ tiêu). Tầng < 48: appidtel.exe (REGISTRY, idx 38), fveprompt.exe (PROCESS,
+  32), rstrui.exe (FILE, 46); tầng ≥ 48: osk, smartscreen, dmcertinst, verifier, MDEServer. Hai lớp
+  RA/NS/IS giữ nguyên chương trình như v1. `cases_v1` giữ nguyên, đánh dấu thay thế, chưa từng chạy
+  inference. Payload cohort v2: lớn nhất 458 entry / ~25 KB, không truncated.
+- `metrics.py`: thêm `M1_relevant_seen_within_v3`, `M1b_relevant_cited_within_v3` (và giữ beyond);
+  cả hai tầng vào danh sách nhiễu. PROTOCOL cập nhật (§1, §3, thêm dòng bảng quyết định "V4 kém BASE
+  ở tầng < 48").
+- (3) `run_s8.ps1`: manifest v2; `-AuthorizedBy` mặc định `DACN_OWNER_07B_EVAL_GO`; ghi rõ chỉ chạy
+  sau freeze.
+- (2)/(4): **chưa** commit freeze. Sẽ tạo commit WIP (không phải freeze) để review đọc được.
