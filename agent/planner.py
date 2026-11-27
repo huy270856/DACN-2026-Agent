@@ -19,7 +19,17 @@ from .schema import OLLAMA_FORMAT_SCHEMA
 
 
 class PlannerError(Exception):
-    """Model/transport failure. Treated as an error, never as a benign result."""
+    """Model/transport failure. Treated as an error, never as a benign result.
+
+    `payload` (TASK 07B, additive): when a response body WAS received but is unusable (empty
+    content), the raw model fields are attached for provenance. `str(exc)` and the type are
+    unchanged; `payload` is None for transport failures.
+    """
+    payload = None
+
+    def __init__(self, *args, payload=None):
+        super().__init__(*args)
+        self.payload = payload
 
 
 class Planner(Protocol):
@@ -149,11 +159,14 @@ class OllamaPlanner:
         content = message.get("content")
         thinking = message.get("thinking")
         if not isinstance(content, str) or not content.strip():
+            raw = {"content": content, "thinking": thinking, "done_reason": payload.get("done_reason"),
+                   "eval_count": payload.get("eval_count"), "prompt_eval_count": payload.get("prompt_eval_count")}
             if isinstance(thinking, str) and thinking:
                 # Diagnostic only (no fallback): thinking consumed the output without content.
                 raise PlannerError(f"Ollama returned empty content (thinking_chars={len(thinking)}, "
-                                   f"done_reason={payload.get('done_reason')}, eval_count={payload.get('eval_count')})")
-            raise PlannerError("Ollama returned empty content")
+                                   f"done_reason={payload.get('done_reason')}, eval_count={payload.get('eval_count')})",
+                                   payload=raw)
+            raise PlannerError("Ollama returned empty content", payload=raw)
         meta = {"model": cfg.model, "think": cfg.think,
                 "eval_count": payload.get("eval_count"), "prompt_eval_count": payload.get("prompt_eval_count"), "done_reason": payload.get("done_reason")}
         if isinstance(thinking, str):

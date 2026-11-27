@@ -80,3 +80,31 @@ Ràng buộc kèm theo (nguyên văn):
   (đo: 13 267 ký tự).
 - Test: `tests/test_task07b_query_projector.py` (18 test, có test DLL nằm ở cả hai block).
 - Full regression: `792 passed, 0 failed, 4 skipped` (+83 subtests).
+
+## 2026-11-27 — S4: contract, verifier, recommendation, workflow v4, sửa planner
+
+- `investigation_v4/contract.py` (`investigation-v4.0`): `analysis` là property đầu tiên và
+  required ở mọi nhánh action lẫn final; action RUN_ANALYZER / LIST_IMPORT_INDEX / QUERY_IMPORTS /
+  READ_TABLE (chỉ V4_NOQ) / ANSWER; không có REQUEST_MORE_EVIDENCE; final theo câu trả lời
+  (answer_status, answer, findings có `sources` là handle, evidence_needed, next_verification,
+  detector_relation). LLM không chọn recommendation/alignment/supporting IDs. Theo lưu ý của Planner
+  sau S3, system prompt nêu quy ước "thiếu symbol = import theo ordinal; thiếu delay = không
+  delay-load; trường vắng không bao giờ nghĩa là không biết", có test.
+- `verifier.py`: source không hiển thị, OBSERVED không source, AGREES/CONFLICTS không basis,
+  absence vượt coverage (dùng lại regex M4 + LIMITATION_RE của 07A, import không sửa),
+  entropy/xác suất. Chỉ resolve handle → literal, không sửa claim.
+- `recommendation.py` (D2): ánh xạ detector_relation → alignment → `safe_recommendation` hiện có;
+  flag hoặc không có final → MANUAL_REVIEW. Hệ quả đã biết: benign + NOT_INFORMATIVE → MANUAL_REVIEW.
+- `workflow.py`: tool offer mọi lượt tới khi đã chạy; lượt cuối luôn chỉ có final
+  (`FORCED_FINAL`); query trùng → `NO_INFORMATION_GAIN` (tốn budget); lỗi query/D4 DENY không
+  terminal; ControllerReject (integrity) vẫn terminal như v3.4; một lần repair định dạng.
+  `V4Planner` gửi đúng schema của lượt qua `OllamaPlanner(cfg, DecodingOptions)`.
+- `agent/planner.py` (additive): `PlannerError(..., payload=...)`, `payload=None` mặc định; khi
+  content rỗng, payload thô (`content`, `thinking`, `done_reason`, `eval_count`,
+  `prompt_eval_count`) được gắn; `str(exc)` và type không đổi. Workflow v4 ghi vào
+  `turn['error_payload']`. Test pin `e31ee31` (07A) và `test_reviewer_repair` (06A) vẫn pass.
+- Ghi chú hash: `agent/planner.py` đổi nên `source_hashes` của 06B-J/07A đổi; không resume thư mục
+  cũ nào.
+- Test: `tests/test_task07b_workflow.py` (28 test: contract, verifier, bảng D2, payload planner,
+  MOCK_LLM E2E qua D1–D9 thật). MOCK_LLM không phải bằng chứng hành vi.
+- Full regression: `820 passed, 0 failed, 4 skipped` (+83 subtests).
