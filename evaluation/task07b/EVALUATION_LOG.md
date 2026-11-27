@@ -62,3 +62,21 @@ Ràng buộc kèm theo (nguyên văn):
 - Test: `tests/test_task07b_imports_table.py` (27 test: adapter, mỗi luật D7, schema, E2E D1–D9 thật
   trên whoami.exe, default-deny, dedupe, tamper). Unit/integration, không có model.
 - Full regression: `774 passed, 0 failed, 4 skipped` (+83 subtests).
+
+## 2026-11-27 — S3: query service và projector v4
+
+- `investigation_v4/query.py`: `list_import_index`, `query_imports{DLL|SYMBOL_PREFIX, page}`,
+  `read_table` (chỉ cho V4_NOQ), `coverage`. Theo lưu ý của Planner sau S2: query theo DLL **gộp
+  mọi block cùng tên** (imports + delay, so không phân biệt hoa thường), phân trang 16 trên danh
+  sách đã gộp; `list_import_index` trả tổng theo DLL (kèm `blocks`, `has_delay_block`); coverage
+  tính theo DLL đã gộp. SYMBOL_PREFIX: 3–64 ký tự `[A-Za-z0-9_?@$]`, so tiền tố literal trên
+  `symbol` hoặc `resolved_symbol`; prefix rộng vẫn chỉ 16 entry/trang. Binding do trusted code
+  điền; `expected_binding` sai case/revision/SHA bị reject.
+- `investigation_v4/projector.py` + `config.py` (`V4Config`): handle E1..En / I<index>,
+  `detector_context` không handle, bỏ nhiễu provenance, đếm facet bị bỏ, không cắt ngầm
+  (`V4_CONTEXT_BUDGET`). V4_NOQ không thấy index hay coverage theo DLL (chỉ số entry đã xem).
+- Chi tiết thực hiện: `viewed_imports` bỏ trường null/false (symbol XOR ordinal; `resolved_symbol`,
+  `delay` chỉ khi có) để 96 entry tên dài (6 query × 16) vẫn vừa `max_context_chars = 16000`
+  (đo: 13 267 ký tự).
+- Test: `tests/test_task07b_query_projector.py` (18 test, có test DLL nằm ở cả hai block).
+- Full regression: `792 passed, 0 failed, 4 skipped` (+83 subtests).
