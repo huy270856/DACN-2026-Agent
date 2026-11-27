@@ -275,3 +275,25 @@ Thực hiện:
   mới; (2) M6 latency median không tính slot `MISSING_TRACE` (và trace không có latency).
 - Commit freeze tiếp theo là commit **pre-run freeze**. S8 chỉ được chạy ở đúng commit đó
   (`run_s8.ps1 -FreezeCommit <SHA>`), authorization `DACN_OWNER_07B_EVAL_GO`, bởi Owner ngoài session.
+
+## 2026-11-27 — S8: frozen live run (Owner, ngoài session)
+
+- Owner chạy `run_s8.ps1 -FreezeCommit dafc62aee5d0404878c77bc173ad5d34d29c34e5` trong PowerShell
+  riêng; START 11:17:36, ALL_DONE 12:05:26 (~48 phút). Log `results/frozen/run_stdout.txt` (UTF-16 LE do
+  `Tee-Object` của PS 5.1) ghi Ollama 0.40.16, digest `d8b0f5e9…`.
+- 120/120 run: 95 FINISHED_FLAGGED, 24 FINISHED, 1 INVESTIGATION_INCOMPLETE (BASE s42 / sample_0005,
+  `VALIDATION_REPAIR_EXHAUSTED`: model trích evidence ID không hiển thị ở lượt TOOL_CALL; tính vào
+  mẫu số là failure). 0 lỗi hạ tầng, 0 truncation, 0 overflow, 0 isolation fail, 0 missing trace.
+- Planner kiểm read-only sau S8: HEAD `dafc62a`, tracked tree sạch.
+
+## 2026-11-27 — S9: metrics, developer review, REPORT
+
+- `metrics.py` **không đổi** sau freeze (`git diff dafc62a` rỗng) → giữ `task07b-metrics-v1`;
+  `python -m evaluation.task07b.metrics --results results/frozen --manifest results/cohort/cases_v2_EVALUATOR_ONLY.json --out results/frozen/metrics_v1.json` (write-once).
+- Developer review M4 (theo PROTOCOL §3, ghi riêng, **không** đổi metric):
+  `evaluation/task07b/m4_developer_review.py` → `results/frozen/M4_developer_review_v1.json`
+  (174 câu; quy tắc + nhãn thủ công theo id; PROVISIONAL, Owner review PENDING).
+- Kết quả chính: M1b V4 7/8 & 7/8 vs V4_NOQ 3/8 & 3/8 vs BASE 0/8 & 0/8 (tầng < 48: 3/3 vs 0/3);
+  M4-UNSCOPED rate V4 0.60/0.55 vs BASE 0.05/0.20 (tăng vượt nhiễu). Bảng quyết định: dòng 3 (giữ
+  query) **đạt**; dòng 1 **không đạt** (M4-UNSCOPED tăng); dòng 7 áp dụng một phần.
+- `REPORT.md` viết xong. Full regression trước commit: `856 passed, 0 failed, 4 skipped` (+83 subtests).

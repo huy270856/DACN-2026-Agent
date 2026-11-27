@@ -1,0 +1,171 @@
+[
+  {
+    "stage": "D4",
+    "decision": {
+      "schema_version": "d0-v1",
+      "decision_id": "POL-640a848e63a94166800a556f86c7a89c",
+      "call_id": "CALL-predict-c257a9ac79e64a56",
+      "case_id": "CASE-e795708cd2ec42628eb78172555ac243",
+      "expected_revision": 1,
+      "outcome": "ALLOW",
+      "reason_code": "static_readonly_allowed",
+      "reasons": [
+        "Read-only allowlisted tool on a verified target within budget"
+      ],
+      "effective_limits": {
+        "timeout_ms": 120000,
+        "max_output_bytes": 262144,
+        "max_artifact_bytes": 1048576,
+        "max_concurrency": 1
+      },
+      "policy_version": "policy-v1",
+      "evaluated_at": "2026-11-27T04:41:07.844846+00:00"
+    }
+  },
+  {
+    "stage": "D5_D6_RECEIPT",
+    "receipt": {
+      "schema_version": "d0-v1",
+      "run_id": "RUN-5df71178dac24501a54f2e97b936dd91",
+      "call_id": "CALL-predict-c257a9ac79e64a56",
+      "case_id": "CASE-e795708cd2ec42628eb78172555ac243",
+      "tool_id": "static.pe_malware_predict",
+      "tool_version": "0.1.0",
+      "provider": {
+        "id": "dacn_lightgbm",
+        "version": "0.1.0",
+        "adapter": "dacn_lightgbm_adapter",
+        "runtime": "subprocess"
+      },
+      "arguments_sha256": "fede87a598dae05e7eeffd1bfd5ec4386a0c5706159d12712a9575863554cdaf",
+      "target_binding": {
+        "status": "VERIFIED",
+        "method": "windows_locked_handle_and_locked_staged_sha256",
+        "observed_ref": {
+          "schema_version": "target-ref-v1",
+          "kind": "FILE",
+          "observed": {
+            "path": "C:\\src\\DACN-2026-Agent\\evaluation\\task06b\\runtime\\r514d97a8df\\sample_0008\\targets\\sample_0008.exe"
+          },
+          "identity_strength": "STRONG",
+          "verified_digest": {
+            "algorithm": "sha256",
+            "value": "9d411e7e2a50e3175ea8cdbe109d2e6605a2ebefc8a638a22e53c6ac9af8cd26"
+          },
+          "snapshot": {
+            "device": 1936109683822646347,
+            "inode": 3096224744443538,
+            "size_bytes": 339968,
+            "mtime_ns": 1795754467667018700
+          },
+          "revalidation_required": true
+        },
+        "verified_at": "2026-11-27T04:41:07.888844+00:00"
+      },
+      "started_at": "2026-11-27T04:41:07.847906+00:00",
+      "finished_at": "2026-11-27T04:41:09.215096+00:00",
+      "outcome": "SUCCESS",
+      "cleanup": {
+        "status": "COMPLETE",
+        "remaining_owned_resources": []
+      },
+      "resources": {
+        "duration_ms": 1375,
+        "output_bytes": 1295
+      }
+    },
+    "exit_code": 0
+  },
+  {
+    "stage": "D7_VALIDATED",
+    "result": {
+      "schema_version": "d0-v1",
+      "run_id": "RUN-5df71178dac24501a54f2e97b936dd91",
+      "call_id": "CALL-predict-c257a9ac79e64a56",
+      "case_id": "CASE-e795708cd2ec42628eb78172555ac243",
+      "tool_id": "static.pe_malware_predict",
+      "tool_version": "0.1.0",
+      "provider": {
+        "id": "dacn_lightgbm",
+        "version": "0.1.0",
+        "adapter": "dacn_lightgbm_adapter",
+        "runtime": "subprocess"
+      },
+      "target_ref": {
+        "schema_version": "target-ref-v1",
+        "kind": "FILE",
+        "observed": {
+          "path": "C:\\src\\DACN-2026-Agent\\evaluation\\task06b\\runtime\\r514d97a8df\\sample_0008\\targets\\sample_0008.exe"
+        },
+        "identity_strength": "STRONG",
+        "verified_digest": {
+          "algorithm": "sha256",
+          "value": "9d411e7e2a50e3175ea8cdbe109d2e6605a2ebefc8a638a22e53c6ac9af8cd26"
+        },
+        "snapshot": {
+          "device": 1936109683822646347,
+          "inode": 3096224744443538,
+          "size_bytes": 339968,
+          "mtime_ns": 1795754467667018700
+        },
+        "revalidation_required": true
+      },
+      "status": "SUCCESS",
+      "observations": [
+        {
+          "facet": "static.pe_malware_prediction",
+          "status": "SUCCESS",
+          "coverage": "COMPLETE",
+          "value": {
+            "schema_version": "static-prediction-v1",
+            "feature_version": 2,
+            "feature_count": 2381,
+            "extractor": {
+              "name": "dacn-independent-ember-v2",
+              "version": "0.1.0",
+              "lief_version": "0.15.1-"
+            },
+            "target_sha256": "9d411e7e2a50e3175ea8cdbe109d2e6605a2ebefc8a638a22e53c6ac9af8cd26",
+            "model_id": "dacn-lgbm-ember2018v2-5db192ec1bda",
+            "model_sha256": "5db192ec1bda850d0e1873af705b57d05aad414aa35e8520c8315ece1c509609",
+            "threshold": 0.8321860386013389,
+            "raw_score": 0.02471921145231004,
+            "score_is_calibrated_probability": false,
+            "predicted_label": "benign",
+            "predicted_class": 0,
+            "parser_status": "OK",
+            "limitations": [
+              "Raw LightGBM score; NOT a calibrated probability.",
+              "Static analysis only; no runtime/dynamic behaviour observed.",
+              "Inference uses LIEF 0.15.1 while EMBER2018 training records used LIEF 0.9.0; feature parity for the raw-PE path is not asserted."
+            ]
+          },
+          "limitations": [
+            "Raw LightGBM score; NOT a calibrated probability.",
+            "Static analysis only; no runtime/dynamic behaviour observed.",
+            "Inference uses LIEF 0.15.1 while EMBER2018 training records used LIEF 0.9.0; feature parity for the raw-PE path is not asserted."
+          ],
+          "content_origin": "provider_output",
+          "trust_level": "UNTRUSTED_CONTENT",
+          "artifact_ref": null
+        }
+      ],
+      "receipt_sha256": "bea24d717dd93c311dc7e66b7b9cd48a8a63c0c5835269888c9d9e95d628039b",
+      "raw_artifacts": [],
+      "error": null
+    }
+  },
+  {
+    "stage": "D9_COMMITTED",
+    "commit": {
+      "case_id": "CASE-e795708cd2ec42628eb78172555ac243",
+      "revision": 3,
+      "added_evidence": 1,
+      "tool_run_id": "RUN-5df71178dac24501a54f2e97b936dd91",
+      "legacy_tool": "static_pe_malware_predict",
+      "canonical_tool_id": "static.pe_malware_predict",
+      "audit_id": "AUDIT-50af40098d504f06bfda7e9577626da9",
+      "audit_path": "C:\\src\\DACN-2026-Agent\\evaluation\\task06b\\runtime\\r514d97a8df\\sample_0008\\C\\ledgers\\CASE-e795708cd2ec42628eb78172555ac243\\d0_audit_ledger.jsonl"
+    }
+  }
+]

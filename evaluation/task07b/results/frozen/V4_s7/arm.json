@@ -1,0 +1,120 @@
+{
+  "arm": "V4",
+  "seed": 7,
+  "engine": "v4",
+  "agent_config": {
+    "model": "qwen3.5:4b",
+    "ollama_host": "http://127.0.0.1:11434",
+    "temperature": 0.1,
+    "num_predict": 3072,
+    "think": false,
+    "inference_timeout_s": 90,
+    "known_reputations": {},
+    "max_tokens": 160000,
+    "max_iterations": 8,
+    "max_tool_calls": 1,
+    "wall_clock_s": 420,
+    "max_context_chars": 24000,
+    "max_value_chars": 800
+  },
+  "decoding": {
+    "num_ctx": 12288,
+    "seed": 7,
+    "top_p": null,
+    "top_k": null,
+    "presence_penalty": null
+  },
+  "v4_config": {
+    "max_turns": 8,
+    "max_queries": 6,
+    "max_context_chars": 16000,
+    "retrieval_mode": "QUERY",
+    "max_repairs": 1
+  },
+  "track": "RAW_PE_E2E",
+  "evaluation_kind": "DEV_EVALUATION_FRESH_COHORT",
+  "confirmatory": "NOT_RUN",
+  "cohort_aliases": [
+    "sample_0001",
+    "sample_0002",
+    "sample_0003",
+    "sample_0004",
+    "sample_0005",
+    "sample_0006",
+    "sample_0007",
+    "sample_0008",
+    "sample_0009",
+    "sample_0010",
+    "sample_0011",
+    "sample_0012",
+    "sample_0013",
+    "sample_0014",
+    "sample_0015",
+    "sample_0016",
+    "sample_0017",
+    "sample_0018",
+    "sample_0019",
+    "sample_0020"
+  ],
+  "manifest_filter": {
+    "source_manifest": "evaluation/task07b/results/cohort/cases_v2_EVALUATOR_ONLY.json",
+    "source_sha256": "0bcef34a324db4235f82da7455f7b49cbe8d2e5157deea95023d47cbd1c132a4",
+    "aliases": [
+      "sample_0001",
+      "sample_0002",
+      "sample_0003",
+      "sample_0004",
+      "sample_0005",
+      "sample_0006",
+      "sample_0007",
+      "sample_0008",
+      "sample_0009",
+      "sample_0010",
+      "sample_0011",
+      "sample_0012",
+      "sample_0013",
+      "sample_0014",
+      "sample_0015",
+      "sample_0016",
+      "sample_0017",
+      "sample_0018",
+      "sample_0019",
+      "sample_0020"
+    ]
+  },
+  "runner_version": "task07b-harness-v1",
+  "v4_source_sha256": {
+    "investigation_v4/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "investigation_v4/build_ordinal_table.py": "6fb9675b6f6555469fceb68bc8e69f025b72589a0b9c1654d0e1300e1fd9a2e5",
+    "investigation_v4/config.py": "0b6dda68ddf1d12d919debf516275f086f5f774a05d43459142bd643d784631d",
+    "investigation_v4/contract.py": "0dd27f5e7f023c2b01bc7815ff83f5591718190ba331cb99aa9af9e35f8a7bcf",
+    "investigation_v4/controller.py": "616ad95b2df62ef478eeff44ed3fd64b63f6933d1ecca3a4399a9f09b970cadf",
+    "investigation_v4/imports_table_adapter.py": "6b62208cf7b66507f4d4ade3c162d10086a8c0c5cfef3a49692c0d5b9409d8fb",
+    "investigation_v4/imports_table_tool.py": "6d499ff0cbac36734596d45c9206defd1a511c9e70b839e7a654c44c219430b9",
+    "investigation_v4/projector.py": "4b723eb2aea8e5323aa6488ed0d491558197e4baa23cf22cd1d8924e261f9056",
+    "investigation_v4/query.py": "1bf616443660b5ec77b0585f8bd9cd1805499b65a59304aeb81166eb122331b2",
+    "investigation_v4/recommendation.py": "9d51213fdf6a56221316713f33bb102435ed50375f6b30cd4d62a9305a689ab5",
+    "investigation_v4/verifier.py": "3eb70ca710b9e422ae321ee0388eeed12d6320f558e568d4053a432a37eb5464",
+    "investigation_v4/workflow.py": "a842224c22733ae9bf0ba456ada64c7daf7d962703a319aada71acdb3e919ef0",
+    "investigation_v4/ordinal_table.json": "5e2f5954c9efcbe952cea25015eea512b3d96a7ad13053277767d407d6dfee5e",
+    "d0/schemas/pe-imports-table-input-v1.schema.json": "7fcc49658f6334f4195e1dfe39226494194b53d1988d365180d2c062f5a5d9ee",
+    "d0/schemas/pe-imports-table-output-v1.schema.json": "959f42187394ebd7ba2a676a2870e2b88469def52c620f699bd49c6a97ddb695",
+    "dacn/investigation.py": "50e3cc967cce8787a428419275c45585172af893281b073867c2805ceb66c91f"
+  },
+  "harness_sha256": {
+    "evaluation/task07b/harness.py": "dfaea8011a84d8b20172ef933dba40cd669be65d9b870bb95febbb197505b707",
+    "evaluation/task07b/metrics.py": "e20278593790b98726c294cdb79d5a64610429a514a891701e6cdaa3024e77e5",
+    "evaluation/task07b/cohort_audit.py": "340d4a86fdaa57524a0d14889e5779764a671bfcdfbd1dd0583d73c9090ad6b7"
+  },
+  "freeze_sha256": "5659ffe75274916ff040734bef0388c53a28b410875e5a0c4dc856fa44e720e2",
+  "git": {
+    "head": "dafc62aee5d0404878c77bc173ad5d34d29c34e5",
+    "tracked_dirty": false,
+    "dirty_paths": []
+  },
+  "expected_qwen": {
+    "model": "qwen3.5:4b",
+    "digest": "d8b0f5e9760cd1682034f292d7ef72ec46f432149be0df7574bf2d6e92e38c04",
+    "version": "0.40.16"
+  }
+}
