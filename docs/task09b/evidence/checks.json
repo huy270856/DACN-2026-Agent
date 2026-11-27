@@ -1,0 +1,59 @@
+{
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "base_commit": "16eb2e6a22eac66f7862d3f55aead98fb251a520",
+  "checks": {
+    "unit_tests.txt": {
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_task09b*.py",
+        "-v"
+      ],
+      "exit_code": 0
+    },
+    "mock_demo.json": {
+      "command": [
+        "python",
+        "-m",
+        "response.prevention",
+        "demo"
+      ],
+      "exit_code": 0
+    },
+    "persistent_mock_demo.json": {
+      "command": [
+        "python",
+        "-m",
+        "response.prevention",
+        "demo-persistent"
+      ],
+      "exit_code": 0
+    },
+    "capabilities.json": {
+      "command": [
+        "python",
+        "-m",
+        "response.prevention",
+        "capabilities"
+      ],
+      "exit_code": 0
+    },
+    "powershell_capabilities.json": {
+      "command": [
+        "python",
+        "-m",
+        "response.prevention",
+        "capabilities-powershell"
+      ],
+      "exit_code": 0
+    }
+  },
+  "scope": "HOST_CHECKS_ONLY_NATIVE_VM_EVIDENCE_SEPARATE",
+  "host_live_execution_test": "NOT_RUN_HOST_GUARD_EXPECTED",
+  "host_checks_do_not_change_system_policy": true
+}

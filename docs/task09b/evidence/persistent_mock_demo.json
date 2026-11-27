@@ -1,0 +1,123 @@
+{
+  "evaluation_type": "MOCK",
+  "fixture": "SYNTHETIC_HEADER_NOT_RUNNABLE",
+  "live_status": "BLOCKED",
+  "results": [
+    {
+      "request_id": "mock-request-1",
+      "status": "PLANNED",
+      "reason_code": "DRY_RUN_NO_WINDOWS_CHANGES",
+      "timestamp": "2026-11-27T17:20:40.864263+00:00",
+      "operation": "plan_block",
+      "evaluation_type": "MOCK",
+      "live_execution_verified": false,
+      "policy_state": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "rollback_reference": null,
+      "audit_metadata": {
+        "sequence": 1,
+        "durability": "SQLITE_TRANSACTION_MOCK_ONLY"
+      },
+      "plan": {
+        "plan_id": "42b3f303390ef0ffa56cb4407419c23c2717e86589b0d1ed28f265c6412f8e95",
+        "identity": {
+          "target_ref": "fixture.exe",
+          "sha256": "cbcb41c3a3adf01c68ffb4774e8fe6751e2c0aa9d4f107ffe8788fa1efa2313f",
+          "size": 128,
+          "pe_check": "HEADER_ONLY_NOT_EXECUTED"
+        },
+        "backend": "IN_MEMORY_MOCK",
+        "base_policy_digest": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "operation": "ADD_OWNED_RULE_ONLY",
+        "scope": "MOCK exact relative path + byte SHA256; no Windows policy generated",
+        "windows_rule_hash": "UNKNOWN_AUTHENTICODE_HASH_REQUIRED",
+        "windows_policy_baseline": {
+          "status": "UNKNOWN_NOT_BOUND",
+          "deployable": false
+        },
+        "policy_delta_proposal": {
+          "backend": "AppLocker",
+          "collection": "Exe",
+          "action": "Deny",
+          "subject_sid": null,
+          "subject_status": "TEST_USER_NOT_SELECTED",
+          "condition": "FileHash_Authenticode",
+          "authenticode_hash": null,
+          "target_byte_sha256": "cbcb41c3a3adf01c68ffb4774e8fe6751e2c0aa9d4f107ffe8788fa1efa2313f",
+          "scope_warning": "Same Authenticode hash copies may match outside lab",
+          "replace_existing_policy": false,
+          "change_collection_mode": false
+        },
+        "live_gates": [
+          "APPROVED_VM",
+          "REHEARSED_RECOVERY",
+          "TRUSTED_AUTHORIZATION",
+          "EFFECTIVE_AND_LOCAL_POLICY_REVIEW",
+          "EXACT_SUBJECT_AND_RULE_IDENTITY",
+          "VALIDATED_OWNED_RULE_ROLLBACK"
+        ],
+        "rollback": "MOCK remove only owned rule; live recovery NOT_VALIDATED"
+      }
+    },
+    {
+      "request_id": "mock-request-1",
+      "status": "MOCK_APPLIED",
+      "reason_code": "SIMULATED_RULE_ADDED",
+      "timestamp": "2026-11-27T17:20:40.875172+00:00",
+      "operation": "apply_block",
+      "evaluation_type": "MOCK",
+      "live_execution_verified": false,
+      "policy_state": "f8fcbecd8d519966ef6031f7138b3044ff857bd3f33c93bd92353aacb78cbda8",
+      "rollback_reference": "42b3f303390ef0ffa56cb4407419c23c2717e86589b0d1ed28f265c6412f8e95",
+      "audit_metadata": {
+        "sequence": 2,
+        "durability": "SQLITE_TRANSACTION_MOCK_ONLY"
+      },
+      "identity_before": {
+        "target_ref": "fixture.exe",
+        "sha256": "cbcb41c3a3adf01c68ffb4774e8fe6751e2c0aa9d4f107ffe8788fa1efa2313f",
+        "size": 128,
+        "pe_check": "HEADER_ONLY_NOT_EXECUTED"
+      },
+      "identity_after": {
+        "target_ref": "fixture.exe",
+        "sha256": "cbcb41c3a3adf01c68ffb4774e8fe6751e2c0aa9d4f107ffe8788fa1efa2313f",
+        "size": 128,
+        "pe_check": "HEADER_ONLY_NOT_EXECUTED"
+      },
+      "policy_before": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "request_id": "mock-request-1",
+      "status": "MOCK_VERIFIED",
+      "reason_code": "SIMULATION_ONLY_NOT_EXECUTION_PROOF",
+      "timestamp": "2026-11-27T17:20:40.885873+00:00",
+      "operation": "verify_block",
+      "evaluation_type": "MOCK",
+      "live_execution_verified": false,
+      "policy_state": "f8fcbecd8d519966ef6031f7138b3044ff857bd3f33c93bd92353aacb78cbda8",
+      "rollback_reference": "42b3f303390ef0ffa56cb4407419c23c2717e86589b0d1ed28f265c6412f8e95",
+      "audit_metadata": {
+        "sequence": 3,
+        "durability": "SQLITE_TRANSACTION_MOCK_ONLY"
+      }
+    },
+    {
+      "request_id": "mock-request-1",
+      "status": "MOCK_ROLLED_BACK",
+      "reason_code": "OWNED_SIMULATED_RULE_REMOVED",
+      "timestamp": "2026-11-27T17:20:40.893663+00:00",
+      "operation": "rollback_block",
+      "evaluation_type": "MOCK",
+      "live_execution_verified": false,
+      "policy_state": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "rollback_reference": "42b3f303390ef0ffa56cb4407419c23c2717e86589b0d1ed28f265c6412f8e95",
+      "audit_metadata": {
+        "sequence": 4,
+        "durability": "SQLITE_TRANSACTION_MOCK_ONLY"
+      },
+      "policy_before": "f8fcbecd8d519966ef6031f7138b3044ff857bd3f33c93bd92353aacb78cbda8"
+    }
+  ],
+  "audit_count": 4,
+  "reopened_after_apply": true
+}

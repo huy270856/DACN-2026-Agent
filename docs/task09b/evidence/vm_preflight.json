@@ -1,0 +1,49 @@
+{
+  "schema_version": "task09b-vm-preflight-v1",
+  "session_date": "2026-11-27",
+  "timezone": "Asia/Bangkok",
+  "evaluation_type": "WINDOWS_VM_READ_ONLY_AND_SNAPSHOT_RECOVERY",
+  "result": "PASS_ENVIRONMENT_CHECK_ONLY",
+  "vm_name": "DACN09B-Win11",
+  "hypervisor": "Oracle VirtualBox 7.2.22",
+  "memory_mb": 4096,
+  "cpus": 2,
+  "guest_observed_before_restore": {
+    "computer_name": "DACN09B-LAB",
+    "edition": "Professional",
+    "build": "26300",
+    "display_version": "26H2",
+    "appidsvc_status": "Running",
+    "applocker_cmdlet_available": true,
+    "enabled_administrator_in_probe_session": false,
+    "effective_policy_xml": "<AppLockerPolicy Version=\"1\" />",
+    "guest_additions_installed": false
+  },
+  "recovery_rehearsal": {
+    "snapshot_name": "01-windows-installed-clean",
+    "snapshot_uuid": "a52ed8f3-1543-44fd-86d2-6d0ac2223a29",
+    "marker_path_in_guest": "C:\\DACN09B-Lab\\recovery-marker.txt",
+    "marker_before_restore": true,
+    "shutdown": "GUEST_SHUTDOWN_AFTER_WINDOWS_UPDATE_COMPLETED",
+    "restore_command_succeeded": true,
+    "vm_resumed_after_restore": true,
+    "marker_after_restore": false,
+    "desktop_and_guest_powershell_usable_after_restore": true,
+    "status": "PASS_MARKER_RESTORE_TEST"
+  },
+  "scope": {
+    "host_windows_policy_changes": 0,
+    "guest_applocker_policy_changes": 0,
+    "fixture_executions": 0,
+    "live_execution_prevention_test": "NOT_RUN",
+    "live_backend": "NOT_IMPLEMENTED",
+    "production_authorization_integration": "NOT_IMPLEMENTED"
+  },
+  "evidence_method": "VBoxManage state/output and visually inspected guest screenshots; no passwords collected",
+  "limitations": [
+    "Cmdlet availability and empty policy do not prove enforcement capability.",
+    "Marker rollback verifies snapshot recovery, not AppLocker owned-rule rollback.",
+    "Snapshot captured the post-install desktop; future baseline should account for pending Windows updates.",
+    "Guest clock is restored with running snapshot; session_date uses client context rather than guest clock."
+  ]
+}

@@ -1,0 +1,451 @@
+{
+  "schema_version": "task09b-ntfs-live-v1",
+  "evaluation_type": "WINDOWS_VM_NTFS_LIVE",
+  "status": "PASS",
+  "backend": "NTFS_EXECUTE_DENY_CURRENT_SID_SINGLE_FIXTURE",
+  "guest_name": "DACN09B-LAB",
+  "timestamp": "2026-11-27T17:05:28.3725937Z",
+  "checks": [
+    {
+      "name": "target_runs_before",
+      "passed": true
+    },
+    {
+      "name": "control_runs_before",
+      "passed": true
+    },
+    {
+      "name": "dry_run_no_dacl_change",
+      "passed": true
+    },
+    {
+      "name": "hash_mismatch_rejected",
+      "passed": true
+    },
+    {
+      "name": "path_escape_rejected",
+      "passed": true
+    },
+    {
+      "name": "authorization_default_deny",
+      "passed": true
+    },
+    {
+      "name": "apply_readback",
+      "passed": true
+    },
+    {
+      "name": "target_createprocess_denied_5",
+      "passed": true
+    },
+    {
+      "name": "control_runs_during_block",
+      "passed": true
+    },
+    {
+      "name": "duplicate_apply_no_change",
+      "passed": true
+    },
+    {
+      "name": "separate_rollback_authorization",
+      "passed": true
+    },
+    {
+      "name": "rollback_failure_audited",
+      "passed": true
+    },
+    {
+      "name": "still_blocked_after_failed_rollback",
+      "passed": true
+    },
+    {
+      "name": "rollback_readback",
+      "passed": true
+    },
+    {
+      "name": "target_runs_after_rollback",
+      "passed": true
+    },
+    {
+      "name": "control_runs_after_rollback",
+      "passed": true
+    },
+    {
+      "name": "duplicate_rollback_no_change",
+      "passed": true
+    },
+    {
+      "name": "apply_failure_audited",
+      "passed": true
+    },
+    {
+      "name": "failed_apply_dacl_unchanged",
+      "passed": true
+    },
+    {
+      "name": "recover_intent_without_change",
+      "passed": true
+    }
+  ],
+  "results": [
+    {
+      "request_id": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "operation": "plan_block",
+      "status": "PLANNED",
+      "reason_code": "DRY_RUN_ACL_UNCHANGED",
+      "timestamp": "2026-11-27T17:05:27.0382276Z",
+      "evaluation_type": "WINDOWS_VM_NTFS_LIVE",
+      "before_dacl_sha256": "7e1041e2997cde41d89369b2cdb5feb909f0a5e32cf533aaf299ea7984815513",
+      "after_dacl_sha256": "7e1041e2997cde41d89369b2cdb5feb909f0a5e32cf533aaf299ea7984815513",
+      "rollback_reference": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "live_execution_verified": false,
+      "execution": null
+    },
+    {
+      "request_id": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "operation": "apply_block",
+      "status": "APPLIED",
+      "reason_code": "FILE_DACL_READBACK_MATCHES",
+      "timestamp": "2026-11-27T17:05:27.2105580Z",
+      "evaluation_type": "WINDOWS_VM_NTFS_LIVE",
+      "before_dacl_sha256": "7e1041e2997cde41d89369b2cdb5feb909f0a5e32cf533aaf299ea7984815513",
+      "after_dacl_sha256": "00d14b20f5b85a2c6fd27023fbc11d03edfa8e831fa78dc5565d18d71cde05ef",
+      "rollback_reference": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "live_execution_verified": false,
+      "execution": null
+    },
+    {
+      "request_id": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "operation": "verify_block",
+      "status": "LIVE_BLOCK_VERIFIED",
+      "reason_code": "CREATEPROCESS_ACCESS_DENIED_5",
+      "timestamp": "2026-11-27T17:05:27.2452173Z",
+      "evaluation_type": "WINDOWS_VM_NTFS_LIVE",
+      "before_dacl_sha256": "7e1041e2997cde41d89369b2cdb5feb909f0a5e32cf533aaf299ea7984815513",
+      "after_dacl_sha256": "00d14b20f5b85a2c6fd27023fbc11d03edfa8e831fa78dc5565d18d71cde05ef",
+      "rollback_reference": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "live_execution_verified": true,
+      "execution": {
+        "started": false,
+        "timed_out": false,
+        "native_error": 5,
+        "exit_code": -1,
+        "output": null
+      }
+    },
+    {
+      "request_id": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "operation": "rollback_block",
+      "status": "ROLLED_BACK",
+      "reason_code": "OWNED_ACE_REMOVED_BASELINE_MATCHES",
+      "timestamp": "2026-11-27T17:05:27.6939532Z",
+      "evaluation_type": "WINDOWS_VM_NTFS_LIVE",
+      "before_dacl_sha256": "00d14b20f5b85a2c6fd27023fbc11d03edfa8e831fa78dc5565d18d71cde05ef",
+      "after_dacl_sha256": "7e1041e2997cde41d89369b2cdb5feb909f0a5e32cf533aaf299ea7984815513",
+      "rollback_reference": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "live_execution_verified": false,
+      "execution": null
+    }
+  ],
+  "before_execution": {
+    "started": true,
+    "timed_out": false,
+    "native_error": 0,
+    "exit_code": 0,
+    "output": "TARGET_b3e27125f7d1420f8d8fa4d6b6b98713"
+  },
+  "control_before": {
+    "started": true,
+    "timed_out": false,
+    "native_error": 0,
+    "exit_code": 0,
+    "output": "CONTROL_2252ba44f7c6464999259d77dac31e2e"
+  },
+  "control_during": {
+    "started": true,
+    "timed_out": false,
+    "native_error": 0,
+    "exit_code": 0,
+    "output": "CONTROL_2252ba44f7c6464999259d77dac31e2e"
+  },
+  "after_execution": {
+    "started": true,
+    "timed_out": false,
+    "native_error": 0,
+    "exit_code": 0,
+    "output": "TARGET_b3e27125f7d1420f8d8fa4d6b6b98713"
+  },
+  "target_sha256": "34a30dc4619d34df48bf7c04035c955eb2a78cd34dfa8773b9942b66623178a2",
+  "control_sha256": "09cec5cc88fb3d7cd91fda21ad692c06e5b148b6b0c54687426456c7e2d970be",
+  "baseline_dacl_sha256": "7e1041e2997cde41d89369b2cdb5feb909f0a5e32cf533aaf299ea7984815513",
+  "final_dacl_sha256": "7e1041e2997cde41d89369b2cdb5feb909f0a5e32cf533aaf299ea7984815513",
+  "snapshot_uuid": "a52ed8f3-1543-44fd-86d2-6d0ac2223a29",
+  "host_policy_changes": 0,
+  "global_app_policy_changes": 0,
+  "files_are_self_compiled_benign": true,
+  "windows_event_log_capture": "NOT_ENABLED_NO_GLOBAL_AUDIT_CHANGES",
+  "block_evidence": "CreateProcess Win32Exception NativeErrorCode=5 plus file DACL readback; not AppLocker event 8004",
+  "audit_events": [
+    {
+      "request_id": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "operation": "plan_block",
+      "status": "PLANNED",
+      "reason_code": "DRY_RUN_ACL_UNCHANGED",
+      "timestamp": "2026-11-27T17:05:27.0382276Z",
+      "evaluation_type": "WINDOWS_VM_NTFS_LIVE",
+      "before_dacl_sha256": "7e1041e2997cde41d89369b2cdb5feb909f0a5e32cf533aaf299ea7984815513",
+      "after_dacl_sha256": "7e1041e2997cde41d89369b2cdb5feb909f0a5e32cf533aaf299ea7984815513",
+      "rollback_reference": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "live_execution_verified": false,
+      "execution": null
+    },
+    {
+      "request_id": "b163613a-df1d-4e91-bbb8-bb7b3b075f82",
+      "operation": "plan_block",
+      "status": "REJECTED_OR_PARTIAL_REVIEW_MANIFEST",
+      "reason_code": "TARGET_HASH_MISMATCH",
+      "timestamp": "2026-11-27T17:05:27.0726073Z",
+      "evaluation_type": "WINDOWS_VM_NTFS_LIVE",
+      "before_dacl_sha256": null,
+      "after_dacl_sha256": null,
+      "rollback_reference": "b163613a-df1d-4e91-bbb8-bb7b3b075f82",
+      "live_execution_verified": false,
+      "execution": null
+    },
+    {
+      "request_id": "799f5d71-1ded-40c1-8b96-06d8f4c9efef",
+      "operation": "plan_block",
+      "status": "REJECTED_OR_PARTIAL_REVIEW_MANIFEST",
+      "reason_code": "TARGET_OUTSIDE_APPROVED_FIXTURE",
+      "timestamp": "2026-11-27T17:05:27.0769226Z",
+      "evaluation_type": "WINDOWS_VM_NTFS_LIVE",
+      "before_dacl_sha256": null,
+      "after_dacl_sha256": null,
+      "rollback_reference": "799f5d71-1ded-40c1-8b96-06d8f4c9efef",
+      "live_execution_verified": false,
+      "execution": null
+    },
+    {
+      "request_id": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "operation": "apply_block",
+      "status": "REJECTED_OR_PARTIAL_REVIEW_MANIFEST",
+      "reason_code": "TRUSTED_HARNESS_AUTHORIZATION_DENIED",
+      "timestamp": "2026-11-27T17:05:27.0843684Z",
+      "evaluation_type": "WINDOWS_VM_NTFS_LIVE",
+      "before_dacl_sha256": null,
+      "after_dacl_sha256": null,
+      "rollback_reference": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "live_execution_verified": false,
+      "execution": null
+    },
+    {
+      "request_id": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "operation": "apply_block",
+      "status": "INTENT",
+      "reason_code": "BEFORE_FILE_DACL_CHANGE",
+      "timestamp": "2026-11-27T17:05:27.1711840Z",
+      "evaluation_type": "WINDOWS_VM_NTFS_LIVE",
+      "before_dacl_sha256": "7e1041e2997cde41d89369b2cdb5feb909f0a5e32cf533aaf299ea7984815513",
+      "after_dacl_sha256": null,
+      "rollback_reference": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "live_execution_verified": false,
+      "execution": null
+    },
+    {
+      "request_id": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "operation": "apply_block",
+      "status": "APPLIED",
+      "reason_code": "FILE_DACL_READBACK_MATCHES",
+      "timestamp": "2026-11-27T17:05:27.2105580Z",
+      "evaluation_type": "WINDOWS_VM_NTFS_LIVE",
+      "before_dacl_sha256": "7e1041e2997cde41d89369b2cdb5feb909f0a5e32cf533aaf299ea7984815513",
+      "after_dacl_sha256": "00d14b20f5b85a2c6fd27023fbc11d03edfa8e831fa78dc5565d18d71cde05ef",
+      "rollback_reference": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "live_execution_verified": false,
+      "execution": null
+    },
+    {
+      "request_id": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "operation": "verify_block",
+      "status": "LIVE_BLOCK_VERIFIED",
+      "reason_code": "CREATEPROCESS_ACCESS_DENIED_5",
+      "timestamp": "2026-11-27T17:05:27.2452173Z",
+      "evaluation_type": "WINDOWS_VM_NTFS_LIVE",
+      "before_dacl_sha256": "7e1041e2997cde41d89369b2cdb5feb909f0a5e32cf533aaf299ea7984815513",
+      "after_dacl_sha256": "00d14b20f5b85a2c6fd27023fbc11d03edfa8e831fa78dc5565d18d71cde05ef",
+      "rollback_reference": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "live_execution_verified": true,
+      "execution": {
+        "started": false,
+        "timed_out": false,
+        "native_error": 5,
+        "exit_code": -1,
+        "output": null
+      }
+    },
+    {
+      "request_id": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "operation": "apply_block",
+      "status": "NO_CHANGE",
+      "reason_code": "DUPLICATE_APPLY_USE_VERIFY",
+      "timestamp": "2026-11-27T17:05:27.5486737Z",
+      "evaluation_type": "WINDOWS_VM_NTFS_LIVE",
+      "before_dacl_sha256": "00d14b20f5b85a2c6fd27023fbc11d03edfa8e831fa78dc5565d18d71cde05ef",
+      "after_dacl_sha256": "00d14b20f5b85a2c6fd27023fbc11d03edfa8e831fa78dc5565d18d71cde05ef",
+      "rollback_reference": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "live_execution_verified": false,
+      "execution": null
+    },
+    {
+      "request_id": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "operation": "rollback_block",
+      "status": "REJECTED_OR_PARTIAL_REVIEW_MANIFEST",
+      "reason_code": "TRUSTED_HARNESS_AUTHORIZATION_DENIED",
+      "timestamp": "2026-11-27T17:05:27.5603672Z",
+      "evaluation_type": "WINDOWS_VM_NTFS_LIVE",
+      "before_dacl_sha256": null,
+      "after_dacl_sha256": null,
+      "rollback_reference": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "live_execution_verified": false,
+      "execution": null
+    },
+    {
+      "request_id": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "operation": "rollback_block",
+      "status": "INTENT",
+      "reason_code": "BEFORE_OWNED_ACE_REMOVAL",
+      "timestamp": "2026-11-27T17:05:27.5956551Z",
+      "evaluation_type": "WINDOWS_VM_NTFS_LIVE",
+      "before_dacl_sha256": "00d14b20f5b85a2c6fd27023fbc11d03edfa8e831fa78dc5565d18d71cde05ef",
+      "after_dacl_sha256": null,
+      "rollback_reference": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "live_execution_verified": false,
+      "execution": null
+    },
+    {
+      "request_id": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "operation": "rollback_block",
+      "status": "REJECTED_OR_PARTIAL_REVIEW_MANIFEST",
+      "reason_code": "INJECTED_ROLLBACK_FAILURE",
+      "timestamp": "2026-11-27T17:05:27.6001308Z",
+      "evaluation_type": "WINDOWS_VM_NTFS_LIVE",
+      "before_dacl_sha256": null,
+      "after_dacl_sha256": null,
+      "rollback_reference": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "live_execution_verified": false,
+      "execution": null
+    },
+    {
+      "request_id": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "operation": "verify_block",
+      "status": "LIVE_BLOCK_VERIFIED",
+      "reason_code": "CREATEPROCESS_ACCESS_DENIED_5",
+      "timestamp": "2026-11-27T17:05:27.6083684Z",
+      "evaluation_type": "WINDOWS_VM_NTFS_LIVE",
+      "before_dacl_sha256": "7e1041e2997cde41d89369b2cdb5feb909f0a5e32cf533aaf299ea7984815513",
+      "after_dacl_sha256": "00d14b20f5b85a2c6fd27023fbc11d03edfa8e831fa78dc5565d18d71cde05ef",
+      "rollback_reference": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "live_execution_verified": true,
+      "execution": {
+        "started": false,
+        "timed_out": false,
+        "native_error": 5,
+        "exit_code": -1,
+        "output": null
+      }
+    },
+    {
+      "request_id": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "operation": "rollback_block",
+      "status": "INTENT",
+      "reason_code": "BEFORE_OWNED_ACE_REMOVAL",
+      "timestamp": "2026-11-27T17:05:27.6446309Z",
+      "evaluation_type": "WINDOWS_VM_NTFS_LIVE",
+      "before_dacl_sha256": "00d14b20f5b85a2c6fd27023fbc11d03edfa8e831fa78dc5565d18d71cde05ef",
+      "after_dacl_sha256": null,
+      "rollback_reference": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "live_execution_verified": false,
+      "execution": null
+    },
+    {
+      "request_id": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "operation": "rollback_block",
+      "status": "ROLLED_BACK",
+      "reason_code": "OWNED_ACE_REMOVED_BASELINE_MATCHES",
+      "timestamp": "2026-11-27T17:05:27.6939532Z",
+      "evaluation_type": "WINDOWS_VM_NTFS_LIVE",
+      "before_dacl_sha256": "00d14b20f5b85a2c6fd27023fbc11d03edfa8e831fa78dc5565d18d71cde05ef",
+      "after_dacl_sha256": "7e1041e2997cde41d89369b2cdb5feb909f0a5e32cf533aaf299ea7984815513",
+      "rollback_reference": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "live_execution_verified": false,
+      "execution": null
+    },
+    {
+      "request_id": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "operation": "rollback_block",
+      "status": "ROLLED_BACK",
+      "reason_code": "ALREADY_BASELINE_NO_CHANGE",
+      "timestamp": "2026-11-27T17:05:28.2625846Z",
+      "evaluation_type": "WINDOWS_VM_NTFS_LIVE",
+      "before_dacl_sha256": "7e1041e2997cde41d89369b2cdb5feb909f0a5e32cf533aaf299ea7984815513",
+      "after_dacl_sha256": "7e1041e2997cde41d89369b2cdb5feb909f0a5e32cf533aaf299ea7984815513",
+      "rollback_reference": "0d9b32df-dc57-4f9b-ad7e-2aa37470f44a",
+      "live_execution_verified": false,
+      "execution": null
+    },
+    {
+      "request_id": "39d0fead-f35e-4ae6-ada5-30c76ec9649f",
+      "operation": "plan_block",
+      "status": "PLANNED",
+      "reason_code": "DRY_RUN_ACL_UNCHANGED",
+      "timestamp": "2026-11-27T17:05:28.2943537Z",
+      "evaluation_type": "WINDOWS_VM_NTFS_LIVE",
+      "before_dacl_sha256": "7e1041e2997cde41d89369b2cdb5feb909f0a5e32cf533aaf299ea7984815513",
+      "after_dacl_sha256": "7e1041e2997cde41d89369b2cdb5feb909f0a5e32cf533aaf299ea7984815513",
+      "rollback_reference": "39d0fead-f35e-4ae6-ada5-30c76ec9649f",
+      "live_execution_verified": false,
+      "execution": null
+    },
+    {
+      "request_id": "39d0fead-f35e-4ae6-ada5-30c76ec9649f",
+      "operation": "apply_block",
+      "status": "INTENT",
+      "reason_code": "BEFORE_FILE_DACL_CHANGE",
+      "timestamp": "2026-11-27T17:05:28.3375995Z",
+      "evaluation_type": "WINDOWS_VM_NTFS_LIVE",
+      "before_dacl_sha256": "7e1041e2997cde41d89369b2cdb5feb909f0a5e32cf533aaf299ea7984815513",
+      "after_dacl_sha256": null,
+      "rollback_reference": "39d0fead-f35e-4ae6-ada5-30c76ec9649f",
+      "live_execution_verified": false,
+      "execution": null
+    },
+    {
+      "request_id": "39d0fead-f35e-4ae6-ada5-30c76ec9649f",
+      "operation": "apply_block",
+      "status": "REJECTED_OR_PARTIAL_REVIEW_MANIFEST",
+      "reason_code": "INJECTED_APPLY_FAILURE",
+      "timestamp": "2026-11-27T17:05:28.3410307Z",
+      "evaluation_type": "WINDOWS_VM_NTFS_LIVE",
+      "before_dacl_sha256": null,
+      "after_dacl_sha256": null,
+      "rollback_reference": "39d0fead-f35e-4ae6-ada5-30c76ec9649f",
+      "live_execution_verified": false,
+      "execution": null
+    },
+    {
+      "request_id": "39d0fead-f35e-4ae6-ada5-30c76ec9649f",
+      "operation": "rollback_block",
+      "status": "ROLLED_BACK",
+      "reason_code": "ALREADY_BASELINE_NO_CHANGE",
+      "timestamp": "2026-11-27T17:05:28.3686870Z",
+      "evaluation_type": "WINDOWS_VM_NTFS_LIVE",
+      "before_dacl_sha256": "7e1041e2997cde41d89369b2cdb5feb909f0a5e32cf533aaf299ea7984815513",
+      "after_dacl_sha256": "7e1041e2997cde41d89369b2cdb5feb909f0a5e32cf533aaf299ea7984815513",
+      "rollback_reference": "39d0fead-f35e-4ae6-ada5-30c76ec9649f",
+      "live_execution_verified": false,
+      "execution": null
+    }
+  ],
+  "backend_source_sha256": "2F5C96048CDDBE6A2C1828C6A9F5373670246DE7A31B54C9A78C88429FB79063",
+  "backend_executable_sha256": "54745352A4F11658BE700A34B7A77CA1E907F28F7C2855B534D5B08B61335680"
+}
