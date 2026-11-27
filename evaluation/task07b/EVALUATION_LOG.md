@@ -267,3 +267,11 @@ Thực hiện:
 - Info (review): `sample_0015` = verifier.exe trùng tên với một ứng viên được scan trong 06B-R
   repair_dev v2/v3; ứng viên đó eligible nhưng **không được chọn và chưa từng inference**, nên không
   phải lây nhiễm cohort (review đã xác minh). Cohort giữ nguyên.
+
+## 2026-11-27 — Re-review S7 (74ee775..c09b16f): PASS → pre-run freeze
+
+- Session review: PASS (Medium-A/B đạt; regression 856/0/4). Hai ghi chú Low đưa vào PROTOCOL trong
+  commit freeze: (1) mọi thay đổi metrics sau freeze phải bump `METRICS_VERSION` và ghi artifact
+  mới; (2) M6 latency median không tính slot `MISSING_TRACE` (và trace không có latency).
+- Commit freeze tiếp theo là commit **pre-run freeze**. S8 chỉ được chạy ở đúng commit đó
+  (`run_s8.ps1 -FreezeCommit <SHA>`), authorization `DACN_OWNER_07B_EVAL_GO`, bởi Owner ngoài session.

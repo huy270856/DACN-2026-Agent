@@ -77,9 +77,12 @@ ví dụ run bị dừng giữa chừng) **luôn nằm trong mẫu số**, và t
 | M4 | Absence screen (`RULE_SCREEN_CANDIDATE`): regex M4 của 07A (`ABSENCE_RE`, `LIMITATION_RE`, `SCOPE_RE`) áp **trực tiếp trên văn bản final**, như nhau cho BASE, V4_NOQ và V4. Phân SCOPED/UNSCOPED. Developer review rà tay câu nguyên văn, áp như nhau cho 3 arm, ghi riêng | run có final |
 | M5 | Structural self-corroboration. BASE: flag `prediction_used_as_own_corroboration`. V4: bằng 0 **do cấu trúc** (detector không có handle). Báo là structural, **không** so như cải thiện hành vi | run có final |
 | M9 | NOT_STATIC → `NOT_STATICALLY_ANSWERABLE` hoặc `PARTIALLY_ANSWERED`; INITIAL_SUFFICIENT → `ANSWERED` và không gọi analyzer. Chỉ v4 (BASE: NOT_APPLICABLE) | NOT_STATIC + INITIAL_SUFFICIENT (8) |
-| M6 | Số lần gọi LLM, latency mean/median, prompt/output token, prompt lớn nhất | tất cả |
+| M6 | Số lần gọi LLM, latency mean/median, prompt/output token, prompt lớn nhất. Latency mean/median chỉ tính trên run **có** `latency_s` (slot `MISSING_TRACE` và trace `INFRA_INTERRUPTED`/`TARGET_DRIFT` không có latency nên **không** vào median; số các slot này luôn báo ở M7) | tất cả |
 | M7 | Status; truncation (`done_reason=length` và cả lượt PlannerError có `error_payload` hoặc "empty content"); tràn context (≥ 0.95 × num_ctx); lỗi hạ tầng; validation error; isolation | tất cả |
 | M10 | Final hợp lệ | 20 |
+
+**Version metric.** Mọi thay đổi `metrics.py` sau commit freeze phải **bump `METRICS_VERSION`** và ghi
+thành artifact mới (`metrics_v2.json` …), không ghi đè `metrics_v1.json`; đó là deviation phải ghi log.
 
 **M4 độc lập với verifier v4 (Planner, 2026-11-27).** M4 **không** dùng flag hay quy tắc miễn trừ
 coverage của verifier v4, nên V4 không được lợi từ chính logic của nó. Flag của verifier (gồm
