@@ -108,3 +108,16 @@ Ràng buộc kèm theo (nguyên văn):
 - Test: `tests/test_task07b_workflow.py` (28 test: contract, verifier, bảng D2, payload planner,
   MOCK_LLM E2E qua D1–D9 thật). MOCK_LLM không phải bằng chứng hành vi.
 - Full regression: `820 passed, 0 failed, 4 skipped` (+83 subtests).
+
+## 2026-11-27 — Quyết định owner (qua Planner): authorization DEV và Ollama
+
+- Chuỗi authorization cho S5 (DEV_DEBUG) và S6 (smoke G3), Owner đã duyệt:
+  `DACN_OWNER_07B_DEV_DEBUG_2026-11-27`. **Chỉ** dùng cho DEV_DEBUG và smoke G3. S8 (run frozen)
+  dùng chuỗi khác, Planner sẽ hỏi Owner khi tới bước đó.
+- Owner tự bật Ollama headless ngoài session; session Developer **không** khởi động Ollama và chờ
+  xác nhận `127.0.0.1:11434` chạy 0.40.16.
+- Xử lý rủi ro `pattern`/`multipleOf` trong schema decode: Ollama bỏ qua → ghi log (parse sau
+  decode vẫn validate đủ schema); Ollama báo lỗi/làm sai output → dừng, báo Planner kèm raw error.
+  Phương án "bỏ keyword không hỗ trợ khỏi schema gửi Ollama, giữ schema validate" **chưa** làm,
+  chờ Owner duyệt.
+- Thứ tự: viết `cohort_audit.py` + test trước; chỉ chạy audit chọn cohort sau khi G3 PASS.
