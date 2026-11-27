@@ -24,6 +24,11 @@ from .imports_table_tool import ARGUMENTS as TABLE_ARGS, FACET as TABLE_FACET, T
 
 DEFAULT_TOOLS = (ToolBinding(TABLE_TOOL, TABLE_FACET, TABLE_ARGS),)
 WORKFLOW_VERSION = "investigation-v4.0-workflow-1"
+# Fixed, case-independent feedback for typed query errors (facts, not suggestions of content).
+QUERY_HINTS = {"QUERY_UNKNOWN_DLL": "value must equal a dll name exactly as listed in import_index (case-insensitive)",
+               "QUERY_BAD_PREFIX": "prefix must be 3-64 characters of letters, digits, _ ? @ $",
+               "QUERY_PAGE_OUT_OF_RANGE": "page is beyond the last page of this query",
+               "READ_BAD_OFFSET": "offset must be a multiple of 16 inside the table"}
 
 
 class V4Planner:
@@ -65,6 +70,7 @@ def run(case_path, cfg, v4: V4Config, registry, orch, policy, *, question: str, 
     turns: List[Dict[str, Any]] = []
     queries_run: List[Dict[str, Any]] = []
     query_keys: set = set()
+    query_log: List[Dict[str, Any]] = []   # trusted record of executed QUERY_IMPORTS (for coverage)
     history: List[Dict[str, Any]] = []
     detector = projector.detector_context(state)
     result: Dict[str, Any] = {
@@ -158,7 +164,7 @@ def run(case_path, cfg, v4: V4Config, registry, orch, policy, *, question: str, 
                     raise ControllerReject("CASE_REVISION_STALE", "Case changed during inference")
                 ctl.validate(ctl.finish_proposal(state, obj["answer"]), state)
                 checks = verifier.verify(obj, shown_handles=shown, handles=handles, table_value=_table_value(state),
-                                         viewed_indices=viewed.keys())
+                                         viewed_indices=viewed.keys(), query_log=query_log)
                 result.update(status="FINISHED_FLAGGED" if checks["has_flags"] else "FINISHED",
                               final=copy.deepcopy(obj), verification=checks, forced_final=forced)
                 break
@@ -209,6 +215,8 @@ def run(case_path, cfg, v4: V4Config, registry, orch, policy, *, question: str, 
                         rec = ({"by": obj["by"], "value": obj["value"], "page": obj["page"], "total_matches": r["total_matches"]}
                                if action == "QUERY_IMPORTS" else {"offset": obj["offset"]})
                         queries_run.append(rec)
+                        if action == "QUERY_IMPORTS":
+                            query_log.append(dict(rec, indices=[e["index"] for e in r["entries"]]))
                         last_result = {"action": action, "outcome": "OK", **rec, "returned": len(r["entries"]),
                                        "new_entries": len(new),
                                        "next_page" if action == "QUERY_IMPORTS" else "next_offset":
@@ -218,7 +226,8 @@ def run(case_path, cfg, v4: V4Config, registry, orch, policy, *, question: str, 
                         events.append({"stage": "COMMITTED_EVIDENCE_QUERY", "result": copy.deepcopy(r)})
             except query.QueryError as exc:
                 turn["query_error"] = exc.code
-                last_result = {"action": action, "outcome": "ERROR", "error": exc.code}
+                last_result = {"action": action, "outcome": "ERROR", "error": exc.code,
+                               "hint": QUERY_HINTS.get(exc.code, "request not executed; budget used")}
     except (ValueError, ControllerReject) as exc:
         result["failure"] = str(exc)
         if turns:

@@ -311,3 +311,22 @@ def test_format_repair_once_then_exhausted(case):
     r = _run(case, Bad())
     assert r["repair_attempts"] == 1 and r["failure"] == "VALIDATION_REPAIR_EXHAUSTED" and len(r["turns"]) == 2
     assert r["turns"][1]["is_repair"] and r["turns"][1]["context"]["facts"]["repair_feedback"]
+
+
+def test_absence_covered_by_complete_prefix_query_or_fully_viewed_dll():
+    v = _payload()
+    zero = [{"by": "SYMBOL_PREFIX", "value": "CreateProcess", "page": 0, "total_matches": 0, "indices": []}]
+    s = _final(["I21"], text="No import starts with CreateProcess in the table.")
+    h = P.HandleMap()
+    base = dict(shown_handles=("I21",), handles=h, table_value=v, viewed_indices={21})
+    assert "absence_beyond_coverage_suspected" in V.verify(s, **base)["flags"]
+    assert "absence_beyond_coverage_suspected" not in V.verify(s, **base, query_log=zero)["flags"]
+    partial = [{"by": "SYMBOL_PREFIX", "value": "Get", "page": 0, "total_matches": 21, "indices": list(range(16))}]
+    s2 = _final(["I21"], text="No Get APIs beyond these are imported.")
+    assert "absence_beyond_coverage_suspected" in V.verify(s2, **base, query_log=partial)["flags"]
+    # Fully viewed DLL named in the sentence (WS2_32 = entries 21-23).
+    s3 = _final(["I21"], text="WS2_32.dll does not import any send function.")
+    full = dict(base, viewed_indices={21, 22, 23})
+    assert "absence_beyond_coverage_suspected" not in V.verify(s3, **full)["flags"]
+    trunc = dict(v, truncated=True)
+    assert "absence_beyond_coverage_suspected" in V.verify(s, **dict(base, table_value=trunc), query_log=zero)["flags"]

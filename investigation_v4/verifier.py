@@ -35,8 +35,28 @@ def resolve(handle: str, handles, table_value: Optional[Dict[str, Any]]) -> Opti
     return {"handle": handle, **r}
 
 
+def _covered(sentence: str, table_value: Dict[str, Any], viewed: set, query_log: List[Dict[str, Any]]) -> bool:
+    """An absence sentence is in coverage when it names a DLL whose returned entries were all viewed,
+    or a query value whose matches were all viewed (incl. zero matches), on a non-truncated table."""
+    if table_value["truncated"]:
+        return False
+    low = sentence.lower()
+    for d in query.dll_summary(table_value):
+        if d["dll"].lower() in low and set(query.dll_indices(table_value, d["dll"])) <= viewed:
+            return True
+    seen: Dict[tuple, Dict[str, Any]] = {}
+    for q in query_log:
+        k = (q["by"], q["value"].lower())
+        rec = seen.setdefault(k, {"total": q["total_matches"], "idx": set()})
+        rec["idx"] |= set(q["indices"])
+    for (by, value), rec in seen.items():
+        if value in low and len(rec["idx"]) >= rec["total"]:
+            return True
+    return False
+
+
 def verify(obj: Dict[str, Any], *, shown_handles: Iterable[str], handles, table_value: Optional[Dict[str, Any]],
-           viewed_indices: Iterable[int]) -> Dict[str, Any]:
+           viewed_indices: Iterable[int], query_log: Optional[List[Dict[str, Any]]] = None) -> Dict[str, Any]:
     shown = set(shown_handles)
     viewed = set(viewed_indices)
     flags: List[str] = []
@@ -66,9 +86,11 @@ def verify(obj: Dict[str, Any], *, shown_handles: Iterable[str], handles, table_
         for sent in SENT_SPLIT.split(text):
             if ABSENCE_RE.search(sent) and not LIMITATION_RE.search(sent):
                 absence.append(sent.strip())
+    uncovered = [a for a in absence if table_value is not None and not full_view
+                 and not _covered(a, table_value, viewed, query_log or [])]
     if absence and table_value is None:
         flags.append("absence_claim_without_imports_source_suspected")
-    elif absence and not full_view:
+    elif uncovered:
         flags.append("absence_beyond_coverage_suspected")
     joined = " ".join(_texts(obj))
     if NUMERIC_RE.search(joined):
@@ -78,5 +100,5 @@ def verify(obj: Dict[str, Any], *, shown_handles: Iterable[str], handles, table_
     if finding_flags:
         flags.append("finding_flags_present")
     return {"flags": flags, "finding_flags": finding_flags, "resolved_sources": resolved,
-            "absence_sentences": absence, "has_flags": bool(flags),
+            "absence_sentences": absence, "absence_uncovered": uncovered, "has_flags": bool(flags),
             "semantic_grounding": "PENDING_INDEPENDENT_REVIEW"}

@@ -121,3 +121,49 @@ Ràng buộc kèm theo (nguyên văn):
   Phương án "bỏ keyword không hỗ trợ khỏi schema gửi Ollama, giữ schema validate" **chưa** làm,
   chờ Owner duyệt.
 - Thứ tự: viết `cohort_audit.py` + test trước; chỉ chạy audit chọn cohort sau khi G3 PASS.
+
+## 2026-11-27 — S5: DEV_DEBUG (cohort 06B-J, chỉ để debug; không dùng để kết luận)
+
+- Ollama: Planner xác nhận chỉ còn `ollama.exe serve` headless (PID 16860, con của PowerShell do
+  Owner mở), app desktop đã tắt. `freeze.json` của mọi thư mục DEV ghi `AVAILABLE`, 0.40.16,
+  digest `d8b0f5e9…`. Session không khởi động/dừng Ollama.
+- Authorization: `DACN_OWNER_07B_DEV_DEBUG_2026-11-27`.
+- **r1** (`results/dev_debug/V4_s42_r1`, 1 case sample_0012):
+  - Ollama **chấp nhận** schema có `pattern` (handle) và `multipleOf` (offset): không lỗi, không
+    output sai. Ghi lại theo hướng dẫn của Planner.
+  - `analysis` đứng đầu 8/8 lượt; prompt lớn nhất 2 826 token (≈ 0.23 × 12 288).
+  - Hành vi: hỏi `kernel32.dll` (không có trong index; file dùng api-set), lặp lại sau lỗi; không
+    dùng SYMBOL_PREFIX, không lật `next_page`; kết thúc FORCED_FINAL.
+- **Chỉnh DEV 1** (chung, không theo case/họ API): last_result của lỗi query kèm `hint` cố định
+  theo mã lỗi (`QUERY_HINTS`); system prompt nói rõ DLL phải đúng tên trong import_index,
+  SYMBOL_PREFIX tìm trên mọi DLL, dùng `next_page`, không lặp query đã có.
+- **r2** (`V4_s42_r2`, 6 case 0001/0002/0003/0010/0012/0013): model dùng SYMBOL_PREFIX và lật
+  trang; 0010 (entry liên quan ở index 122, ngoài tầm v3.4) được thấy và trích. Hai vấn đề:
+  - model trích handle chưa hiển thị (I0..I3) cho query 0 match → verifier flag đúng
+    (`source_not_visible`);
+  - câu "không có X" sau một SYMBOL_PREFIX 0 match (đã phủ toàn bảng) vẫn bị flag
+    `absence_beyond_coverage_suspected` vì verifier chỉ xét "đã xem toàn bảng".
+  - 0001: model ghi `CONFLICTS` vì đọc sai score/threshold — lỗi suy luận, **không** chỉnh.
+- **Chỉnh DEV 2**: prompt nói query 0 match không có handle để trích; verifier áp đúng spec §2.6
+  ("coverage của DLL hoặc query liên quan"): câu absence được coi là trong coverage nếu nêu một DLL
+  đã xem hết, hoặc một giá trị query mà mọi match đã xem (kể cả 0 match), trên bảng không
+  truncated. Có test.
+- **r3**: 20 case DEV × {V4, V4_NOQ} seed 42 (đang chạy).
+- **r3** xong: 20 case DEV × {V4, V4_NOQ}, seed 42 (`results/dev_debug/{V4,V4_NOQ}_s42_r3`). Cơ chế ổn
+  định: 40/40 có final, 0 lỗi hạ tầng, 0 validation/repair exhausted, `analysis` đứng đầu mọi lượt,
+  prompt lớn nhất 5 042 token (< 0.8 × 12 288). Mô tả DEV (không kết luận): IN_INITIAL+REACHABLE
+  thấy/trích entry liên quan V4 7/8, V4_NOQ 6/8; INACCESSIBLE thấy V4 3/4, V4_NOQ 1/4; V4 không gọi
+  analyzer ở 4/4 INITIAL_SUFFICIENT. Ghi nhận: verifier flag `absence_claim_without_imports_source_suspected`
+  ở INITIAL_SUFFICIENT khi model nói "không có thông tin imports" (rule screen; không chỉnh).
+  Kết luận S5: hành vi đủ ổn định để thử G3.
+
+## 2026-11-27 — S6: G3 smoke — PASS
+
+- Case chọn **trước khi chạy**: `sample_0010` (06B-J DEV, INACCESSIBLE_UNDER_LIMITS, NETWORK; entry
+  liên quan đầu tiên WS2_32.dll!#115 ở index 122, ngoài tầm v3.4). Thư mục `results/g3/V4_s42_g3_r1`,
+  kind `DEV_SMOKE_G3`, authorization DEV.
+- `g3_gate.json`: **PASS** — analyzer commit qua D9; query thấy entry liên quan; final hợp lệ và trích
+  entry liên quan; không truncation; `analysis` đứng đầu mọi lượt (oneOf v4); prompt lớn nhất 3 051
+  token (< 0.8 × 12 288); không tràn context; isolation PASS.
+- `pattern` (handle) và `multipleOf` (offset) trong schema decode: Ollama 0.40.16 chấp nhận, không
+  lỗi, không output sai (từ S5 r1 tới G3). Validate sau decode vẫn dùng đủ schema.
