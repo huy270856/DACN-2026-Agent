@@ -117,3 +117,155 @@ Push: **chưa** được phép; không push.
   `done_reason=stop`, có `thinking` (11 928–16 552 ký tự) và content JSON hợp lệ; không có content
   rỗng, không truncation; `prompt+output` lớn nhất 11 243 (< 0.95 × 24 576). Run
   `FINISHED_FLAGGED`. Gate G1 = **PASS**. VRAM khi model nạp: khoảng 5.5 GB / 8 GB.
+
+## 2026-11-27 — S6 sự cố: Ollama ngừng phục vụ giữa V0 s42
+
+- `prepare V0 s42` OK (2026-11-26 17:08). `run V0 s42` bắt đầu 17:08:58.
+- sample_0001–0012: hoàn tất bình thường (11 FINISHED_FLAGGED, 1 FINISHED).
+- sample_0013: lượt 3 lỗi `Ollama inference failed: ConnectionResetError [WinError 10054]`
+  (sau TOOL_CALL đã commit rev 5 và FINISH-select) → `INVESTIGATION_INCOMPLETE`.
+- sample_0014, 0015, 0016: lượt 1 lỗi `URLError [WinError 10061]` (connection refused) →
+  `INVESTIGATION_INCOMPLETE`, không có tool call.
+- Sau đó tiến trình script và session Claude Code kết thúc; sample_0017–0020 **chưa có trace**.
+  V0 s7, V2, V3, V1 chưa bắt đầu.
+- Ngày 2026-11-27: `http://127.0.0.1:11434` không phản hồi. Không tự khởi động lại Ollama
+  (PLAN §6), chờ owner.
+- Xử lý theo PROTOCOL §6 (đã freeze): 4 run lỗi do Ollama **được giữ nguyên, tính vào mẫu số, không
+  chạy lại**. Đây là lỗi hạ tầng, không phải hành vi model; báo cáo sẽ tách riêng số run bị lỗi
+  hạ tầng. Các case chưa có trace (0017–0020) được tiếp tục bằng `run` trên cùng thư mục
+  (protocol cho phép), sau khi `validate_freeze` xác nhận Qwen digest/version không đổi.
+
+## 2026-11-27 — S6: resume V0 s42, V0 s7 xong, sự cố Ollama lần 2 giữa V2 s42
+
+- 04:32 Ollama phản hồi lại (ứng dụng desktop đã tự khởi động lại; owner cho phép bật Ollama).
+  Digest `d8b0f5e9…` và version 0.40.16 khớp freeze. Không cần thao tác khởi động.
+- `run V0 s42` tiếp tục cho case chưa có trace: 0017–0020 đều `FINISHED_FLAGGED`, isolation PASS.
+  V0 s42 đủ 20 trace, trong đó **4 run lỗi hạ tầng** (0013–0016) giữ nguyên trong mẫu số.
+- V0 s7: 20/20 trace, 17 `FINISHED_FLAGGED`, 3 `FINISHED`, không lỗi hạ tầng.
+- V2 s42: 0001–0017 chạy; **3 run lỗi hạ tầng**:
+  - 0018: lượt 3 (final) `HTTP Error 500` (server log: 500 ở 04:51:39 rồi runner nạp lại model);
+  - 0019: `RemoteDisconnected`;
+  - 0020: `WinError 10061` connection refused.
+- Nguyên nhân quan sát được (`%LOCALAPPDATA%\Ollama\app.log`): 04:51:58 `shutting down desktop
+  server` / `shutting down ollama server`. Updater của ứng dụng desktop đã tải sẵn v0.40.18
+  (`update already downloaded`). Trong `server.log` còn có request lạ không thuộc harness
+  (04:50:36–42 `HEAD /`, `GET /api/ps`, `POST /api/show`, `POST /api/generate`) ngay trước một
+  lần nạp lại model. Nguyên nhân gốc chưa xác minh chắc chắn; khả năng cao là ứng dụng desktop
+  (UI/updater). Sự cố V0 s42 ngày 2026-11-26 có cùng kiểu (reset rồi refused).
+- Chuỗi script bị dừng thủ công ngay khi thấy connection refused để không tiêu run vào lỗi kết nối.
+  Tiến trình `prepare V2 s7` mồ côi chạy xong: `results/V2_s7/freeze.json` ghi
+  `ollama.status=UNAVAILABLE`, nên `run` bị chặn `BLOCKED_OLLAMA_UNAVAILABLE`. **Không có case nào
+  của V2_s7 được chạy.** Thư mục này giữ nguyên (write-once), đánh dấu `NOT_RUN_BLOCKED`, và V2
+  seed 7 được prepare/run ở thư mục mới `results/V2_s7_r2/`. Đây không phải rerun ca lỗi.
+- Từ 2026-11-27 ~05:0x, Ollama được chạy **headless** bằng `ollama.exe serve` (cùng binary 0.40.16,
+  `OLLAMA_HOST=127.0.0.1:11434`), không qua ứng dụng desktop, để tránh updater tự cài 0.40.18.
+  Model và digest không đổi; `num_ctx`/sampling do request quy định. Chênh lệch có thể có giữa
+  server do app khởi chạy và server headless (biến môi trường của app) chưa được kiểm; V0 s42/s7
+  và V2 s42 chạy dưới app, phần còn lại chạy headless. Ghi lại như một confound hạ tầng.
+- Khuyến nghị owner: tắt auto-update của ứng dụng Ollama trong thời gian chạy thí nghiệm.
+
+## 2026-11-27 — Đính chính mục trước
+
+- Mốc bật Ollama headless ghi "~05:0x" là sai. Đúng là khoảng **04:53** (V2 s7_r2 `PREPARE`
+  04:53:51, `RUN` 04:54:38 đã chạy dưới server headless).
+- Diễn biến sau đó: V2 s7_r2 xong 05:06 (20 trace: 16 `FINISHED_FLAGGED`, 3
+  `MODEL_REQUESTED_MORE_EVIDENCE`, 1 `RETRIEVAL_NO_INFORMATION_GAIN`; 0 lỗi hạ tầng). V3 s42 xong
+  05:10 (8 trace). V1 s42 bắt đầu 05:11; trace cuối `sample_0007_C.json` lúc 05:37.
+
+## 2026-11-27 — S6 kết thúc: V1 dừng
+
+Ghi nguyên văn quyết định của owner (tin nhắn trong session Claude Code, 2026-11-27):
+
+> BỐI CẢNH
+> - V1 s42 dừng sau sample_0007 (file cuối 05:37). Session trước kết thúc kéo theo runner và `ollama serve` headless (tiến trình con của session).
+> - Case 0008: CaseState trong home C đã lên rev 5 (tool đã commit) nhưng không có `sample_0008_C.json`. Resume sẽ bị guard STATE_CHANGED_WITHOUT_SAVED_TRACE_NO_RETRY chặn (ablation.py:132) và dừng cả vòng lặp. Guard này đúng.
+> - Trong 7 trace của V1 s42, có 3 case (0001, 0002, 0007) bị truncation ngay lượt 1: thinking khoảng 42–44k ký tự, eval_count=12288, done_reason=length, content rỗng.
+>
+> QUYẾT ĐỊNH CỦA OWNER
+> 1. KHÔNG resume V1 s42, KHÔNG chạy V1 s7, KHÔNG sửa harness hay metrics đã freeze, KHÔNG rerun case nào.
+>    - V1 s42 = PARTIAL: 7 trace + 1 INFRA_INTERRUPTED (0008) + 12 NOT_RUN (0009–0020).
+>    - V1 s7 = NOT_RUN.
+>    - Lý do: (a) quy tắc toàn vẹn ghi trước trong PROTOCOL §7 (truncation > 2 ca → variant không diễn giải được) đã kích hoạt; (b) muốn resume thì phải sửa harness sau freeze, không đáng.
+>    - Đây là deviation có owner duyệt, dựa trên metric toàn vẹn chứ không dựa trên kết quả nghiên cứu.
+>    - V1b vẫn NOT_RUN như đã quyết định trước đó.
+> 2. Ghi limitation về provenance: với các lượt trả content rỗng, agent/planner.py:154 raise PlannerError trước khi gắn meta, nên raw thinking bị mất, chỉ còn thinking_chars. Không sửa trong 07A (sẽ gây SOURCE_DRIFT). Đưa vào danh sách việc cần làm của TASK 07B.
+> 3. Ghi confound hạ tầng đã biết: V0 s42/s7 và V2 s42 chạy dưới Ollama của ứng dụng desktop; V2 s7_r2, V3 và V1 chạy dưới Ollama headless. Ghi cả sự cố tiến trình chết theo session.
+> 4. Ghi minh bạch: đã xem kết quả sơ bộ V0/V2/V3 trong scratchpad trong lúc V1 chạy. Không có cấu hình, ngưỡng hay regex nào bị đổi sau khi xem.
+
+Ghi chú của người thực hiện (Claude Code):
+
+- Bảng quyết định nằm ở **PROTOCOL §5** (owner gọi là "§7" theo số mục trong PLAN; cùng một bảng,
+  dòng "Variant có M7 overflow hoặc truncation > 2 run").
+- Xác nhận mục 4: kết quả sơ bộ được tính bằng `metrics.collect` (chỉ đọc) và ghi vào
+  scratchpad lúc khoảng 05:1x–05:3x. Sau thời điểm đó **không** có file nào trong `variants.py`,
+  `ablation.py`, `metrics.py`, `PROTOCOL.md` bị sửa (`git diff c58d351 -- evaluation/task07a/*.py
+  evaluation/task07a/PROTOCOL.md` rỗng).
+- Sự cố tiến trình chết theo session: cả chuỗi `live07a_resume2.sh` lẫn `ollama.exe serve` được
+  khởi chạy làm tiến trình con của session Claude Code; khi session kết thúc, cả hai bị dừng. Đây
+  là lần thứ hai một run bị ngắt theo kiểu này (lần đầu V0 s42 ngày 2026-11-26).
+
+## 2026-11-27 — Đính chính bối cảnh V1 s42 (kiểm từ trace)
+
+- 0001 và 0002: truncation ở **lượt 1** (PlannerError `empty content`, thinking_chars 42 912 /
+  44 044, `done_reason=length`, `eval_count=12288`).
+- 0007: truncation ở **lượt 4** (lượt viết final), **không** phải lượt 1. Ba lượt trước hợp lệ
+  (thinking 24 162 / 13 968 / 18 582 ký tự, `done_reason=stop`); lượt 4 PlannerError
+  thinking_chars 42 582, `done_reason=length`.
+- Tổng: 3/7 trace V1 s42 kết thúc do thinking dùng hết `num_predict=12288` (2 ở lượt 1, 1 ở lượt
+  final). Các lượt lỗi không có `meta` (PlannerError raise trước khi gắn meta); thinking_chars chỉ
+  còn trong chuỗi lỗi, raw thinking bị mất (limitation provenance, owner mục 2).
+- 0008: CaseState home C đang ở rev 5 (initial rev 3), không có `sample_0008_C.json` → đúng như
+  owner mô tả (INFRA_INTERRUPTED).
+
+## 2026-11-27 — Việc A: kiểm tra V3 s42 / sample_0013
+
+- So context lượt 1 của `V3_s42/sample_0013_C.json` với V0_s42, V0_s7, V2_s42, V2_s7_r2: sau khi
+  chuẩn hóa ID theo run (CASE/EV/RUN/COL), timestamp, thư mục runtime băm, và `snapshot`
+  (device/inode/mtime của bản staged), hai bản **giống hệt nhau**. Phần khác duy nhất là metadata
+  snapshot của bản copy staged (mỗi `prepare` staging một bản mới). `system` giống hệt;
+  `requested_decoding_schema` giống hệt (sau chuẩn hóa ID).
+- Oracle **không tác động**: `EVALUATOR_ONLY/sample_0013_C_oracle.json` có `per_turn: []` vì imports
+  chưa được commit ở lượt 1 và run kết thúc tại lượt 1.
+- Lỗi: lượt 1 `TOOL_CALL`, `validation_error = EVIDENCE_NOT_VISIBLE`. Model trích
+  `EV-cf435bc78a7d44d6b477d3f55607d3d` (31 hex), trong khi ID hiển thị là
+  `EV-cf435bc78a7d44d6b477d3f556607d3d` (32 hex): **chép sai ID** (rơi một ký tự). v3.4 không cho
+  repair TOOL_CALL → `VALIDATION_REPAIR_EXHAUSTED`.
+- 0013 ở các run khác: không có validation error nào (V0 s42 lỗi hạ tầng ở lượt 3; V0 s7, V2 s7_r2,
+  06B-J run_v1 FINISHED_FLAGGED; V2 s42 REQUEST_MORE_EVIDENCE).
+- **Kết luận: lỗi do model (sao chép ID 32 hex), không do harness/oracle.** 0013 của V3 nằm trong
+  mẫu số với M1 = M1b = 0; không loại, không rerun. Đây là đúng loại lỗi REPORT §2.3 đã nêu (gánh
+  nặng chép ID 32 hex).
+
+## 2026-11-27 — S7: metrics và các deviation đi kèm
+
+- **metrics_v1.json** (`task07a-metrics-v1`, frozen, không sửa): chạy bằng CLI đã freeze
+  `python -m evaluation.task07a.metrics --results <view> --baseline evaluation/task06b_j/results/confirmatory/run_v1 --out evaluation/task07a/results/metrics_v1.json`.
+  `<view>` là thư mục trong scratchpad chứa **directory junction** tới 5 nhóm đầy đủ
+  (V0_s42, V0_s7, V2_s42, V2_s7_r2, V3_s42). Lý do: `metrics.collect` bỏ case thiếu trace khỏi
+  mẫu số, nên nếu đưa V1_s42 (7/20 trace) hoặc V2_s7 (0 trace) vào sẽ ra mẫu số thu nhỏ sai. Cả 5
+  nhóm có `missing_runs = []`; run lỗi hạ tầng có trace nên vẫn nằm trong mẫu số.
+  sha256 `1377558dc87520be…`.
+- **Deviation (owner cho phép, mục B):** `evaluation/task07a/supplementary_v1.py` (mới, sau freeze,
+  không thuộc HARNESS_FILES) → `results/supplementary_v1_metrics.json`
+  (sha256 `faf12cf3c51cf634…`). Chỉ phân loại trạng thái
+  mọi slot cohort (COMPLETED_FINAL / MODEL_INCOMPLETE / MODEL_OUTPUT_TRUNCATION / INFRA_OLLAMA_ERROR /
+  INFRA_INTERRUPTED / NOT_RUN / NOT_RUN_BLOCKED) và tính chi tiết V1 s42 (status, truncation, action
+  lượt 1, chi phí, thinking_chars, metric hành vi EXPLORATORY trên 7 trace). Có 3 unit test
+  (`tests/test_supplementary.py`).
+- **Deviation (owner yêu cầu, mục C):** `results/M4_developer_review_v1.json` (sha256
+  `bae61fab5f66a6fe…`), builder
+  `evaluation/task07a/m4_developer_review.py`. 119 câu ứng viên M4 được Claude Code gán nhãn thủ công
+  theo 7 nhãn cố định, có lý do. **PROVISIONAL developer review**, không phải semantic grading hay
+  human adjudication; nhãn `RULE_SCREEN_CANDIDATE` gốc và regex **không** đổi.
+- Phát hiện về metric (không sửa hồi tố):
+  - M7 `runs_with_done_reason_length` = 0 ở mọi nhóm nhưng **không** bắt được truncation của V1,
+    vì lượt bị cắt không có `meta` (PlannerError). Truncation V1 được đếm ở supplementary.
+  - M3b chỉ tính khi model chọn FINISH; run kết thúc bằng REQUEST_MORE hoặc lỗi hạ tầng tự động là
+    "không stopped_with_gap". Mức giảm M3b của V2 một phần do điều này.
+  - SCOPE_RE không có "current view" (câu #34 bị screen gọi UNSCOPED).
+
+## 2026-11-27 — S8: báo cáo và regression
+
+- `REPORT.md` viết xong (tiếng Việt), áp bảng quyết định PROTOCOL §5 đã freeze.
+- Full regression: `743 passed, 0 failed, 4 skipped` (+81 subtests).
+- Không có live run nào sau 05:37 ngày 2026-11-27. Không khởi động Ollama. Không push, không merge.

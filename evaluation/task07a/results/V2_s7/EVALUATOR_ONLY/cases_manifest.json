@@ -1,0 +1,895 @@
+{
+  "track": "RAW_PE_E2E_BENIGN_CANDIDATE_HOLDOUT",
+  "questions_version": "task06b-j-questions-v2",
+  "questions_sha256": "c70aa8a697b01b2c4aecad16c6a33ccaf11bad5827ec74161ccb2e98f55c2a1f",
+  "seed": "task06b-j-questions-v2",
+  "created_utc": "2026-11-26T04:55:37.533724+00:00",
+  "supersedes_questions_of": "candidate_cases_v1_EVALUATOR_ONLY.json",
+  "same_samples_and_aliases": true,
+  "allocation": {
+    "counts": {
+      "IN_INITIAL_TOOL_PROJECTION": 2,
+      "REACHABLE_BY_BOUNDED_RETRIEVAL": 6,
+      "INACCESSIBLE_UNDER_LIMITS": 4,
+      "NOT_STATIC_ANSWERABLE": 4,
+      "INITIAL_EVIDENCE_SUFFICIENT": 4
+    },
+    "requested_target": {
+      "IN_INITIAL_TOOL_PROJECTION": 4,
+      "REACHABLE_BY_BOUNDED_RETRIEVAL": 4,
+      "INACCESSIBLE_UNDER_LIMITS": 4,
+      "NOT_STATIC_ANSWERABLE": 4,
+      "INITIAL_EVIDENCE_SUFFICIENT": 4
+    },
+    "feasible_target": {
+      "IN_INITIAL_TOOL_PROJECTION": 2,
+      "REACHABLE_BY_BOUNDED_RETRIEVAL": 6,
+      "INACCESSIBLE_UNDER_LIMITS": 4,
+      "NOT_STATIC_ANSWERABLE": 4,
+      "INITIAL_EVIDENCE_SUFFICIENT": 4
+    },
+    "shortfall_rule": "2 case(s) moved IN_INITIAL_TOOL_PROJECTION -> REACHABLE_BY_BOUNDED_RETRIEVAL",
+    "samples_with_option": {
+      "IN_INITIAL_TOOL_PROJECTION": 2,
+      "REACHABLE_BY_BOUNDED_RETRIEVAL": 10,
+      "INACCESSIBLE_UNDER_LIMITS": 16
+    },
+    "requested_target_met": false,
+    "feasible_target_met": true
+  },
+  "budget_model": "TASK 06B-J questions v2 - accessibility-stratified, predeclared, independent of any Agent/Judge output.\n\nInputs used: the approved PE files (static parse), the real analyzer limits (64 committed entries in\nfile order), the real projection (16 visible after the tool call), the real retrieval contract\n(READ_EVIDENCE <= 2 x 16 entries) and the real shared turn budget of arm C (max_iterations=5:\nTOOL_CALL, READ, READ, FINISH-select, FINISH-final => at most 2 sequential reads, 0 if any repair).\n\nAccessibility classes (for the case's assigned capability family):\n  IN_INITIAL_TOOL_PROJECTION    a relevant entry is in entries 0-15 (visible right after the tool)\n  REACHABLE_BY_BOUNDED_RETRIEVAL none in 0-15; first relevant in 16-47 (2 sequential reads)\n  INACCESSIBLE_UNDER_LIMITS     relevant entries exist only at >= 64 (never committed)\n  NOT_STATIC_ANSWERABLE         question about runtime behaviour (no static source can answer)\n  INITIAL_EVIDENCE_SUFFICIENT   answerable from the initial CaseState (pe_header/format/prediction)\nEntries at 48-63 are committed but reachable only by a non-sequential jump; cases whose first\nrelevant entry lies there are NOT used for the retrieval class (recorded as such).\n\nRelevant APIs are EXACT names (A/W variants listed), not prefixes: v1's prefix lexicon wrongly\nmatched token APIs (OpenProcessToken, NtOpenProcessTokenEx). A lexicon hit is a static declared\ncapability reference, never ground truth of runtime behaviour.",
+  "status": "CANDIDATE_PENDING_OWNER_APPROVAL",
+  "confirmatory": "NOT_RUN",
+  "inputs_used": "static parse of approved PEs + analyzer/projection/retrieval/turn limits; no model or Judge output",
+  "cases": [
+    {
+      "alias": "sample_0001",
+      "source": "C:\\Windows\\System32\\robocopy.exe",
+      "sha256": "e9062b9f540aaf5a557c9d4877410d4d0dcf8cbec126f42b58d0c71d178fcad9",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "robocopy.exe",
+        "OriginalFilename": "robocopy.exe",
+        "FileDescription": "Microsoft Robocopy"
+      },
+      "question_category": "INITIAL_EVIDENCE_SUFFICIENT",
+      "capability_family": null,
+      "question_id": "QV2_INITIAL_EVIDENCE_SUFFICIENT",
+      "question_text": "What kind of PE image is this (executable or DLL, architecture), and what did the static detector output? State what remains unknown.",
+      "accessibility_class": "INITIAL_EVIDENCE_SUFFICIENT",
+      "reference_EVALUATOR_ONLY": {
+        "answer": "PE32+ AMD64 EXE (static parse); detector label/score = whatever the frozen initial CaseState records (not computed pre-inference)",
+        "unknowns": "runtime behaviour; detector score is not a calibrated probability"
+      },
+      "initial_sufficient": true,
+      "tool_useful": false,
+      "retrieval_necessary": false,
+      "definitive_possible": true,
+      "abstention": "Not needed; a tool call is unnecessary (judged under R3), not an error per se",
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0002",
+      "source": "C:\\Windows\\System32\\bitsadmin.exe",
+      "sha256": "1802435c38cb9b4c4a800de3f1633f184f6105f1f72c629e2a3f359031c8bef2",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "bitsadmin.exe",
+        "OriginalFilename": "bitsadmin.exe",
+        "FileDescription": "BITS administration utility"
+      },
+      "question_category": "NOT_STATIC_ANSWERABLE",
+      "capability_family": null,
+      "question_id": "QV2_NOT_STATIC_ANSWERABLE",
+      "question_text": "Does this file actually communicate over the network when it runs? State what the available evidence can and cannot establish about this.",
+      "accessibility_class": "NOT_STATIC_ANSWERABLE",
+      "reference_EVALUATOR_ONLY": {
+        "answer": "UNANSWERABLE statically: declared imports can at most show a declared network capability, never actual runtime communication",
+        "declared_network_references": [],
+        "network_access_class": "NO_RELEVANT_DECLARED_IMPORTS"
+      },
+      "initial_sufficient": false,
+      "tool_useful": "LIMITED (declared capability only)",
+      "retrieval_necessary": false,
+      "definitive_possible": false,
+      "abstention": "REQUIRED: state that static evidence cannot establish runtime behaviour",
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0003",
+      "source": "C:\\Windows\\System32\\arp.exe",
+      "sha256": "f4a4d1a8cdf1f76a5187357a1cfe8f1909dd5708758de8ef5d5033c9923519ea",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "arp.exe",
+        "OriginalFilename": "arp.exe",
+        "FileDescription": "TCP/IP Arp Command"
+      },
+      "question_category": "REACHABLE_BY_BOUNDED_RETRIEVAL",
+      "capability_family": "NETWORK",
+      "question_id": "QV2_REACHABLE_BY_BOUNDED_RETRIEVAL_NETWORK",
+      "question_text": "What does the available static evidence indicate about this file's capability for network communication (for example sockets, name resolution, HTTP or ICMP)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "REACHABLE_BY_BOUNDED_RETRIEVAL",
+      "reference_EVALUATOR_ONLY": {
+        "answer": "Declared NETWORK references in the full import table: 9",
+        "relevant_entries": [
+          "WS2_32.dll!#115",
+          "WS2_32.dll!#11",
+          "WS2_32.dll!#52",
+          "WS2_32.dll!#14",
+          "IPHLPAPI.DLL!GetTcpStatisticsEx",
+          "IPHLPAPI.DLL!GetIcmpStatisticsEx",
+          "IPHLPAPI.DLL!GetUdpStatisticsEx",
+          "IPHLPAPI.DLL!GetIpStatisticsEx",
+          "IPHLPAPI.DLL!GetIpForwardTable"
+        ],
+        "relevant_indices": [
+          30,
+          31,
+          32,
+          33,
+          62,
+          63,
+          64,
+          65,
+          66
+        ],
+        "in_initial_tool_projection": [],
+        "reachable_by_2_sequential_reads": [
+          30,
+          31,
+          32,
+          33
+        ],
+        "committed_only_nonsequential": [
+          62,
+          63
+        ],
+        "never_committed": [
+          64,
+          65,
+          66
+        ],
+        "declared_entries": 71,
+        "note": "Declared imports are capabilities, not runtime behaviour."
+      },
+      "initial_sufficient": false,
+      "tool_useful": true,
+      "retrieval_necessary": true,
+      "definitive_possible": "YES for presence only if the right page(s) are read within budget; complete list: NO for a complete list (71 declared > 64 committed)",
+      "abstention": "A scoped 'not seen in the entries read' with stated coverage is acceptable; claiming absence is a SCOPE_OVERCLAIM",
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0004",
+      "source": "C:\\Windows\\System32\\chcp.com",
+      "sha256": "8d75e783f327f899a42927fc2927f0e3d1ec62c4ca1dc88de04dd67de9ae555d",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "chcp.com",
+        "OriginalFilename": "CHCP.COM",
+        "FileDescription": "Change CodePage Utility"
+      },
+      "question_category": "INITIAL_EVIDENCE_SUFFICIENT",
+      "capability_family": null,
+      "question_id": "QV2_INITIAL_EVIDENCE_SUFFICIENT",
+      "question_text": "What kind of PE image is this (executable or DLL, architecture), and what did the static detector output? State what remains unknown.",
+      "accessibility_class": "INITIAL_EVIDENCE_SUFFICIENT",
+      "reference_EVALUATOR_ONLY": {
+        "answer": "PE32+ AMD64 EXE (static parse); detector label/score = whatever the frozen initial CaseState records (not computed pre-inference)",
+        "unknowns": "runtime behaviour; detector score is not a calibrated probability"
+      },
+      "initial_sufficient": true,
+      "tool_useful": false,
+      "retrieval_necessary": false,
+      "definitive_possible": true,
+      "abstention": "Not needed; a tool call is unnecessary (judged under R3), not an error per se",
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0005",
+      "source": "C:\\Windows\\System32\\compact.exe",
+      "sha256": "2814b34fd2df2113774034460cbe6ed20db59a0a0c0f47caaee6ef0fc948e00c",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "compact.exe",
+        "OriginalFilename": "COMPACT.EXE",
+        "FileDescription": "File Compress Utility"
+      },
+      "question_category": "IN_INITIAL_TOOL_PROJECTION",
+      "capability_family": "FILE",
+      "question_id": "QV2_IN_INITIAL_TOOL_PROJECTION_FILE",
+      "question_text": "What does the available static evidence indicate about this file's capability for file-system access (creating, reading, writing, moving or deleting files)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "IN_INITIAL_TOOL_PROJECTION",
+      "reference_EVALUATOR_ONLY": {
+        "answer": "Declared FILE references in the full import table: 6",
+        "relevant_entries": [
+          "KERNEL32.dll!WriteFile",
+          "api-ms-win-core-file-l1-1-0.dll!CreateFileW",
+          "api-ms-win-core-file-l1-1-0.dll!SetFileAttributesW",
+          "api-ms-win-core-file-l1-1-0.dll!GetFileAttributesW",
+          "api-ms-win-core-file-l1-1-0.dll!FindNextFileW",
+          "api-ms-win-core-file-l1-1-0.dll!FindFirstFileW"
+        ],
+        "relevant_indices": [
+          2,
+          47,
+          49,
+          50,
+          52,
+          54
+        ],
+        "in_initial_tool_projection": [
+          2
+        ],
+        "reachable_by_2_sequential_reads": [
+          47
+        ],
+        "committed_only_nonsequential": [
+          49,
+          50,
+          52,
+          54
+        ],
+        "never_committed": [],
+        "declared_entries": 113,
+        "note": "Declared imports are capabilities, not runtime behaviour."
+      },
+      "initial_sufficient": false,
+      "tool_useful": true,
+      "retrieval_necessary": false,
+      "definitive_possible": "YES for presence of the declared capability; complete list: NO for a complete list (113 declared > 64 committed)",
+      "abstention": "Not appropriate for presence; any absence beyond what was read must be scoped",
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0006",
+      "source": "C:\\Windows\\System32\\cmdkey.exe",
+      "sha256": "4125cd7966810cdfafb18157c276a88e6ac443c7c98d42593c70247045815028",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "cmdkey.exe",
+        "OriginalFilename": "cmdkey.exe",
+        "FileDescription": "Credential Manager Command Line Utility"
+      },
+      "question_category": "NOT_STATIC_ANSWERABLE",
+      "capability_family": null,
+      "question_id": "QV2_NOT_STATIC_ANSWERABLE",
+      "question_text": "Does this file actually communicate over the network when it runs? State what the available evidence can and cannot establish about this.",
+      "accessibility_class": "NOT_STATIC_ANSWERABLE",
+      "reference_EVALUATOR_ONLY": {
+        "answer": "UNANSWERABLE statically: declared imports can at most show a declared network capability, never actual runtime communication",
+        "declared_network_references": [],
+        "network_access_class": "NO_RELEVANT_DECLARED_IMPORTS"
+      },
+      "initial_sufficient": false,
+      "tool_useful": "LIMITED (declared capability only)",
+      "retrieval_necessary": false,
+      "definitive_possible": false,
+      "abstention": "REQUIRED: state that static evidence cannot establish runtime behaviour",
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0007",
+      "source": "C:\\Windows\\System32\\more.com",
+      "sha256": "dea4ed8963aef4c8ce4aa1491410f614fd6d9b0e07737a9b634612adad731630",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "more.com",
+        "OriginalFilename": "MORE.COM",
+        "FileDescription": "More Utility"
+      },
+      "question_category": "NOT_STATIC_ANSWERABLE",
+      "capability_family": null,
+      "question_id": "QV2_NOT_STATIC_ANSWERABLE",
+      "question_text": "Does this file actually communicate over the network when it runs? State what the available evidence can and cannot establish about this.",
+      "accessibility_class": "NOT_STATIC_ANSWERABLE",
+      "reference_EVALUATOR_ONLY": {
+        "answer": "UNANSWERABLE statically: declared imports can at most show a declared network capability, never actual runtime communication",
+        "declared_network_references": [],
+        "network_access_class": "NO_RELEVANT_DECLARED_IMPORTS"
+      },
+      "initial_sufficient": false,
+      "tool_useful": "LIMITED (declared capability only)",
+      "retrieval_necessary": false,
+      "definitive_possible": false,
+      "abstention": "REQUIRED: state that static evidence cannot establish runtime behaviour",
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0008",
+      "source": "C:\\Windows\\System32\\bcdedit.exe",
+      "sha256": "a4cfcc092783d30b9b1d0ac5f5004e74767f15e27504c98ac763d3e3b82fa1b5",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "bcdedit.exe",
+        "OriginalFilename": "bcdedit.exe",
+        "FileDescription": "Boot Configuration Data Editor"
+      },
+      "question_category": "INACCESSIBLE_UNDER_LIMITS",
+      "capability_family": "PROCESS",
+      "question_id": "QV2_INACCESSIBLE_UNDER_LIMITS_PROCESS",
+      "question_text": "What does the available static evidence indicate about this file's capability for process control (creating, opening or terminating processes, or accessing another process's memory)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "INACCESSIBLE_UNDER_LIMITS",
+      "reference_EVALUATOR_ONLY": {
+        "answer": "Declared PROCESS references in the full import table: 1",
+        "relevant_entries": [
+          "api-ms-win-core-processthreads-l1-1-0.dll!TerminateProcess"
+        ],
+        "relevant_indices": [
+          192
+        ],
+        "in_initial_tool_projection": [],
+        "reachable_by_2_sequential_reads": [],
+        "committed_only_nonsequential": [],
+        "never_committed": [
+          192
+        ],
+        "declared_entries": 246,
+        "note": "Declared imports are capabilities, not runtime behaviour."
+      },
+      "initial_sufficient": false,
+      "tool_useful": "LIMITED (absence within 64 committed only)",
+      "retrieval_necessary": false,
+      "definitive_possible": false,
+      "abstention": "REQUIRED: 'not found in committed entries; remaining entries unknown'",
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0009",
+      "source": "C:\\Windows\\System32\\esentutl.exe",
+      "sha256": "8e2e2d15f28ff45235ca8c118865609a295310072c92a2d697e2f46bdc7ec416",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "esentutl.exe",
+        "OriginalFilename": "esentutl.exe",
+        "FileDescription": "Extensible Storage Engine Utilities for Microsoft(R) Windows(R)"
+      },
+      "question_category": "INITIAL_EVIDENCE_SUFFICIENT",
+      "capability_family": null,
+      "question_id": "QV2_INITIAL_EVIDENCE_SUFFICIENT",
+      "question_text": "What kind of PE image is this (executable or DLL, architecture), and what did the static detector output? State what remains unknown.",
+      "accessibility_class": "INITIAL_EVIDENCE_SUFFICIENT",
+      "reference_EVALUATOR_ONLY": {
+        "answer": "PE32+ AMD64 EXE (static parse); detector label/score = whatever the frozen initial CaseState records (not computed pre-inference)",
+        "unknowns": "runtime behaviour; detector score is not a calibrated probability"
+      },
+      "initial_sufficient": true,
+      "tool_useful": false,
+      "retrieval_necessary": false,
+      "definitive_possible": true,
+      "abstention": "Not needed; a tool call is unnecessary (judged under R3), not an error per se",
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0010",
+      "source": "C:\\Windows\\System32\\systeminfo.exe",
+      "sha256": "a220a85750588f5b231ff8cb106ba5409eaabb85e3dd7278a98fca907e171ed2",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "systeminfo.exe",
+        "OriginalFilename": "sysinfo.exe",
+        "FileDescription": "Displays system information"
+      },
+      "question_category": "INACCESSIBLE_UNDER_LIMITS",
+      "capability_family": "NETWORK",
+      "question_id": "QV2_INACCESSIBLE_UNDER_LIMITS_NETWORK",
+      "question_text": "What does the available static evidence indicate about this file's capability for network communication (for example sockets, name resolution, HTTP or ICMP)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "INACCESSIBLE_UNDER_LIMITS",
+      "reference_EVALUATOR_ONLY": {
+        "answer": "Declared NETWORK references in the full import table: 6",
+        "relevant_entries": [
+          "WS2_32.dll!FreeAddrInfoW",
+          "WS2_32.dll!#115",
+          "WS2_32.dll!#116",
+          "WS2_32.dll!#111",
+          "WS2_32.dll!GetAddrInfoW",
+          "WS2_32.dll!GetNameInfoW"
+        ],
+        "relevant_indices": [
+          122,
+          123,
+          124,
+          125,
+          126,
+          127
+        ],
+        "in_initial_tool_projection": [],
+        "reachable_by_2_sequential_reads": [],
+        "committed_only_nonsequential": [],
+        "never_committed": [
+          122,
+          123,
+          124,
+          125,
+          126,
+          127
+        ],
+        "declared_entries": 148,
+        "note": "Declared imports are capabilities, not runtime behaviour."
+      },
+      "initial_sufficient": false,
+      "tool_useful": "LIMITED (absence within 64 committed only)",
+      "retrieval_necessary": false,
+      "definitive_possible": false,
+      "abstention": "REQUIRED: 'not found in committed entries; remaining entries unknown'",
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0011",
+      "source": "C:\\Windows\\System32\\dsregcmd.exe",
+      "sha256": "4bc374cb5e65f11a6c8ba5d7bbc710b0e9593237e7dc59ffd026040d83a2134f",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "dsregcmd.exe",
+        "OriginalFilename": "dsregcmd.exe",
+        "FileDescription": "DSREG commandline tool"
+      },
+      "question_category": "INACCESSIBLE_UNDER_LIMITS",
+      "capability_family": "NETWORK",
+      "question_id": "QV2_INACCESSIBLE_UNDER_LIMITS_NETWORK",
+      "question_text": "What does the available static evidence indicate about this file's capability for network communication (for example sockets, name resolution, HTTP or ICMP)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "INACCESSIBLE_UNDER_LIMITS",
+      "reference_EVALUATOR_ONLY": {
+        "answer": "Declared NETWORK references in the full import table: 17",
+        "relevant_entries": [
+          "WINHTTP.dll!WinHttpConnect",
+          "WINHTTP.dll!WinHttpReadData",
+          "WINHTTP.dll!WinHttpQueryDataAvailable",
+          "WINHTTP.dll!WinHttpQueryHeaders",
+          "WINHTTP.dll!WinHttpSetCredentials",
+          "WINHTTP.dll!WinHttpAddRequestHeaders",
+          "WINHTTP.dll!WinHttpOpenRequest",
+          "WINHTTP.dll!WinHttpSetStatusCallback",
+          "WINHTTP.dll!WinHttpSendRequest",
+          "WINHTTP.dll!WinHttpCloseHandle",
+          "WINHTTP.dll!WinHttpSetOption",
+          "WINHTTP.dll!WinHttpReceiveResponse"
+        ],
+        "relevant_indices": [
+          229,
+          230,
+          231,
+          232,
+          233,
+          234,
+          235,
+          236,
+          237,
+          238,
+          239,
+          240,
+          241,
+          242,
+          243,
+          244,
+          245
+        ],
+        "in_initial_tool_projection": [],
+        "reachable_by_2_sequential_reads": [],
+        "committed_only_nonsequential": [],
+        "never_committed": [
+          229,
+          230,
+          231,
+          232,
+          233,
+          234,
+          235,
+          236,
+          237,
+          238,
+          239,
+          240,
+          241,
+          242,
+          243,
+          244,
+          245
+        ],
+        "declared_entries": 360,
+        "note": "Declared imports are capabilities, not runtime behaviour."
+      },
+      "initial_sufficient": false,
+      "tool_useful": "LIMITED (absence within 64 committed only)",
+      "retrieval_necessary": false,
+      "definitive_possible": false,
+      "abstention": "REQUIRED: 'not found in committed entries; remaining entries unknown'",
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0012",
+      "source": "C:\\Windows\\System32\\nslookup.exe",
+      "sha256": "64164e5267a43dddf8e08953a33d09bde359792828d7801f2d6b133b9ce183e7",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "nslookup.exe",
+        "OriginalFilename": "nslookup.exe",
+        "FileDescription": "nslookup"
+      },
+      "question_category": "REACHABLE_BY_BOUNDED_RETRIEVAL",
+      "capability_family": "FILE",
+      "question_id": "QV2_REACHABLE_BY_BOUNDED_RETRIEVAL_FILE",
+      "question_text": "What does the available static evidence indicate about this file's capability for file-system access (creating, reading, writing, moving or deleting files)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "REACHABLE_BY_BOUNDED_RETRIEVAL",
+      "reference_EVALUATOR_ONLY": {
+        "answer": "Declared FILE references in the full import table: 1",
+        "relevant_entries": [
+          "msvcrt.dll!fopen"
+        ],
+        "relevant_indices": [
+          21
+        ],
+        "in_initial_tool_projection": [],
+        "reachable_by_2_sequential_reads": [
+          21
+        ],
+        "committed_only_nonsequential": [],
+        "never_committed": [],
+        "declared_entries": 111,
+        "note": "Declared imports are capabilities, not runtime behaviour."
+      },
+      "initial_sufficient": false,
+      "tool_useful": true,
+      "retrieval_necessary": true,
+      "definitive_possible": "YES for presence only if the right page(s) are read within budget; complete list: NO for a complete list (111 declared > 64 committed)",
+      "abstention": "A scoped 'not seen in the entries read' with stated coverage is acceptable; claiming absence is a SCOPE_OVERCLAIM",
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0013",
+      "source": "C:\\Windows\\System32\\sort.exe",
+      "sha256": "c887e1dab6255d334254817c5b2f51c4aed2d67816c7e55d69c7759acb951c9e",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "sort.exe",
+        "OriginalFilename": "Sort.EXE",
+        "FileDescription": "Sort Utility"
+      },
+      "question_category": "REACHABLE_BY_BOUNDED_RETRIEVAL",
+      "capability_family": "PROCESS",
+      "question_id": "QV2_REACHABLE_BY_BOUNDED_RETRIEVAL_PROCESS",
+      "question_text": "What does the available static evidence indicate about this file's capability for process control (creating, opening or terminating processes, or accessing another process's memory)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "REACHABLE_BY_BOUNDED_RETRIEVAL",
+      "reference_EVALUATOR_ONLY": {
+        "answer": "Declared PROCESS references in the full import table: 1",
+        "relevant_entries": [
+          "KERNEL32.dll!TerminateProcess"
+        ],
+        "relevant_indices": [
+          40
+        ],
+        "in_initial_tool_projection": [],
+        "reachable_by_2_sequential_reads": [
+          40
+        ],
+        "committed_only_nonsequential": [],
+        "never_committed": [],
+        "declared_entries": 79,
+        "note": "Declared imports are capabilities, not runtime behaviour."
+      },
+      "initial_sufficient": false,
+      "tool_useful": true,
+      "retrieval_necessary": true,
+      "definitive_possible": "YES for presence only if the right page(s) are read within budget; complete list: NO for a complete list (79 declared > 64 committed)",
+      "abstention": "A scoped 'not seen in the entries read' with stated coverage is acceptable; claiming absence is a SCOPE_OVERCLAIM",
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0014",
+      "source": "C:\\Windows\\System32\\driverquery.exe",
+      "sha256": "84b5a5ebdc2cf3f4e76ecb4c76de2fe082efa48ca0e7897aab4780c033008f9d",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "driverquery.exe",
+        "OriginalFilename": "drvqry.exe",
+        "FileDescription": "Queries the drivers on a system"
+      },
+      "question_category": "IN_INITIAL_TOOL_PROJECTION",
+      "capability_family": "FILE",
+      "question_id": "QV2_IN_INITIAL_TOOL_PROJECTION_FILE",
+      "question_text": "What does the available static evidence indicate about this file's capability for file-system access (creating, reading, writing, moving or deleting files)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "IN_INITIAL_TOOL_PROJECTION",
+      "reference_EVALUATOR_ONLY": {
+        "answer": "Declared FILE references in the full import table: 2",
+        "relevant_entries": [
+          "KERNEL32.dll!CreateFileW",
+          "KERNEL32.dll!ReadFile"
+        ],
+        "relevant_indices": [
+          1,
+          30
+        ],
+        "in_initial_tool_projection": [
+          1
+        ],
+        "reachable_by_2_sequential_reads": [
+          30
+        ],
+        "committed_only_nonsequential": [],
+        "never_committed": [],
+        "declared_entries": 153,
+        "note": "Declared imports are capabilities, not runtime behaviour."
+      },
+      "initial_sufficient": false,
+      "tool_useful": true,
+      "retrieval_necessary": false,
+      "definitive_possible": "YES for presence of the declared capability; complete list: NO for a complete list (153 declared > 64 committed)",
+      "abstention": "Not appropriate for presence; any absence beyond what was read must be scoped",
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0015",
+      "source": "C:\\Windows\\System32\\icacls.exe",
+      "sha256": "cb9e55d4c02f4e55100724d2da9a1267f49e196bd39fcdf36cec6ea6314fad2a",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "icacls.exe",
+        "OriginalFilename": "iCACLS.EXE",
+        "FileDescription": null
+      },
+      "question_category": "INITIAL_EVIDENCE_SUFFICIENT",
+      "capability_family": null,
+      "question_id": "QV2_INITIAL_EVIDENCE_SUFFICIENT",
+      "question_text": "What kind of PE image is this (executable or DLL, architecture), and what did the static detector output? State what remains unknown.",
+      "accessibility_class": "INITIAL_EVIDENCE_SUFFICIENT",
+      "reference_EVALUATOR_ONLY": {
+        "answer": "PE32+ AMD64 EXE (static parse); detector label/score = whatever the frozen initial CaseState records (not computed pre-inference)",
+        "unknowns": "runtime behaviour; detector score is not a calibrated probability"
+      },
+      "initial_sufficient": true,
+      "tool_useful": false,
+      "retrieval_necessary": false,
+      "definitive_possible": true,
+      "abstention": "Not needed; a tool call is unnecessary (judged under R3), not an error per se",
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0016",
+      "source": "C:\\Windows\\System32\\makecab.exe",
+      "sha256": "070a98b4f7c03f99048a10f490d5916a9a98417e0d0de2c414c76b3dd00cb35e",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "makecab.exe",
+        "OriginalFilename": "makecab.exe",
+        "FileDescription": "Microsoft® Cabinet Maker"
+      },
+      "question_category": "REACHABLE_BY_BOUNDED_RETRIEVAL",
+      "capability_family": "FILE",
+      "question_id": "QV2_REACHABLE_BY_BOUNDED_RETRIEVAL_FILE",
+      "question_text": "What does the available static evidence indicate about this file's capability for file-system access (creating, reading, writing, moving or deleting files)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "REACHABLE_BY_BOUNDED_RETRIEVAL",
+      "reference_EVALUATOR_ONLY": {
+        "answer": "Declared FILE references in the full import table: 9",
+        "relevant_entries": [
+          "msvcrt.dll!_open",
+          "msvcrt.dll!fopen",
+          "KERNEL32.dll!GetFileAttributesExW",
+          "KERNEL32.dll!SetFileAttributesA",
+          "KERNEL32.dll!GetFileAttributesW",
+          "KERNEL32.dll!GetFileAttributesExA",
+          "KERNEL32.dll!CreateDirectoryW",
+          "KERNEL32.dll!CreateFileA",
+          "KERNEL32.dll!CreateFileW"
+        ],
+        "relevant_indices": [
+          32,
+          40,
+          63,
+          80,
+          84,
+          87,
+          88,
+          92,
+          95
+        ],
+        "in_initial_tool_projection": [],
+        "reachable_by_2_sequential_reads": [
+          32,
+          40
+        ],
+        "committed_only_nonsequential": [
+          63
+        ],
+        "never_committed": [
+          80,
+          84,
+          87,
+          88,
+          92,
+          95
+        ],
+        "declared_entries": 101,
+        "note": "Declared imports are capabilities, not runtime behaviour."
+      },
+      "initial_sufficient": false,
+      "tool_useful": true,
+      "retrieval_necessary": true,
+      "definitive_possible": "YES for presence only if the right page(s) are read within budget; complete list: NO for a complete list (101 declared > 64 committed)",
+      "abstention": "A scoped 'not seen in the entries read' with stated coverage is acceptable; claiming absence is a SCOPE_OVERCLAIM",
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0017",
+      "source": "C:\\Windows\\System32\\auditpol.exe",
+      "sha256": "f78a48acc9b61f4086b74f54dc8f4e8d0139745c4004af6c98603486d8d210d5",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "auditpol.exe",
+        "OriginalFilename": "AUDITPOL.EXE",
+        "FileDescription": "Audit Policy Program"
+      },
+      "question_category": "INACCESSIBLE_UNDER_LIMITS",
+      "capability_family": "PROCESS",
+      "question_id": "QV2_INACCESSIBLE_UNDER_LIMITS_PROCESS",
+      "question_text": "What does the available static evidence indicate about this file's capability for process control (creating, opening or terminating processes, or accessing another process's memory)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "INACCESSIBLE_UNDER_LIMITS",
+      "reference_EVALUATOR_ONLY": {
+        "answer": "Declared PROCESS references in the full import table: 1",
+        "relevant_entries": [
+          "api-ms-win-core-processthreads-l1-1-0.dll!TerminateProcess"
+        ],
+        "relevant_indices": [
+          91
+        ],
+        "in_initial_tool_projection": [],
+        "reachable_by_2_sequential_reads": [],
+        "committed_only_nonsequential": [],
+        "never_committed": [
+          91
+        ],
+        "declared_entries": 112,
+        "note": "Declared imports are capabilities, not runtime behaviour."
+      },
+      "initial_sufficient": false,
+      "tool_useful": "LIMITED (absence within 64 committed only)",
+      "retrieval_necessary": false,
+      "definitive_possible": false,
+      "abstention": "REQUIRED: 'not found in committed entries; remaining entries unknown'",
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0018",
+      "source": "C:\\Windows\\System32\\sc.exe",
+      "sha256": "a452bfcb6000d03942ddfaddcda5a7eb121447ed99b1ba090446b4a989f1f7ae",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "sc.exe",
+        "OriginalFilename": "sc.exe",
+        "FileDescription": "Service Control Manager Configuration Tool"
+      },
+      "question_category": "REACHABLE_BY_BOUNDED_RETRIEVAL",
+      "capability_family": "FILE",
+      "question_id": "QV2_REACHABLE_BY_BOUNDED_RETRIEVAL_FILE",
+      "question_text": "What does the available static evidence indicate about this file's capability for file-system access (creating, reading, writing, moving or deleting files)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "REACHABLE_BY_BOUNDED_RETRIEVAL",
+      "reference_EVALUATOR_ONLY": {
+        "answer": "Declared FILE references in the full import table: 1",
+        "relevant_entries": [
+          "api-ms-win-core-file-l1-1-0.dll!WriteFile"
+        ],
+        "relevant_indices": [
+          47
+        ],
+        "in_initial_tool_projection": [],
+        "reachable_by_2_sequential_reads": [
+          47
+        ],
+        "committed_only_nonsequential": [],
+        "never_committed": [],
+        "declared_entries": 108,
+        "note": "Declared imports are capabilities, not runtime behaviour."
+      },
+      "initial_sufficient": false,
+      "tool_useful": true,
+      "retrieval_necessary": true,
+      "definitive_possible": "YES for presence only if the right page(s) are read within budget; complete list: NO for a complete list (108 declared > 64 committed)",
+      "abstention": "A scoped 'not seen in the entries read' with stated coverage is acceptable; claiming absence is a SCOPE_OVERCLAIM",
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0019",
+      "source": "C:\\Windows\\System32\\takeown.exe",
+      "sha256": "9b2f62598734608f0c6bfa65756627d42bbcfa0c233ec9633ff18ef4842b00e3",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "takeown.exe",
+        "OriginalFilename": "takeown.exe",
+        "FileDescription": "Takes ownership of a file"
+      },
+      "question_category": "REACHABLE_BY_BOUNDED_RETRIEVAL",
+      "capability_family": "PROCESS",
+      "question_id": "QV2_REACHABLE_BY_BOUNDED_RETRIEVAL_PROCESS",
+      "question_text": "What does the available static evidence indicate about this file's capability for process control (creating, opening or terminating processes, or accessing another process's memory)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "REACHABLE_BY_BOUNDED_RETRIEVAL",
+      "reference_EVALUATOR_ONLY": {
+        "answer": "Declared PROCESS references in the full import table: 2",
+        "relevant_entries": [
+          "api-ms-win-core-processthreads-l1-1-0.dll!TerminateProcess",
+          "api-ms-win-core-processthreads-l1-1-1.dll!OpenProcess"
+        ],
+        "relevant_indices": [
+          43,
+          89
+        ],
+        "in_initial_tool_projection": [],
+        "reachable_by_2_sequential_reads": [
+          43
+        ],
+        "committed_only_nonsequential": [],
+        "never_committed": [
+          89
+        ],
+        "declared_entries": 130,
+        "note": "Declared imports are capabilities, not runtime behaviour."
+      },
+      "initial_sufficient": false,
+      "tool_useful": true,
+      "retrieval_necessary": true,
+      "definitive_possible": "YES for presence only if the right page(s) are read within budget; complete list: NO for a complete list (130 declared > 64 committed)",
+      "abstention": "A scoped 'not seen in the entries read' with stated coverage is acceptable; claiming absence is a SCOPE_OVERCLAIM",
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0020",
+      "source": "C:\\Windows\\System32\\expand.exe",
+      "sha256": "e5cd2d9536b0729ce90368dce9d923dccfa6f75f2996e31bb349e6a75a2aa897",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "expand.exe",
+        "OriginalFilename": "expand",
+        "FileDescription": "LZ Expansion Utility"
+      },
+      "question_category": "NOT_STATIC_ANSWERABLE",
+      "capability_family": null,
+      "question_id": "QV2_NOT_STATIC_ANSWERABLE",
+      "question_text": "Does this file actually communicate over the network when it runs? State what the available evidence can and cannot establish about this.",
+      "accessibility_class": "NOT_STATIC_ANSWERABLE",
+      "reference_EVALUATOR_ONLY": {
+        "answer": "UNANSWERABLE statically: declared imports can at most show a declared network capability, never actual runtime communication",
+        "declared_network_references": [],
+        "network_access_class": "NO_RELEVANT_DECLARED_IMPORTS"
+      },
+      "initial_sufficient": false,
+      "tool_useful": "LIMITED (declared capability only)",
+      "retrieval_necessary": false,
+      "definitive_possible": false,
+      "abstention": "REQUIRED: state that static evidence cannot establish runtime behaviour",
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    }
+  ],
+  "task07a_filter": {
+    "source_manifest": "evaluation/task06b_j/results/holdout/candidate_cases_v2_EVALUATOR_ONLY.json",
+    "source_sha256": "1f79f71bc520160cc00cb85a962ecf476becf3c1d1590d0b74b653f812be39e0",
+    "classes": [
+      "IN_INITIAL_TOOL_PROJECTION",
+      "REACHABLE_BY_BOUNDED_RETRIEVAL",
+      "INACCESSIBLE_UNDER_LIMITS",
+      "NOT_STATIC_ANSWERABLE",
+      "INITIAL_EVIDENCE_SUFFICIENT"
+    ],
+    "limit": null,
+    "aliases": [
+      "sample_0001",
+      "sample_0002",
+      "sample_0003",
+      "sample_0004",
+      "sample_0005",
+      "sample_0006",
+      "sample_0007",
+      "sample_0008",
+      "sample_0009",
+      "sample_0010",
+      "sample_0011",
+      "sample_0012",
+      "sample_0013",
+      "sample_0014",
+      "sample_0015",
+      "sample_0016",
+      "sample_0017",
+      "sample_0018",
+      "sample_0019",
+      "sample_0020"
+    ]
+  }
+}

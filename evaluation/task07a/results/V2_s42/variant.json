@@ -1,0 +1,339 @@
+{
+  "variant": "V2",
+  "seed": 42,
+  "hypothesis": "H1 analysis-first field order (E2), think OFF",
+  "planner": "ANALYSIS_FIRST",
+  "oracle": false,
+  "cohort_classes": [
+    "IN_INITIAL_TOOL_PROJECTION",
+    "REACHABLE_BY_BOUNDED_RETRIEVAL",
+    "INACCESSIBLE_UNDER_LIMITS",
+    "NOT_STATIC_ANSWERABLE",
+    "INITIAL_EVIDENCE_SUFFICIENT"
+  ],
+  "agent_config": {
+    "model": "qwen3.5:4b",
+    "ollama_host": "http://127.0.0.1:11434",
+    "temperature": 0.1,
+    "num_predict": 3072,
+    "think": false,
+    "inference_timeout_s": 90,
+    "known_reputations": {},
+    "max_tokens": 100000,
+    "max_iterations": 5,
+    "max_tool_calls": 1,
+    "wall_clock_s": 300,
+    "max_context_chars": 24000,
+    "max_value_chars": 800
+  },
+  "decoding": {
+    "num_ctx": 12288,
+    "seed": 42,
+    "top_p": null,
+    "top_k": null,
+    "presence_penalty": null
+  },
+  "augmented_schema_generic": {
+    "oneOf": [
+      {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "analysis",
+          "action",
+          "case_id",
+          "case_revision",
+          "reason",
+          "evidence_refs",
+          "assessment",
+          "change_explanation",
+          "stop_reason"
+        ],
+        "properties": {
+          "analysis": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1500,
+            "description": "Before choosing the action, reason step by step: what the question asks, what visible evidence answers it, what is still missing, and whether a listed action can obtain it."
+          },
+          "action": {
+            "const": "FINISH"
+          },
+          "case_id": {
+            "type": "string"
+          },
+          "case_revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 600
+          },
+          "evidence_refs": {
+            "type": "array",
+            "maxItems": 3,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "assessment": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "alignment",
+              "supporting_evidence_ids",
+              "contradicting_evidence_ids",
+              "uncertainty_notes",
+              "review_required",
+              "recommendation",
+              "confidence_in_assessment",
+              "explanation",
+              "claims"
+            ],
+            "properties": {
+              "alignment": {
+                "type": "string",
+                "enum": [
+                  "CONSISTENT",
+                  "CONFLICT",
+                  "INSUFFICIENT_EVIDENCE"
+                ]
+              },
+              "supporting_evidence_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 4
+              },
+              "contradicting_evidence_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 4
+              },
+              "uncertainty_notes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 4
+              },
+              "review_required": {
+                "type": "boolean"
+              },
+              "recommendation": {
+                "type": "string",
+                "enum": [
+                  "MANUAL_REVIEW",
+                  "MONITOR",
+                  "AVOID_EXECUTION",
+                  "CONSIDER_QUARANTINE"
+                ]
+              },
+              "confidence_in_assessment": {
+                "type": "string",
+                "enum": [
+                  "LOW",
+                  "MEDIUM",
+                  "HIGH"
+                ]
+              },
+              "explanation": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 900
+              },
+              "claims": {
+                "type": "array",
+                "maxItems": 4,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "kind",
+                    "text",
+                    "evidence_ids"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "type": "string",
+                      "enum": [
+                        "OBSERVED",
+                        "HYPOTHESIS",
+                        "LIMITATION",
+                        "NEXT_VERIFICATION"
+                      ]
+                    },
+                    "text": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 500
+                    },
+                    "evidence_ids": {
+                      "type": "array",
+                      "maxItems": 4,
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "import_refs": {
+                      "type": "array",
+                      "maxItems": 4,
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "evidence_id",
+                          "entry_index"
+                        ],
+                        "properties": {
+                          "evidence_id": {
+                            "type": "string"
+                          },
+                          "entry_index": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 63
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "change_explanation": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 600
+          },
+          "stop_reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 400
+          }
+        }
+      },
+      {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "analysis",
+          "action",
+          "case_id",
+          "case_revision",
+          "reason",
+          "evidence_refs"
+        ],
+        "properties": {
+          "analysis": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1500,
+            "description": "Before choosing the action, reason step by step: what the question asks, what visible evidence answers it, what is still missing, and whether a listed action can obtain it."
+          },
+          "action": {
+            "const": "REQUEST_MORE_EVIDENCE"
+          },
+          "case_id": {
+            "type": "string"
+          },
+          "case_revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 600
+          },
+          "evidence_refs": {
+            "type": "array",
+            "maxItems": 3,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  "augmented_schema_generic_sha256": "1d5f710626fe8a4c454bd001f1f87163fa90f0c24d329fe84d2d1e6d162cf030",
+  "track": "RAW_PE_E2E",
+  "evaluation_kind": "DEV_DIAGNOSTIC",
+  "smoke": false,
+  "confirmatory": "NOT_RUN",
+  "cohort_note": "06B-J holdout cohort reused as DEV_DIAGNOSTIC (owner D1); never confirmatory again",
+  "cohort_aliases": [
+    "sample_0001",
+    "sample_0002",
+    "sample_0003",
+    "sample_0004",
+    "sample_0005",
+    "sample_0006",
+    "sample_0007",
+    "sample_0008",
+    "sample_0009",
+    "sample_0010",
+    "sample_0011",
+    "sample_0012",
+    "sample_0013",
+    "sample_0014",
+    "sample_0015",
+    "sample_0016",
+    "sample_0017",
+    "sample_0018",
+    "sample_0019",
+    "sample_0020"
+  ],
+  "manifest_filter": {
+    "source_manifest": "evaluation/task06b_j/results/holdout/candidate_cases_v2_EVALUATOR_ONLY.json",
+    "source_sha256": "1f79f71bc520160cc00cb85a962ecf476becf3c1d1590d0b74b653f812be39e0",
+    "classes": [
+      "IN_INITIAL_TOOL_PROJECTION",
+      "REACHABLE_BY_BOUNDED_RETRIEVAL",
+      "INACCESSIBLE_UNDER_LIMITS",
+      "NOT_STATIC_ANSWERABLE",
+      "INITIAL_EVIDENCE_SUFFICIENT"
+    ],
+    "limit": null,
+    "aliases": [
+      "sample_0001",
+      "sample_0002",
+      "sample_0003",
+      "sample_0004",
+      "sample_0005",
+      "sample_0006",
+      "sample_0007",
+      "sample_0008",
+      "sample_0009",
+      "sample_0010",
+      "sample_0011",
+      "sample_0012",
+      "sample_0013",
+      "sample_0014",
+      "sample_0015",
+      "sample_0016",
+      "sample_0017",
+      "sample_0018",
+      "sample_0019",
+      "sample_0020"
+    ]
+  },
+  "runner_version": "task07a-ablation-v1",
+  "harness_sha256": {
+    "evaluation/task07a/variants.py": "633e36faa647c99b0ee11eee2ae01f7221d07aa9fa8fb90e3198032e61c280fa",
+    "evaluation/task07a/ablation.py": "8d08eb2062d373aa8ce55644fabc9644b5391159aa4483973921c4294ad68e55",
+    "evaluation/task07a/metrics.py": "59672732c42ca4b75985dfcc6b1ad2fb945c28717ab89090a34363f34f49a198"
+  },
+  "freeze_sha256": "2480793cbdee73680ef568d39f7c744429d5c595c03daaebe74c32c4803fa46f"
+}
