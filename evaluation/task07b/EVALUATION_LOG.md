@@ -238,3 +238,32 @@ Thực hiện:
 - Ghi chú: hai câu ví dụ của review không bị `ABSENCE_RE` (07A, dùng chung cho M4) bắt nên verifier
   không flag chúng; quan trọng là chúng **không bao giờ được miễn** (`_covered` = False, có test).
   Không đổi `ABSENCE_RE` để giữ khả năng so sánh với 07A.
+
+## 2026-11-27 — Owner chốt 3 chỗ mơ hồ của bảng quyết định + điều kiện dừng (qua Planner)
+
+Nguyên văn:
+
+> (a) Latency so bằng median; tỉ số V4/BASE ≤ 3 ở cả hai seed.
+> (b) "M4-UNSCOPED không tăng" và "M2/M9 không cải thiện" áp đúng quy tắc nhiễu §4: chỉ tính khi có ở cả hai seed và vượt nhiễu tối đa.
+> (c) M4 so bằng tỷ lệ n/d, vì mẫu số khác nhau giữa các arm. Vẫn ghi kèm tử số và mẫu số; nhiễu tính bằng chênh lệch tỷ lệ giữa hai seed.
+>
+> Quy tắc dừng: cách của bạn (lỗi theo case thì ghi trace rồi đi tiếp; drift/Qwen/Ollama down thì dừng toàn bộ, resume chỉ chạy các run chưa có trace) được chấp nhận, với một điều kiện: kiểm health của Ollama (/api/version kèm digest) TRƯỚC MỖI case. Ollama down thì dừng, không ghi INFRA_INTERRUPTED hàng loạt (đã xảy ra ở 07A).
+
+Thực hiện:
+
+- (a)(b)(c) đưa vào PROTOCOL §4. `metrics.py`: M4 có `rate`; nhiễu M4 = |Δ rate| (`*_rate`);
+  `latency_median_ratio` (V4/BASE, V4_NOQ/BASE theo seed). Test.
+- Điều kiện dừng: **đã có từ 74ee775** — `harness.run` gọi `check_qwen(runner.probe_ollama())`
+  (`/api/tags` + `/api/version`, so digest và version với `EXPECTED_QWEN`) **trước mỗi case**; lỗi
+  → exception, script dừng, case chưa bắt đầu nên không có trace (không ghi INFRA_INTERRUPTED hàng loạt).
+
+## 2026-11-27 — Re-review S7 (b9eeda5..74ee775): 6 finding cũ đạt; 2 Medium mới → sửa
+
+- Medium-A: PROTOCOL §4 (chốt (a)(b)(c)) và §5 dòng 1 (median V4/BASE ≤ 3 ở cả hai seed; M4 theo
+  rate) cập nhật; `metrics.noise` tính `M4_absence_*_rate` = |Δ rate|; `latency_median_ratio`. Test.
+- Medium-B: run hỏng không còn làm M2 tốt lên. Thêm `M2_correct_no_tool` (final hợp lệ **và** không
+  gọi analyzer; run hỏng = không đạt) làm chỉ số quyết định, kèm `M2_broken_runs`; `M2_unnecessary_tool`
+  chỉ còn mô tả. PROTOCOL §3/§5. Test.
+- Info (review): `sample_0015` = verifier.exe trùng tên với một ứng viên được scan trong 06B-R
+  repair_dev v2/v3; ứng viên đó eligible nhưng **không được chọn và chưa từng inference**, nên không
+  phải lây nhiễm cohort (review đã xác minh). Cohort giữ nguyên.

@@ -101,3 +101,30 @@ def test_noq_read_hit_not_reported_as_m8(doc):
     s = doc["groups"]["V4_NOQ_s42_r3"]["summary"]
     assert s["M8_query_hit"] == "NOT_APPLICABLE" and isinstance(s["M8_read_hit_reference"], dict)
     assert isinstance(doc["groups"]["V4_s42_r3"]["summary"]["M8_query_hit"], dict)
+
+
+def test_m4_rate_noise_and_latency_ratio():
+    def g(n, d, lat):
+        return {"summary": {"M4_absence_unscoped": M._rate(n, d), "M4_absence_scoped": M._rate(0, d),
+                            "M6_cost": {"latency_median_s": lat}, **{k: {"n": 0, "d": 1} for k in M.KEY if k not in M.RATE_KEYS}}}
+    groups = {"V4_s42": g(1, 10, 60.0), "V4_s7": g(3, 12, 66.0), "BASE_s42": g(4, 20, 20.0), "BASE_s7": g(4, 20, 30.0)}
+    for k in ("M8_query_hit", "M9_answer_status_fit"):
+        for x in ("V4_s42", "V4_s7"):
+            groups[x]["summary"][k] = {"n": 0, "d": 1}
+    nz = M.noise(groups)
+    assert nz["V4"]["M4_absence_unscoped_rate"] == round(abs(0.1 - 0.25), 4)
+    assert "M4_absence_unscoped" not in nz["V4"]
+    assert M.latency_ratios(groups) == {"V4/BASE_s42": 3.0, "V4/BASE_s7": 2.2}
+
+
+def test_broken_runs_never_improve_m2():
+    ok_case = {"accessibility_class": M.IS, "reference_EVALUATOR_ONLY": {}}
+    broken = {"schema_version": "investigation-v4.0", "alias": "s", "status": "INFRA_INTERRUPTED", "final": None,
+              "turns": [], "failure": "STATE_CHANGED_WITHOUT_SAVED_TRACE_NO_RETRY"}
+    good = dict(broken, status="FINISHED", failure=None,
+                final={"answer_status": "ANSWERED", "answer": "x", "findings": []}, trusted_metadata={})
+    rows = [M.run_row(broken, ok_case, 12288), M.run_row(good, ok_case, 12288),
+            M.missing_row("m", ok_case, "v4", "QUERY")]
+    assert [r["M2_correct_no_tool"] for r in rows] == [False, True, False]
+    s = M.summarize(rows)
+    assert s["M2_correct_no_tool"] == {"n": 1, "d": 3, "aliases": ["s"]} and s["M2_broken_runs"] == 2

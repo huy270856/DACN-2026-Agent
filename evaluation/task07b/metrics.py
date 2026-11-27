@@ -120,6 +120,8 @@ def run_row(r: Dict[str, Any], case: Dict[str, Any], num_ctx: int) -> Dict[str, 
         "M8_query_hit": qhit, "M8_first_query_hit": first_q,
         "M8_read_hit_reference": read_hit,
         "M2_tool_proposed": tool,
+        # Good-direction M2 (owner rule: a broken run never makes a metric look better):
+        "M2_correct_no_tool": final is not None and not tool,
         "M4_absence_sentences": absence, "M4_unscoped": any(a["scope"] == "UNSCOPED" for a in absence),
         "M4_scoped": any(a["scope"] == "SCOPED" for a in absence), "M4_label": "RULE_SCREEN_CANDIDATE",
         "M5_structural_self_corroboration": ("prediction_used_as_own_corroboration" in flags) if _engine(r) == "v3.4" else False,
@@ -149,13 +151,18 @@ def missing_row(alias: str, case: Dict[str, Any], engine: str, retrieval_mode: O
             "M1_relevant_seen": False, "M1b_relevant_cited": False,
             "M8_query_hit": False if query_mode else None, "M8_first_query_hit": None,
             "M8_read_hit_reference": False if (engine == "v4" and not query_mode) else None,
-            "M2_tool_proposed": False, "M4_absence_sentences": [], "M4_unscoped": False, "M4_scoped": False,
+            "M2_tool_proposed": False, "M2_correct_no_tool": False, "M4_absence_sentences": [], "M4_unscoped": False, "M4_scoped": False,
             "M4_label": "RULE_SCREEN_CANDIDATE", "M5_structural_self_corroboration": False, "M5_note": "NO_TRACE",
             "M9_answer_status_fit": False if case["accessibility_class"] in (NS, IS) else None, "answer_status": None,
             "M10_final_present": False, "llm_calls": 0, "latency_s": None, "prompt_tokens": 0, "output_tokens": 0,
             "max_prompt_tokens": 0, "truncations": 0, "overflow": False, "infra_error": True,
             "validation_error_runs": False, "verifier_flags": [], "isolation_passed": None,
             "query_attempts": None, "tool_attempts": None, "missing_trace": True}
+
+
+def _rate(n: int, d: int) -> Dict[str, Any]:
+    """M4 is compared by RATE n/d (denominators differ across arms); n and d are always reported."""
+    return {"n": n, "d": d, "rate": round(n / d, 4) if d else None, "label": "RULE_SCREEN_CANDIDATE"}
 
 
 def _frac(rows, key, classes, subset=None):
@@ -183,9 +190,12 @@ def summarize(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
         "M8_read_hit_reference": (_frac(rows, "M8_read_hit_reference", (RP,)) if (v4 and not query_mode)
                                   else "NOT_APPLICABLE"),
         "M2_unnecessary_tool": _frac(rows, "M2_tool_proposed", (IS, NS)),
+        "M2_correct_no_tool": _frac(rows, "M2_correct_no_tool", (IS, NS)),
+        "M2_correct_no_tool_initial_sufficient": _frac(rows, "M2_correct_no_tool", (IS,)),
+        "M2_broken_runs": sum(not x["final_present"] for x in rows if x["class"] in (IS, NS)),
         "M2_tool_initial_sufficient": _frac(rows, "M2_tool_proposed", (IS,)),
-        "M4_absence_unscoped": {"n": sum(x["M4_unscoped"] for x in finals), "d": len(finals), "label": "RULE_SCREEN_CANDIDATE"},
-        "M4_absence_scoped": {"n": sum(x["M4_scoped"] for x in finals), "d": len(finals), "label": "RULE_SCREEN_CANDIDATE"},
+        "M4_absence_unscoped": _rate(sum(x["M4_unscoped"] for x in finals), len(finals)),
+        "M4_absence_scoped": _rate(sum(x["M4_scoped"] for x in finals), len(finals)),
         "M5_structural_self_corroboration": {"n": sum(x["M5_structural_self_corroboration"] for x in finals),
                                              "d": len(finals),
                                              "note": "v4: structurally impossible; not a behavioural improvement" if v4 else None},
@@ -213,13 +223,29 @@ def summarize(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
 
 
 KEY = ("M1_relevant_seen", "M1b_relevant_cited", "M1b_relevant_cited_beyond_v3", "M1b_relevant_cited_within_v3",
-       "M1_relevant_seen_beyond_v3", "M1_relevant_seen_within_v3", "M2_unnecessary_tool",
+       "M1_relevant_seen_beyond_v3", "M1_relevant_seen_within_v3", "M2_unnecessary_tool", "M2_correct_no_tool",
        "M4_absence_unscoped", "M10_final_present")
 
 
 def _n(summary, k):
     v = summary.get(k)
     return v["n"] if isinstance(v, dict) else None
+
+
+RATE_KEYS = ("M4_absence_unscoped", "M4_absence_scoped")
+
+
+def latency_ratios(groups: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
+    """V4/BASE and V4_NOQ/BASE median-latency ratios per seed (decision rule: <= 3 in BOTH seeds)."""
+    out = {}
+    for seed in (42, 7):
+        base = groups.get(f"BASE_s{seed}")
+        for arm in ("V4", "V4_NOQ"):
+            g = groups.get(f"{arm}_s{seed}")
+            if base and g:
+                b, x = base["summary"]["M6_cost"]["latency_median_s"], g["summary"]["M6_cost"]["latency_median_s"]
+                out[f"{arm}/BASE_s{seed}"] = round(x / b, 3) if b and x is not None else None
+    return out
 
 
 def noise(groups: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
@@ -229,7 +255,13 @@ def noise(groups: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
         if a and b:
             ks = KEY + {"BASE": (), "V4_NOQ": ("M8_read_hit_reference", "M9_answer_status_fit"),
                         "V4": ("M8_query_hit", "M9_answer_status_fit")}[arm]
-            out[arm] = {k: abs((_n(a["summary"], k) or 0) - (_n(b["summary"], k) or 0)) for k in ks}
+            out[arm] = {k: abs((_n(a["summary"], k) or 0) - (_n(b["summary"], k) or 0)) for k in ks
+                        if k not in RATE_KEYS}
+            for k in RATE_KEYS:  # M4: noise = |rate_s42 - rate_s7| (owner, 2026-11-27)
+                ra, rb = a["summary"][k].get("rate"), b["summary"][k].get("rate")
+                out[arm][k + "_rate"] = round(abs(ra - rb), 4) if ra is not None and rb is not None else None
+            la, lb = a["summary"]["M6_cost"]["latency_median_s"], b["summary"]["M6_cost"]["latency_median_s"]
+            out[arm]["latency_median_s"] = {"s42": la, "s7": lb}
     return out
 
 
@@ -253,7 +285,8 @@ def collect(results: Path, manifest_path: Path) -> Dict[str, Any]:
         groups[d.name] = {"arm": a["arm"], "seed": a["seed"], "missing_runs": missing,
                           "summary": summarize(rows), "rows": rows}
     return {"kind": "DETERMINISTIC_METRICS_NOT_SEMANTIC", "metrics_version": METRICS_VERSION,
-            "evaluation_kind": "DEV_EVALUATION_FRESH_COHORT", "groups": groups, "noise": noise(groups)}
+            "evaluation_kind": "DEV_EVALUATION_FRESH_COHORT", "groups": groups, "noise": noise(groups),
+            "latency_median_ratio": latency_ratios(groups)}
 
 
 def main(argv=None):

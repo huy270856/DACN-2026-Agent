@@ -73,7 +73,7 @@ ví dụ run bị dừng giữa chừng) **luôn nằm trong mẫu số**, và t
 | M1/M1b beyond_v3 | Như trên, chỉ tính case có entry liên quan đầu tiên ở index ≥ 48 | 5 |
 | M1/M1b within_v3 | Như trên, chỉ tính case có entry liên quan đầu tiên ở index < 48 | 3 |
 | M8 | Có ít nhất một QUERY_IMPORTS trả về entry liên quan, kèm số thứ tự query đầu tiên trúng. **Chỉ V4.** V4_NOQ có chỉ số riêng `M8_read_hit_reference` (hit từ READ_TABLE), chỉ để tham khảo, **không** so như M8 | RELEVANT_PRESENT |
-| M2 | Có đề xuất analyzer (TOOL_CALL hoặc RUN_ANALYZER) | INITIAL_SUFFICIENT + NOT_STATIC (8); thêm chỉ số riêng cho INITIAL_SUFFICIENT (4) |
+| M2 | **Chỉ số quyết định theo chiều "tốt": `M2_correct_no_tool`** = run có final hợp lệ **và** không đề xuất analyzer. Run hỏng (không final, `INFRA_INTERRUPTED`, `TARGET_DRIFT`, `MISSING_TRACE`) tính là **không đạt**, nên không bao giờ làm M2 trông tốt hơn. Báo kèm `M2_broken_runs` và chỉ số mô tả `M2_unnecessary_tool` (có đề xuất analyzer) | INITIAL_SUFFICIENT + NOT_STATIC (8); thêm riêng INITIAL_SUFFICIENT (4) |
 | M4 | Absence screen (`RULE_SCREEN_CANDIDATE`): regex M4 của 07A (`ABSENCE_RE`, `LIMITATION_RE`, `SCOPE_RE`) áp **trực tiếp trên văn bản final**, như nhau cho BASE, V4_NOQ và V4. Phân SCOPED/UNSCOPED. Developer review rà tay câu nguyên văn, áp như nhau cho 3 arm, ghi riêng | run có final |
 | M5 | Structural self-corroboration. BASE: flag `prediction_used_as_own_corroboration`. V4: bằng 0 **do cấu trúc** (detector không có handle). Báo là structural, **không** so như cải thiện hành vi | run có final |
 | M9 | NOT_STATIC → `NOT_STATICALLY_ANSWERABLE` hoặc `PARTIALLY_ANSWERED`; INITIAL_SUFFICIENT → `ANSWERED` và không gọi analyzer. Chỉ v4 (BASE: NOT_APPLICABLE) | NOT_STATIC + INITIAL_SUFFICIENT (8) |
@@ -94,11 +94,22 @@ coverage của verifier v4, nên V4 không được lợi từ chính logic củ
 - n nhỏ, nên đây là quy tắc ưu tiên công việc, **không** phải kiểm định thống kê. Không phân biệt
   được với nhiễu thì ghi **INCONCLUSIVE**.
 
+**Chốt ba chỗ mơ hồ (Owner duyệt, 2026-11-27, trước freeze):**
+
+- (a) **Latency** so bằng **median** (`M6.latency_median_s`). Điều kiện "latency ≤ 3×" nghĩa là tỉ số
+  median V4/BASE ≤ 3 **ở cả hai seed** (`latency_median_ratio` trong `metrics_v1.json`).
+- (b) "M4-UNSCOPED không tăng" và "M2/M9 không cải thiện" áp **đúng quy tắc nhiễu ở trên**: một
+  thay đổi chỉ được tính (tăng, giảm hoặc cải thiện) khi có ở cả hai seed **và** vượt max nhiễu. Không
+  đạt điều kiện đó thì coi là "không đổi".
+- (c) **M4 so bằng tỷ lệ n/d**, vì mẫu số (số run có final) khác nhau giữa các arm. Vẫn báo kèm
+  n và d. Nhiễu của M4 = |rate_s42 − rate_s7| trong cùng arm (`M4_absence_*_rate` trong
+  `noise`).
+
 ## 5. Bảng quyết định (ghi trước; PLAN §4.5)
 
 | Quan sát (cả hai seed, vượt nhiễu) | Diễn giải | Bước tiếp theo |
 |---|---|---|
-| V4 vượt BASE ở M1b và M8; M4-UNSCOPED không tăng; M10 ≥ BASE; latency ≤ 3× | Lát cắt 1 có tác dụng | TASK 07C: investigation state; `FEATURE_RECORD_REPLAY` trên EMBER (malicious, FP/FN) |
+| V4 vượt BASE ở M1b và M8; M4-UNSCOPED (theo **rate**) không tăng; M10 ≥ BASE; median latency V4/BASE ≤ 3 **ở cả hai seed** | Lát cắt 1 có tác dụng | TASK 07C: investigation state; `FEATURE_RECORD_REPLAY` trên EMBER (malicious, FP/FN) |
 | V4 **kém** BASE ở M1b tầng < 48 (cả hai seed, vượt nhiễu) | V4 làm hỏng trường hợp evidence nằm trong tầm của v3.4 | Không mở rộng V4 trước khi tìm nguyên nhân (contract/projector/turn budget) ở 07C |
 | V4 vượt V4_NOQ ở M1b | Retrieval có chỉ mục đóng góp riêng | Giữ query service; mở rộng sang facet khác ở 07C |
 | V4 ≈ V4_NOQ, cả hai vượt BASE | Lợi ích đến từ contract, workflow và bảng đầy đủ, không phải từ query | 07C ưu tiên state/kế hoạch; xem lại có giữ query không |
@@ -106,6 +117,11 @@ coverage của verifier v4, nên V4 không được lợi từ chính logic củ
 | M8 thấp | Model không biết hỏi gì (thiếu kiến thức miền) | 07C: capability tag như **ablation**, hoặc 9B |
 | M2 hoặc M9 không cải thiện | Quyết định gọi tool vẫn phản xạ | 07C: investigation state hoặc bước kế hoạch rõ ràng |
 | Truncation > 2 run hoặc tràn context ở một arm | Arm đó không diễn giải được | PARTIAL; **không** chạy lại để cứu |
+
+Mọi điều kiện "tăng / không tăng / cải thiện / không cải thiện" trong bảng (M1b, M4-UNSCOPED rate,
+M2 = `M2_correct_no_tool`, M9, M10) áp **đúng quy tắc nhiễu §4** (cả hai seed, vượt max nhiễu); với
+M4 nhiễu là |Δ rate|. Metric "càng thấp càng tốt" chỉ được so ở dạng chiều "tốt" (như M2) hoặc trên
+mẫu số run có final kèm số run hỏng, để run hỏng không làm kết quả trông tốt hơn.
 
 "V4 vượt BASE ở M8" không định nghĩa được, vì BASE không có M8. Dòng 1 sẽ dùng M8 của V4 so với
 hit theo READ của V4_NOQ và BASE (nếu có), kèm giải thích. M2 và M9 so V4 với V4_NOQ (cùng contract)
