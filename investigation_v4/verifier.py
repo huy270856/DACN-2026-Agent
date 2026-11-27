@@ -35,32 +35,43 @@ def resolve(handle: str, handles, table_value: Optional[Dict[str, Any]]) -> Opti
     return {"handle": handle, **r}
 
 
-# Conservative exemption: the sentence must stay within the queried scope.
-SCOPE_CUE_RE = re.compile(r"\b(?:quer(?:y|ied|ies)|prefix|starting with|start with|named|match(?:es|ing)?|in [\w.\-]+\.dll)\b", re.I)
-BROAD_RE = re.compile(r"\b(?:network|networking|file[- ]system|file|files|process|processes|registry|service|services|"
-                      r"capabilit(?:y|ies)|communicat\w*|internet|socket[- ]?level)\b", re.I)
+# Conservative exemption (review Medium-3): WHITELIST of narrow sentence shapes + DENY list of broad words.
+# Narrow prefix shape: "no ... (import|entry|symbol|name|function|API)s ... (starting with|prefix|named|matching) VALUE"
+NARROW_PREFIX_RE = re.compile(
+    r"\b(?:no|none|zero|not)\b.{0,80}?\b(?:imports?|entr(?:y|ies)|symbols?|names?|functions?|apis?)\b.{0,40}?"
+    r"\b(?:starting with|start with|with (?:the )?prefix|prefix(?:ed)?(?: by| with)?|named|matching|match(?:es|ed)?)"
+    r"\s+['\"`]?([A-Za-z0-9_?@$]{3,64})", re.I)
+# Narrow DLL shape: "... in/from X.dll"
+NARROW_DLL_RE = re.compile(r"\b(?:in|from)\s+['\"`]?([A-Za-z0-9_.\-]+\.dll)\b", re.I)
+BROAD_RE = re.compile(
+    r"\b(?:network\w*|file[- ]system|files?|process(?:es)?|registry|services?|capabilit(?:y|ies)|communicat\w*|"
+    r"internet|persisten\w*|inject\w*|crypt\w*|encrypt\w*|download\w*|upload\w*|remote\w*|malicious|malware|"
+    r"suspicious|evasi\w*|privilege\w*|keylog\w*|exfiltrat\w*|execut\w*|memory|thread\w*|hook\w*|debug\w*|"
+    r"security|sensitive|dangerous|harmful|behaviou?r\w*|related|relevant|(?:apis?|functions?|imports?)\s+for)\b",
+    re.I)
 
 
 def _covered(sentence: str, table_value: Dict[str, Any], viewed: set, query_log: List[Dict[str, Any]]) -> bool:
-    """An absence sentence is in coverage only if (a) the table is not truncated, (b) it names a DLL whose
-    returned entries were all viewed, or a query value whose matches were all viewed (incl. zero
-    matches), (c) it carries an explicit query/DLL scope cue, and (d) it does not generalise to a whole
-    capability family (network/file/process/registry/service/capability...). Broader claims stay flagged."""
-    if table_value["truncated"]:
+    """An absence sentence is exempt ONLY if: the table is not truncated; it contains no broad word
+    (capability families, intent words like malicious/injection/persistence, "APIs for ..."); and it
+    has a narrow shape whose captured VALUE is a query whose matches were all viewed (incl. zero
+    matches), or whose captured DLL had all its returned entries viewed. Everything else stays flagged."""
+    if table_value["truncated"] or BROAD_RE.search(sentence):
         return False
-    low = sentence.lower()
-    if not SCOPE_CUE_RE.search(sentence) or BROAD_RE.search(sentence):
-        return False
-    for d in query.dll_summary(table_value):
-        if d["dll"].lower() in low and set(query.dll_indices(table_value, d["dll"])) <= viewed:
-            return True
-    seen: Dict[tuple, Dict[str, Any]] = {}
+    seen: Dict[str, Dict[str, Any]] = {}
     for q in query_log:
-        k = (q["by"], q["value"].lower())
-        rec = seen.setdefault(k, {"total": q["total_matches"], "idx": set()})
+        rec = seen.setdefault(q["value"].lower(), {"total": q["total_matches"], "idx": set()})
         rec["idx"] |= set(q["indices"])
-    for (by, value), rec in seen.items():
-        if value in low and len(rec["idx"]) >= rec["total"]:
+    m = NARROW_PREFIX_RE.search(sentence)
+    if m and m.group(1).lower() in seen:
+        rec = seen[m.group(1).lower()]
+        if len(rec["idx"]) >= rec["total"]:
+            return True
+    d = NARROW_DLL_RE.search(sentence)
+    if d:
+        names = {x["dll"].lower(): x["dll"] for x in query.dll_summary(table_value)}
+        name = names.get(d.group(1).lower())
+        if name and set(query.dll_indices(table_value, name)) <= viewed:
             return True
     return False
 

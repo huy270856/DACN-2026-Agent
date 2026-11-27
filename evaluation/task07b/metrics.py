@@ -94,7 +94,10 @@ def run_row(r: Dict[str, Any], case: Dict[str, Any], num_ctx: int) -> Dict[str, 
         bool(t.get("error_payload")) or bool(EMPTY_RE.search(str(t.get("error") or ""))) for t in turns)
     seen = bool(keys & _seen_keys(r))
     cited = bool(keys & _cited_keys(r))
-    qhit, first_q = _query_hit(r, keys) if _engine(r) == "v4" else (None, None)
+    hit, first = _query_hit(r, keys) if _engine(r) == "v4" else (None, None)
+    query_mode = _engine(r) == "v4" and r.get("retrieval_mode") == "QUERY"
+    qhit, first_q = (hit, first) if query_mode else (None, None)
+    read_hit = hit if (_engine(r) == "v4" and not query_mode) else None
     status_ans = (final or {}).get("answer_status") if _engine(r) == "v4" else None
     tool = _tool_proposed(r)
     if cls == NS:
@@ -115,6 +118,7 @@ def run_row(r: Dict[str, Any], case: Dict[str, Any], num_ctx: int) -> Dict[str, 
         "beyond_v3": bool(ref.get("beyond_v3_reach")),
         "M1_relevant_seen": seen, "M1b_relevant_cited": cited,
         "M8_query_hit": qhit, "M8_first_query_hit": first_q,
+        "M8_read_hit_reference": read_hit,
         "M2_tool_proposed": tool,
         "M4_absence_sentences": absence, "M4_unscoped": any(a["scope"] == "UNSCOPED" for a in absence),
         "M4_scoped": any(a["scope"] == "SCOPED" for a in absence), "M4_label": "RULE_SCREEN_CANDIDATE",
@@ -135,6 +139,25 @@ def run_row(r: Dict[str, Any], case: Dict[str, Any], num_ctx: int) -> Dict[str, 
     }
 
 
+def missing_row(alias: str, case: Dict[str, Any], engine: str, retrieval_mode: Optional[str]) -> Dict[str, Any]:
+    """A cohort slot with NO trace (interrupted / not run). Kept in every denominator as a failure."""
+    ref = case.get("reference_EVALUATOR_ONLY") or {}
+    query_mode = engine == "v4" and retrieval_mode == "QUERY"
+    return {"alias": alias, "class": case["accessibility_class"], "engine": engine, "status": "MISSING_TRACE",
+            "failure": "NO_TRACE_IN_RUN_DIRECTORY", "final_present": False,
+            "relevant_literals": sorted(load_relevant(ref)), "beyond_v3": bool(ref.get("beyond_v3_reach")),
+            "M1_relevant_seen": False, "M1b_relevant_cited": False,
+            "M8_query_hit": False if query_mode else None, "M8_first_query_hit": None,
+            "M8_read_hit_reference": False if (engine == "v4" and not query_mode) else None,
+            "M2_tool_proposed": False, "M4_absence_sentences": [], "M4_unscoped": False, "M4_scoped": False,
+            "M4_label": "RULE_SCREEN_CANDIDATE", "M5_structural_self_corroboration": False, "M5_note": "NO_TRACE",
+            "M9_answer_status_fit": False if case["accessibility_class"] in (NS, IS) else None, "answer_status": None,
+            "M10_final_present": False, "llm_calls": 0, "latency_s": None, "prompt_tokens": 0, "output_tokens": 0,
+            "max_prompt_tokens": 0, "truncations": 0, "overflow": False, "infra_error": True,
+            "validation_error_runs": False, "verifier_flags": [], "isolation_passed": None,
+            "query_attempts": None, "tool_attempts": None, "missing_trace": True}
+
+
 def _frac(rows, key, classes, subset=None):
     den = [x for x in rows if x["class"] in classes and (subset is None or subset(x))]
     return {"n": sum(bool(x[key]) for x in den), "d": len(den), "aliases": sorted(x["alias"] for x in den if x[key])}
@@ -146,7 +169,8 @@ def summarize(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
     st: Dict[str, int] = {}
     for x in rows:
         st[str(x["status"])] = st.get(str(x["status"]), 0) + 1
-    v4 = rows and rows[0]["engine"] == "v4"
+    v4 = bool(rows) and rows[0]["engine"] == "v4"
+    query_mode = v4 and any(x["M8_query_hit"] is not None for x in rows)
     return {
         "n_runs": len(rows),
         "M1_relevant_seen": _frac(rows, "M1_relevant_seen", (RP,)),
@@ -155,7 +179,9 @@ def summarize(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
         "M1b_relevant_cited_beyond_v3": _frac(rows, "M1b_relevant_cited", (RP,), lambda x: x["beyond_v3"]),
         "M1_relevant_seen_within_v3": _frac(rows, "M1_relevant_seen", (RP,), lambda x: not x["beyond_v3"]),
         "M1b_relevant_cited_within_v3": _frac(rows, "M1b_relevant_cited", (RP,), lambda x: not x["beyond_v3"]),
-        "M8_query_hit": _frac(rows, "M8_query_hit", (RP,)) if v4 else "NOT_APPLICABLE",
+        "M8_query_hit": _frac(rows, "M8_query_hit", (RP,)) if query_mode else "NOT_APPLICABLE",
+        "M8_read_hit_reference": (_frac(rows, "M8_read_hit_reference", (RP,)) if (v4 and not query_mode)
+                                  else "NOT_APPLICABLE"),
         "M2_unnecessary_tool": _frac(rows, "M2_tool_proposed", (IS, NS)),
         "M2_tool_initial_sufficient": _frac(rows, "M2_tool_proposed", (IS,)),
         "M4_absence_unscoped": {"n": sum(x["M4_unscoped"] for x in finals), "d": len(finals), "label": "RULE_SCREEN_CANDIDATE"},
@@ -174,6 +200,7 @@ def summarize(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
         "M7_integrity": {"status_counts": st, "runs_with_truncation": sum(x["truncations"] > 0 for x in rows),
                          "runs_with_overflow": sum(x["overflow"] for x in rows),
                          "infra_errors": sum(x["infra_error"] for x in rows),
+                         "missing_traces": sum(bool(x.get("missing_trace")) for x in rows),
                          "runs_with_validation_error": sum(x["validation_error_runs"] for x in rows),
                          "isolation_failed": sum(x["isolation_passed"] is False for x in rows)},
         "per_class": {c: {"n_runs": sum(x["class"] == c for x in rows),
@@ -200,7 +227,8 @@ def noise(groups: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
     for arm in ("BASE", "V4_NOQ", "V4"):
         a, b = groups.get(f"{arm}_s42"), groups.get(f"{arm}_s7")
         if a and b:
-            ks = KEY + (("M8_query_hit", "M9_answer_status_fit") if arm != "BASE" else ())
+            ks = KEY + {"BASE": (), "V4_NOQ": ("M8_read_hit_reference", "M9_answer_status_fit"),
+                        "V4": ("M8_query_hit", "M9_answer_status_fit")}[arm]
             out[arm] = {k: abs((_n(a["summary"], k) or 0) - (_n(b["summary"], k) or 0)) for k in ks}
     return out
 
@@ -215,6 +243,8 @@ def collect(results: Path, manifest_path: Path) -> Dict[str, Any]:
             p = d / f"{alias}_{a['arm']}.json"
             if not p.exists():
                 missing.append(alias)
+                rows.append(missing_row(alias, man[alias], "v3.4" if a["engine"] == "v3.4" else "v4",
+                                        (a.get("v4_config") or {}).get("retrieval_mode")))
                 continue
             r = json.loads(p.read_text(encoding="utf-8"))
             if man[alias]["sha256"] != r["initial_state"]["target_ref"]["verified_digest"]["value"]:

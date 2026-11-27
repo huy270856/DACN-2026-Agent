@@ -75,3 +75,29 @@ def test_base_v34_trace_shape():
     row = M.run_row(r, case, 8192)
     assert row["engine"] == "v3.4" and row["M1_relevant_seen"] and row["M1b_relevant_cited"]
     assert row["M5_structural_self_corroboration"] and row["M2_tool_proposed"] and row["M9_answer_status_fit"] is None
+
+
+def test_missing_trace_stays_in_denominator(tmp_path):
+    case = {"alias": "sample_0001", "sha256": "a" * 64, "accessibility_class": M.RP,
+            "reference_EVALUATOR_ONLY": {"relevant_entries": ["A.dll!X"], "beyond_v3_reach": True}}
+    case2 = dict(case, alias="sample_0002", accessibility_class=M.NS, reference_EVALUATOR_ONLY={})
+    man = tmp_path / "m.json"
+    man.write_text(json.dumps({"cases": [case, case2]}), encoding="utf-8")
+    d = tmp_path / "res" / "V4_s42"
+    d.mkdir(parents=True)
+    (d / "arm.json").write_text(json.dumps({"arm": "V4", "seed": 42, "engine": "v4", "decoding": {"num_ctx": 12288},
+                                            "v4_config": {"retrieval_mode": "QUERY"},
+                                            "cohort_aliases": ["sample_0001", "sample_0002"]}), encoding="utf-8")
+    doc = M.collect(tmp_path / "res", man)
+    s = doc["groups"]["V4_s42"]["summary"]
+    assert doc["groups"]["V4_s42"]["missing_runs"] == ["sample_0001", "sample_0002"]
+    assert s["n_runs"] == 2 and s["M10_final_present"] == {"n": 0, "d": 2}
+    assert s["M1b_relevant_cited"]["d"] == 1 and s["M8_query_hit"]["d"] == 1 and s["M8_query_hit"]["n"] == 0
+    assert s["M9_answer_status_fit"]["d"] == 1 and s["M9_answer_status_fit"]["n"] == 0
+    assert s["M7_integrity"]["missing_traces"] == 2
+
+
+def test_noq_read_hit_not_reported_as_m8(doc):
+    s = doc["groups"]["V4_NOQ_s42_r3"]["summary"]
+    assert s["M8_query_hit"] == "NOT_APPLICABLE" and isinstance(s["M8_read_hit_reference"], dict)
+    assert isinstance(doc["groups"]["V4_s42_r3"]["summary"]["M8_query_hit"], dict)

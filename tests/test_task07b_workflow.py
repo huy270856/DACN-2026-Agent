@@ -344,3 +344,33 @@ def test_broad_absence_claim_not_exempted_by_narrow_query():
     assert "absence_beyond_coverage_suspected" not in V.verify(narrow, **base)["flags"]
     no_cue = _final(["I21"], text="No socket APIs exist.")  # names the value but no scope cue
     assert "absence_beyond_coverage_suspected" in V.verify(no_cue, **base)["flags"]
+
+
+@pytest.mark.parametrize("text", [
+    "No persistence/injection/crypto/download/remote-access/malicious imports were found by the query.",
+    "There are no APIs for injection that match the prefix socket.",
+    "No suspicious imports starting with socket were found.",
+    "No import starting with socket exists, so the file is not malicious.",
+    "Nothing matched socket.",  # no narrow shape
+])
+def test_broad_or_unshaped_claims_still_flagged(text):
+    v = _payload()
+    zero = [{"by": "SYMBOL_PREFIX", "value": "socket", "page": 0, "total_matches": 0, "indices": []}]
+    # Never exempted by the coverage rule (whether or not the shared 07A absence screen detects the sentence).
+    assert V._covered(text, v, {21}, zero) is False, text
+    out = V.verify(_final(["I21"], text=text), shown_handles=("I21",), handles=P.HandleMap(), table_value=v,
+                   viewed_indices={21}, query_log=zero)
+    if out["absence_sentences"]:
+        assert "absence_beyond_coverage_suspected" in out["flags"], text
+
+
+def test_narrow_shapes_exempt_only_when_value_or_dll_covered():
+    v = _payload()
+    zero = [{"by": "SYMBOL_PREFIX", "value": "socket", "page": 0, "total_matches": 0, "indices": []}]
+    kw = dict(shown_handles=("I21",), handles=P.HandleMap(), table_value=v, viewed_indices={21})
+    ok = _final(["I21"], text="No import name starting with socket was found.")
+    assert "absence_beyond_coverage_suspected" not in V.verify(ok, query_log=zero, **kw)["flags"]
+    other = _final(["I21"], text="No import name starting with connect was found.")  # value never queried
+    assert "absence_beyond_coverage_suspected" in V.verify(other, query_log=zero, **kw)["flags"]
+    dll_not_full = _final(["I21"], text="No send import is listed in WS2_32.dll.")
+    assert "absence_beyond_coverage_suspected" in V.verify(dll_not_full, query_log=[], **kw)["flags"]

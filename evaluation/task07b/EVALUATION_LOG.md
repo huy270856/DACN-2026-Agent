@@ -223,3 +223,18 @@ Thực hiện:
 - (3) `run_s8.ps1`: manifest v2; `-AuthorizedBy` mặc định `DACN_OWNER_07B_EVAL_GO`; ghi rõ chỉ chạy
   sau freeze.
 - (2)/(4): **chưa** commit freeze. Sẽ tạo commit WIP (không phải freeze) để review đọc được.
+
+## 2026-11-27 — Review S7 (session review, d0811fc..b9eeda5): FAIL → sửa
+
+| Finding | Sửa |
+|---|---|
+| High-1: run thiếu trace bị loại khỏi mẫu số (`metrics.collect`) | `missing_row()`: mỗi alias thiếu trace thành row thất bại (`MISSING_TRACE`), giữ đúng class; tính không đạt cho M1b/M8/M9/M10; `M7.missing_traces`. Test |
+| High-2: digest Qwen không pin vào hằng số PROTOCOL | `harness.EXPECTED_QWEN` (qwen3.5:4b, `d8b0f5e9…`, 0.40.16); `check_qwen` ở prepare (trừ MOCK) và run (so với probe đã freeze); `run_s8.ps1` kiểm digest qua `/api/tags`. Test |
+| Medium-1: S8 không chặn khi repo chưa ở commit freeze | `run_s8.ps1` bắt buộc `-FreezeCommit` = HEAD và tracked tree sạch; harness từ chối prepare kind frozen khi tracked tree bẩn, ghi `git.head` vào `arm.json`. Test |
+| Medium-2: run lỗi throw dừng các arm còn lại | Chủ ý cho lỗi drift/Qwen/Ollama-không-phản-hồi (dừng toàn bộ, resume được). Lỗi theo case (`STATE_CHANGED…`, `TARGET_DRIFT`) giờ **ghi trace** (`INFRA_INTERRUPTED`/`TARGET_DRIFT`) và đi tiếp. Thêm kiểm Ollama trước mỗi case (không đốt case như 07A). PROTOCOL §6 ghi rõ. Test |
+| Medium-3: BROAD_RE hẹp | Verifier chuyển sang **whitelist** mẫu câu hẹp ("no … imports/entries/symbols/names/functions/APIs … starting with/prefix/named/matching VALUE" với VALUE là query đã phủ đủ match, hoặc "in/from X.dll" với DLL đã xem hết) cộng deny-list mở rộng (intent: persistence, injection, crypto, download, remote, malicious, suspicious, execution, memory, hook, debug…, "APIs for"). Test. M4 vẫn độc lập với verifier |
+| Low-1: V4_NOQ ghi read-hit vào `M8_query_hit` | Đổi thành `M8_read_hit_reference` (chỉ V4_NOQ, tham khảo); `M8_query_hit` chỉ V4; nhiễu theo đúng key. Test |
+
+- Ghi chú: hai câu ví dụ của review không bị `ABSENCE_RE` (07A, dùng chung cho M4) bắt nên verifier
+  không flag chúng; quan trọng là chúng **không bao giờ được miễn** (`_covered` = False, có test).
+  Không đổi `ABSENCE_RE` để giữ khả năng so sánh với 07A.

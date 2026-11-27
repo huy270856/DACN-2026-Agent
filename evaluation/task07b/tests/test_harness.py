@@ -104,3 +104,53 @@ def test_g3_gate_on_mock_trace(runs):
     assert checks["analyzer_committed_d9"] and checks["query_saw_relevant"] and checks["final_valid"]
     assert checks["analysis_first_every_turn"] and checks["isolation"]
     assert H.g3_gate(o, ["NOPE.dll!X"], 12288)["result"] == "FAIL"
+
+
+# ----------------------------------------------------------------------------- review fixes (S7)
+GOOD = {"status": "AVAILABLE", "model": {"name": "qwen3.5:4b", "digest": H.EXPECTED_QWEN["digest"]},
+        "version": {"version": "0.40.16"}}
+
+
+@pytest.mark.parametrize("info, err", [
+    ({"status": "UNAVAILABLE"}, "BLOCKED_OLLAMA_UNAVAILABLE"),
+    (dict(GOOD, model={"name": "qwen3.5:4b", "digest": "0" * 64}), "QWEN_NOT_PROTOCOL_DIGEST"),
+    (dict(GOOD, model={"name": "qwen3:1.7b", "digest": H.EXPECTED_QWEN["digest"]}), "QWEN_NOT_PROTOCOL_DIGEST"),
+    (dict(GOOD, version={"version": "0.40.18"}), "OLLAMA_NOT_PROTOCOL_VERSION"),
+])
+def test_check_qwen_pins_protocol_constants(info, err):
+    with pytest.raises((RuntimeError, ValueError), match=err):
+        H.check_qwen(info)
+    H.check_qwen(GOOD)
+
+
+def test_prepare_refuses_wrong_digest_and_dirty_frozen_tree(tmp_path, monkeypatch):
+    if not PE.exists():
+        pytest.skip("Windows PE required")
+    m = _manifest(tmp_path / "m.json")
+    bad = dict(GOOD, model={"name": "qwen3.5:4b", "digest": "1" * 64})
+    with pytest.raises(ValueError, match="QWEN_NOT_PROTOCOL_DIGEST"):
+        H.prepare("V4", 42, tmp_path / "a", manifest=m, kind="DEV_DEBUG", ollama_info=bad, signer_lookup=False)
+    assert not (tmp_path / "a").exists()
+    monkeypatch.setattr(H, "git_state", lambda: {"head": "x", "tracked_dirty": True, "dirty_paths": [" M f.py"]})
+    with pytest.raises(RuntimeError, match="FROZEN_PREPARE_REQUIRES_CLEAN_TRACKED_TREE"):
+        H.prepare("V4", 42, tmp_path / "b", manifest=m, kind=H.FROZEN_KIND, ollama_info=GOOD, signer_lookup=False)
+    assert not (tmp_path / "b").exists()
+
+
+def test_state_changed_case_recorded_not_raised(tmp_path):
+    if not PE.exists():
+        pytest.skip("Windows PE required")
+    import case_manager as cm
+    m = _manifest(tmp_path / "m.json")
+    o = tmp_path / "V4_s42"
+    H.prepare("V4", 42, o, manifest=m, kind="DEV_DEBUG", runtime_root=tmp_path / "rt", ollama_info={"status": "MOCK"},
+              signer_lookup=False)
+    row = runner.read(o / "cases.json")[0]
+    p = Path(row["case_paths"]["C"])
+    state = cm.read_json(p)
+    state["revision"] += 2  # simulate a tool commit without a saved trace
+    p.write_text(json.dumps(state), encoding="utf-8")
+    res = H.run(o, planner_factory=lambda a: V4Mock())
+    assert res["runs"] == [("sample_0001", "INFRA_INTERRUPTED", None)]
+    r = runner.read(o / "sample_0001_V4.json")
+    assert r["final"] is None and r["failure"] == "STATE_CHANGED_WITHOUT_SAVED_TRACE_NO_RETRY"

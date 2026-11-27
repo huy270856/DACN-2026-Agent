@@ -53,6 +53,30 @@ ARMS: Dict[str, Dict[str, Any]] = {
            "v4": {"retrieval_mode": "QUERY"}},
 }
 SEEDS = (42, 7)
+# PROTOCOL-pinned local model (review High-2): a different qwen3.5:4b build must never be frozen or run.
+EXPECTED_QWEN = {"model": "qwen3.5:4b",
+                 "digest": "d8b0f5e9760cd1682034f292d7ef72ec46f432149be0df7574bf2d6e92e38c04",
+                 "version": "0.40.16"}
+FROZEN_KIND = "DEV_EVALUATION_FRESH_COHORT"
+
+
+def check_qwen(info: Dict[str, Any]) -> None:
+    """Raise unless an AVAILABLE Ollama probe matches the PROTOCOL model name, digest and version."""
+    if (info or {}).get("status") != "AVAILABLE":
+        raise RuntimeError("BLOCKED_OLLAMA_UNAVAILABLE")
+    model = info.get("model") or {}
+    version = (info.get("version") or {}).get("version")
+    if model.get("name") != EXPECTED_QWEN["model"] or model.get("digest") != EXPECTED_QWEN["digest"]:
+        raise ValueError(f"QWEN_NOT_PROTOCOL_DIGEST: {model.get('name')} {model.get('digest')}")
+    if version != EXPECTED_QWEN["version"]:
+        raise ValueError(f"OLLAMA_NOT_PROTOCOL_VERSION: {version}")
+
+
+def git_state() -> Dict[str, Any]:
+    import subprocess
+    head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+    dirty = subprocess.check_output(["git", "status", "--porcelain", "--untracked-files=no"], cwd=ROOT, text=True).strip()
+    return {"head": head, "tracked_dirty": bool(dirty), "dirty_paths": dirty.splitlines()[:50]}
 V4_REGION_PREFIXES = ("viewed_imports", "import_index", "coverage.dlls_viewed", "coverage.queries_run")
 
 
@@ -98,6 +122,13 @@ def prepare(arm: str, seed: int, out: Path, *, manifest: Path, kind: str, aliase
     if seed not in SEEDS:
         raise ValueError("SEED_NOT_IN_PROTOCOL")
     cfg, dec, v4 = make(arm, seed)
+    mock_info = (ollama_info or {}).get("status") in ("MOCK", "MOCK_TEST_NOT_QUERIED")
+    if not mock_info:
+        ollama_info = ollama_info if ollama_info is not None else runner.probe_ollama()
+        check_qwen(ollama_info)
+    git = git_state()
+    if kind == FROZEN_KIND and git["tracked_dirty"]:
+        raise RuntimeError("FROZEN_PREPARE_REQUIRES_CLEAN_TRACKED_TREE: " + "; ".join(git["dirty_paths"][:5]))
     view = _manifest_view(manifest, aliases)
     with tempfile.TemporaryDirectory(prefix="t07b-") as tmp:
         mpath = Path(tmp) / "cases_manifest_view.json"
@@ -110,7 +141,8 @@ def prepare(arm: str, seed: int, out: Path, *, manifest: Path, kind: str, aliase
             "evaluation_kind": kind, "confirmatory": "NOT_RUN", "cohort_aliases": view["task07b_filter"]["aliases"],
             "manifest_filter": view["task07b_filter"], "runner_version": RUNNER_VERSION,
             "v4_source_sha256": file_hashes(V4_SOURCES), "harness_sha256": file_hashes(HARNESS_FILES),
-            "freeze_sha256": runner.file_sha(out / "freeze.json")}
+            "freeze_sha256": runner.file_sha(out / "freeze.json"), "git": git,
+            "expected_qwen": EXPECTED_QWEN if not mock_info else "MOCK"}
     sha = runner.write_new(out / "arm.json", desc)
     runner.write_new(out / "arm_lock.json", {"arm_json_sha256": sha})
     return {"freeze": freeze, "arm": desc}
@@ -153,6 +185,8 @@ def run(out: Path, *, authorized_by: Optional[str] = None,
         raise PermissionError("Owner authorization string required for a live Qwen run")
     f = runner.validate_freeze(out, allow_mock=is_mock)
     a = validate_arm(out)
+    if not is_mock:
+        check_qwen(f["ollama"])  # frozen probe must equal the PROTOCOL constants
     cfg, dec, v4 = make(a["arm"], a["seed"])
     done = []
     for row in runner.read(out / "cases.json"):
@@ -160,14 +194,30 @@ def run(out: Path, *, authorized_by: Optional[str] = None,
         dest = out / f"{alias}_{a['arm']}.json"
         if dest.exists():
             continue
+        if not is_mock:
+            # Stop BEFORE starting a case if the model server vanished (07A: avoid burning cases); resumable.
+            check_qwen(runner.probe_ollama())
         q = row.get("question") or questions.QUESTIONS[row["question_id"]]
         path = Path(row["case_paths"]["C"])
         state = cm.read_json(path)
         initial = runner.read(out / row["initial_file"])
+        integrity = None
         if state != initial:
-            raise ValueError("STATE_CHANGED_WITHOUT_SAVED_TRACE_NO_RETRY")
-        if runner.file_sha(Path(state["target_ref"]["observed"]["path"])) != row["sha256"]:
-            raise ValueError("TARGET_DRIFT")
+            integrity = ("INFRA_INTERRUPTED", "STATE_CHANGED_WITHOUT_SAVED_TRACE_NO_RETRY")
+        elif runner.file_sha(Path(state["target_ref"]["observed"]["path"])) != row["sha256"]:
+            integrity = ("TARGET_DRIFT", "TARGET_DRIFT")
+        if integrity is not None:
+            # Recorded as a failed run in the denominator; never retried (review Medium-2).
+            rec = {"status": integrity[0], "failure": integrity[1], "turns": [], "final": None,
+                   "initial_state": initial, "final_state": state, "events": [], "latency_s": None,
+                   "arm": a["arm"], "alias": alias, "question_id": row["question_id"], "question": q, "seed": a["seed"],
+                   "authorized_by": authorized_by, "runner_version": RUNNER_VERSION,
+                   "evaluation_kind": a["evaluation_kind"], "track": TRACK,
+                   "planner_kind_07b": "MOCK_LLM" if is_mock else "LOCAL_QWEN"}
+            runner.write_new(dest, rec)
+            done.append((alias, integrity[0], None))
+            print(alias, a["arm"], a["seed"], integrity[0], integrity[1], flush=True)
+            continue
         config = AppConfig.from_home(Path(row["homes"]["C"]))
         events: List[Dict[str, Any]] = []
         try:

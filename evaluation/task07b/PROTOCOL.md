@@ -62,8 +62,9 @@
 ## 3. Metric (`task07b-metrics-v1`)
 
 Báo tử số/mẫu số theo từng (arm, seed) và theo lớp. Run không có final, lỗi hạ tầng, truncation và
-`HARNESS_EXCEPTION` **luôn nằm trong mẫu số**, và tính là **không đạt** cho mọi metric "tốt" (M1b, M8,
-M9, M10).
+`HARNESS_EXCEPTION`, `INFRA_INTERRUPTED`, `TARGET_DRIFT` và cả slot **không có trace** (`MISSING_TRACE`,
+ví dụ run bị dừng giữa chừng) **luôn nằm trong mẫu số**, và tính là **không đạt** cho mọi metric "tốt"
+(M1b, M8, M9, M10). Mẫu số lấy từ `cohort_aliases` của `arm.json`, không phải từ số trace có trên đĩa.
 
 | Mã | Định nghĩa | Mẫu số |
 |---|---|---|
@@ -71,7 +72,7 @@ M9, M10).
 | M1b | Final trích entry liên quan (BASE: `resolved_import_refs`; V4: `resolved_sources`) | RELEVANT_PRESENT (8) |
 | M1/M1b beyond_v3 | Như trên, chỉ tính case có entry liên quan đầu tiên ở index ≥ 48 | 5 |
 | M1/M1b within_v3 | Như trên, chỉ tính case có entry liên quan đầu tiên ở index < 48 | 3 |
-| M8 | Có ít nhất một QUERY_IMPORTS trả về entry liên quan, kèm số thứ tự query đầu tiên trúng. Chỉ có ở V4 (V4_NOQ ghi hit từ READ_TABLE để tham khảo) | RELEVANT_PRESENT |
+| M8 | Có ít nhất một QUERY_IMPORTS trả về entry liên quan, kèm số thứ tự query đầu tiên trúng. **Chỉ V4.** V4_NOQ có chỉ số riêng `M8_read_hit_reference` (hit từ READ_TABLE), chỉ để tham khảo, **không** so như M8 | RELEVANT_PRESENT |
 | M2 | Có đề xuất analyzer (TOOL_CALL hoặc RUN_ANALYZER) | INITIAL_SUFFICIENT + NOT_STATIC (8); thêm chỉ số riêng cho INITIAL_SUFFICIENT (4) |
 | M4 | Absence screen (`RULE_SCREEN_CANDIDATE`): regex M4 của 07A (`ABSENCE_RE`, `LIMITATION_RE`, `SCOPE_RE`) áp **trực tiếp trên văn bản final**, như nhau cho BASE, V4_NOQ và V4. Phân SCOPED/UNSCOPED. Developer review rà tay câu nguyên văn, áp như nhau cho 3 arm, ghi riêng | run có final |
 | M5 | Structural self-corroboration. BASE: flag `prediction_used_as_own_corroboration`. V4: bằng 0 **do cấu trúc** (detector không có handle). Báo là structural, **không** so như cải thiện hành vi | run có final |
@@ -114,13 +115,29 @@ và M2 với BASE.
 
 - Mỗi run chạy **đúng một lần**, write-once (`runner.write_new`). Không rerun ca lỗi, không xóa run,
   không thêm seed. Lỗi hạ tầng, timeout, validation, truncation đều tính vào mẫu số.
-- Run bị ngắt: tiếp tục `run` trên cùng thư mục, chỉ cho case chưa có trace. Case có CaseState
-  đã đổi mà không có trace bị chặn (`STATE_CHANGED_WITHOUT_SAVED_TRACE_NO_RETRY`), ghi
-  `INFRA_INTERRUPTED`.
-- Drift của nguồn Agent/v4 (`V4_SOURCES`), harness, `metrics.py`, `cohort_audit.py`, `arm.json`,
-  model LightGBM hoặc Qwen đều làm `run` dừng.
+- **Lỗi theo case, ghi trace và đi tiếp** (không dừng arm):
+  - lỗi model, validation, truncation, query, lỗi Ollama trong lúc inference (`HARNESS_EXCEPTION`
+    hoặc `failure`);
+  - CaseState đã đổi mà không có trace → ghi trace `INFRA_INTERRUPTED`
+    (`STATE_CHANGED_WITHOUT_SAVED_TRACE_NO_RETRY`);
+  - file staged đổi → ghi trace `TARGET_DRIFT`.
+  Các trace này không bao giờ được chạy lại.
+- **Lỗi làm dừng toàn bộ S8** (script `run_s8.ps1` throw, **không** chạy các arm sau):
+  - drift của nguồn Agent/v4 (`V4_SOURCES`), harness, `metrics.py`, `cohort_audit.py`, `arm.json`,
+    model LightGBM;
+  - Qwen sai digest/version so với hằng số PROTOCOL (`EXPECTED_QWEN` ở cả prepare lẫn run);
+  - Ollama không phản hồi **trước khi bắt đầu** một case. Case đó chưa bắt đầu nên không có trace.
+  Khi bị dừng, Owner báo Planner. Chạy lại script **sau khi** sự cố hạ tầng được khắc phục sẽ tiếp
+  tục đúng chỗ: thư mục đã có `arm.json` không bị prepare lại, case đã có trace bị bỏ qua. Không xóa
+  hay prepare lại thư mục nào. Mọi lần dừng ghi vào `EVALUATION_LOG.md`.
+- Guard của `run_s8.ps1`: tham số bắt buộc `-FreezeCommit` phải bằng `HEAD`; tracked tree sạch
+  (`git status --porcelain --untracked-files=no` rỗng); Ollama 0.40.16; digest `qwen3.5:4b` bằng
+  digest PROTOCOL. Harness cũng từ chối prepare kind `DEV_EVALUATION_FRESH_COHORT` khi tracked tree
+  bẩn, và ghi `git.head` vào `arm.json`.
 - Owner chạy S8 trong cửa sổ PowerShell **riêng ngoài session** (D7), với Ollama headless 0.40.16.
-  Session Developer chỉ theo dõi artifact. Lệnh nằm trong `evaluation/task07b/run_s8.ps1`.
+  Session Developer chỉ theo dõi artifact:
+  `powershell -ExecutionPolicy Bypass -File evaluation\task07b\run_s8.ps1 -FreezeCommit <SHA freeze>`
+  (authorization mặc định `DACN_OWNER_07B_EVAL_GO`).
 - Thứ tự: BASE s42, V4_NOQ s42, V4 s42, BASE s7, V4_NOQ s7, V4 s7.
 
 ## 7. Thay đổi đã chốt từ DEV trước freeze
