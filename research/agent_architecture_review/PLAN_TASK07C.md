@@ -18,6 +18,24 @@ Model chạy một query hẹp, chẳng hạn DLL kernel32 hoặc prefix `Create
 
 Ngoài phạm vi, chỉ ghi lại: việc NOT_STATIC gọi tool theo phản xạ, policy v4.0 và các nit trình bày.
 
+## 2b. Sửa đổi rev 2 (Owner duyệt 2026-11-28): final có cấu trúc, contract `investigation-v4.2`
+**Bằng chứng:** sau S2 smoke ×2, ledger và `absence_claims` hoạt động (5/5 accepted). Nhưng ở 2/2 case, sau repair Qwen vẫn lặp câu absence rộng bằng free-text. Lỗi cùng loại A1: SLM bị giao thêm việc viết văn xuôi.
+**Thay đổi:**
+- Final chỉ gồm các trường có cấu trúc:
+  - `analysis`: giữ lại để model suy luận; không render, không chấm M4;
+  - các trường quyết định hiện có của v4;
+  - `findings[]` gồm `{statement, refs[≥1 handle]}`, `statement` ngắn và chỉ dành cho khẳng định *có mặt*;
+  - `absence_claims[]` như ở v4.1.
+- Bỏ toàn bộ free-text narrative trong final.
+- Verifier: `statement` có dạng absence thì reject. Dùng lại repair 1 lần (kể cả ở FORCED_FINAL).
+- **Trusted renderer**: tạo báo cáo tiếng Việt theo template.
+  - `statement` của model được trích nguyên văn và ghi rõ là do model viết.
+  - Mỗi `absence_claim` render thành "Không thấy X trong phạm vi Qk (…, đã đọc hết)".
+  - Phần "Phạm vi đã xem / chưa xem" render tất định từ ledger.
+  - Renderer KHÔNG tạo, KHÔNG sửa claim (CLAUDE.md §3).
+- v4.0 và v4.1 giữ nguyên. Arm `V4_2` thay cho `V4_1` trong đợt eval.
+**M4:** chấm trên phần do model viết và được render (`statement` cùng các dòng absence). Ghi trong PROTOCOL rằng định dạng khác 07B, nên so sánh với 07B có giới hạn.
+
 ## 3. Đánh giá (tối giản để tiết kiệm thời gian)
 - **Loại:** DEV_DIAGNOSTIC trên cohort v2 của 07B (đã dùng, ghi rõ là cohort đã tiêu thụ). Chưa phải confirmatory.
 - **Arm:** chỉ chạy V4.1 × 2 seed (42, 7), tổng 40 run, ước khoảng 16 phút máy. Baseline là trace frozen của V4 và BASE trong 07B, đã kiểm cùng Ollama 0.40.16 và cùng digest. Không chạy lại 07B.

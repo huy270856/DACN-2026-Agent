@@ -187,3 +187,21 @@ def check_absence_claims(obj: Dict[str, Any], ledger_entries: List[Dict[str, Any
                     free.append(sent.strip())
     return {"accepted": accepted, "rejected": rejected, "free_text_absence_rejected": free,
             "has_rejections": bool(rejected or free)}
+
+
+# ----------------------------------------------------------------------------- TASK 07C rev 2 (investigation-v4.2)
+NEGATION_RE = re.compile(r"\b(?:no|not|none|never|nothing|lacks?|lacking|absent|absence|missing|without|zero|neither|nor)\b"
+                         r"|n't\b", re.I)
+
+
+def v42_view(obj: Dict[str, Any]) -> Dict[str, Any]:
+    """Read-only adapter: a v4.2 final seen through the v4.0 verifier field names (no text is created)."""
+    v = {k: val for k, val in obj.items() if k != "findings"}
+    v["answer"] = ""
+    v["findings"] = [{"kind": f["kind"], "text": f["statement"], "sources": list(f["refs"])} for f in obj.get("findings", [])]
+    return v
+
+
+def statement_absence(obj: Dict[str, Any]) -> List[str]:
+    """v4.2: findings statements are presence-only; any negated / absence-form statement is rejected."""
+    return [f["statement"] for f in obj.get("findings", []) if NEGATION_RE.search(f["statement"])]

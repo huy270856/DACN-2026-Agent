@@ -13,6 +13,7 @@ from typing import Any, Dict, List
 from jsonschema import Draft202012Validator
 
 VERSION = "investigation-v4.0"
+VERSION_42 = "investigation-v4.2"  # TASK 07C rev 2: structured final, trusted renderer
 VERSION_41 = "investigation-v4.1"  # TASK 07C: structured absence_claims bound to the coverage ledger
 HANDLE_PATTERN = r"^(E[1-9][0-9]{0,2}|I(0|[1-9][0-9]{0,3}))$"
 ANALYSIS = {"type": "string", "minLength": 1, "maxLength": 1500,
@@ -81,15 +82,36 @@ def final_schema(version: str = "4.0") -> Dict[str, Any]:
                               "properties": {"value": {"enum": ["AGREES", "CONFLICTS", "NOT_INFORMATIVE"]},
                                              "basis_sources": copy.deepcopy(src)}},
     }
+    absence = {"type": "array", "maxItems": 6, "items": {
+        "type": "object", "additionalProperties": False, "required": ["api_or_prefix", "scope_ref"],
+        "properties": {"api_or_prefix": {"type": "string", "minLength": 3, "maxLength": 64,
+                                         "pattern": r"^[A-Za-z0-9_?@$.\-]+$"},
+                       "scope_ref": {"type": "string", "pattern": r"^Q[1-9][0-9]?$"}}}}
     if version == "4.1":
-        props["absence_claims"] = {"type": "array", "maxItems": 6, "items": {
-            "type": "object", "additionalProperties": False, "required": ["api_or_prefix", "scope_ref"],
-            "properties": {"api_or_prefix": {"type": "string", "minLength": 3, "maxLength": 64,
-                                             "pattern": r"^[A-Za-z0-9_?@$.\-]+$"},
-                           "scope_ref": {"type": "string", "pattern": r"^Q[1-9][0-9]?$"}}}}
+        props["absence_claims"] = absence
+    elif version == "4.2":
+        # TASK 07C rev 2: structured final only. No free-text narrative ("answer" dropped); findings hold short
+        # PRESENCE statements with >= 1 handle; absence only via absence_claims. Trusted code renders the report.
+        props.pop("answer")
+        props["findings"] = {"type": "array", "minItems": 0, "maxItems": 6, "items": {
+            "type": "object", "additionalProperties": False, "required": ["kind", "statement", "refs"],
+            "properties": {"kind": {"enum": ["OBSERVED", "INFERENCE"]},
+                           "statement": {"type": "string", "minLength": 1, "maxLength": 300},
+                           "refs": dict(copy.deepcopy(src), minItems=1)}}}
+        props["absence_claims"] = absence
     elif version != "4.0":
         raise ValueError("unknown contract version")
     return {"type": "object", "additionalProperties": False, "required": list(props), "properties": props}
+
+
+SYSTEM_42 = ("\nSTRUCTURED FINAL (investigation-v4.2): there is no free-text answer. findings[] are short statements of what "
+             "IS present or inferred, each with >= 1 visible handle in refs. A statement must never say that something is "
+             "absent, missing, not imported or not found. Every absence goes ONLY into absence_claims as {api_or_prefix, "
+             "scope_ref} where scope_ref is an exhausted coverage_ledger entry Qk whose scope contains api_or_prefix (a "
+             "SYMBOL_PREFIX Qk covers names starting with its prefix; a DLL Qk covers that DLL; the import index Qk covers "
+             "DLL names). The trusted layer writes the report from these fields; what you did not cover is reported from "
+             "the ledger automatically. Use [] when you make no absence claim. If there is no presence finding, leave findings "
+             "empty; every absence goes ONLY into absence_claims.")
 
 
 SYSTEM_41 = ("\nABSENCE RULE (investigation-v4.1): never state in answer or findings text that an API, DLL or capability is "

@@ -40,3 +40,28 @@
     (prefix Create/Read/Write/Open/Move @Q2–Q6, đều exhausted), nhưng model vẫn lặp câu free-text rộng → reject.
 - Nhận định: cơ chế ledger + repair hoạt động (model chuyển được absence sang absence_claims), nhưng model
   không bỏ câu free-text rộng dù đã được nhắc. Không phải vấn đề kiến trúc mới (cùng hiện tượng S2 lần 1).
+
+## 2026-11-28 — Owner chọn (B): investigation-v4.2 (structured final) + smoke lần 3
+
+- Thực hiện PLAN §2b: `final_schema("4.2")` (bỏ `answer`; findings `{kind OBSERVED|INFERENCE, statement, refs≥1}`;
+  `absence_claims`), `verifier.v42_view` / `statement_absence` (statement có phủ định → reject), repair absence
+  1 lần (kể cả FORCED_FINAL), `renderer.py` (báo cáo tiếng Việt, statement nguyên văn, absence theo Qk, phạm vi từ
+  ledger), arm `V4_2`, metrics `task07b-metrics-v3` (M4 v4.2 chấm trên statement). v4.0/v4.1 giữ nguyên.
+  Test mới 11; full regression 890 passed / 0 failed / 4 skipped.
+- Smoke `results/dev_smoke_3/V4_2_s42_r1` (DACN_OWNER_07C_DEV_GO, Ollama 0.40.16): 2/2 FINISHED_FLAGGED, isolation PASS.
+  - sample_0010: repair absence dùng; lần 2 `WinHttp`@Q3 accepted, nhưng vẫn 1 statement phủ định ("The absence of
+    WinHttp symbols ... indicates no HTTP communication capability") → reject. Các statement có mặt đúng (WS2_32).
+  - sample_0012: FORCED_FINAL → repair; lần 2 `CreateFile/ReadFile/WriteFile` @Q2–Q4 **accepted**, nhưng 2/2
+    statement vẫn là phủ định ("No import entries matching ... were found") → reject; không có statement có mặt nào.
+- Nhận định: cùng hiện tượng — model dùng absence_claims đúng khi repair, nhưng **vẫn** viết absence vào chỗ dành
+  cho văn bản (statement), kể cả khi contract chỉ cho phép statement có mặt. Đã báo Planner, không tự lặp.
+
+## 2026-11-28 — Planner chọn P1 (PLAN §2 mục 4) + smoke lần 4
+
+- P1: statement phủ định bị **loại** khỏi báo cáo render, liệt kê ở "Nội dung bị loại" kèm lý do, ghi trace
+  `rendered_dropped_statements`; không sửa chữ; final vẫn FLAGGED. `findings` minItems 0; SYSTEM_42 thêm câu
+  "để findings rỗng nếu không có phát hiện có mặt". Metrics v3: `v42_product` (M1b/M4 trên báo cáo render) và
+  `v42_model_behaviour` (M4_raw, run/statement bị loại; DIAGNOSTIC, không ngưỡng). Test; full regression
+  893 passed / 0 failed / 4 skipped.
+- Smoke `results/dev_smoke_4/V4_2_s42_r4`: sample_0010 FINISHED_FLAGGED (1 statement phủ định bị loại; statement
+  WS2_32 giữ); sample_0012 FINISHED (findings rỗng; 5/5 absence_claims accepted ở lần đầu). Không có lỗi khác.

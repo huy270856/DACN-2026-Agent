@@ -17,7 +17,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 from evaluation.task07a.metrics import ABSENCE_RE, LIMITATION_RE, SCOPE_RE, SENT_SPLIT
 from evaluation.task07a.variants import entry_key, load_relevant, parse_literal
 
-METRICS_VERSION = "task07b-metrics-v2"  # v2 (TASK 07C): absence_claims accepted/rejected; v1 unchanged otherwise
+METRICS_VERSION = "task07b-metrics-v3"  # v2 (TASK 07C): absence_claims accepted/rejected; v1 unchanged otherwise
 RP, RA, NS, IS = "RELEVANT_PRESENT", "RELEVANT_ABSENT", "NOT_STATIC_ANSWERABLE", "INITIAL_EVIDENCE_SUFFICIENT"
 CLASSES = (RP, RA, NS, IS)
 V3_FACET = "static.pe_imports_detail"
@@ -36,7 +36,10 @@ def _engine(r: Dict[str, Any]) -> str:
 
 def _final_texts(r: Dict[str, Any]) -> List[str]:
     f = r.get("final") or {}
-    if _engine(r) == "v4":
+    if _engine(r) == "v4" and r.get("schema_version") == "investigation-v4.2":
+        # v4.2: model-written text = statements only (rendered absence lines come from verified claims)
+        texts = [x.get("statement") or "" for x in f.get("findings", [])]
+    elif _engine(r) == "v4":
         texts = [f.get("answer") or ""] + [x.get("text") or "" for x in f.get("findings", [])]
     else:
         a = f.get("assessment") or {}
@@ -112,6 +115,19 @@ def run_row(r: Dict[str, Any], case: Dict[str, Any], num_ctx: int) -> Dict[str, 
             if ABSENCE_RE.search(s) and not LIMITATION_RE.search(s):
                 absence.append({"sentence": s.strip(), "scope": "SCOPED" if SCOPE_RE.search(s) else "UNSCOPED"})
     flags = list(((r.get("verification") or {}).get("flags")) or [])
+    # v4.2 (TASK 07C rev 2): PRODUCT metrics on the trusted-rendered report vs RAW model behaviour.
+    v42 = r.get("schema_version") == "investigation-v4.2"
+    dropped = set(r.get("rendered_dropped_statements") or []) if v42 else set()
+    if v42 and final is not None:
+        kept_idx = {i for i, x in enumerate(final.get("findings", [])) if x["statement"] not in dropped}
+        rendered_cited = {_lit_key(s["literal"]) for s in (r.get("trusted_metadata") or {}).get("resolved_sources", [])
+                          if s.get("literal") and str(s.get("cited_in", "")).startswith("findings[")
+                          and int(s["cited_in"][9:-1]) in kept_idx}
+        rendered_unscoped = any(ABSENCE_RE.search(x["statement"]) and not LIMITATION_RE.search(x["statement"])
+                                and not SCOPE_RE.search(x["statement"])
+                                for i, x in enumerate(final.get("findings", [])) if i in kept_idx)
+    else:
+        rendered_cited, rendered_unscoped = None, None
     return {
         "alias": r.get("alias"), "class": cls, "engine": _engine(r), "status": r.get("status"), "failure": r.get("failure"),
         "final_present": final is not None, "relevant_literals": sorted(load_relevant(ref)),
@@ -138,6 +154,9 @@ def run_row(r: Dict[str, Any], case: Dict[str, Any], num_ctx: int) -> Dict[str, 
         "validation_error_runs": any(t.get("validation_error") for t in turns),
         "verifier_flags": flags, "isolation_passed": (r.get("isolation_checks") or {}).get("passed"),
         "query_attempts": r.get("query_attempts"), "tool_attempts": r.get("tool_attempts"),
+        "v42_M1b_rendered": (bool(keys & rendered_cited) if rendered_cited is not None else None),
+        "v42_M4_rendered_unscoped": rendered_unscoped,
+        "v42_statements_dropped": len(dropped),
         "absence_claims_accepted": len(((r.get("verification") or {}).get("absence_claims") or {}).get("accepted", [])),
         "absence_claims_rejected": len(((r.get("verification") or {}).get("absence_claims") or {}).get("rejected", [])),
         "free_text_absence_rejected": len(((r.get("verification") or {}).get("absence_claims") or {}).get("free_text_absence_rejected", [])),
@@ -204,6 +223,15 @@ def summarize(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
                                              "note": "v4: structurally impossible; not a behavioural improvement" if v4 else None},
         "M9_answer_status_fit": _frac(rows, "M9_answer_status_fit", (NS, IS)) if v4 else "NOT_APPLICABLE (v3.4 has no answer_status)",
         "M10_final_present": {"n": len(finals), "d": len(rows)},
+        "v42_product": ({"M1b_rendered": _frac(rows, "v42_M1b_rendered", (RP,)),
+                         "M4_rendered_unscoped": _rate(sum(bool(x.get("v42_M4_rendered_unscoped")) for x in finals), len(finals)),
+                         "note": "PRODUCT metric on the trusted-rendered report; meeting it via the trusted filter != the model learned"}
+                        if any(x.get("v42_M1b_rendered") is not None or x.get("missing_trace") for x in rows) and
+                        any(x.get("v42_M1b_rendered") is not None for x in rows) else "NOT_APPLICABLE"),
+        "v42_model_behaviour": {"M4_raw_unscoped": _rate(sum(x["M4_unscoped"] for x in finals), len(finals)),
+                                "runs_with_dropped_statement": sum(x.get("v42_statements_dropped", 0) > 0 for x in rows),
+                                "statements_dropped": sum(x.get("v42_statements_dropped", 0) for x in rows),
+                                "label": "DIAGNOSTIC (no threshold)"},
         "absence_claims": {"accepted": sum(x.get("absence_claims_accepted", 0) for x in rows),
                            "rejected": sum(x.get("absence_claims_rejected", 0) for x in rows),
                            "free_text_rejected": sum(x.get("free_text_absence_rejected", 0) for x in rows),
@@ -257,12 +285,13 @@ def latency_ratios(groups: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
 
 def noise(groups: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
     out = {}
-    for arm in ("BASE", "V4_NOQ", "V4", "V4_1"):
+    for arm in ("BASE", "V4_NOQ", "V4", "V4_1", "V4_2"):
         a, b = groups.get(f"{arm}_s42"), groups.get(f"{arm}_s7")
         if a and b:
             ks = KEY + {"BASE": (), "V4_NOQ": ("M8_read_hit_reference", "M9_answer_status_fit"),
                         "V4": ("M8_query_hit", "M9_answer_status_fit"),
-                        "V4_1": ("M8_query_hit", "M9_answer_status_fit")}[arm]
+                        "V4_1": ("M8_query_hit", "M9_answer_status_fit"),
+                        "V4_2": ("M8_query_hit", "M9_answer_status_fit")}[arm]
             out[arm] = {k: abs((_n(a["summary"], k) or 0) - (_n(b["summary"], k) or 0)) for k in ks
                         if k not in RATE_KEYS}
             for k in RATE_KEYS:  # M4: noise = |rate_s42 - rate_s7| (owner, 2026-11-27)

@@ -54,6 +54,9 @@ ARMS: Dict[str, Dict[str, Any]] = {
     # TASK 07C: V4 + investigation-v4.1 (ledger-bound absence_claims, coverage summary at final)
     "V4_1": {"engine": "v4", "agent": dict(V4_AGENT), "decoding": {"num_ctx": 12288},
              "v4": {"retrieval_mode": "QUERY", "contract_version": "4.1"}},
+    # TASK 07C rev 2: V4 + investigation-v4.2 (structured final, trusted renderer)
+    "V4_2": {"engine": "v4", "agent": dict(V4_AGENT), "decoding": {"num_ctx": 12288},
+             "v4": {"retrieval_mode": "QUERY", "contract_version": "4.2"}},
 }
 SEEDS = (42, 7)
 # PROTOCOL-pinned local model (review High-2): a different qwen3.5:4b build must never be frozen or run.

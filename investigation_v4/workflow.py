@@ -17,7 +17,7 @@ import case_manager as cm
 from agent.controller import ControllerReject
 from agent.planner import DecodingOptions, OllamaPlanner, PlannerError
 
-from . import contract, ledger, projector, query, recommendation, verifier
+from . import contract, ledger, projector, query, recommendation, renderer, verifier
 from .config import V4Config
 from .controller import ToolBinding, V4Controller
 from .imports_table_tool import ARGUMENTS as TABLE_ARGS, FACET as TABLE_FACET, TOOL_ID as TABLE_TOOL
@@ -74,7 +74,7 @@ def run(case_path, cfg, v4: V4Config, registry, orch, policy, *, question: str, 
     history: List[Dict[str, Any]] = []
     detector = projector.detector_context(state)
     result: Dict[str, Any] = {
-        "schema_version": contract.VERSION_41 if v4.contract_version == "4.1" else contract.VERSION, "workflow_version": WORKFLOW_VERSION, "case_id": state["case_id"],
+        "schema_version": {"4.1": contract.VERSION_41, "4.2": contract.VERSION_42}.get(v4.contract_version, contract.VERSION), "workflow_version": WORKFLOW_VERSION, "case_id": state["case_id"],
         "initial_state": initial, "initial_revision": state["revision"], "detector_context": detector,
         "question": question, "turns": turns, "history": history, "agent_event_start": len(events),
         "status": "INVESTIGATION_INCOMPLETE", "final": None, "failure": None, "tool_attempts": 0,
@@ -86,7 +86,7 @@ def run(case_path, cfg, v4: V4Config, registry, orch, policy, *, question: str, 
     reserve = 8192 + 2 * cfg.num_predict
     try:
         planner = planner or V4Planner(cfg, decoding)
-        for t in range(v4.max_turns + (1 if v4.contract_version == "4.1" else 0)):
+        for t in range(v4.max_turns + (1 if v4.contract_version in ("4.1", "4.2") else 0)):
             if t >= v4.max_turns and not absence_repair_pending:
                 break  # the extra slot exists only for the dedicated absence repair
             turns_left = max(1, v4.max_turns - t)
@@ -116,7 +116,8 @@ def run(case_path, cfg, v4: V4Config, registry, orch, policy, *, question: str, 
                     elif queries_left > 0:
                         available.append("READ_TABLE")
                 available.append("ANSWER")
-            v41 = v4.contract_version == "4.1"
+            v41 = v4.contract_version in ("4.1", "4.2")   # ledger-bound absence (4.2 = structured final)
+            v42 = v4.contract_version == "4.2"
             led = ledger.build(query_log, index_listed, table)
             extra = ({"coverage_ledger": [{k: e[k] for k in ("id", "kind", "value", "total_matches", "returned", "exhausted")}
                                           for e in led], "coverage_summary": ledger.summary(led)}
@@ -129,7 +130,7 @@ def run(case_path, cfg, v4: V4Config, registry, orch, policy, *, question: str, 
                                    retrieval_mode=v4.retrieval_mode, max_context_chars=v4.max_context_chars,
                                    last_result=last_result, repair_error=feedback, extra=extra)
             shown |= {e["handle"] for e in proj["facts"]["evidence"]} | {x["handle"] for x in proj["facts"]["viewed_imports"]}
-            system = contract.SYSTEM + (contract.SYSTEM_41 if v41 else "") + (contract.STAGE_FORCED if forced else contract.STAGE_FINAL if finalizing
+            system = contract.SYSTEM + (contract.SYSTEM_42 if v42 else contract.SYSTEM_41 if v41 else "") + (contract.STAGE_FORCED if forced else contract.STAGE_FINAL if finalizing
                                         else contract.STAGE_ACTION)
             ctx = {"system": system, "user": proj["user"], "facts": proj["facts"], "schema": schema,
                    "finalization_stage": final_stage, "remaining_s": min(remaining, cfg.inference_timeout_s)}
@@ -173,11 +174,16 @@ def run(case_path, cfg, v4: V4Config, registry, orch, policy, *, question: str, 
                 current = _read(case_path)
                 if current["revision"] != state["revision"]:
                     raise ControllerReject("CASE_REVISION_STALE", "Case changed during inference")
-                ctl.validate(ctl.finish_proposal(state, obj["answer"]), state)
-                checks = verifier.verify(obj, shown_handles=shown, handles=handles, table_value=_table_value(state),
+                vobj = verifier.v42_view(obj) if v42 else obj
+                ctl.validate(ctl.finish_proposal(state, obj["answer"] if not v42 else
+                                                 " ".join(f["statement"] for f in obj["findings"])), state)
+                checks = verifier.verify(vobj, shown_handles=shown, handles=handles, table_value=_table_value(state),
                                          viewed_indices=viewed.keys(), query_log=query_log)
                 if v41:
-                    ab = verifier.check_absence_claims(obj, led, _table_value(state))
+                    ab = verifier.check_absence_claims(vobj, led, _table_value(state))
+                    if v42:  # presence-only statements: any negated statement is rejected (stricter than 4.1)
+                        ab["free_text_absence_rejected"] = verifier.statement_absence(obj)
+                        ab["has_rejections"] = bool(ab["rejected"] or ab["free_text_absence_rejected"])
                     turn["absence_check"] = copy.deepcopy(ab)
                     if ab["has_rejections"] and not result["absence_repair_used"]:
                         result["absence_repair_used"] = True
@@ -196,6 +202,11 @@ def run(case_path, cfg, v4: V4Config, registry, orch, policy, *, question: str, 
                     checks["has_flags"] = bool(checks["flags"])
                 result.update(status="FINISHED_FLAGGED" if checks["has_flags"] else "FINISHED",
                               final=copy.deepcopy(obj), verification=checks, forced_final=forced)
+                if v42:
+                    ab_ = checks.get("absence_claims") or {}
+                    result["rendered_dropped_statements"] = list(ab_.get("free_text_absence_rejected", []))
+                    result["rendered_report"] = renderer.render(obj, led, checks.get("absence_claims"),
+                                                                checks.get("resolved_sources", []), detector, question)
                 break
             action = obj["action"]
             turn["action"] = action
