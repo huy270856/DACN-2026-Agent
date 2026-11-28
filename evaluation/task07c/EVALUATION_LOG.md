@@ -111,3 +111,17 @@
   giới hạn. `NEGATION_RE` cũng loại cả câu giới hạn trung thực ("cannot be confirmed").
 - **Kết luận: 07C-R KHÔNG ĐẠT.** Lọc phủ định sau sự kiện trên v4.0 giữ được M1b nhưng làm mất câu trả lời ở các
   câu hỏi mà câu trả lời đúng là vắng mặt. Theo chỉ thị, bước sau là B (final hai bước), chưa làm.
+
+## 2026-11-28 — TASK 07C rev 3 (B): v4.3, smoke, protocol (trước review)
+
+- Code: `investigation-v4.3`. F1 = presence findings (P1, 1 repair); F2 = quyết định + absence_claims +
+  unresolved enum (1 repair khi claim bị reject). Renderer `render_v43`. Arm `V4_3`. Metrics `task07b-metrics-v4`.
+  v4.0–v4.2 không đổi. Regression: 900 passed / 0 failed / 4 skipped (+83 subtests).
+- Smoke DEV (`results/dev_smoke_5/V4_3_s42_r5`, 06B-J DEV; RA = sample_0013 hỏi lại về SERVICE, alias sample_9001):
+  4/4 có final, 0 lỗi hạ tầng, 4/4 có câu trả lời render.
+  - 0010 (RP): trích WS2_32 đúng.
+  - 0012 (RP): chỉ trích msvcrt.
+  - 0002 (NOT_STATIC): 5 claim accepted + unresolved NOT_STATIC_DETERMINABLE.
+  - 9001 (RA): claim OpenSCManagerW/CreateService accepted + unresolved NOT_COVERED.
+  - F1 vẫn viết câu phủ định ở 4/4 run; sau 1 repair có 3/4 run còn câu phủ định, bị loại theo P1.
+  - Không có lỗi chặn → viết `PROTOCOL_V43.md` và `run_s4_v43.ps1`.

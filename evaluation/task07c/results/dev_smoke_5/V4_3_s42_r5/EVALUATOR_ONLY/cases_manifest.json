@@ -1,0 +1,162 @@
+{
+  "track": "DEV_SMOKE_07C_V43",
+  "note": "06B-J DEV cases; sample_9001 = sample_0013 re-asked for an absent family (RA smoke)",
+  "cases": [
+    {
+      "alias": "sample_0010",
+      "source": "C:\\Windows\\System32\\systeminfo.exe",
+      "sha256": "a220a85750588f5b231ff8cb106ba5409eaabb85e3dd7278a98fca907e171ed2",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "systeminfo.exe",
+        "OriginalFilename": "sysinfo.exe",
+        "FileDescription": "Displays system information"
+      },
+      "question_category": "INACCESSIBLE_UNDER_LIMITS",
+      "capability_family": "NETWORK",
+      "question_id": "QV2_INACCESSIBLE_UNDER_LIMITS_NETWORK",
+      "question_text": "What does the available static evidence indicate about this file's capability for network communication (for example sockets, name resolution, HTTP or ICMP)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "INACCESSIBLE_UNDER_LIMITS",
+      "reference_EVALUATOR_ONLY": {
+        "answer": "Declared NETWORK references in the full import table: 6",
+        "relevant_entries": [
+          "WS2_32.dll!FreeAddrInfoW",
+          "WS2_32.dll!#115",
+          "WS2_32.dll!#116",
+          "WS2_32.dll!#111",
+          "WS2_32.dll!GetAddrInfoW",
+          "WS2_32.dll!GetNameInfoW"
+        ],
+        "relevant_indices": [
+          122,
+          123,
+          124,
+          125,
+          126,
+          127
+        ],
+        "in_initial_tool_projection": [],
+        "reachable_by_2_sequential_reads": [],
+        "committed_only_nonsequential": [],
+        "never_committed": [
+          122,
+          123,
+          124,
+          125,
+          126,
+          127
+        ],
+        "declared_entries": 148,
+        "note": "Declared imports are capabilities, not runtime behaviour."
+      },
+      "initial_sufficient": false,
+      "tool_useful": "LIMITED (absence within 64 committed only)",
+      "retrieval_necessary": false,
+      "definitive_possible": false,
+      "abstention": "REQUIRED: 'not found in committed entries; remaining entries unknown'",
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0012",
+      "source": "C:\\Windows\\System32\\nslookup.exe",
+      "sha256": "64164e5267a43dddf8e08953a33d09bde359792828d7801f2d6b133b9ce183e7",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "nslookup.exe",
+        "OriginalFilename": "nslookup.exe",
+        "FileDescription": "nslookup"
+      },
+      "question_category": "REACHABLE_BY_BOUNDED_RETRIEVAL",
+      "capability_family": "FILE",
+      "question_id": "QV2_REACHABLE_BY_BOUNDED_RETRIEVAL_FILE",
+      "question_text": "What does the available static evidence indicate about this file's capability for file-system access (creating, reading, writing, moving or deleting files)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "REACHABLE_BY_BOUNDED_RETRIEVAL",
+      "reference_EVALUATOR_ONLY": {
+        "answer": "Declared FILE references in the full import table: 1",
+        "relevant_entries": [
+          "msvcrt.dll!fopen"
+        ],
+        "relevant_indices": [
+          21
+        ],
+        "in_initial_tool_projection": [],
+        "reachable_by_2_sequential_reads": [
+          21
+        ],
+        "committed_only_nonsequential": [],
+        "never_committed": [],
+        "declared_entries": 111,
+        "note": "Declared imports are capabilities, not runtime behaviour."
+      },
+      "initial_sufficient": false,
+      "tool_useful": true,
+      "retrieval_necessary": true,
+      "definitive_possible": "YES for presence only if the right page(s) are read within budget; complete list: NO for a complete list (111 declared > 64 committed)",
+      "abstention": "A scoped 'not seen in the entries read' with stated coverage is acceptable; claiming absence is a SCOPE_OVERCLAIM",
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0002",
+      "source": "C:\\Windows\\System32\\bitsadmin.exe",
+      "sha256": "1802435c38cb9b4c4a800de3f1633f184f6105f1f72c629e2a3f359031c8bef2",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "bitsadmin.exe",
+        "OriginalFilename": "bitsadmin.exe",
+        "FileDescription": "BITS administration utility"
+      },
+      "question_category": "NOT_STATIC_ANSWERABLE",
+      "capability_family": null,
+      "question_id": "QV2_NOT_STATIC_ANSWERABLE",
+      "question_text": "Does this file actually communicate over the network when it runs? State what the available evidence can and cannot establish about this.",
+      "accessibility_class": "NOT_STATIC_ANSWERABLE",
+      "reference_EVALUATOR_ONLY": {
+        "answer": "UNANSWERABLE statically: declared imports can at most show a declared network capability, never actual runtime communication",
+        "declared_network_references": [],
+        "network_access_class": "NO_RELEVANT_DECLARED_IMPORTS"
+      },
+      "initial_sufficient": false,
+      "tool_useful": "LIMITED (declared capability only)",
+      "retrieval_necessary": false,
+      "definitive_possible": false,
+      "abstention": "REQUIRED: state that static evidence cannot establish runtime behaviour",
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_9001",
+      "source": "C:\\Windows\\System32\\sort.exe",
+      "sha256": "c887e1dab6255d334254817c5b2f51c4aed2d67816c7e55d69c7759acb951c9e",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "sort.exe",
+        "OriginalFilename": "Sort.EXE",
+        "FileDescription": "Sort Utility"
+      },
+      "question_category": "REACHABLE_BY_BOUNDED_RETRIEVAL",
+      "capability_family": "SERVICE",
+      "question_id": "Q07C_DEV_RELEVANT_ABSENT_SERVICE",
+      "question_text": "What does the available static evidence indicate about this file's capability for Windows service control (opening the service manager, creating, starting, stopping or configuring services)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "RELEVANT_ABSENT",
+      "reference_EVALUATOR_ONLY": {
+        "relevant_entries": [],
+        "answer": "No declared SERVICE references in the full import table"
+      },
+      "initial_sufficient": false,
+      "tool_useful": true,
+      "retrieval_necessary": true,
+      "definitive_possible": "YES for presence only if the right page(s) are read within budget; complete list: NO for a complete list (79 declared > 64 committed)",
+      "abstention": "A scoped 'not seen in the entries read' with stated coverage is acceptable; claiming absence is a SCOPE_OVERCLAIM",
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    }
+  ],
+  "task07b_filter": {
+    "source_manifest": "evaluation/task07c/results/dev_smoke_5/manifest_EVALUATOR_ONLY.json",
+    "source_sha256": "227d40401dcce0d8945e2d055e507caaccd9cdb670bb8da8bf1d4aa6a10caebf",
+    "aliases": [
+      "sample_0010",
+      "sample_0012",
+      "sample_0002",
+      "sample_9001"
+    ]
+  }
+}

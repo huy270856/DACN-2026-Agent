@@ -36,6 +36,30 @@ Ngoài phạm vi, chỉ ghi lại: việc NOT_STATIC gọi tool theo phản xạ
 - v4.0 và v4.1 giữ nguyên. Arm `V4_2` thay cho `V4_1` trong đợt eval.
 **M4:** chấm trên phần do model viết và được render (`statement` cùng các dòng absence). Ghi trong PROTOCOL rằng định dạng khác 07B, nên so sánh với 07B có giới hạn.
 
+## 2c. Rev 3 (Owner duyệt "C rồi B, time-box", 2026-11-28): final hai bước, contract `investigation-v4.3`
+**Bằng chứng:**
+- v4.2 (eval): M1b render còn 5/8 và 4/8, do model bỏ trống findings (A5).
+- 07C-R (replay offline v4.0 + lọc phủ định): M1b 7/8, nhưng chỉ 85% run còn câu có mặt. Câu trả lời đúng ở các case RA/NOT_STATIC bị xóa.
+
+**Thiết kế:** mỗi lần gọi model chỉ một ràng buộc.
+- **F1, phát hiện có mặt.** Đầu vào: câu hỏi và các entry đã truy xuất (trusted, từ ledger và query). Model trả `analysis` cùng `findings[{statement, refs≥1}]`, có thể rỗng. P1 vẫn loại statement phủ định.
+- **F2, trả lời.** Đầu vào: câu hỏi, coverage ledger và findings của F1 (chỉ đọc). Model trả:
+  - `analysis`;
+  - các trường quyết định v4;
+  - `absence_claims[]` (scope Qk, như v4.1);
+  - `unresolved[{topic, reason}]`, với `reason` là enum `NOT_STATIC_DETERMINABLE | NOT_COVERED | INSUFFICIENT_EVIDENCE`. Dùng enum để câu giới hạn trung thực không bị lọc nhầm.
+- Mỗi bước được repair 1 lần. Renderer tất định render từ F1 và F2, không tạo hay sửa claim. v4.0–v4.2 giữ nguyên. Arm `V4_3`.
+
+**Eval:** V4_3 × 2 seed trên cohort v2, kind `DEV_DIAGNOSTIC_CONSUMED_COHORT`. Tiêu chí, phải đạt ở cả hai seed:
+- M1b render ≥ 6/8;
+- ≥ 90% run có câu trả lời render (≥ 1 finding, hoặc ≥ 1 absence_claim accepted, hoặc ≥ 1 unresolved);
+- M10 ≥ 19/20;
+- median latency ≤ 1.5 lần V4.
+
+M4 render thỏa do cấu trúc; M4_raw là diagnostic.
+
+**Time-box:** sau đợt eval này ĐÓNG TASK 07, dù kết quả ra sao. Kết quả ghi vào A4/A5.
+
 ## 3. Đánh giá (tối giản để tiết kiệm thời gian)
 - **Loại:** DEV_DIAGNOSTIC trên cohort v2 của 07B (đã dùng, ghi rõ là cohort đã tiêu thụ). Chưa phải confirmatory.
 - **Arm:** chỉ chạy V4.1 × 2 seed (42, 7), tổng 40 run, ước khoảng 16 phút máy. Baseline là trace frozen của V4 và BASE trong 07B, đã kiểm cùng Ollama 0.40.16 và cùng digest. Không chạy lại 07B.

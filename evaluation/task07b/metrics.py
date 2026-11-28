@@ -17,7 +17,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 from evaluation.task07a.metrics import ABSENCE_RE, LIMITATION_RE, SCOPE_RE, SENT_SPLIT
 from evaluation.task07a.variants import entry_key, load_relevant, parse_literal
 
-METRICS_VERSION = "task07b-metrics-v3"  # v2 (TASK 07C): absence_claims accepted/rejected; v1 unchanged otherwise
+METRICS_VERSION = "task07b-metrics-v4"  # v4 (TASK 07C rev 3): investigation-v4.3 + rendered-answer rate  # v2 (TASK 07C): absence_claims accepted/rejected; v1 unchanged otherwise
 RP, RA, NS, IS = "RELEVANT_PRESENT", "RELEVANT_ABSENT", "NOT_STATIC_ANSWERABLE", "INITIAL_EVIDENCE_SUFFICIENT"
 CLASSES = (RP, RA, NS, IS)
 V3_FACET = "static.pe_imports_detail"
@@ -36,7 +36,7 @@ def _engine(r: Dict[str, Any]) -> str:
 
 def _final_texts(r: Dict[str, Any]) -> List[str]:
     f = r.get("final") or {}
-    if _engine(r) == "v4" and r.get("schema_version") == "investigation-v4.2":
+    if _engine(r) == "v4" and r.get("schema_version") in ("investigation-v4.2", "investigation-v4.3"):
         # v4.2: model-written text = statements only (rendered absence lines come from verified claims)
         texts = [x.get("statement") or "" for x in f.get("findings", [])]
     elif _engine(r) == "v4":
@@ -116,7 +116,7 @@ def run_row(r: Dict[str, Any], case: Dict[str, Any], num_ctx: int) -> Dict[str, 
                 absence.append({"sentence": s.strip(), "scope": "SCOPED" if SCOPE_RE.search(s) else "UNSCOPED"})
     flags = list(((r.get("verification") or {}).get("flags")) or [])
     # v4.2 (TASK 07C rev 2): PRODUCT metrics on the trusted-rendered report vs RAW model behaviour.
-    v42 = r.get("schema_version") == "investigation-v4.2"
+    v42 = r.get("schema_version") in ("investigation-v4.2", "investigation-v4.3")
     dropped = set(r.get("rendered_dropped_statements") or []) if v42 else set()
     if v42 and final is not None:
         kept_idx = {i for i, x in enumerate(final.get("findings", [])) if x["statement"] not in dropped}
@@ -157,6 +157,11 @@ def run_row(r: Dict[str, Any], case: Dict[str, Any], num_ctx: int) -> Dict[str, 
         "v42_M1b_rendered": (bool(keys & rendered_cited) if rendered_cited is not None else None),
         "v42_M4_rendered_unscoped": rendered_unscoped,
         "v42_statements_dropped": len(dropped),
+        # TASK 07C rev 3: rendered report contains an answer = >=1 kept finding, or >=1 accepted absence claim,
+        # or >=1 model-authored unresolved item.
+        "rendered_answer": (bool((final.get("findings") and any(x["statement"] not in dropped for x in final["findings"]))
+                                 or len(((r.get("verification") or {}).get("absence_claims") or {}).get("accepted", []))
+                                 or final.get("unresolved")) if (v42 and final is not None) else (False if v42 else None)),
         # first final attempt (before the absence repair), from the recorded proposal of the first final turn
         "v42_M4_raw_pre_repair": (any(ABSENCE_RE.search(x.get("statement", "")) and not LIMITATION_RE.search(x.get("statement", ""))
                                        and not SCOPE_RE.search(x.get("statement", ""))
@@ -234,6 +239,8 @@ def summarize(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
                          "note": "PRODUCT metric on the trusted-rendered report; meeting it via the trusted filter != the model learned"}
                         if any(x.get("v42_M1b_rendered") is not None or x.get("missing_trace") for x in rows) and
                         any(x.get("v42_M1b_rendered") is not None for x in rows) else "NOT_APPLICABLE"),
+        "rendered_answer_rate": ({"n": sum(bool(x.get("rendered_answer")) for x in rows), "d": len(rows)}
+                                 if any(x.get("rendered_answer") is not None for x in rows) else "NOT_APPLICABLE"),
         "v42_model_behaviour": {"M4_raw_unscoped": _rate(sum(x["M4_unscoped"] for x in finals), len(finals)),
                                 "M4_raw_pre_repair_unscoped": _rate(sum(bool(x.get("v42_M4_raw_pre_repair")) for x in finals), len(finals)),
                                 "runs_with_dropped_statement": sum(x.get("v42_statements_dropped", 0) > 0 for x in rows),
@@ -292,13 +299,14 @@ def latency_ratios(groups: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
 
 def noise(groups: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
     out = {}
-    for arm in ("BASE", "V4_NOQ", "V4", "V4_1", "V4_2"):
+    for arm in ("BASE", "V4_NOQ", "V4", "V4_1", "V4_2", "V4_3"):
         a, b = groups.get(f"{arm}_s42"), groups.get(f"{arm}_s7")
         if a and b:
             ks = KEY + {"BASE": (), "V4_NOQ": ("M8_read_hit_reference", "M9_answer_status_fit"),
                         "V4": ("M8_query_hit", "M9_answer_status_fit"),
                         "V4_1": ("M8_query_hit", "M9_answer_status_fit"),
-                        "V4_2": ("M8_query_hit", "M9_answer_status_fit")}[arm]
+                        "V4_2": ("M8_query_hit", "M9_answer_status_fit"),
+                        "V4_3": ("M8_query_hit", "M9_answer_status_fit")}[arm]
             out[arm] = {k: abs((_n(a["summary"], k) or 0) - (_n(b["summary"], k) or 0)) for k in ks
                         if k not in RATE_KEYS}
             for k in RATE_KEYS:  # M4: noise = |rate_s42 - rate_s7| (owner, 2026-11-27)

@@ -74,7 +74,8 @@ def run(case_path, cfg, v4: V4Config, registry, orch, policy, *, question: str, 
     history: List[Dict[str, Any]] = []
     detector = projector.detector_context(state)
     result: Dict[str, Any] = {
-        "schema_version": {"4.1": contract.VERSION_41, "4.2": contract.VERSION_42}.get(v4.contract_version, contract.VERSION), "workflow_version": WORKFLOW_VERSION, "case_id": state["case_id"],
+        "schema_version": {"4.1": contract.VERSION_41, "4.2": contract.VERSION_42,
+                           "4.3": contract.VERSION_43}.get(v4.contract_version, contract.VERSION), "workflow_version": WORKFLOW_VERSION, "case_id": state["case_id"],
         "initial_state": initial, "initial_revision": state["revision"], "detector_context": detector,
         "question": question, "turns": turns, "history": history, "agent_event_start": len(events),
         "status": "INVESTIGATION_INCOMPLETE", "final": None, "failure": None, "tool_attempts": 0,
@@ -82,13 +83,15 @@ def run(case_path, cfg, v4: V4Config, registry, orch, policy, *, question: str, 
         "planner_kind": "MOCK_LLM" if getattr(planner, "is_mock", False) else "LOCAL_QWEN"}
     feedback, finalizing, index_listed, last_result, charged = None, False, False, None, 0
     absence_repair_pending = False   # v4.1: one dedicated final-only repair for absence rejections
+    v43 = v4.contract_version == "4.3"
+    f_step, f1_obj, f1_dropped, step_repair = None, None, [], {"F1": False, "F2": False}  # v4.3 two-step final
     result["absence_repair_used"] = False
     reserve = 8192 + 2 * cfg.num_predict
     try:
         planner = planner or V4Planner(cfg, decoding)
-        for t in range(v4.max_turns + (1 if v4.contract_version in ("4.1", "4.2") else 0)):
-            if t >= v4.max_turns and not absence_repair_pending:
-                break  # the extra slot exists only for the dedicated absence repair
+        for t in range(v4.max_turns + {"4.1": 1, "4.2": 1, "4.3": 3}.get(v4.contract_version, 0)):
+            if t >= v4.max_turns and not absence_repair_pending and not (v43 and f_step is not None):
+                break  # extra slots exist only for the dedicated absence repair / the v4.3 final steps
             turns_left = max(1, v4.max_turns - t)
             if absence_repair_pending:
                 finalizing = True  # final-only: no tool / query is offered on the absence repair turn
@@ -102,6 +105,8 @@ def run(case_path, cfg, v4: V4Config, registry, orch, policy, *, question: str, 
                 break
             forced = turns_left == 1 and not finalizing
             final_stage = finalizing or forced
+            if v43 and final_stage and f_step is None:
+                f_step = "F1"
             table = _table_value(state)
             queries_left = v4.max_queries - result["query_attempts"]
             if final_stage:
@@ -116,27 +121,32 @@ def run(case_path, cfg, v4: V4Config, registry, orch, policy, *, question: str, 
                     elif queries_left > 0:
                         available.append("READ_TABLE")
                 available.append("ANSWER")
-            v41 = v4.contract_version in ("4.1", "4.2")   # ledger-bound absence (4.2 = structured final)
+            v41 = v4.contract_version in ("4.1", "4.2", "4.3")   # ledger-bound absence
             v42 = v4.contract_version == "4.2"
             led = ledger.build(query_log, index_listed, table)
             extra = ({"coverage_ledger": [{k: e[k] for k in ("id", "kind", "value", "total_matches", "returned", "exhausted")}
                                           for e in led], "coverage_summary": ledger.summary(led)}
-                     if (v41 and final_stage) else None)
-            schema = contract.final_schema(v4.contract_version) if final_stage else contract.action_schema(
-                available, tool_ids=[s["tool_id"] for s in offered])
+                     if (v41 and final_stage and not (v43 and f_step == "F1")) else None)
+            if v43 and f_step == "F2":
+                extra = dict(extra or {}, f1_findings=copy.deepcopy((f1_obj or {}).get("findings", [])))
+            schema = ((contract.f1_schema() if f_step == "F1" else contract.f2_schema()) if (v43 and final_stage)
+                      else contract.final_schema(v4.contract_version) if final_stage else contract.action_schema(
+                available, tool_ids=[s["tool_id"] for s in offered]))
             proj = projector.build(state, question=question, handles=handles, viewed=viewed,
                                    index_listed=index_listed, queries_run=queries_run, queries_left=queries_left,
                                    turns_left=turns_left, available_actions=available or ["FINAL_ANSWER"],
                                    retrieval_mode=v4.retrieval_mode, max_context_chars=v4.max_context_chars,
                                    last_result=last_result, repair_error=feedback, extra=extra)
             shown |= {e["handle"] for e in proj["facts"]["evidence"]} | {x["handle"] for x in proj["facts"]["viewed_imports"]}
-            system = contract.SYSTEM + (contract.SYSTEM_42 if v42 else contract.SYSTEM_41 if v41 else "") + (contract.STAGE_FORCED if forced else contract.STAGE_FINAL if finalizing
+            system = contract.SYSTEM + (({"F1": contract.STAGE_F1, "F2": contract.STAGE_F2}[f_step]) if (v43 and final_stage)
+                                        else contract.SYSTEM_42 if v42 else contract.SYSTEM_41 if v41 else "") + (contract.STAGE_FORCED if forced else contract.STAGE_FINAL if finalizing
                                         else contract.STAGE_ACTION)
             ctx = {"system": system, "user": proj["user"], "facts": proj["facts"], "schema": schema,
                    "finalization_stage": final_stage, "remaining_s": min(remaining, cfg.inference_timeout_s)}
             from evaluation.task05c.agent_replay import _assert_no_ground_truth
             _assert_no_ground_truth(ctx["system"] + ctx["user"])
             turn = {"iteration": t + 1, "stage": "FORCED_FINAL" if forced else "FINAL" if finalizing else "ACTION",
+                    "final_step": f_step if (v43 and final_stage) else None,
                     "context": {"system": system, "user": proj["user"], "facts": copy.deepcopy(proj["facts"])},
                     "requested_decoding_schema": copy.deepcopy(schema), "is_repair": bool(feedback),
                     "case_revision": state["revision"]}
@@ -161,7 +171,11 @@ def run(case_path, cfg, v4: V4Config, registry, orch, policy, *, question: str, 
                 turn["proposal"] = copy.deepcopy(obj)
             except ValueError as exc:
                 turn["validation_error"] = str(exc)[:800]
-                if result["repair_attempts"] < v4.max_repairs and turns_left > 1:
+                if v43 and final_stage and not step_repair[f_step]:   # each final step: one repair
+                    step_repair[f_step] = True
+                    feedback, finalizing = str(exc)[:600], True
+                    continue
+                if result["repair_attempts"] < v4.max_repairs and turns_left > 1 and not (v43 and final_stage):
                     result["repair_attempts"] += 1
                     feedback = str(exc)[:600]
                     if forced:
@@ -170,12 +184,30 @@ def run(case_path, cfg, v4: V4Config, registry, orch, policy, *, question: str, 
                 result["failure"] = "VALIDATION_REPAIR_EXHAUSTED"
                 break
             feedback = None
+            if v43 and final_stage and f_step == "F1":
+                neg = verifier.statement_absence(obj)
+                turn["f1_negated"] = list(neg)
+                if neg and not step_repair["F1"]:
+                    step_repair["F1"] = True
+                    feedback = ("F1_REJECTED: statements must state presence only; negated statements: "
+                                + json.dumps(neg[:4]))[:600]
+                    finalizing = True
+                    continue
+                f1_obj, f1_dropped, f_step, finalizing = copy.deepcopy(obj), list(neg), "F2", True
+                continue
+            f2_obj = None
+            if v43 and final_stage and f_step == "F2":
+                f2_obj = copy.deepcopy(obj)
+                obj = {"analysis": obj["analysis"], "analysis_f1": f1_obj["analysis"],
+                       **{k: f2_obj[k] for k in ("answer_status", "evidence_needed", "next_verification",
+                                                 "detector_relation", "absence_claims", "unresolved")},
+                       "findings": copy.deepcopy(f1_obj["findings"])}
             if final_stage:
                 current = _read(case_path)
                 if current["revision"] != state["revision"]:
                     raise ControllerReject("CASE_REVISION_STALE", "Case changed during inference")
-                vobj = verifier.v42_view(obj) if v42 else obj
-                ctl.validate(ctl.finish_proposal(state, obj["answer"] if not v42 else
+                vobj = verifier.v42_view(obj) if (v42 or v43) else obj
+                ctl.validate(ctl.finish_proposal(state, obj["answer"] if not (v42 or v43) else
                                                  " ".join(f["statement"] for f in obj["findings"])), state)
                 checks = verifier.verify(vobj, shown_handles=shown, handles=handles, table_value=_table_value(state),
                                          viewed_indices=viewed.keys(), query_log=query_log)
@@ -184,8 +216,17 @@ def run(case_path, cfg, v4: V4Config, registry, orch, policy, *, question: str, 
                     if v42:  # presence-only statements: any negated statement is rejected (stricter than 4.1)
                         ab["free_text_absence_rejected"] = verifier.statement_absence(obj)
                         ab["has_rejections"] = bool(ab["rejected"] or ab["free_text_absence_rejected"])
+                    if v43:  # F1 negations were already handled (repair, then P1); F2 repair only for rejected claims
+                        ab["free_text_absence_rejected"] = list(f1_dropped)
+                        ab["has_rejections"] = bool(ab["rejected"])
                     turn["absence_check"] = copy.deepcopy(ab)
-                    if ab["has_rejections"] and not result["absence_repair_used"]:
+                    if v43 and ab["rejected"] and not step_repair["F2"]:
+                        step_repair["F2"] = True
+                        feedback = ("F2_ABSENCE_REJECTED: " + json.dumps(
+                            [{k: r[k] for k in ("api_or_prefix", "scope_ref", "reason")} for r in ab["rejected"]]))[:600]
+                        finalizing = True
+                        continue
+                    if not v43 and ab["has_rejections"] and not result["absence_repair_used"]:
                         result["absence_repair_used"] = True
                         absence_repair_pending = True
                         feedback = ("ABSENCE_REJECTED: rejected absence_claims "
@@ -202,11 +243,12 @@ def run(case_path, cfg, v4: V4Config, registry, orch, policy, *, question: str, 
                     checks["has_flags"] = bool(checks["flags"])
                 result.update(status="FINISHED_FLAGGED" if checks["has_flags"] else "FINISHED",
                               final=copy.deepcopy(obj), verification=checks, forced_final=forced)
-                if v42:
+                if v42 or v43:
                     ab_ = checks.get("absence_claims") or {}
                     result["rendered_dropped_statements"] = list(ab_.get("free_text_absence_rejected", []))
-                    result["rendered_report"] = renderer.render(obj, led, checks.get("absence_claims"),
-                                                                checks.get("resolved_sources", []), detector, question)
+                    result["rendered_report"] = (renderer.render_v43 if v43 else renderer.render)(
+                        obj, led, checks.get("absence_claims"), checks.get("resolved_sources", []), detector, question)
+                    result["step_repairs"] = dict(step_repair) if v43 else None
                 break
             action = obj["action"]
             turn["action"] = action

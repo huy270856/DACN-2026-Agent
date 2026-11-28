@@ -142,3 +142,40 @@ def analysis_first(raw: str) -> bool:
     except (TypeError, ValueError):
         return False
     return isinstance(obj, dict) and bool(obj) and next(iter(obj)) == "analysis"
+
+
+# ----------------------------------------------------------------------------- TASK 07C rev 3: investigation-v4.3
+VERSION_43 = "investigation-v4.3"  # two-step final: F1 presence findings, F2 decision + absence + unresolved
+UNRESOLVED_REASONS = ["NOT_STATIC_DETERMINABLE", "NOT_COVERED", "INSUFFICIENT_EVIDENCE"]
+
+
+def f1_schema() -> Dict[str, Any]:
+    src = {"type": "array", "minItems": 1, "maxItems": 4, "items": {"type": "string", "pattern": HANDLE_PATTERN}}
+    props = {"analysis": copy.deepcopy(ANALYSIS),
+             "findings": {"type": "array", "minItems": 0, "maxItems": 6, "items": {
+                 "type": "object", "additionalProperties": False, "required": ["kind", "statement", "refs"],
+                 "properties": {"kind": {"enum": ["OBSERVED", "INFERENCE"]},
+                                "statement": {"type": "string", "minLength": 1, "maxLength": 300}, "refs": src}}}}
+    return {"type": "object", "additionalProperties": False, "required": list(props), "properties": props}
+
+
+def f2_schema() -> Dict[str, Any]:
+    base = final_schema("4.2")["properties"]
+    props = {"analysis": copy.deepcopy(ANALYSIS)}
+    for k in ("answer_status", "evidence_needed", "next_verification", "detector_relation", "absence_claims"):
+        props[k] = copy.deepcopy(base[k])
+    props["unresolved"] = {"type": "array", "maxItems": 6, "items": {
+        "type": "object", "additionalProperties": False, "required": ["topic", "reason"],
+        "properties": {"topic": {"type": "string", "minLength": 1, "maxLength": 120},
+                       "reason": {"enum": list(UNRESOLVED_REASONS)}}}}
+    return {"type": "object", "additionalProperties": False, "required": list(props), "properties": props}
+
+
+STAGE_F1 = ("\nFINAL STEP 1 of 2 (investigation-v4.3): list ONLY what IS present in the viewed import entries or evidence, "
+            "as short statements each with >= 1 visible handle in refs. Never write that anything is absent, missing or "
+            "not found. If nothing relevant is present, return findings []. Absence and limits are handled in step 2.")
+STAGE_F2 = ("\nFINAL STEP 2 of 2 (investigation-v4.3): the step-1 findings are shown read-only as f1_findings. Choose "
+            "answer_status and detector_relation; put every absence ONLY in absence_claims {api_or_prefix, scope_ref} "
+            "where scope_ref is an exhausted coverage_ledger Qk whose scope contains it; put every open question in "
+            "unresolved {topic, reason} with reason NOT_STATIC_DETERMINABLE (needs runtime), NOT_COVERED (not viewed) or "
+            "INSUFFICIENT_EVIDENCE. Do not repeat findings.")

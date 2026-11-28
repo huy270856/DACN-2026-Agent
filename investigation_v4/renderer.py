@@ -67,3 +67,18 @@ def render(final: Dict[str, Any], ledger: List[Dict[str, Any]], absence: Optiona
     out += ["", "_Khai báo import là capability tĩnh, không phải hành vi runtime. Báo cáo này không thực thi hay "
             "cách ly (containment) gì._"]
     return "\n".join(out)
+
+
+UNRESOLVED_VI = {"NOT_STATIC_DETERMINABLE": "không xác định được bằng phân tích tĩnh",
+                 "NOT_COVERED": "chưa được xem (ngoài phạm vi đã phủ)",
+                 "INSUFFICIENT_EVIDENCE": "chưa đủ bằng chứng"}
+
+
+def render_v43(final, ledger, absence, resolved_sources, detector, question) -> str:
+    """investigation-v4.3: same template as v4.2 plus model-authored `unresolved` items (topic verbatim, enum reason)."""
+    out = render(final, ledger, absence, resolved_sources, detector, question).split("\n")
+    i = next((k for k, line in enumerate(out) if line.startswith("## Phạm vi đã xem")), len(out))
+    block = ["## Câu hỏi còn mở (model viết; lý do theo enum)"]
+    block += [f"- \"{u['topic']}\" — {UNRESOLVED_VI[u['reason']]} ({u['reason']})" for u in final.get("unresolved", [])] \
+        or ["- (không có)"]
+    return "\n".join(out[:i] + block + [""] + out[i:])
