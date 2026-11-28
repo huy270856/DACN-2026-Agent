@@ -64,6 +64,8 @@ EXPECTED_QWEN = {"model": "qwen3.5:4b",
                  "digest": "d8b0f5e9760cd1682034f292d7ef72ec46f432149be0df7574bf2d6e92e38c04",
                  "version": "0.40.16"}
 FROZEN_KIND = "DEV_EVALUATION_FRESH_COHORT"
+CONSUMED_KIND = "DEV_DIAGNOSTIC_CONSUMED_COHORT"  # TASK 07C: frozen DEV run on an already-used cohort
+FROZEN_KINDS = (FROZEN_KIND, CONSUMED_KIND)
 
 
 def check_qwen(info: Dict[str, Any]) -> None:
@@ -133,7 +135,7 @@ def prepare(arm: str, seed: int, out: Path, *, manifest: Path, kind: str, aliase
         ollama_info = ollama_info if ollama_info is not None else runner.probe_ollama()
         check_qwen(ollama_info)
     git = git_state()
-    if kind == FROZEN_KIND and git["tracked_dirty"]:
+    if kind in FROZEN_KINDS and git["tracked_dirty"]:
         raise RuntimeError("FROZEN_PREPARE_REQUIRES_CLEAN_TRACKED_TREE: " + "; ".join(git["dirty_paths"][:5]))
     view = _manifest_view(manifest, aliases)
     with tempfile.TemporaryDirectory(prefix="t07b-") as tmp:
@@ -312,7 +314,7 @@ def main(argv=None):
     p.add_argument("--seed", type=int, required=True)
     p.add_argument("--out", type=Path, required=True)
     p.add_argument("--manifest", type=Path, required=True)
-    p.add_argument("--kind", choices=("DEV_DEBUG", "DEV_SMOKE_G3", "DEV_EVALUATION_FRESH_COHORT"), required=True)
+    p.add_argument("--kind", choices=("DEV_DEBUG", "DEV_SMOKE_G3", "DEV_EVALUATION_FRESH_COHORT", "DEV_DIAGNOSTIC_CONSUMED_COHORT"), required=True)
     p.add_argument("--aliases", nargs="*", default=None)
     r = sub.add_parser("run")
     r.add_argument("--out", type=Path, required=True)

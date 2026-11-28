@@ -157,6 +157,12 @@ def run_row(r: Dict[str, Any], case: Dict[str, Any], num_ctx: int) -> Dict[str, 
         "v42_M1b_rendered": (bool(keys & rendered_cited) if rendered_cited is not None else None),
         "v42_M4_rendered_unscoped": rendered_unscoped,
         "v42_statements_dropped": len(dropped),
+        # first final attempt (before the absence repair), from the recorded proposal of the first final turn
+        "v42_M4_raw_pre_repair": (any(ABSENCE_RE.search(x.get("statement", "")) and not LIMITATION_RE.search(x.get("statement", ""))
+                                       and not SCOPE_RE.search(x.get("statement", ""))
+                                       for x in (next((t.get("proposal") or {} for t in turns if t.get("stage") in ("FINAL", "FORCED_FINAL")
+                                                       and t.get("proposal")), {}) or {}).get("findings", []))
+                                  if v42 else None),
         "absence_claims_accepted": len(((r.get("verification") or {}).get("absence_claims") or {}).get("accepted", [])),
         "absence_claims_rejected": len(((r.get("verification") or {}).get("absence_claims") or {}).get("rejected", [])),
         "free_text_absence_rejected": len(((r.get("verification") or {}).get("absence_claims") or {}).get("free_text_absence_rejected", [])),
@@ -229,6 +235,7 @@ def summarize(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
                         if any(x.get("v42_M1b_rendered") is not None or x.get("missing_trace") for x in rows) and
                         any(x.get("v42_M1b_rendered") is not None for x in rows) else "NOT_APPLICABLE"),
         "v42_model_behaviour": {"M4_raw_unscoped": _rate(sum(x["M4_unscoped"] for x in finals), len(finals)),
+                                "M4_raw_pre_repair_unscoped": _rate(sum(bool(x.get("v42_M4_raw_pre_repair")) for x in finals), len(finals)),
                                 "runs_with_dropped_statement": sum(x.get("v42_statements_dropped", 0) > 0 for x in rows),
                                 "statements_dropped": sum(x.get("v42_statements_dropped", 0) for x in rows),
                                 "label": "DIAGNOSTIC (no threshold)"},

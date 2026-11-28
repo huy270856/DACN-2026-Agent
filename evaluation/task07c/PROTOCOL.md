@@ -34,14 +34,15 @@ Tóm tắt PLAN_TASK07C §2 và §2b:
 
 | Tiêu chí | Ngưỡng |
 |---|---|
-| M4-UNSCOPED rate trên báo cáo render (statement được giữ) | ≤ 0.20 |
+| M4-UNSCOPED rate trên báo cáo render (statement được giữ) | ≤ 0.20 — **thỏa do cấu trúc**: mọi nhánh của `ABSENCE_RE` đều chứa một từ thuộc `NEGATION_RE`, và statement có từ đó bị loại khỏi báo cáo render. Tiêu chí này chỉ kiểm rằng filter hoạt động, **không** đo hành vi model |
 | M1b trên báo cáo render (entry liên quan được trích bởi statement được giữ) | ≥ 6/8 |
 | M10 final hợp lệ | ≥ 19/20 |
 | Median latency V4_2 / V4 (07B cùng seed) | ≤ 1.5 |
 
 ### 2b. Chỉ số hành vi model (DIAGNOSTIC, **không có ngưỡng**)
 
-- `M4_raw_unscoped`: M4 trên **mọi** statement model viết, kể cả statement bị loại.
+- `M4_raw_unscoped`: M4 trên mọi statement của **final được chấp nhận cuối cùng** (sau repair), kể cả statement bị loại khỏi render.
+- `M4_raw_pre_repair_unscoped`: M4 trên statement của **lần final đầu tiên** (trước repair absence).
 - Số run có statement bị loại; tổng số statement bị loại.
 - `absence_claims`: số được chấp nhận, số bị reject, số run có rejection; `absence_repair_used`.
 - M1b của trace (`M1b_relevant_cited`, tính trên mọi ref), M8, M2_correct_no_tool, M9.
@@ -59,6 +60,7 @@ model đã học được"**.
 ## 4. Nhiễu, bảng quyết định, quy tắc dừng
 
 - Nhiễu = |Δ| giữa seed 42 và 7 của V4_2; M4 so theo rate.
+- Vì M4 render ≤ 0.20 thỏa do cấu trúc (không phải bằng chứng), bảng quyết định **thực chất dựa vào M1b render, M10 và latency**; M4_raw (trước và sau repair) chỉ báo như chẩn đoán hành vi model.
 - Bảng quyết định (PLAN §3):
   - đạt cả bốn tiêu chí 2a → v4.2 thành nhánh chính của Agent; 07D chạy confirmatory trên cohort mới nhỏ.
     Phải ghi kèm chỉ số 2b;

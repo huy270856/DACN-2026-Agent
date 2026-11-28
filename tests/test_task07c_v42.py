@@ -122,3 +122,15 @@ def test_metrics_product_vs_raw_for_v42():
     s = M.summarize([row])
     assert s["v42_product"]["M4_rendered_unscoped"]["n"] == 0 and s["v42_model_behaviour"]["M4_raw_unscoped"]["n"] == 1
     assert s["v42_model_behaviour"]["runs_with_dropped_statement"] == 1
+
+
+def test_m4_raw_pre_repair_from_first_final():
+    from evaluation.task07b import metrics as M
+    case = {"accessibility_class": M.RA, "reference_EVALUATOR_ONLY": {"relevant_entries": []}}
+    first = _f42("The file does not import HTTP APIs.")
+    last = _f42("Declares WS2_32 networking imports.")
+    r = {"schema_version": "investigation-v4.2", "alias": "s", "status": "FINISHED", "final": last,
+         "turns": [{"stage": "FINAL", "proposal": first}, {"stage": "FINAL", "proposal": last}],
+         "trusted_metadata": {"resolved_sources": []}, "verification": {"flags": []}}
+    row = M.run_row(r, case, 12288)
+    assert row["v42_M4_raw_pre_repair"] is True and row["M4_unscoped"] is False

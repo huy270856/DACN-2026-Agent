@@ -154,3 +154,14 @@ def test_state_changed_case_recorded_not_raised(tmp_path):
     assert res["runs"] == [("sample_0001", "INFRA_INTERRUPTED", None)]
     r = runner.read(o / "sample_0001_V4.json")
     assert r["final"] is None and r["failure"] == "STATE_CHANGED_WITHOUT_SAVED_TRACE_NO_RETRY"
+
+
+def test_consumed_cohort_kind_requires_clean_tree(tmp_path, monkeypatch):
+    if not PE.exists():
+        pytest.skip("Windows PE required")
+    assert H.CONSUMED_KIND in H.FROZEN_KINDS
+    m = _manifest(tmp_path / "m.json")
+    monkeypatch.setattr(H, "git_state", lambda: {"head": "x", "tracked_dirty": True, "dirty_paths": [" M f.py"]})
+    with pytest.raises(RuntimeError, match="FROZEN_PREPARE_REQUIRES_CLEAN_TRACKED_TREE"):
+        H.prepare("V4_2", 42, tmp_path / "c", manifest=m, kind=H.CONSUMED_KIND, ollama_info=GOOD, signer_lookup=False)
+    assert "DEV_DIAGNOSTIC_CONSUMED_COHORT" in (H.ROOT / "evaluation/task07c/run_s4.ps1").read_text(encoding="utf-8")

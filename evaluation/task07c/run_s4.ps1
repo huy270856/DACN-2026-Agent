@@ -31,7 +31,7 @@ foreach ($spec in @("V4_2:42", "V4_2:7")) {
     $out = Join-Path $root "$($arm)_s$seed"
     "=== $(Get-Date -Format o) $arm s$seed" | Tee-Object -FilePath $log -Append
     if (-not (Test-Path (Join-Path $out "arm.json"))) {
-        python -m evaluation.task07b.harness prepare --arm $arm --seed $seed --out $out --manifest $manifest --kind DEV_EVALUATION_FRESH_COHORT 2>&1 | Tee-Object -FilePath $log -Append
+        python -m evaluation.task07b.harness prepare --arm $arm --seed $seed --out $out --manifest $manifest --kind DEV_DIAGNOSTIC_CONSUMED_COHORT 2>&1 | Tee-Object -FilePath $log -Append
         if ($LASTEXITCODE -ne 0) { throw "prepare failed: $arm s$seed (see $log). Report to Planner; do not delete or re-prepare $out" }
     }
     python -m evaluation.task07b.harness run --out $out --authorized-by $AuthorizedBy 2>&1 | Tee-Object -FilePath $log -Append
