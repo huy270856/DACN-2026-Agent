@@ -135,3 +135,12 @@
   - sửa message lỗi trong config cho có 4.3.
 - Commit 5169eec bị thay bằng freeze mới. Chưa có run nào chạy trên 5169eec.
 - freeze 5169eec bị thay thế trước khi chạy vì bổ sung phạm vi đo M4 (diagnostic); không có run nào. Regression: 901 passed / 0 failed / 4 skipped (+83 subtests).
+
+## 2026-11-28 — S5 v4.3 và đóng TASK 07
+- Run: START 09:38:55, xong s42. Đến 09:52:34, nhóm s7 làm prepare (20×A/initial_state/initial_trusted_trace) thì validate_freeze báo `BLOCKED_OLLAMA_UNAVAILABLE`. Kiểm mtime: không có trace s7 `_V4_3.json` nào trước 09:54:08. START lần 2 lúc 09:54:08, cùng freeze/version/digest: s42 được skip, s7 chạy đủ 20 run; ALL_DONE 10:06:19. Đúng quy tắc dừng, không chạy lại có chọn lọc.
+- metrics v4 → `results/frozen_v43/metrics_v4.json`.
+  - M1b render 7/8 và 6/8; rendered_answer 20/20 và 20/20; M10 20/20 và 20/20.
+  - Latency 1.65× (s42, **không đạt**) và 1.42×.
+  - M4 render 0.10/0 (do topic), M4_raw 0.20/0.10.
+  - step_repairs F1 16/15, F2 13/7.
+- Theo PROTOCOL_V43: không đạt (latency s42). TASK 07 đóng theo time-box. Kết quả ở `REPORT_V43.md`, `TASK07_SUMMARY.md`. A4/A5 → PARTIAL; T1 cập nhật.

@@ -10,6 +10,8 @@ Mỗi mục: Task · Vấn đề · Nguyên nhân · Cách xử lý · Bài họ
 - **Vấn đề:** app desktop có bản cập nhật 0.40.18 đang chờ, đã làm crash run live hai lần, có nguy cơ QWEN_DRIFT.
 - **Cách xử lý:** chạy `ollama serve` headless trong cửa sổ PowerShell riêng của Owner; run live không chạy dưới dạng process con của session Claude. Script run kiểm version 0.40.16 và digest model trước khi chạy.
 - **Bài học:** không mở app Ollama desktop trong lúc đang có đợt eval.
+- **07C v4.3:** Ollama không truy cập được lúc 09:52, và guard `validate_freeze` dừng trước case đầu tiên của s7. Không mất trace; chạy lại START với cùng freeze thì resume sạch. Guard hoạt động đúng thiết kế.
+- **Trạng thái:** RESOLVED (có guard và resume).
 
 ## T2. Native thinking của Qwen bị runaway
 - **Task:** 07A (V1)

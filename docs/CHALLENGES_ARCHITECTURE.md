@@ -32,7 +32,10 @@ Mỗi mục: Task · Vấn đề · Bằng chứng · Quyết định/hướng x
   (smoke 2/2). Chuyển sang final có cấu trúc `investigation-v4.2` + trusted renderer loại statement phủ định (P1).
   Eval 40 run: M4_raw 0.05/0.10 (so 0.60/0.55 ở 07B, định dạng khác), nhưng M1b giảm 7/8 → 5/8, 4/8 vì model bỏ
   trống `findings` (7/7 run trượt có findings = [], 4/7 đã query trúng entry). `evaluation/task07c/REPORT.md`.
-- **Trạng thái:** PARTIAL — absence được kiểm soát bằng cấu trúc + trusted filter, đổi lại mất phát hiện có mặt (A5).
+- **07C v4.3 (final hai bước):** M1b 7/8, 6/8, 20/20 run có câu trả lời, M4 render 0.10/0 (do `unresolved.topic`). Vẫn
+  không đạt vì latency 1.65× ở s42. `evaluation/task07c/REPORT_V43.md`.
+- **Trạng thái:** PARTIAL — absence chỉ được grounding nhờ trusted code (ledger, claim theo scope, renderer); model 4B
+  vẫn viết phủ định. TASK 07 đã đóng theo time-box.
 
 ## A5. Ép cấu trúc absence làm model bỏ trống phát hiện có mặt
 - **Task:** 07C
@@ -42,4 +45,6 @@ Mỗi mục: Task · Vấn đề · Bằng chứng · Quyết định/hướng x
 - **Bằng chứng:** `evaluation/task07c/REPORT.md` §2b; smoke `results/dev_smoke_3`, `dev_smoke_4`.
 - **Hướng xử lý (đề xuất, chưa làm):** nhắc tất định "đã xem các entry I…" ở lượt final và yêu cầu statement có mặt
   khi đã xem ≥ 1 entry; đo lại trên DEV trước.
-- **Trạng thái:** OPEN.
+- **07C v4.3:** tách F1 (presence) và F2 (quyết định + absence + unresolved) giúp M1b phục hồi về 7/8, 6/8, nhưng
+  latency vượt ngân sách (1.65× ở s42) và F1 vẫn viết phủ định ở 15–16/20 run.
+- **Trạng thái:** PARTIAL — nguyên nhân chất lượng đã xử lý bằng cách mỗi lần gọi một ràng buộc; còn mở chi phí latency.
