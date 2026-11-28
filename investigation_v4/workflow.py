@@ -81,11 +81,17 @@ def run(case_path, cfg, v4: V4Config, registry, orch, policy, *, question: str, 
         "query_attempts": 0, "repair_attempts": 0, "retrieval_mode": v4.retrieval_mode, "v4_config": asdict(v4),
         "planner_kind": "MOCK_LLM" if getattr(planner, "is_mock", False) else "LOCAL_QWEN"}
     feedback, finalizing, index_listed, last_result, charged = None, False, False, None, 0
+    absence_repair_pending = False   # v4.1: one dedicated final-only repair for absence rejections
+    result["absence_repair_used"] = False
     reserve = 8192 + 2 * cfg.num_predict
     try:
         planner = planner or V4Planner(cfg, decoding)
-        for t in range(v4.max_turns):
-            turns_left = v4.max_turns - t
+        for t in range(v4.max_turns + (1 if v4.contract_version == "4.1" else 0)):
+            if t >= v4.max_turns and not absence_repair_pending:
+                break  # the extra slot exists only for the dedicated absence repair
+            turns_left = max(1, v4.max_turns - t)
+            if absence_repair_pending:
+                finalizing = True  # final-only: no tool / query is offered on the absence repair turn
             remaining = cfg.wall_clock_s - (time.monotonic() - started)
             if remaining <= 0 or charged + reserve > cfg.max_tokens:
                 result["failure"] = "SHARED_BUDGET_EXHAUSTED"
@@ -173,8 +179,9 @@ def run(case_path, cfg, v4: V4Config, registry, orch, policy, *, question: str, 
                 if v41:
                     ab = verifier.check_absence_claims(obj, led, _table_value(state))
                     turn["absence_check"] = copy.deepcopy(ab)
-                    if ab["has_rejections"] and result["repair_attempts"] < v4.max_repairs and turns_left > 1:
-                        result["repair_attempts"] += 1
+                    if ab["has_rejections"] and not result["absence_repair_used"]:
+                        result["absence_repair_used"] = True
+                        absence_repair_pending = True
                         feedback = ("ABSENCE_REJECTED: rejected absence_claims "
                                     + json.dumps([{k: r[k] for k in ("api_or_prefix", "scope_ref", "reason")} for r in ab["rejected"]])
                                     + "; free-text absence sentences not allowed: "

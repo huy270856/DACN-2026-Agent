@@ -119,3 +119,49 @@ def test_e2e_v40_default_unchanged(case):
     r = _run(case, Mock())
     assert r["schema_version"] == "investigation-v4.0" and "absence_claims" not in (r["verification"] or {})
     assert all("coverage_ledger" not in t["context"]["facts"] for t in r["turns"])
+
+
+@pytest.mark.parametrize("text, kept", [
+    ("CreateProcessW was not observed in the viewed entries of KERNEL32.dll.", True),
+    ("WSAStartup is not visible in the entries viewed so far.", True),
+    ("No network APIs were observed in the viewed entries.", False),          # broad family word
+    ("Nothing relevant is visible in the viewed entries.", False),           # no concrete API + broad word
+    ("The file does not import CreateProcessW.", False),                       # unscoped
+])
+def test_scoped_free_text_exception(text, kept):
+    v = _payload()
+    ab = V.check_absence_claims(dict(_final(["I21"], text=text), absence_claims=[]), _led(v), v)
+    detected = bool(V.ABSENCE_RE.search(text))
+    if detected:
+        assert (ab["free_text_absence_rejected"] == []) is kept, text
+
+
+class MockForced(Mock41):
+    """Never answers early: queries until the forced final, which has a free-text absence."""
+
+    def decide(self, ctx):
+        f = ctx["facts"]
+        if not ctx["finalization_stage"]:
+            a = f["available_actions"]
+            obj = ({"analysis": "r", "action": "RUN_ANALYZER", "tool_id": "static.pe_imports_table"} if "RUN_ANALYZER" in a
+                   else {"analysis": "l", "action": "LIST_IMPORT_INDEX"} if "LIST_IMPORT_INDEX" in a
+                   else {"analysis": "q", "action": "QUERY_IMPORTS", "by": "SYMBOL_PREFIX",
+                         "value": "Zz" + str(len(self.ctxs)) + "x", "page": 0})
+            self.ctxs.append(copy.deepcopy(ctx))
+            return PlanResult(json.dumps(obj), 0.0, {"mock": True})
+        return super().decide(ctx)
+
+
+def test_absence_repair_available_at_forced_final_and_final_only(case):
+    r = _run(case, MockForced(), V4Config(contract_version="4.1", max_turns=4))
+    stages = [t["stage"] for t in r["turns"]]
+    assert stages[-2] == "FORCED_FINAL" and stages[-1] == "FINAL" and len(r["turns"]) == 5  # one extra final-only turn
+    assert r["absence_repair_used"] is True
+    assert r["turns"][-1]["requested_decoding_schema"] == C.final_schema("4.1")
+    assert len(r["verification"]["absence_claims"]["accepted"]) == 1
+
+
+def test_absence_repair_used_once_only(case):
+    r = _run(case, Mock41(fix=False), V4Config(contract_version="4.1"))
+    finals = [t for t in r["turns"] if t["stage"] in ("FINAL", "FORCED_FINAL")]
+    assert len(finals) == 2 and r["absence_repair_used"] and "free_text_absence_rejected" in r["verification"]["flags"]

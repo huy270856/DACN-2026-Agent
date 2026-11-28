@@ -1,0 +1,147 @@
+{
+  "track": "RAW_PE_E2E_BENIGN_CANDIDATE_HOLDOUT",
+  "questions_version": "task06b-j-questions-v2",
+  "questions_sha256": "c70aa8a697b01b2c4aecad16c6a33ccaf11bad5827ec74161ccb2e98f55c2a1f",
+  "seed": "task06b-j-questions-v2",
+  "created_utc": "2026-11-26T04:55:37.533724+00:00",
+  "supersedes_questions_of": "candidate_cases_v1_EVALUATOR_ONLY.json",
+  "same_samples_and_aliases": true,
+  "allocation": {
+    "counts": {
+      "IN_INITIAL_TOOL_PROJECTION": 2,
+      "REACHABLE_BY_BOUNDED_RETRIEVAL": 6,
+      "INACCESSIBLE_UNDER_LIMITS": 4,
+      "NOT_STATIC_ANSWERABLE": 4,
+      "INITIAL_EVIDENCE_SUFFICIENT": 4
+    },
+    "requested_target": {
+      "IN_INITIAL_TOOL_PROJECTION": 4,
+      "REACHABLE_BY_BOUNDED_RETRIEVAL": 4,
+      "INACCESSIBLE_UNDER_LIMITS": 4,
+      "NOT_STATIC_ANSWERABLE": 4,
+      "INITIAL_EVIDENCE_SUFFICIENT": 4
+    },
+    "feasible_target": {
+      "IN_INITIAL_TOOL_PROJECTION": 2,
+      "REACHABLE_BY_BOUNDED_RETRIEVAL": 6,
+      "INACCESSIBLE_UNDER_LIMITS": 4,
+      "NOT_STATIC_ANSWERABLE": 4,
+      "INITIAL_EVIDENCE_SUFFICIENT": 4
+    },
+    "shortfall_rule": "2 case(s) moved IN_INITIAL_TOOL_PROJECTION -> REACHABLE_BY_BOUNDED_RETRIEVAL",
+    "samples_with_option": {
+      "IN_INITIAL_TOOL_PROJECTION": 2,
+      "REACHABLE_BY_BOUNDED_RETRIEVAL": 10,
+      "INACCESSIBLE_UNDER_LIMITS": 16
+    },
+    "requested_target_met": false,
+    "feasible_target_met": true
+  },
+  "budget_model": "TASK 06B-J questions v2 - accessibility-stratified, predeclared, independent of any Agent/Judge output.\n\nInputs used: the approved PE files (static parse), the real analyzer limits (64 committed entries in\nfile order), the real projection (16 visible after the tool call), the real retrieval contract\n(READ_EVIDENCE <= 2 x 16 entries) and the real shared turn budget of arm C (max_iterations=5:\nTOOL_CALL, READ, READ, FINISH-select, FINISH-final => at most 2 sequential reads, 0 if any repair).\n\nAccessibility classes (for the case's assigned capability family):\n  IN_INITIAL_TOOL_PROJECTION    a relevant entry is in entries 0-15 (visible right after the tool)\n  REACHABLE_BY_BOUNDED_RETRIEVAL none in 0-15; first relevant in 16-47 (2 sequential reads)\n  INACCESSIBLE_UNDER_LIMITS     relevant entries exist only at >= 64 (never committed)\n  NOT_STATIC_ANSWERABLE         question about runtime behaviour (no static source can answer)\n  INITIAL_EVIDENCE_SUFFICIENT   answerable from the initial CaseState (pe_header/format/prediction)\nEntries at 48-63 are committed but reachable only by a non-sequential jump; cases whose first\nrelevant entry lies there are NOT used for the retrieval class (recorded as such).\n\nRelevant APIs are EXACT names (A/W variants listed), not prefixes: v1's prefix lexicon wrongly\nmatched token APIs (OpenProcessToken, NtOpenProcessTokenEx). A lexicon hit is a static declared\ncapability reference, never ground truth of runtime behaviour.",
+  "status": "CANDIDATE_PENDING_OWNER_APPROVAL",
+  "confirmatory": "NOT_RUN",
+  "inputs_used": "static parse of approved PEs + analyzer/projection/retrieval/turn limits; no model or Judge output",
+  "cases": [
+    {
+      "alias": "sample_0010",
+      "source": "C:\\Windows\\System32\\systeminfo.exe",
+      "sha256": "a220a85750588f5b231ff8cb106ba5409eaabb85e3dd7278a98fca907e171ed2",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "systeminfo.exe",
+        "OriginalFilename": "sysinfo.exe",
+        "FileDescription": "Displays system information"
+      },
+      "question_category": "INACCESSIBLE_UNDER_LIMITS",
+      "capability_family": "NETWORK",
+      "question_id": "QV2_INACCESSIBLE_UNDER_LIMITS_NETWORK",
+      "question_text": "What does the available static evidence indicate about this file's capability for network communication (for example sockets, name resolution, HTTP or ICMP)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "INACCESSIBLE_UNDER_LIMITS",
+      "reference_EVALUATOR_ONLY": {
+        "answer": "Declared NETWORK references in the full import table: 6",
+        "relevant_entries": [
+          "WS2_32.dll!FreeAddrInfoW",
+          "WS2_32.dll!#115",
+          "WS2_32.dll!#116",
+          "WS2_32.dll!#111",
+          "WS2_32.dll!GetAddrInfoW",
+          "WS2_32.dll!GetNameInfoW"
+        ],
+        "relevant_indices": [
+          122,
+          123,
+          124,
+          125,
+          126,
+          127
+        ],
+        "in_initial_tool_projection": [],
+        "reachable_by_2_sequential_reads": [],
+        "committed_only_nonsequential": [],
+        "never_committed": [
+          122,
+          123,
+          124,
+          125,
+          126,
+          127
+        ],
+        "declared_entries": 148,
+        "note": "Declared imports are capabilities, not runtime behaviour."
+      },
+      "initial_sufficient": false,
+      "tool_useful": "LIMITED (absence within 64 committed only)",
+      "retrieval_necessary": false,
+      "definitive_possible": false,
+      "abstention": "REQUIRED: 'not found in committed entries; remaining entries unknown'",
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    },
+    {
+      "alias": "sample_0012",
+      "source": "C:\\Windows\\System32\\nslookup.exe",
+      "sha256": "64164e5267a43dddf8e08953a33d09bde359792828d7801f2d6b133b9ce183e7",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "nslookup.exe",
+        "OriginalFilename": "nslookup.exe",
+        "FileDescription": "nslookup"
+      },
+      "question_category": "REACHABLE_BY_BOUNDED_RETRIEVAL",
+      "capability_family": "FILE",
+      "question_id": "QV2_REACHABLE_BY_BOUNDED_RETRIEVAL_FILE",
+      "question_text": "What does the available static evidence indicate about this file's capability for file-system access (creating, reading, writing, moving or deleting files)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "REACHABLE_BY_BOUNDED_RETRIEVAL",
+      "reference_EVALUATOR_ONLY": {
+        "answer": "Declared FILE references in the full import table: 1",
+        "relevant_entries": [
+          "msvcrt.dll!fopen"
+        ],
+        "relevant_indices": [
+          21
+        ],
+        "in_initial_tool_projection": [],
+        "reachable_by_2_sequential_reads": [
+          21
+        ],
+        "committed_only_nonsequential": [],
+        "never_committed": [],
+        "declared_entries": 111,
+        "note": "Declared imports are capabilities, not runtime behaviour."
+      },
+      "initial_sufficient": false,
+      "tool_useful": true,
+      "retrieval_necessary": true,
+      "definitive_possible": "YES for presence only if the right page(s) are read within budget; complete list: NO for a complete list (111 declared > 64 committed)",
+      "abstention": "A scoped 'not seen in the entries read' with stated coverage is acceptable; claiming absence is a SCOPE_OVERCLAIM",
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature"
+    }
+  ],
+  "task07b_filter": {
+    "source_manifest": "evaluation/task06b_j/results/holdout/candidate_cases_v2_EVALUATOR_ONLY.json",
+    "source_sha256": "1f79f71bc520160cc00cb85a962ecf476becf3c1d1590d0b74b653f812be39e0",
+    "aliases": [
+      "sample_0010",
+      "sample_0012"
+    ]
+  }
+}

@@ -96,7 +96,9 @@ SYSTEM_41 = ("\nABSENCE RULE (investigation-v4.1): never state in answer or find
              "absent. Put every absence statement ONLY in absence_claims as {api_or_prefix, scope_ref}, where scope_ref is a "
              "coverage_ledger entry Qk that is exhausted and whose scope contains api_or_prefix (a SYMBOL_PREFIX Qk covers "
              "names starting with its prefix; a DLL Qk covers that DLL; the import index Qk covers DLL names). Anything not "
-             "covered must be described as not seen / not covered, never as absent. Use [] when you make no absence claim.")
+             "covered must be described as not seen / not covered, never as absent. Use [] when you make no absence claim. "
+             "Prefer putting EVERY absence in absence_claims; in text you may only say \"<API> not observed in the viewed "
+             "entries of <DLL or prefix>\".")
 
 
 def parse(raw: str, schema: Dict[str, Any]) -> Dict[str, Any]:

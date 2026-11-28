@@ -1,0 +1,86 @@
+{
+  "arm": "V4_1",
+  "seed": 42,
+  "engine": "v4",
+  "agent_config": {
+    "model": "qwen3.5:4b",
+    "ollama_host": "http://127.0.0.1:11434",
+    "temperature": 0.1,
+    "num_predict": 3072,
+    "think": false,
+    "inference_timeout_s": 90,
+    "known_reputations": {},
+    "max_tokens": 160000,
+    "max_iterations": 8,
+    "max_tool_calls": 1,
+    "wall_clock_s": 420,
+    "max_context_chars": 24000,
+    "max_value_chars": 800
+  },
+  "decoding": {
+    "num_ctx": 12288,
+    "seed": 42,
+    "top_p": null,
+    "top_k": null,
+    "presence_penalty": null
+  },
+  "v4_config": {
+    "max_turns": 8,
+    "max_queries": 6,
+    "max_context_chars": 16000,
+    "retrieval_mode": "QUERY",
+    "max_repairs": 1,
+    "contract_version": "4.1"
+  },
+  "track": "RAW_PE_E2E",
+  "evaluation_kind": "DEV_DEBUG",
+  "confirmatory": "NOT_RUN",
+  "cohort_aliases": [
+    "sample_0010",
+    "sample_0012"
+  ],
+  "manifest_filter": {
+    "source_manifest": "evaluation/task06b_j/results/holdout/candidate_cases_v2_EVALUATOR_ONLY.json",
+    "source_sha256": "1f79f71bc520160cc00cb85a962ecf476becf3c1d1590d0b74b653f812be39e0",
+    "aliases": [
+      "sample_0010",
+      "sample_0012"
+    ]
+  },
+  "runner_version": "task07b-harness-v1",
+  "v4_source_sha256": {
+    "investigation_v4/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "investigation_v4/build_ordinal_table.py": "6fb9675b6f6555469fceb68bc8e69f025b72589a0b9c1654d0e1300e1fd9a2e5",
+    "investigation_v4/config.py": "39031e5a861383d1fc1aff2780d4b3b9fc01f6e8c7a4f9ca50537affd845f045",
+    "investigation_v4/contract.py": "8f60fcd3e4fe56b3465f4e572db26f1d6e60aa2599b3809d9f3c68d877096c30",
+    "investigation_v4/controller.py": "616ad95b2df62ef478eeff44ed3fd64b63f6933d1ecca3a4399a9f09b970cadf",
+    "investigation_v4/imports_table_adapter.py": "6b62208cf7b66507f4d4ade3c162d10086a8c0c5cfef3a49692c0d5b9409d8fb",
+    "investigation_v4/imports_table_tool.py": "6d499ff0cbac36734596d45c9206defd1a511c9e70b839e7a654c44c219430b9",
+    "investigation_v4/ledger.py": "84d06ec51520324f22739dd7a656a5a1b726f27ab7300e157773288ce8a93bba",
+    "investigation_v4/projector.py": "40a2a9783333cc72afefbcd921be84728a09b64ad059bd89b4e44fce346d028f",
+    "investigation_v4/query.py": "1bf616443660b5ec77b0585f8bd9cd1805499b65a59304aeb81166eb122331b2",
+    "investigation_v4/recommendation.py": "9d51213fdf6a56221316713f33bb102435ed50375f6b30cd4d62a9305a689ab5",
+    "investigation_v4/verifier.py": "09d0ab7968d00061771d8c559563f4526a84e3f8cf46dad57059e932ea4f74fb",
+    "investigation_v4/workflow.py": "351dc4e467752da3d99dacca08eb13cd4c62713ba1f9cd307338ad5871c006f4",
+    "investigation_v4/ordinal_table.json": "5e2f5954c9efcbe952cea25015eea512b3d96a7ad13053277767d407d6dfee5e",
+    "d0/schemas/pe-imports-table-input-v1.schema.json": "7fcc49658f6334f4195e1dfe39226494194b53d1988d365180d2c062f5a5d9ee",
+    "d0/schemas/pe-imports-table-output-v1.schema.json": "959f42187394ebd7ba2a676a2870e2b88469def52c620f699bd49c6a97ddb695",
+    "dacn/investigation.py": "50e3cc967cce8787a428419275c45585172af893281b073867c2805ceb66c91f"
+  },
+  "harness_sha256": {
+    "evaluation/task07b/harness.py": "8ad803e21a2bf0455809bcf180e69cf696891ebd5e6be80287f9f8012bdb662e",
+    "evaluation/task07b/metrics.py": "3dab65110ce13fab22afeb6d763b5d893b649b46ce64282a3c28833263ec5fb1",
+    "evaluation/task07b/cohort_audit.py": "340d4a86fdaa57524a0d14889e5779764a671bfcdfbd1dd0583d73c9090ad6b7"
+  },
+  "freeze_sha256": "85fde8677fe6e07c3be0dcbf9ce74091dae06ac681ac6b59c8a64b04a57592b5",
+  "git": {
+    "head": "c3193f358aecb70fdd36843091a690f3db6a188b",
+    "tracked_dirty": false,
+    "dirty_paths": []
+  },
+  "expected_qwen": {
+    "model": "qwen3.5:4b",
+    "digest": "d8b0f5e9760cd1682034f292d7ef72ec46f432149be0df7574bf2d6e92e38c04",
+    "version": "0.40.16"
+  }
+}

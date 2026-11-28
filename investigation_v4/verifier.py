@@ -11,7 +11,9 @@ from typing import Any, Dict, Iterable, List, Optional
 from . import query
 
 # Same absence screen as TASK 07A metrics (task07a-metrics-v1) so results stay comparable.
-from evaluation.task07a.metrics import ABSENCE_RE, LIMITATION_RE, SENT_SPLIT
+from evaluation.task07a.metrics import ABSENCE_RE, LIMITATION_RE, SCOPE_RE, SENT_SPLIT
+# A concrete API / DLL token (CamelCase name, snake_name, or *.dll). Used by the v4.1 scoped free-text exception.
+API_TOKEN_RE = re.compile(r"\b(?:[A-Z][a-z0-9]+){2,}[AW]?\b|\b[A-Za-z]+_[A-Za-z0-9_]+\b|\b[\w.\-]+\.dll\b")
 
 NUMERIC_RE = re.compile(r"\bentropy\b|\b\d+(?:\.\d+)?\s*%\s*(?:probability|chance|likelihood)", re.I)
 SCORE_PROB_RE = re.compile(r"\b(?:probability|likelihood|chance)\b[^.]{0,60}\b(?:malicious|benign|malware)\b"
@@ -178,7 +180,10 @@ def check_absence_claims(obj: Dict[str, Any], ledger_entries: List[Dict[str, Any
     for text in _texts(obj):
         for sent in SENT_SPLIT.split(text):
             if ABSENCE_RE.search(sent) and not LIMITATION_RE.search(sent):
-                if table_value is None or not _covered(sent, table_value, viewed, qlog):
+                # Planner decision 2026-11-28: a narrowly SCOPED sentence that names a concrete API and has no
+                # broad/intent word is honest ("not observed in the viewed entries of X") and is kept.
+                scoped_ok = bool(SCOPE_RE.search(sent)) and not BROAD_RE.search(sent) and bool(API_TOKEN_RE.search(sent))
+                if not scoped_ok and (table_value is None or not _covered(sent, table_value, viewed, qlog)):
                     free.append(sent.strip())
     return {"accepted": accepted, "rejected": rejected, "free_text_absence_rejected": free,
             "has_rejections": bool(rejected or free)}
