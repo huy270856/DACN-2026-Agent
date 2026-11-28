@@ -21,3 +21,8 @@ Bổ sung cho `PROTOCOL.md`: giữ nguyên mọi điều khoản, chỉ khác c�
 - **Quyết định:** đạt cả bốn tiêu chí → ghi v4.3 là ứng viên cho bước sau. Không đạt → ghi negative result vào
   A4/A5. Dù kết quả nào thì cũng **ĐÓNG TASK 07** (time-box), không tối ưu thêm.
 - **Dừng:** giống `PROTOCOL.md` §6. Không chạy lại riêng các run lỗi.
+
+**Ghi chú phạm vi (review v4.3):**
+- M4 render chỉ phủ findings và absence_claims. `unresolved.topic` được render nguyên văn và không qua
+  `statement_absence`.
+- Số repair theo từng bước nằm trong `step_repairs`, không cộng vào `repair_attempts`.

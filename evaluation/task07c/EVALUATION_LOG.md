@@ -125,3 +125,7 @@
   - 9001 (RA): claim OpenSCManagerW/CreateService accepted + unresolved NOT_COVERED.
   - F1 vẫn viết câu phủ định ở 4/4 run; sau 1 repair có 3/4 run còn câu phủ định, bị loại theo P1.
   - Không có lỗi chặn → viết `PROTOCOL_V43.md` và `run_s4_v43.ps1`.
+
+## 2026-11-28 — Review v4.3 PASS (f955e21..b41fa25) → freeze
+- Có 3 nit, không chặn: unresolved.topic render nguyên văn (đã ghi phạm vi vào PROTOCOL_V43), message lỗi trong config thiếu "4.3", step_repairs tách khỏi repair_attempts. Không sửa code (chỉ thị chỉ sửa CORE).
+- Commit này là pre-run freeze cho V4_3. Sau freeze không sửa code hay metrics.
