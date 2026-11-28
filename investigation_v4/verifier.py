@@ -123,3 +123,62 @@ def verify(obj: Dict[str, Any], *, shown_handles: Iterable[str], handles, table_
     return {"flags": flags, "finding_flags": finding_flags, "resolved_sources": resolved,
             "absence_sentences": absence, "absence_uncovered": uncovered, "has_flags": bool(flags),
             "semantic_grounding": "PENDING_INDEPENDENT_REVIEW"}
+
+
+# ----------------------------------------------------------------------------- TASK 07C (investigation-v4.1)
+def _in_scope(claim: str, entry: Dict[str, Any], table_value: Dict[str, Any]) -> Optional[str]:
+    """None if `claim` lies inside the scope of ledger `entry` and is consistent with the full table; else reason."""
+    c = claim.lower()
+    if entry["kind"] == "SYMBOL_PREFIX":
+        if not c.startswith(entry["value"].lower()):
+            return "OUT_OF_SCOPE: api_or_prefix does not start with the query prefix"
+        if entry["total_matches"]:
+            idx = entry.get("indices", [])
+            names = [(table_value["entries"][i][1] or table_value["entries"][i][4] or "").lower() for i in idx]
+            if any(n.startswith(c) for n in names):
+                return "CONTRADICTED: a returned entry starts with api_or_prefix"
+        return None
+    if entry["kind"] == "DLL":
+        idx = query.dll_indices(table_value, entry["value"])
+        names = [(table_value["entries"][i][1] or table_value["entries"][i][4] or "").lower() for i in idx]
+        if any(n.startswith(c) for n in names):
+            return "CONTRADICTED: an entry of this DLL starts with api_or_prefix"
+        return None
+    if entry["kind"] == "INDEX":
+        if not c.endswith(".dll"):
+            return "OUT_OF_SCOPE: the import index only covers DLL names"
+        if c in {d["dll"].lower() for d in query.dll_summary(table_value)}:
+            return "CONTRADICTED: the DLL is in the import index"
+        return None
+    return "OUT_OF_SCOPE: unknown ledger kind"
+
+
+def check_absence_claims(obj: Dict[str, Any], ledger_entries: List[Dict[str, Any]],
+                         table_value: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    """v4.1: every absence_claims item must cite an EXHAUSTED ledger Qk whose scope contains it, and free-text
+    absence sentences are rejected unless the existing narrow whitelist covers them (whitelist/deny-list unchanged).
+    Never edits the model's text; returns accepted / rejected lists for the trace."""
+    led = {e["id"]: e for e in ledger_entries}
+    accepted, rejected = [], []
+    for i, ac in enumerate(obj.get("absence_claims", [])):
+        e = led.get(ac["scope_ref"])
+        if e is None:
+            why = "UNKNOWN_SCOPE_REF"
+        elif table_value is None:
+            why = "NO_COMMITTED_TABLE"
+        elif not e["exhausted"]:
+            why = "SCOPE_NOT_EXHAUSTED"
+        else:
+            why = _in_scope(ac["api_or_prefix"], e, table_value)
+        (accepted if why is None else rejected).append(dict(ac, index=i, **({} if why is None else {"reason": why})))
+    free = []
+    viewed = {i for e in ledger_entries for i in e.get("indices", [])}
+    qlog = [{"by": e["kind"], "value": e["value"], "total_matches": e["total_matches"], "indices": e.get("indices", [])}
+            for e in ledger_entries if e["kind"] != "INDEX"]
+    for text in _texts(obj):
+        for sent in SENT_SPLIT.split(text):
+            if ABSENCE_RE.search(sent) and not LIMITATION_RE.search(sent):
+                if table_value is None or not _covered(sent, table_value, viewed, qlog):
+                    free.append(sent.strip())
+    return {"accepted": accepted, "rejected": rejected, "free_text_absence_rejected": free,
+            "has_rejections": bool(rejected or free)}

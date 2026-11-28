@@ -17,7 +17,7 @@ import case_manager as cm
 from agent.controller import ControllerReject
 from agent.planner import DecodingOptions, OllamaPlanner, PlannerError
 
-from . import contract, projector, query, recommendation, verifier
+from . import contract, ledger, projector, query, recommendation, verifier
 from .config import V4Config
 from .controller import ToolBinding, V4Controller
 from .imports_table_tool import ARGUMENTS as TABLE_ARGS, FACET as TABLE_FACET, TOOL_ID as TABLE_TOOL
@@ -74,7 +74,7 @@ def run(case_path, cfg, v4: V4Config, registry, orch, policy, *, question: str, 
     history: List[Dict[str, Any]] = []
     detector = projector.detector_context(state)
     result: Dict[str, Any] = {
-        "schema_version": contract.VERSION, "workflow_version": WORKFLOW_VERSION, "case_id": state["case_id"],
+        "schema_version": contract.VERSION_41 if v4.contract_version == "4.1" else contract.VERSION, "workflow_version": WORKFLOW_VERSION, "case_id": state["case_id"],
         "initial_state": initial, "initial_revision": state["revision"], "detector_context": detector,
         "question": question, "turns": turns, "history": history, "agent_event_start": len(events),
         "status": "INVESTIGATION_INCOMPLETE", "final": None, "failure": None, "tool_attempts": 0,
@@ -110,15 +110,20 @@ def run(case_path, cfg, v4: V4Config, registry, orch, policy, *, question: str, 
                     elif queries_left > 0:
                         available.append("READ_TABLE")
                 available.append("ANSWER")
-            schema = contract.final_schema() if final_stage else contract.action_schema(
+            v41 = v4.contract_version == "4.1"
+            led = ledger.build(query_log, index_listed, table)
+            extra = ({"coverage_ledger": [{k: e[k] for k in ("id", "kind", "value", "total_matches", "returned", "exhausted")}
+                                          for e in led], "coverage_summary": ledger.summary(led)}
+                     if (v41 and final_stage) else None)
+            schema = contract.final_schema(v4.contract_version) if final_stage else contract.action_schema(
                 available, tool_ids=[s["tool_id"] for s in offered])
             proj = projector.build(state, question=question, handles=handles, viewed=viewed,
                                    index_listed=index_listed, queries_run=queries_run, queries_left=queries_left,
                                    turns_left=turns_left, available_actions=available or ["FINAL_ANSWER"],
                                    retrieval_mode=v4.retrieval_mode, max_context_chars=v4.max_context_chars,
-                                   last_result=last_result, repair_error=feedback)
+                                   last_result=last_result, repair_error=feedback, extra=extra)
             shown |= {e["handle"] for e in proj["facts"]["evidence"]} | {x["handle"] for x in proj["facts"]["viewed_imports"]}
-            system = contract.SYSTEM + (contract.STAGE_FORCED if forced else contract.STAGE_FINAL if finalizing
+            system = contract.SYSTEM + (contract.SYSTEM_41 if v41 else "") + (contract.STAGE_FORCED if forced else contract.STAGE_FINAL if finalizing
                                         else contract.STAGE_ACTION)
             ctx = {"system": system, "user": proj["user"], "facts": proj["facts"], "schema": schema,
                    "finalization_stage": final_stage, "remaining_s": min(remaining, cfg.inference_timeout_s)}
@@ -165,6 +170,23 @@ def run(case_path, cfg, v4: V4Config, registry, orch, policy, *, question: str, 
                 ctl.validate(ctl.finish_proposal(state, obj["answer"]), state)
                 checks = verifier.verify(obj, shown_handles=shown, handles=handles, table_value=_table_value(state),
                                          viewed_indices=viewed.keys(), query_log=query_log)
+                if v41:
+                    ab = verifier.check_absence_claims(obj, led, _table_value(state))
+                    turn["absence_check"] = copy.deepcopy(ab)
+                    if ab["has_rejections"] and result["repair_attempts"] < v4.max_repairs and turns_left > 1:
+                        result["repair_attempts"] += 1
+                        feedback = ("ABSENCE_REJECTED: rejected absence_claims "
+                                    + json.dumps([{k: r[k] for k in ("api_or_prefix", "scope_ref", "reason")} for r in ab["rejected"]])
+                                    + "; free-text absence sentences not allowed: "
+                                    + json.dumps(ab["free_text_absence_rejected"][:4]))[:600]
+                        finalizing = True
+                        continue
+                    checks["absence_claims"] = ab
+                    if ab["rejected"]:
+                        checks["flags"].append("absence_claims_rejected")
+                    if ab["free_text_absence_rejected"]:
+                        checks["flags"].append("free_text_absence_rejected")
+                    checks["has_flags"] = bool(checks["flags"])
                 result.update(status="FINISHED_FLAGGED" if checks["has_flags"] else "FINISHED",
                               final=copy.deepcopy(obj), verification=checks, forced_final=forced)
                 break
@@ -245,6 +267,7 @@ def run(case_path, cfg, v4: V4Config, registry, orch, policy, *, question: str, 
                           "viewed_literals": {str(i): query.literal(v) for i, v in sorted(viewed.items())},
                           "resolved_sources": (result.get("verification") or {}).get("resolved_sources", []),
                           "table_evidence_present": table_value is not None,
+                          "coverage_ledger": ledger.build(query_log, index_listed, table_value),
                           "semantic_grounding": "PENDING_INDEPENDENT_REVIEW"},
         final_state=final_state, final_revision=final_state["revision"], latency_s=time.monotonic() - started,
         charged_tokens=charged, events=copy.deepcopy(events),

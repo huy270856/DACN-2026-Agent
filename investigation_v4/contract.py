@@ -13,6 +13,7 @@ from typing import Any, Dict, List
 from jsonschema import Draft202012Validator
 
 VERSION = "investigation-v4.0"
+VERSION_41 = "investigation-v4.1"  # TASK 07C: structured absence_claims bound to the coverage ledger
 HANDLE_PATTERN = r"^(E[1-9][0-9]{0,2}|I(0|[1-9][0-9]{0,3}))$"
 ANALYSIS = {"type": "string", "minLength": 1, "maxLength": 1500,
             "description": "Before choosing, reason step by step: what the question asks, what visible "
@@ -62,7 +63,7 @@ def action_schema(available: List[str], *, tool_ids: List[str] = ()) -> Dict[str
     return {"oneOf": branches}
 
 
-def final_schema() -> Dict[str, Any]:
+def final_schema(version: str = "4.0") -> Dict[str, Any]:
     src = {"type": "array", "maxItems": 4, "items": {"type": "string", "pattern": HANDLE_PATTERN}}
     short = {"type": "array", "maxItems": 4, "items": {"type": "string", "minLength": 1, "maxLength": 200}}
     props = {
@@ -80,7 +81,22 @@ def final_schema() -> Dict[str, Any]:
                               "properties": {"value": {"enum": ["AGREES", "CONFLICTS", "NOT_INFORMATIVE"]},
                                              "basis_sources": copy.deepcopy(src)}},
     }
+    if version == "4.1":
+        props["absence_claims"] = {"type": "array", "maxItems": 6, "items": {
+            "type": "object", "additionalProperties": False, "required": ["api_or_prefix", "scope_ref"],
+            "properties": {"api_or_prefix": {"type": "string", "minLength": 3, "maxLength": 64,
+                                             "pattern": r"^[A-Za-z0-9_?@$.\-]+$"},
+                           "scope_ref": {"type": "string", "pattern": r"^Q[1-9][0-9]?$"}}}}
+    elif version != "4.0":
+        raise ValueError("unknown contract version")
     return {"type": "object", "additionalProperties": False, "required": list(props), "properties": props}
+
+
+SYSTEM_41 = ("\nABSENCE RULE (investigation-v4.1): never state in answer or findings text that an API, DLL or capability is "
+             "absent. Put every absence statement ONLY in absence_claims as {api_or_prefix, scope_ref}, where scope_ref is a "
+             "coverage_ledger entry Qk that is exhausted and whose scope contains api_or_prefix (a SYMBOL_PREFIX Qk covers "
+             "names starting with its prefix; a DLL Qk covers that DLL; the import index Qk covers DLL names). Anything not "
+             "covered must be described as not seen / not covered, never as absent. Use [] when you make no absence claim.")
 
 
 def parse(raw: str, schema: Dict[str, Any]) -> Dict[str, Any]:

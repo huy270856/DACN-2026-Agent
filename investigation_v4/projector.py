@@ -83,7 +83,8 @@ def _entry(handle: str, x: Dict[str, Any]) -> Dict[str, Any]:
 def build(state: Dict[str, Any], *, question: str, handles: HandleMap, viewed: Dict[int, Dict[str, Any]],
           index_listed: bool, queries_run: List[Dict[str, Any]], queries_left: int, turns_left: int,
           available_actions: List[str], retrieval_mode: str, max_context_chars: int,
-          last_result: Optional[Dict[str, Any]] = None, repair_error: Optional[str] = None) -> Dict[str, Any]:
+          last_result: Optional[Dict[str, Any]] = None, repair_error: Optional[str] = None,
+          extra: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     evidence, omitted = [], 0
     table = None
     for ev in state.get("evidence", []):
@@ -121,6 +122,8 @@ def build(state: Dict[str, Any], *, question: str, handles: HandleMap, viewed: D
     facts["repair_feedback"] = ({"error": repair_error[:600],
                                  "instruction": "One bounded format correction. Use only these same facts."}
                                 if repair_error else None)
+    if extra:
+        facts.update(extra)  # e.g. v4.1 coverage_ledger + coverage_summary (trusted facts)
     text = json.dumps(facts, ensure_ascii=True)
     if len(text) > max_context_chars:
         raise ValueError(f"V4_CONTEXT_BUDGET: {len(text)} > {max_context_chars}")

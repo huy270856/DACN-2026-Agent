@@ -11,6 +11,7 @@ class V4Config:
     max_context_chars: int = 16000  # facts JSON; exceeding raises, never silently truncated
     retrieval_mode: str = "QUERY"   # "QUERY" (V4) or "READ_TABLE" (V4_NOQ ablation)
     max_repairs: int = 1            # format-only repair
+    contract_version: str = "4.0"   # "4.1" (TASK 07C) adds ledger-bound absence_claims
 
     def __post_init__(self):
         for name in ("max_turns", "max_queries", "max_context_chars"):
@@ -21,5 +22,7 @@ class V4Config:
             raise ValueError("max_turns must leave one turn for the final answer")
         if self.retrieval_mode not in ("QUERY", "READ_TABLE"):
             raise ValueError("retrieval_mode must be QUERY or READ_TABLE")
+        if self.contract_version not in ("4.0", "4.1"):
+            raise ValueError("contract_version must be 4.0 or 4.1")
         if self.max_repairs not in (0, 1):
             raise ValueError("max_repairs must be 0 or 1")

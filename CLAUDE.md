@@ -85,6 +85,10 @@ You MUST preserve all of the following:
 - **No unapproved external model or network dependency.** The LLM runtime is local Ollama on loopback only. Never call an external LLM API.
 - **No committed credentials, keys, malware binaries, or sensitive local data.** Runtime and sample-bearing paths such as `dacn_data/`, `collections/`, `cases/`, `demo_results/`, and the task runtime staging directories that hold target PE bytes MUST NOT be committed, published as artifacts, or sent to any external service. The same applies to `.env*`, `*.key`, `*.pem`, and `secrets/`.
 - Do not download, create, or obtain malicious samples. Malicious raw-PE evaluation stays **BLOCKED** until authorized samples are formally provided.
+  *Owner duyệt 2026-11-28:*
+  - EMBER2018 malicious feature records (đã có local ở `D:\datasets\ember2018-v2`) được dùng ngay, theo track `FEATURE_RECORD_REPLAY`.
+  - Binary đã disarm của SOREL-20M chỉ được dùng sau khi Owner ghi xác nhận của giảng viên vào `docs/MALWARE_DATA_AUTHORIZATION.md`. Owner tự tải về một chỗ ngoài repo. Claude session không bao giờ tự tải, không commit, không gửi binary ra ngoài.
+  - Trước khi có xác nhận đó, raw malicious vẫn BLOCKED.
 
 You MUST NOT claim OS-level sandbox isolation unless it has actually been established and verified. Process controls such as Job Objects, timeouts, and output limits are not a sandbox, and the known key-isolation and identity limitations remain documented.
 

@@ -17,7 +17,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 from evaluation.task07a.metrics import ABSENCE_RE, LIMITATION_RE, SCOPE_RE, SENT_SPLIT
 from evaluation.task07a.variants import entry_key, load_relevant, parse_literal
 
-METRICS_VERSION = "task07b-metrics-v1"
+METRICS_VERSION = "task07b-metrics-v2"  # v2 (TASK 07C): absence_claims accepted/rejected; v1 unchanged otherwise
 RP, RA, NS, IS = "RELEVANT_PRESENT", "RELEVANT_ABSENT", "NOT_STATIC_ANSWERABLE", "INITIAL_EVIDENCE_SUFFICIENT"
 CLASSES = (RP, RA, NS, IS)
 V3_FACET = "static.pe_imports_detail"
@@ -138,6 +138,9 @@ def run_row(r: Dict[str, Any], case: Dict[str, Any], num_ctx: int) -> Dict[str, 
         "validation_error_runs": any(t.get("validation_error") for t in turns),
         "verifier_flags": flags, "isolation_passed": (r.get("isolation_checks") or {}).get("passed"),
         "query_attempts": r.get("query_attempts"), "tool_attempts": r.get("tool_attempts"),
+        "absence_claims_accepted": len(((r.get("verification") or {}).get("absence_claims") or {}).get("accepted", [])),
+        "absence_claims_rejected": len(((r.get("verification") or {}).get("absence_claims") or {}).get("rejected", [])),
+        "free_text_absence_rejected": len(((r.get("verification") or {}).get("absence_claims") or {}).get("free_text_absence_rejected", [])),
     }
 
 
@@ -201,6 +204,10 @@ def summarize(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
                                              "note": "v4: structurally impossible; not a behavioural improvement" if v4 else None},
         "M9_answer_status_fit": _frac(rows, "M9_answer_status_fit", (NS, IS)) if v4 else "NOT_APPLICABLE (v3.4 has no answer_status)",
         "M10_final_present": {"n": len(finals), "d": len(rows)},
+        "absence_claims": {"accepted": sum(x.get("absence_claims_accepted", 0) for x in rows),
+                           "rejected": sum(x.get("absence_claims_rejected", 0) for x in rows),
+                           "free_text_rejected": sum(x.get("free_text_absence_rejected", 0) for x in rows),
+                           "runs_with_rejection": sum((x.get("absence_claims_rejected", 0) + x.get("free_text_absence_rejected", 0)) > 0 for x in rows)},
         "M6_cost": {"llm_calls": sum(x["llm_calls"] for x in rows),
                     "latency_mean_s": round(mean(lat), 2) if lat else None,
                     "latency_median_s": round(median(lat), 2) if lat else None,
@@ -250,11 +257,12 @@ def latency_ratios(groups: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
 
 def noise(groups: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
     out = {}
-    for arm in ("BASE", "V4_NOQ", "V4"):
+    for arm in ("BASE", "V4_NOQ", "V4", "V4_1"):
         a, b = groups.get(f"{arm}_s42"), groups.get(f"{arm}_s7")
         if a and b:
             ks = KEY + {"BASE": (), "V4_NOQ": ("M8_read_hit_reference", "M9_answer_status_fit"),
-                        "V4": ("M8_query_hit", "M9_answer_status_fit")}[arm]
+                        "V4": ("M8_query_hit", "M9_answer_status_fit"),
+                        "V4_1": ("M8_query_hit", "M9_answer_status_fit")}[arm]
             out[arm] = {k: abs((_n(a["summary"], k) or 0) - (_n(b["summary"], k) or 0)) for k in ks
                         if k not in RATE_KEYS}
             for k in RATE_KEYS:  # M4: noise = |rate_s42 - rate_s7| (owner, 2026-11-27)
