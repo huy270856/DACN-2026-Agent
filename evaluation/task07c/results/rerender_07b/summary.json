@@ -1,0 +1,2850 @@
+{
+  "kind": "DEV_DIAGNOSTIC",
+  "track": "DETERMINISTIC_REPLAY_OFFLINE",
+  "version": "task07c-r-rerender-v1",
+  "source": "evaluation/task07b/results/frozen/V4_s{42,7} (read-only)",
+  "groups": {
+    "V4_s42": {
+      "M1b_render": {
+        "n": 7,
+        "d": 8
+      },
+      "M1b_trace": {
+        "n": 7,
+        "d": 8
+      },
+      "M4_render_unscoped": {
+        "n": 0,
+        "d": 20,
+        "note": "satisfied by construction (ABSENCE_RE sentences are dropped)"
+      },
+      "runs_with_presence_sentence": {
+        "n": 17,
+        "d": 20
+      },
+      "dropped_per_run": [
+        5,
+        5,
+        5,
+        5,
+        7,
+        3,
+        8,
+        4,
+        5,
+        2,
+        2,
+        5,
+        0,
+        5,
+        3,
+        5,
+        3,
+        5,
+        3,
+        2
+      ],
+      "rows": [
+        {
+          "alias": "sample_0001",
+          "class": "NOT_STATIC_ANSWERABLE",
+          "final": true,
+          "m1b_trace": false,
+          "m1b_render": false,
+          "dropped": 5,
+          "kept_presence": 2,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "Static analysis cannot confirm runtime network communication, but it can declare declared capabilities.",
+                "reason": null
+              },
+              {
+                "where": "answer",
+                "sentence": "The evidence shows imports from ADVAPI32.dll (registry/events), KERNEL32.dll, msvcp_win.dll, and various CRT libraries.",
+                "reason": null
+              },
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "it only shows declared imports.",
+                "sources": [
+                  "E1",
+                  "E2",
+                  "E3"
+                ],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "Queries for symbols like 'socket', 'connect', and 'winsock' returned zero matches across all DLLs in the import table.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "No typical network socket APIs (e.g., from ws2_32.dll) or HTTP libraries are visible in the committed import table.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "No network-related symbols (socket, connect, winsock) were found in any imported DLLs.",
+                "sources": [
+                  "I0",
+                  "I1",
+                  "I2",
+                  "I3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[1]",
+                "kind": "INFERENCE",
+                "sentence": "The absence of socket/connect/winsock imports suggests no declared network capability.",
+                "sources": [
+                  "I0",
+                  "I1",
+                  "I2",
+                  "I3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "Static analysis cannot prove the file does not communicate at runtime;",
+                "sources": [
+                  "E1",
+                  "E2",
+                  "E3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0002",
+          "class": "NOT_STATIC_ANSWERABLE",
+          "final": true,
+          "m1b_trace": false,
+          "m1b_render": false,
+          "dropped": 5,
+          "kept_presence": 3,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "Static analysis cannot confirm whether this file communicates over the network at runtime.",
+                "reason": null
+              },
+              {
+                "where": "answer",
+                "sentence": "The available evidence shows only 39 declared imports across 4 DLLs (KERNEL32.dll, msvcrt.dll, SHELL32.dll, api-ms-win-core-shlwapi-legacy-l1-1-0.dll).",
+                "reason": null
+              },
+              {
+                "where": "answer",
+                "sentence": "runtime behavior cannot be determined from imports alone.",
+                "reason": null
+              },
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "Static analysis cannot confirm runtime behavior;",
+                "sources": [
+                  "E1"
+                ],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "None of these are known networking libraries (e.g., WINSOCK.DLL, HTTPAPI.DLL), and no network-related symbols (socket, wsa, connect) were found in the import table.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "While the absence of declared network APIs suggests no network capability, this is a static limitation;",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "No network-related DLLs or symbols (socket, wsa, connect) were found in the import table.",
+                "sources": [
+                  "I0",
+                  "I1",
+                  "I2",
+                  "I3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[1]",
+                "kind": "INFERENCE",
+                "sentence": "The absence of declared network APIs suggests no network capability, but this is a static limitation.",
+                "sources": [
+                  "E3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "the file may use dynamic linking or other mechanisms not visible in imports.",
+                "sources": [
+                  "E1"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0003",
+          "class": "RELEVANT_PRESENT",
+          "final": true,
+          "m1b_trace": true,
+          "m1b_render": true,
+          "dropped": 5,
+          "kept_presence": 4,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "The static evidence indicates the file has the capability to create registry keys (RegCreateKeyW), set registry values (RegSetValueExW), and close registry keys (RegCloseKey).",
+                "reason": null
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "The file imports RegCreateKeyW from ADVAPI32.dll, indicating capability to create registry keys.",
+                "sources": [
+                  "I40"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[1]",
+                "kind": "OBSERVED",
+                "sentence": "The file imports RegSetValueExW from ADVAPI32.dll, indicating capability to modify registry values.",
+                "sources": [
+                  "I42"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[2]",
+                "kind": "OBSERVED",
+                "sentence": "The file imports RegCloseKey from ADVAPI32.dll, indicating capability to close registry keys.",
+                "sources": [
+                  "I38"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[5]",
+                "kind": "LIMITATION",
+                "sentence": "Static analysis cannot confirm runtime behavior;",
+                "sources": [],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "There is no visible evidence of imports related to reading registry data (e.g., RegOpenKey, RegQueryValue) in the committed import table.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "The file does not appear to have capabilities for opening or modifying registry keys beyond creation and value setting based on the available static imports.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[3]",
+                "kind": "LIMITATION",
+                "sentence": "No registry read-related symbols (e.g., RegOpenKey, RegQueryValue) are visible in the committed import table, so reading capability is not confirmed.",
+                "sources": [],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[4]",
+                "kind": "INFERENCE",
+                "sentence": "Since ADVAPI32.dll is the only DLL with registry APIs and all its 9 imports were viewed, no other registry-related imports exist in this file.",
+                "sources": [
+                  "I38",
+                  "I39",
+                  "I40",
+                  "I41"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[5]",
+                "kind": "LIMITATION",
+                "sentence": "absence of import entries does not definitively prove the API is never called if it were dynamically resolved or loaded differently, though unlikely for these APIs.",
+                "sources": [],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0004",
+          "class": "RELEVANT_PRESENT",
+          "final": true,
+          "m1b_trace": false,
+          "m1b_render": false,
+          "dropped": 5,
+          "kept_presence": 2,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "The observed imports are primarily related to registry operations (ADVAPI32.dll), threading/synchronization (KERNEL32.dll), and UI/GDI functions.",
+                "reason": null
+              },
+              {
+                "where": "findings[1]",
+                "kind": "OBSERVED",
+                "sentence": "The executable imports registry and UI-related functions from ADVAPI32.dll and KERNEL32.dll.",
+                "sources": [
+                  "I1",
+                  "I28"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "Only a subset of import entries was explicitly listed in the viewed_imports array, though total counts were returned for some DLLs.",
+                "sources": [
+                  "E3"
+                ],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "The static evidence indicates that this executable does not appear to have direct file-system access capabilities based on its imported API symbols.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "Specifically, queries for 'CreateFile', 'ReadFile', and 'WriteFile' returned zero matches across all DLLs in the import table.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "While the file has 403 total imports, none of the standard file I/O API symbols were found in the committed import table.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "No direct file-system access APIs (CreateFile, ReadFile, WriteFile) were found in the import table.",
+                "sources": [
+                  "I0"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[3]",
+                "kind": "INFERENCE",
+                "sentence": "The absence of CreateFile/ReadFile/WriteFile imports suggests the file does not perform direct file I/O operations.",
+                "sources": [
+                  "I0"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0005",
+          "class": "NOT_STATIC_ANSWERABLE",
+          "final": true,
+          "m1b_trace": false,
+          "m1b_render": false,
+          "dropped": 7,
+          "kept_presence": 0,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "The static evidence does not confirm whether the file communicates over the network at runtime.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "While queries for symbols prefixed with 'socket' and 'http' returned zero matches in the import table, this only covers those specific prefixes.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "The full import table (130 entries across 26 DLLs) has not been fully examined to rule out other network-related APIs (e.g., Winsock, URL handling, TCP/UDP functions).",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "Without viewing the complete set of imports or confirming the absence of known network libraries (like ws2_32.dll), a definitive conclusion cannot be made solely from static analysis.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "Queries for symbols prefixed with 'socket' and 'http' returned zero matches in the import table.",
+                "sources": [
+                  "I0"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[1]",
+                "kind": "LIMITATION",
+                "sentence": "The full import table (130 entries) has not been viewed, so other network-related APIs may exist.",
+                "sources": [
+                  "E3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[2]",
+                "kind": "INFERENCE",
+                "sentence": "Zero matches for 'socket' and 'http' suggests a lack of common network API usage, but this is not definitive without checking all imports.",
+                "sources": [],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0006",
+          "class": "RELEVANT_PRESENT",
+          "final": true,
+          "m1b_trace": true,
+          "m1b_render": true,
+          "dropped": 3,
+          "kept_presence": 3,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "Static evidence indicates limited process control capability.",
+                "reason": null
+              },
+              {
+                "where": "answer",
+                "sentence": "The file imports TerminateProcess (KERNEL32.dll, I32), allowing termination of other processes.",
+                "reason": null
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "The file imports TerminateProcess from KERNEL32.dll, indicating capability to terminate other processes.",
+                "sources": [
+                  "I32"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "The import table is large (90 entries) and only KERNEL32.dll and ADVAPI32.dll have been fully queried;",
+                "sources": [
+                  "E3"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "other DLLs remain unverified.",
+                "sources": [
+                  "E3"
+                ],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "It does not show imports for CreateProcess or OpenProcess in the viewed entries.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "Accessing another process's memory would typically require NtQueryInformationProcess or similar APIs, which are not yet observed.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[1]",
+                "kind": "INFERENCE",
+                "sentence": "No CreateProcess or OpenProcess APIs were observed in the 90 imported symbols viewed so far.",
+                "sources": [
+                  "I0",
+                  "I1",
+                  "I2",
+                  "I35"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0007",
+          "class": "RELEVANT_ABSENT",
+          "final": true,
+          "m1b_trace": false,
+          "m1b_render": false,
+          "dropped": 8,
+          "kept_presence": 0,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "The static evidence indicates the file lacks explicit imports for Windows service control APIs.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "Queries for symbols prefixed with 'OpenService', 'CreateService', and 'Service' returned zero matches across all imported DLLs.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "The import table does not include advapi32.dll, which is the standard source for these functions.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "While ordinal imports cannot be definitively ruled out without inspecting every entry individually, the absence of name-based imports and the lack of advapi32.dll suggest the file does not declare capabilities to open, create, start, stop, or configure services.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "Queries for 'OpenService', 'CreateService', and 'Service' prefixes returned zero matches across all imported DLLs.",
+                "sources": [
+                  "I0",
+                  "I1",
+                  "I2"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[1]",
+                "kind": "OBSERVED",
+                "sentence": "The import table does not include advapi32.dll, the primary source for service control APIs.",
+                "sources": [
+                  "E3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[2]",
+                "kind": "INFERENCE",
+                "sentence": "The absence of name-based imports and advapi32.dll suggests the file likely lacks capabilities to open, create, start, stop, or configure services.",
+                "sources": [],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[3]",
+                "kind": "LIMITATION",
+                "sentence": "Ordinal imports cannot be definitively ruled out without inspecting every entry individually, though the zero matches for common prefixes are strong indicators.",
+                "sources": [
+                  "E3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0008",
+          "class": "RELEVANT_PRESENT",
+          "final": true,
+          "m1b_trace": true,
+          "m1b_render": true,
+          "dropped": 4,
+          "kept_presence": 2,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "Static evidence indicates the file has capabilities for creating files (CreateFileW), moving files (MoveFileExW), and creating directories (CreateDirectoryW).",
+                "reason": null
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "The file imports CreateFileW (KERNEL32.dll), MoveFileExW (KERNEL32.dll), and CreateDirectoryW (KERNEL32.dll), indicating capabilities for creating, moving, and directory creation.",
+                "sources": [
+                  "I46",
+                  "I93",
+                  "I122"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "Only 14 import entries were viewed out of 277 total;",
+                "sources": [
+                  "E3"
+                ],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "Evidence does not show imports for ReadFile, WriteFile, or DeleteFile in the currently viewed entries, but this is limited to a specific subset of 14 symbols;",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "full import table analysis is required to confirm absence.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[1]",
+                "kind": "INFERENCE",
+                "sentence": "The file likely lacks explicit ReadFile or WriteFile imports based on zero matches for 'Read' and 'Write' prefixes in the queried subset, but this is not a definitive absence.",
+                "sources": [
+                  "I46",
+                  "I93",
+                  "I122"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "full table analysis is needed to confirm the absence of read/write/delete APIs.",
+                "sources": [
+                  "E3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0009",
+          "class": "RELEVANT_PRESENT",
+          "final": true,
+          "m1b_trace": true,
+          "m1b_render": true,
+          "dropped": 5,
+          "kept_presence": 2,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "Static evidence indicates the file has the capability to open processes (imported 'OpenProcess' from api-ms-win-core-processthreads-l1-1-1.dll and 'OpenProcessToken').",
+                "reason": null
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "The file imports 'OpenProcess' and 'OpenProcessToken', indicating capability to open processes.",
+                "sources": [
+                  "I250"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "Only 2 out of 280 import entries were explicitly viewed;",
+                "sources": [
+                  "E3"
+                ],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "There is no static evidence of capabilities to create processes ('CreateProcess') or terminate processes ('TerminateProcess'), as queries for these symbols returned zero matches.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "Capability to access another process's memory (e.g., ReadProcessMemory, WriteProcessMemory) was not explicitly observed in the viewed entries.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[1]",
+                "kind": "OBSERVED",
+                "sentence": "Queries for 'CreateProcess' and 'TerminateProcess' returned zero matches, suggesting no static evidence of these capabilities.",
+                "sources": [
+                  "I90"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "full coverage is not available to confirm absence of all process control or memory access APIs.",
+                "sources": [
+                  "E3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[3]",
+                "kind": "INFERENCE",
+                "sentence": "The file likely lacks static evidence for creating, terminating processes, or accessing other processes' memory based on current query results, but this is limited by the small sample size viewed.",
+                "sources": [],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0010",
+          "class": "INITIAL_EVIDENCE_SUFFICIENT",
+          "final": true,
+          "m1b_trace": false,
+          "m1b_render": false,
+          "dropped": 2,
+          "kept_presence": 4,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "The static detector predicted 'benign' with a raw score of 0.005874200650598155, which is below the threshold of 0.8321860386013389.",
+                "reason": null
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "The image is a PE32+ x64 executable (is_dll: false).",
+                "sources": [
+                  "E1"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[1]",
+                "kind": "OBSERVED",
+                "sentence": "The static detector predicted 'benign' with a raw score of 0.005874200650598155.",
+                "sources": [
+                  "E1"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[2]",
+                "kind": "INFERENCE",
+                "sentence": "The low raw score (below threshold) suggests the detection model may have flagged it as suspicious despite the benign prediction label.",
+                "sources": [
+                  "E1"
+                ],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "The PE image is a 32-bit x64 executable (not a DLL).",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[3]",
+                "kind": "LIMITATION",
+                "sentence": "No import entries were viewed, so dynamic capabilities or specific API usage are unknown.",
+                "sources": [],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0011",
+          "class": "INITIAL_EVIDENCE_SUFFICIENT",
+          "final": true,
+          "m1b_trace": false,
+          "m1b_render": false,
+          "dropped": 2,
+          "kept_presence": 2,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "The static detector predicted 'benign' with a raw score of 0.007834335036226906.",
+                "reason": null
+              },
+              {
+                "where": "findings[1]",
+                "kind": "OBSERVED",
+                "sentence": "The detector context indicates a predicted label of 'benign' with a raw score below the threshold.",
+                "sources": [
+                  "E1",
+                  "E2"
+                ],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "This is a 64-bit (x64) executable image (PE_IMAGE, not a DLL).",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "The PE header and format entries confirm the image is x64 architecture, PE32+, and an executable (not a DLL).",
+                "sources": [
+                  "E1",
+                  "E2"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0012",
+          "class": "RELEVANT_ABSENT",
+          "final": true,
+          "m1b_trace": false,
+          "m1b_render": false,
+          "dropped": 5,
+          "kept_presence": 2,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "All 98 imported symbols across ADVAPI32.dll and KERNEL32.dll were viewed;",
+                "reason": null
+              },
+              {
+                "where": "answer",
+                "sentence": "The observed imports are registry-related (ADVAPI32) and general system utilities (KERNEL32).",
+                "reason": null
+              },
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "Indirect file access via dynamic libraries or non-imported APIs cannot be confirmed statically.",
+                "sources": [],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "Static evidence shows no explicit file-system access APIs (e.g., CreateFile, ReadFile, WriteFile, MoveFile) in the import table.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "none relate to direct file I/O or manipulation.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "While the executable may perform file operations indirectly (e.g., via dynamic libraries not visible statically), no static evidence confirms such capability.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "No direct file-system access APIs (CreateFile, ReadFile, WriteFile, MoveFile, DeleteFile) are present in the import table.",
+                "sources": [
+                  "I0",
+                  "I1",
+                  "I2",
+                  "I3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[1]",
+                "kind": "OBSERVED",
+                "sentence": "Registry-related imports allow key manipulation but not direct file operations.",
+                "sources": [
+                  "I0",
+                  "I4",
+                  "I5",
+                  "I6"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0013",
+          "class": "RELEVANT_PRESENT",
+          "final": true,
+          "m1b_trace": true,
+          "m1b_render": true,
+          "dropped": 0,
+          "kept_presence": 6,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "The static evidence indicates the file has the capability to open, read, and modify Windows registry keys.",
+                "reason": null
+              },
+              {
+                "where": "answer",
+                "sentence": "This is evidenced by imports from api-ms-win-core-registry-l1-1-0.dll including RegOpenKeyExW (opening), RegQueryValueExW/RegQueryInfoKeyW (reading), RegSetValueExW (modifying values), RegCreateKeyExW (creating/modifying structure), and RegDeleteKeyExW/RegDeleteTreeW (deleting).",
+                "reason": null
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "The file imports functions to open registry keys (RegOpenKeyExW) and delete keys/trees (RegDeleteKeyExW, RegDeleteTreeW).",
+                "sources": [
+                  "I120",
+                  "I121",
+                  "I122"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[1]",
+                "kind": "OBSERVED",
+                "sentence": "The file imports functions to read registry values and key information (RegQueryValueExW, RegQueryInfoKeyW).",
+                "sources": [
+                  "I118",
+                  "I119"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[2]",
+                "kind": "OBSERVED",
+                "sentence": "The file imports functions to modify registry structure and values (RegCreateKeyExW, RegSetValueExW).",
+                "sources": [
+                  "I116",
+                  "I117"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[3]",
+                "kind": "INFERENCE",
+                "sentence": "Based on the presence of these specific API imports, the file is statically capable of performing registry operations.",
+                "sources": [
+                  "I115",
+                  "I116",
+                  "I117",
+                  "I118"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[4]",
+                "kind": "LIMITATION",
+                "sentence": "Static analysis cannot confirm if these APIs are actually called at runtime or if they are used for malicious purposes.",
+                "sources": [],
+                "reason": null
+              }
+            ],
+            "dropped": []
+          }
+        },
+        {
+          "alias": "sample_0014",
+          "class": "RELEVANT_ABSENT",
+          "final": true,
+          "m1b_trace": false,
+          "m1b_render": false,
+          "dropped": 5,
+          "kept_presence": 1,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "The viewed imports consist entirely of system utilities, resource management, and process control functions.",
+                "reason": null
+              },
+              {
+                "where": "findings[3]",
+                "kind": "LIMITATION",
+                "sentence": "Static analysis cannot confirm runtime behavior or hidden dynamic loading.",
+                "sources": [
+                  "E3"
+                ],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "Static evidence indicates the file has no observable capability for network communication.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "A search for 'socket' symbols returned zero matches, and none of the standard network-related DLLs (e.g., WS2_32.dll, WINHTTP.dll) appear in the provided import index.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "No socket-related symbols were found in the imported DLLs.",
+                "sources": [
+                  "I0",
+                  "I1",
+                  "I2",
+                  "I3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[1]",
+                "kind": "OBSERVED",
+                "sentence": "No HTTP or DNS-related DLLs are listed in the import index.",
+                "sources": [
+                  "E3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[2]",
+                "kind": "INFERENCE",
+                "sentence": "The file lacks standard network communication APIs based on the absence of relevant imports.",
+                "sources": [
+                  "I0",
+                  "I1",
+                  "I2",
+                  "I3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0015",
+          "class": "RELEVANT_PRESENT",
+          "final": true,
+          "m1b_trace": true,
+          "m1b_render": true,
+          "dropped": 3,
+          "kept_presence": 2,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "Static evidence indicates the file has the capability to open the Service Control Manager via the import of OpenSCManagerW from api-ms-win-service-management-l1-1-0.dll (handle I153).",
+                "reason": null
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "The file imports OpenSCManagerW from api-ms-win-service-management-l1-1-0.dll, indicating capability to open the Service Control Manager.",
+                "sources": [
+                  "I153"
+                ],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "However, there is no visible evidence of imports for creating, starting, stopping, or configuring services (e.g., CreateService, StartService), so those capabilities cannot be confirmed statically.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[1]",
+                "kind": "LIMITATION",
+                "sentence": "Static evidence does not show imports for service creation, starting, stopping, or configuration APIs (e.g., CreateService, StartService).",
+                "sources": [],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[2]",
+                "kind": "INFERENCE",
+                "sentence": "Capability to perform full service control operations cannot be confirmed without seeing the specific service management API imports.",
+                "sources": [
+                  "I153"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0016",
+          "class": "RELEVANT_ABSENT",
+          "final": true,
+          "m1b_trace": false,
+          "m1b_render": false,
+          "dropped": 5,
+          "kept_presence": 1,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "findings[1]",
+                "kind": "LIMITATION",
+                "sentence": "Static analysis cannot confirm runtime behavior or non-imported registry access methods.",
+                "sources": [],
+                "reason": null
+              },
+              {
+                "where": "findings[2]",
+                "kind": "OBSERVED",
+                "sentence": "The file is a PE32+ executable image (x64).",
+                "sources": [
+                  "E1"
+                ],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "Static evidence indicates no Windows registry access capabilities via imported functions.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "Queries for symbols 'Reg', 'RegOpenKey', and 'Key' across all DLLs returned zero matches (coverage.queries_run).",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "The PE header shows it is an executable image, but the import table entries do not contain any registry-related API names.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "While the full 25 import entries were viewed in total count, the absence of registry symbols suggests no opening, reading, or modifying of registry keys/values via standard APIs.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "No registry-related symbols (Reg, RegOpenKey, Key) found in any imported DLLs.",
+                "sources": [
+                  "I0"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0017",
+          "class": "INITIAL_EVIDENCE_SUFFICIENT",
+          "final": true,
+          "m1b_trace": false,
+          "m1b_render": false,
+          "dropped": 3,
+          "kept_presence": 3,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "The static detector predicted the label 'benign' with a raw score of 0.0010815162403800874, which is below the threshold of 0.8321860386013389.",
+                "reason": null
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "The image is a PE32+ x64 executable (is_dll: false).",
+                "sources": [
+                  "E1"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[1]",
+                "kind": "OBSERVED",
+                "sentence": "The static detector predicted 'benign' with a raw score of 0.0010815162403800874.",
+                "sources": [
+                  "E1"
+                ],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "The PE image is a 32-bit x64 executable (not a DLL).",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[2]",
+                "kind": "INFERENCE",
+                "sentence": "Since the image is an executable, it does not have a DLL entry point or specific export table structure relevant to DLLs.",
+                "sources": [
+                  "E1"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[3]",
+                "kind": "LIMITATION",
+                "sentence": "No import entries were viewed, so dynamic API usage cannot be determined statically.",
+                "sources": [],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0018",
+          "class": "NOT_STATIC_ANSWERABLE",
+          "final": true,
+          "m1b_trace": false,
+          "m1b_render": false,
+          "dropped": 5,
+          "kept_presence": 0,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "Static analysis cannot confirm runtime behavior;",
+                "sources": [],
+                "reason": null
+              },
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "dynamic execution is required to verify actual network communication.",
+                "sources": [],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "The static evidence does not confirm that the file communicates over the network.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "The visible import entries include standard system functions but no known network-related APIs (e.g., Winsock, HTTP, DNS).",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "However, the full import table was viewed (39 entries total), and while the displayed sample (I0-I15) lacks network calls, the absence of such imports in the complete view suggests no static evidence of network communication.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "No network-related API imports were visible in the 16 explicitly listed entries (I0-I15).",
+                "sources": [
+                  "I0",
+                  "I1",
+                  "I2",
+                  "I3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[1]",
+                "kind": "INFERENCE",
+                "sentence": "The file likely does not communicate over the network based on the absence of network APIs in the committed import table.",
+                "sources": [
+                  "E3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0019",
+          "class": "RELEVANT_PRESENT",
+          "final": true,
+          "m1b_trace": true,
+          "m1b_render": true,
+          "dropped": 3,
+          "kept_presence": 5,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "Static evidence indicates the file has capabilities for IP address manipulation and network interface enumeration via imports of WS2_32.dll (InetPtonW, InetNtopW) and IPHLPAPI.DLL (GetAdaptersAddresses, ResolveIpNetEntry2, GetIpNetEntry2, GetBestInterfaceEx).",
+                "reason": null
+              },
+              {
+                "where": "answer",
+                "sentence": "The full import table contains 263 entries across 44 DLLs, but only 6 entries from 2 DLLs were examined;",
+                "reason": null
+              },
+              {
+                "where": "answer",
+                "sentence": "thus, the presence of other network capabilities remains unknown.",
+                "reason": null
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "Imports for WS2_32.dll (InetPtonW, InetNtopW) and IPHLPAPI.DLL (GetAdaptersAddresses, ResolveIpNetEntry2, GetIpNetEntry2, GetBestInterfaceEx) indicate IP address manipulation and network interface enumeration capabilities.",
+                "sources": [
+                  "I257",
+                  "I258",
+                  "I259",
+                  "I260"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[1]",
+                "kind": "OBSERVED",
+                "sentence": "All viewed imports are marked as delay-loaded, indicating these APIs are resolved dynamically at runtime.",
+                "sources": [
+                  "I257",
+                  "I258",
+                  "I259",
+                  "I260"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "Only 6 out of 263 total import entries (from 2 out of 44 DLLs) were examined;",
+                "sources": [
+                  "E3"
+                ],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "However, no socket-related APIs (e.g., WSAStartup, connect, send) or HTTP-specific libraries were observed in the viewed subset.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "socket-related APIs or HTTP libraries were not observed but may exist in unviewed entries.",
+                "sources": [
+                  "E3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[3]",
+                "kind": "INFERENCE",
+                "sentence": "The absence of socket or HTTP imports in the viewed subset does not confirm their absence, as the full import table was not fully queried.",
+                "sources": [
+                  "E3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0020",
+          "class": "INITIAL_EVIDENCE_SUFFICIENT",
+          "final": true,
+          "m1b_trace": false,
+          "m1b_render": false,
+          "dropped": 2,
+          "kept_presence": 2,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "The static detector predicted 'benign' with a raw score of 0.004876991504946674, which is below the threshold of 0.8321860386013389.",
+                "reason": null
+              },
+              {
+                "where": "findings[1]",
+                "kind": "OBSERVED",
+                "sentence": "The static detector output predicts 'benign' with a raw score of 0.004876991504946674.",
+                "sources": [
+                  "E1",
+                  "E2"
+                ],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "This is a 64-bit x86-64 executable image (PE32+, not a DLL).",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "The PE header and format entries confirm the image is a 64-bit executable (PE32+, x64, not a DLL).",
+                "sources": [
+                  "E1",
+                  "E2"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "V4_s7": {
+      "M1b_render": {
+        "n": 7,
+        "d": 8
+      },
+      "M1b_trace": {
+        "n": 7,
+        "d": 8
+      },
+      "M4_render_unscoped": {
+        "n": 0,
+        "d": 20,
+        "note": "satisfied by construction (ABSENCE_RE sentences are dropped)"
+      },
+      "runs_with_presence_sentence": {
+        "n": 17,
+        "d": 20
+      },
+      "dropped_per_run": [
+        4,
+        4,
+        3,
+        3,
+        4,
+        4,
+        10,
+        3,
+        6,
+        1,
+        2,
+        8,
+        0,
+        5,
+        3,
+        5,
+        2,
+        5,
+        3,
+        2
+      ],
+      "rows": [
+        {
+          "alias": "sample_0001",
+          "class": "NOT_STATIC_ANSWERABLE",
+          "final": true,
+          "m1b_trace": false,
+          "m1b_render": false,
+          "dropped": 4,
+          "kept_presence": 2,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "Static analysis cannot confirm runtime network communication, only declared capabilities.",
+                "reason": null
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "The PE header indicates a 64-bit executable image.",
+                "sources": [
+                  "E1"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[3]",
+                "kind": "LIMITATION",
+                "sentence": "Static analysis cannot prove runtime network activity;",
+                "sources": [],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "The file imports from standard system DLLs (KERNEL32, ADVAPI32, CRT libs), but no specific import entries have been viewed to confirm the presence or absence of network APIs like socket functions.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[1]",
+                "kind": "OBSERVED",
+                "sentence": "The imports table contains 112 entries across 7 DLLs, but no specific entries were viewed in the provided evidence.",
+                "sources": [
+                  "E3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[2]",
+                "kind": "INFERENCE",
+                "sentence": "Queries for 'socket', 'Winsock', and 'Win' returned zero matches, suggesting these specific symbols may not be imported by name.",
+                "sources": [
+                  "I0",
+                  "I1",
+                  "I2"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[3]",
+                "kind": "LIMITATION",
+                "sentence": "absence of visible imports does not guarantee no network capability exists (e.g., via ordinals or indirect calls).",
+                "sources": [],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0002",
+          "class": "NOT_STATIC_ANSWERABLE",
+          "final": true,
+          "m1b_trace": false,
+          "m1b_render": false,
+          "dropped": 4,
+          "kept_presence": 5,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "However, the import index lists SHELL32.dll and api-ms-win-core-shlwapi-legacy-l1-1-0.dll with 1 entry each.",
+                "reason": null
+              },
+              {
+                "where": "answer",
+                "sentence": "While these specific DLLs are often used for UI or shell functions, they can also contain network-related APIs (e.g., WinHttp in SHELL32).",
+                "reason": null
+              },
+              {
+                "where": "answer",
+                "sentence": "The provided 'viewed_imports' list appears to be incomplete or miscounted relative to the import_index counts (KERNEL32 shows 21 count but 22 items listed;",
+                "reason": null
+              },
+              {
+                "where": "answer",
+                "sentence": "msvcrt shows 16 count and 16 items listed).",
+                "reason": null
+              },
+              {
+                "where": "answer",
+                "sentence": "To fully verify, I need to inspect the remaining DLLs in the import table.",
+                "reason": null
+              },
+              {
+                "where": "findings[1]",
+                "kind": "LIMITATION",
+                "sentence": "The import index lists SHELL32.dll and api-ms-win-core-shlwapi-legacy-l1-1-0.dll, but the provided 'viewed_imports' list seems incomplete or inconsistent with the counts (KERNEL32 count 21 vs 22 items listed).",
+                "sources": [
+                  "I0",
+                  "E3"
+                ],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "The static evidence does not confirm network communication.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "All viewed import entries (39 total) are from KERNEL32.dll and msvcrt.dll and do not include any network-related APIs (e.g., Winsock, HTTP, DNS).",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "No network-related APIs (e.g., Winsock, HTTP, DNS) were found in the 39 imported symbols explicitly listed.",
+                "sources": [
+                  "I0",
+                  "I1",
+                  "I2",
+                  "I3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[2]",
+                "kind": "INFERENCE",
+                "sentence": "The absence of network APIs in the viewed entries suggests no static evidence of network communication, but unverified DLLs might contain them.",
+                "sources": [
+                  "I0",
+                  "I1"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0003",
+          "class": "RELEVANT_PRESENT",
+          "final": true,
+          "m1b_trace": true,
+          "m1b_render": true,
+          "dropped": 3,
+          "kept_presence": 4,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "The static evidence indicates the file has capabilities to create registry keys (RegCreateKeyW) and modify registry values (RegSetValueExW).",
+                "reason": null
+              },
+              {
+                "where": "answer",
+                "sentence": "It also imports functions for service management (OpenSCManagerW, OpenServiceW, StartServiceW, etc.) which are often used in conjunction with registry access.",
+                "reason": null
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "The file imports RegCreateKeyW and RegSetValueExW from ADVAPI32.dll, indicating capability to create registry keys and modify values.",
+                "sources": [
+                  "I40",
+                  "I42"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[1]",
+                "kind": "OBSERVED",
+                "sentence": "The file imports OpenSCManagerW and OpenServiceW from ADVAPI32.dll, suggesting infrastructure for managing services and potentially registry access contexts.",
+                "sources": [
+                  "I44",
+                  "I46"
+                ],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "However, no explicit symbol for opening existing registry keys (e.g., RegOpenKeyExW) or reading registry values (e.g., RegQueryValueExW) was observed in the currently viewed import entries.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "No explicit symbol for opening existing registry keys (e.g., RegOpenKeyExW) or reading values (e.g., RegQueryValueExW) was found in the viewed import entries.",
+                "sources": [],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[3]",
+                "kind": "INFERENCE",
+                "sentence": "While RegCreateKeyW implies creating new keys, it does not statically confirm the ability to open existing keys without further evidence of RegOpenKeyExW or similar.",
+                "sources": [
+                  "I40"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0004",
+          "class": "RELEVANT_PRESENT",
+          "final": true,
+          "m1b_trace": true,
+          "m1b_render": true,
+          "dropped": 3,
+          "kept_presence": 3,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "Static evidence indicates the file has the capability to delete files (DeleteFileW) and query file attributes (GetFileAttributesW).",
+                "reason": null
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "The file has the capability to delete files via DeleteFileW import.",
+                "sources": [
+                  "I65"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[1]",
+                "kind": "OBSERVED",
+                "sentence": "The file has the capability to query file attributes via GetFileAttributesW import.",
+                "sources": [
+                  "I66"
+                ],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "There is no visible evidence of capabilities for creating, reading, writing, or moving files, as imports for CreateFile, ReadFile, WriteFile, MoveFile, etc., were not found in the fully viewed import table.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "No imports for CreateFile, ReadFile, WriteFile, or MoveFile were found in the fully viewed import table (403 entries).",
+                "sources": [
+                  "I0",
+                  "I1",
+                  "I28",
+                  "I65"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[3]",
+                "kind": "INFERENCE",
+                "sentence": "Based on the absence of CreateFile and related file I/O imports in the static evidence, the file does not appear to have capabilities for creating, reading, writing, or moving files.",
+                "sources": [
+                  "I0",
+                  "I1",
+                  "I28",
+                  "I65"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0005",
+          "class": "NOT_STATIC_ANSWERABLE",
+          "final": true,
+          "m1b_trace": false,
+          "m1b_render": false,
+          "dropped": 4,
+          "kept_presence": 1,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "The PE file is a valid x64 executable image with 130 import entries across 26 DLLs.",
+                "sources": [
+                  "E1",
+                  "E2"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "The static analysis only reveals declared imports;",
+                "sources": [],
+                "reason": null
+              },
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "it cannot confirm runtime behavior or dynamically resolved APIs.",
+                "sources": [],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "The static evidence does not confirm that the file communicates over the network.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "While the PE header and import table structure are valid, no network-related API imports (such as socket, connect, send, recv) have been observed in the viewed entries.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "A previous search for 'socket' returned zero matches, suggesting a lack of standard network APIs.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[1]",
+                "kind": "OBSERVED",
+                "sentence": "No network-related API imports (e.g., socket) were found in the committed import table.",
+                "sources": [
+                  "I0"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0006",
+          "class": "RELEVANT_PRESENT",
+          "final": true,
+          "m1b_trace": true,
+          "m1b_render": true,
+          "dropped": 4,
+          "kept_presence": 2,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "The static evidence indicates the file has the capability to terminate a process via the import of TerminateProcess from KERNEL32.dll (handle I32).",
+                "reason": null
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "The file imports TerminateProcess from KERNEL32.dll (handle I32), indicating capability to terminate a process if privileges are present.",
+                "sources": [
+                  "I32"
+                ],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "However, there is no evidence of imports related to creating new processes (e.g., CreateProcess*, CreateRemoteThread) or opening/accessing another process's memory (e.g., OpenProcess*, ReadProcessMemory, WriteProcessMemory).",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "The file does import GetCurrentProcess and GetCurrentProcessId, which identify the current process but do not enable accessing other processes' memory.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[1]",
+                "kind": "LIMITATION",
+                "sentence": "No imports for CreateProcess*, CreateRemoteThread, OpenProcess*, ReadProcessMemory, or WriteProcessMemory were found in the viewed entries.",
+                "sources": [],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[2]",
+                "kind": "INFERENCE",
+                "sentence": "The absence of process creation and memory access APIs suggests the file does not statically exhibit capabilities to create processes or access other processes' memory, though it can terminate existing ones.",
+                "sources": [
+                  "I32"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0007",
+          "class": "RELEVANT_ABSENT",
+          "final": true,
+          "m1b_trace": false,
+          "m1b_render": false,
+          "dropped": 10,
+          "kept_presence": 0,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "Static evidence indicates no direct imports for OpenService, CreateService, or StartService were found in the viewed entries (zero matches for SYMBOL_PREFIX queries).",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "However, the import table was not fully enumerated;",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "only aggregate counts and specific zero-result queries are visible.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "The absence of advapi32.dll in the import index is notable as it typically hosts these APIs, but other DLLs might contain them.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "Without viewing the full list of imported symbols or checking if any entry resolves to service control functions via ordinal resolution, the complete capability cannot be confirmed statically.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "No imports for OpenService, CreateService, or StartService were found in the viewed entries (zero matches).",
+                "sources": [
+                  "I0"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[1]",
+                "kind": "LIMITATION",
+                "sentence": "The import table was not fully enumerated;",
+                "sources": [
+                  "E3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[1]",
+                "kind": "LIMITATION",
+                "sentence": "only aggregate counts and specific zero-result queries are visible.",
+                "sources": [
+                  "E3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[1]",
+                "kind": "LIMITATION",
+                "sentence": "The absence of advapi32.dll is noted but does not confirm absence of service APIs in other DLLs.",
+                "sources": [
+                  "E3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[2]",
+                "kind": "INFERENCE",
+                "sentence": "Service control capabilities cannot be confirmed without viewing the full list of imported symbols or checking for ordinal imports that might resolve to service functions.",
+                "sources": [],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0008",
+          "class": "RELEVANT_PRESENT",
+          "final": true,
+          "m1b_trace": true,
+          "m1b_render": true,
+          "dropped": 3,
+          "kept_presence": 4,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "Static evidence indicates the file has the capability to create, read, write, and delete files via KERNEL32.dll's CreateFileW (I46).",
+                "reason": null
+              },
+              {
+                "where": "answer",
+                "sentence": "The total import count for KERNEL32 is 91, but only 34 entries were displayed.",
+                "reason": null
+              },
+              {
+                "where": "answer",
+                "sentence": "A symbol prefix query for 'File' returned 2 matches, likely CreateFileW and GetFileTimeW, but other file manipulation APIs may exist in the remaining 57 unseen entries.",
+                "reason": null
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "The file imports CreateFileW from KERNEL32.dll (I46), which supports creating, reading, writing, and deleting files if appropriate permissions are used.",
+                "sources": [
+                  "I46"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[1]",
+                "kind": "LIMITATION",
+                "sentence": "Only 74 of the 91 KERNEL32.dll import entries were viewed;",
+                "sources": [
+                  "I0",
+                  "I46",
+                  "E3"
+                ],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "However, specific capabilities for moving or deleting files (e.g., MoveFileExW, DeleteFileW) are not explicitly visible in the currently viewed 74 import entries.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[1]",
+                "kind": "LIMITATION",
+                "sentence": "specific file manipulation APIs like MoveFile or DeleteFile were not explicitly listed in the visible entries.",
+                "sources": [
+                  "I0",
+                  "I46",
+                  "E3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[2]",
+                "kind": "INFERENCE",
+                "sentence": "The file likely has limited file-system access capabilities based on the visible imports, but the full set of 91 KERNEL32 imports was not examined.",
+                "sources": [
+                  "E3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0009",
+          "class": "RELEVANT_PRESENT",
+          "final": true,
+          "m1b_trace": false,
+          "m1b_render": false,
+          "dropped": 6,
+          "kept_presence": 1,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "The file appears to have minimal process control capabilities.",
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "Static evidence shows no imports related to process creation (CreateProcess), opening (OpenProcess), or termination (TerminateProcess).",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "Memory access APIs (ReadProcessMemory, WriteProcessMemory) were not explicitly queried but are likely absent given the benign profile and lack of other suspicious imports.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "No imports for CreateProcess, OpenProcess, TerminateProcess, ReadProcessMemory, or WriteProcessMemory were found in the static import table.",
+                "sources": [
+                  "I0"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[1]",
+                "kind": "INFERENCE",
+                "sentence": "The absence of these specific APIs suggests the file does not perform process creation, opening, termination, or memory access on other processes.",
+                "sources": [
+                  "I0"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "Static analysis cannot confirm the absence of all possible process control APIs without viewing every single import entry;",
+                "sources": [],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "only those explicitly queried are known to be absent.",
+                "sources": [],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0010",
+          "class": "INITIAL_EVIDENCE_SUFFICIENT",
+          "final": true,
+          "m1b_trace": false,
+          "m1b_render": false,
+          "dropped": 1,
+          "kept_presence": 5,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "The PE image is a 32-bit executable (PE_IMAGE) running on x64 architecture (is_dll: false).",
+                "reason": null
+              },
+              {
+                "where": "answer",
+                "sentence": "The static detector predicted 'benign' with a raw score of 0.005874200650598155, which is below the threshold of 0.8321860386013389.",
+                "reason": null
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "The PE image is identified as a non-DLL executable (PE_IMAGE) with x64 architecture.",
+                "sources": [
+                  "E1"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[1]",
+                "kind": "OBSERVED",
+                "sentence": "The static detector output predicts 'benign' with a raw score of 0.005874200650598155.",
+                "sources": [
+                  "E1",
+                  "E2"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[2]",
+                "kind": "INFERENCE",
+                "sentence": "The architecture is listed as x64 in the PE header and format sections, indicating a 32-bit executable on x64 platform.",
+                "sources": [
+                  "E1",
+                  "E2"
+                ],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "findings[3]",
+                "kind": "LIMITATION",
+                "sentence": "No import table analysis was performed, so dynamic API usage or malicious behavior cannot be determined statically.",
+                "sources": [],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0011",
+          "class": "INITIAL_EVIDENCE_SUFFICIENT",
+          "final": true,
+          "m1b_trace": false,
+          "m1b_render": false,
+          "dropped": 2,
+          "kept_presence": 2,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "The static detector predicted 'benign' with a raw score of 0.007834335036226906, which is below the threshold of 0.8321860386013389.",
+                "reason": null
+              },
+              {
+                "where": "findings[1]",
+                "kind": "OBSERVED",
+                "sentence": "The static detector predicted 'benign' with a raw score of 0.0078, below the threshold of 0.83.",
+                "sources": [
+                  "E1",
+                  "E2"
+                ],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "The PE image is a 32-bit executable (PE32+) on x64 architecture, confirmed as not a DLL by both the pe_header (E1) and format (E2) evidence.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "The image is a PE32+ executable on x64 architecture and is not a DLL.",
+                "sources": [
+                  "E1",
+                  "E2"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0012",
+          "class": "RELEVANT_ABSENT",
+          "final": true,
+          "m1b_trace": false,
+          "m1b_render": false,
+          "dropped": 8,
+          "kept_presence": 5,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "A query for DeleteFile is pending to confirm deletion capability.",
+                "reason": null
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "CreateFileW/CreateFileA queries returned 0 matches.",
+                "sources": [
+                  "I27"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[1]",
+                "kind": "OBSERVED",
+                "sentence": "ReadFile query returned 0 matches.",
+                "sources": [
+                  "I28"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[2]",
+                "kind": "OBSERVED",
+                "sentence": "Write query returned 0 matches (likely excludes WriteFile).",
+                "sources": [
+                  "I27"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[3]",
+                "kind": "OBSERVED",
+                "sentence": "MoveFile query returned 0 matches.",
+                "sources": [
+                  "I28"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[5]",
+                "kind": "LIMITATION",
+                "sentence": "Static analysis cannot confirm runtime behavior;",
+                "sources": [],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "Static evidence indicates the file has no observed capabilities for creating, reading, writing, moving, or deleting files based on imported API symbols.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "Queries for CreateFile, ReadFile, Write (covering WriteFile), and MoveFile returned zero matches.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "No file creation APIs observed;",
+                "sources": [
+                  "I27"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[1]",
+                "kind": "OBSERVED",
+                "sentence": "No file reading APIs observed;",
+                "sources": [
+                  "I28"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[2]",
+                "kind": "OBSERVED",
+                "sentence": "No file writing APIs observed;",
+                "sources": [
+                  "I27"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[3]",
+                "kind": "OBSERVED",
+                "sentence": "No file moving APIs observed;",
+                "sources": [
+                  "I28"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[4]",
+                "kind": "INFERENCE",
+                "sentence": "Based on the zero matches for standard file I/O API prefixes, the file likely lacks these capabilities statically.",
+                "sources": [
+                  "I27",
+                  "I28"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[5]",
+                "kind": "LIMITATION",
+                "sentence": "absence of imports does not guarantee no file access at runtime (e.g., via kernel callbacks or dynamic loading), but indicates no direct API usage.",
+                "sources": [],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0013",
+          "class": "RELEVANT_PRESENT",
+          "final": true,
+          "m1b_trace": true,
+          "m1b_render": true,
+          "dropped": 0,
+          "kept_presence": 6,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "The static evidence indicates the file has capabilities for opening, reading, and modifying Windows registry keys and values.",
+                "reason": null
+              },
+              {
+                "where": "answer",
+                "sentence": "This is based on the presence of 8 imported functions from api-ms-win-core-registry-l1-1-0.dll: RegOpenKeyExW (opening), RegQueryValueExW/RegQueryInfoKeyW (reading), and RegSetValueExW (modifying).",
+                "reason": null
+              },
+              {
+                "where": "answer",
+                "sentence": "Additional functions like RegCreateKeyExW, RegDeleteTreeW, and RegDeleteKeyExW further support key management operations.",
+                "reason": null
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "The file imports 8 registry-related functions from api-ms-win-core-registry-l1-1-0.dll, covering opening (RegOpenKeyExW), reading (RegQueryValueExW, RegQueryInfoKeyW), and modifying (RegSetValueExW) capabilities.",
+                "sources": [
+                  "I115",
+                  "I116",
+                  "I117",
+                  "I118"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[1]",
+                "kind": "OBSERVED",
+                "sentence": "Additional registry functions include RegCloseKey, RegCreateKeyExW, RegDeleteTreeW, and RegDeleteKeyExW, indicating full key management capability.",
+                "sources": [
+                  "I119",
+                  "I120",
+                  "I121",
+                  "I122"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[2]",
+                "kind": "INFERENCE",
+                "sentence": "The presence of these specific API imports confirms the file's static capability to perform registry operations at runtime.",
+                "sources": [
+                  "I115",
+                  "I116",
+                  "I117",
+                  "I118"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[3]",
+                "kind": "LIMITATION",
+                "sentence": "Static analysis cannot confirm whether these APIs are actually invoked during execution, only that they are imported.",
+                "sources": [],
+                "reason": null
+              }
+            ],
+            "dropped": []
+          }
+        },
+        {
+          "alias": "sample_0014",
+          "class": "RELEVANT_ABSENT",
+          "final": true,
+          "m1b_trace": false,
+          "m1b_render": false,
+          "dropped": 5,
+          "kept_presence": 0,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "Static evidence indicates no direct imports for 'socket', 'connect', 'Winsock', or 'http' were found in the viewed entries.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "However, the full import table (100 entries) was not displayed, and other network-related APIs (e.g., DNS resolution, ICMP, HTTP client libraries) could not be verified due to lack of visible evidence and exhausted query options.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "No imports for 'socket', 'connect', 'Winsock', or 'http' were found in the queried symbol prefix searches.",
+                "sources": [
+                  "I0",
+                  "I1",
+                  "I2",
+                  "I3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[1]",
+                "kind": "LIMITATION",
+                "sentence": "The full import table (100 entries) was not displayed, preventing verification of other network-related APIs like DNS or ICMP.",
+                "sources": [
+                  "E3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[2]",
+                "kind": "INFERENCE",
+                "sentence": "Network communication capability cannot be fully confirmed as absent because the specific import entries for potential network functions are not visible in the provided evidence.",
+                "sources": [],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0015",
+          "class": "RELEVANT_PRESENT",
+          "final": true,
+          "m1b_trace": true,
+          "m1b_render": true,
+          "dropped": 3,
+          "kept_presence": 4,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "Static evidence indicates the file has capability to open the service manager (OpenSCManagerW) and start services (StartServiceW).",
+                "reason": null
+              },
+              {
+                "where": "answer",
+                "sentence": "The import table is fully viewed for the relevant DLL.",
+                "reason": null
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "File can open the service manager and start services via OpenSCManagerW and StartServiceW.",
+                "sources": [
+                  "I153",
+                  "I152"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[2]",
+                "kind": "OBSERVED",
+                "sentence": "File can close service handles via CloseServiceHandle.",
+                "sources": [
+                  "I150"
+                ],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "It lacks observed imports for creating services (CreateService), stopping services, or configuring services.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[1]",
+                "kind": "LIMITATION",
+                "sentence": "No static evidence for creating, stopping, or configuring services;",
+                "sources": [
+                  "I150",
+                  "I151",
+                  "I152",
+                  "I153"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[1]",
+                "kind": "LIMITATION",
+                "sentence": "CreateService import not found in fully viewed table.",
+                "sources": [
+                  "I150",
+                  "I151",
+                  "I152",
+                  "I153"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0016",
+          "class": "RELEVANT_ABSENT",
+          "final": true,
+          "m1b_trace": false,
+          "m1b_render": false,
+          "dropped": 5,
+          "kept_presence": 0,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "Static analysis cannot confirm runtime behavior;",
+                "sources": [],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "Static evidence indicates no capability for Windows registry access.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "A query for symbols prefixed with 'Reg' returned zero matches, and the import table scan (25 entries) contained no registry-related API declarations.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "No registry-related imports were found in the file's import table.",
+                "sources": [
+                  "I0"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[1]",
+                "kind": "INFERENCE",
+                "sentence": "The absence of 'Reg' symbols implies no declared capability to open, read, or modify registry keys.",
+                "sources": [
+                  "I0"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "the file may use dynamic loading or other obfuscation techniques not visible in imports.",
+                "sources": [],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0017",
+          "class": "INITIAL_EVIDENCE_SUFFICIENT",
+          "final": true,
+          "m1b_trace": false,
+          "m1b_render": false,
+          "dropped": 2,
+          "kept_presence": 4,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "The PE image is a 32-bit executable (PE_IMAGE) running on x64 architecture (is_dll: false).",
+                "reason": null
+              },
+              {
+                "where": "answer",
+                "sentence": "The static detector predicted 'benign' with a raw score of 0.0010815162403800874.",
+                "reason": null
+              },
+              {
+                "where": "findings[1]",
+                "kind": "OBSERVED",
+                "sentence": "Static detector predicted 'benign' with raw score 0.0010815162403800874.",
+                "sources": [
+                  "E1"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[2]",
+                "kind": "INFERENCE",
+                "sentence": "PE32+ format on x64 architecture indicates a 32-bit executable targeting x64 environment.",
+                "sources": [
+                  "E2"
+                ],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "PE image is executable, not DLL, on x64 architecture.",
+                "sources": [
+                  "E1"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[3]",
+                "kind": "LIMITATION",
+                "sentence": "No import table data was viewed, so dynamic API usage is unknown.",
+                "sources": [],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0018",
+          "class": "NOT_STATIC_ANSWERABLE",
+          "final": true,
+          "m1b_trace": false,
+          "m1b_render": false,
+          "dropped": 5,
+          "kept_presence": 1,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "Static analysis cannot prove runtime behavior, but it can declare capabilities.",
+                "reason": null
+              },
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "Static analysis cannot confirm runtime behavior;",
+                "sources": [],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "This file declares no network-related APIs in its import table (all 39 entries viewed).",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "answer",
+                "sentence": "The absence of Winsock or HTTP imports suggests it does not communicate over the network statically.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "No network-related API symbols were found in the fully examined import table.",
+                "sources": [
+                  "I0",
+                  "I1",
+                  "I2",
+                  "I3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[1]",
+                "kind": "INFERENCE",
+                "sentence": "The absence of declared network APIs suggests no network communication capability.",
+                "sources": [
+                  "I0",
+                  "I1",
+                  "I2",
+                  "I3"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "the file might use dynamic loading or reflection to access network APIs not visible in imports.",
+                "sources": [],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0019",
+          "class": "RELEVANT_PRESENT",
+          "final": true,
+          "m1b_trace": true,
+          "m1b_render": true,
+          "dropped": 3,
+          "kept_presence": 4,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "Static evidence indicates the file has capabilities for network name resolution (IPv4/IPv6 parsing via InetPtonW, InetNtopW from WS2_32.dll) and URL handling (PathCreateFromUrlW).",
+                "reason": null
+              },
+              {
+                "where": "answer",
+                "sentence": "The file may have network capabilities, but full socket functionality requires checking more imports.",
+                "reason": null
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "Imports from WS2_32.dll include InetPtonW and InetNtopW (delay-loaded), indicating IPv4/IPv6 address parsing capability.",
+                "sources": [
+                  "I257",
+                  "I258"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[1]",
+                "kind": "OBSERVED",
+                "sentence": "Import from api-ms-win-core-url-l1-1-0.dll includes PathCreateFromUrlW, suggesting URL string handling.",
+                "sources": [
+                  "I147"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "more imports needed to confirm full network capability.",
+                "sources": [],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "However, explicit socket communication APIs (e.g., for creating connections) were not observed in the viewed entries.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "No explicit socket communication APIs (e.g., connect, send, recv) were observed in the 2 viewed WS2_32.dll entries;",
+                "sources": [],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[3]",
+                "kind": "INFERENCE",
+                "sentence": "The presence of URL and address parsing functions suggests potential for network interaction, but without socket APIs, direct communication is not statically confirmed.",
+                "sources": [
+                  "I147",
+                  "I257",
+                  "I258"
+                ],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        },
+        {
+          "alias": "sample_0020",
+          "class": "INITIAL_EVIDENCE_SUFFICIENT",
+          "final": true,
+          "m1b_trace": false,
+          "m1b_render": false,
+          "dropped": 2,
+          "kept_presence": 4,
+          "m4_render_unscoped": false,
+          "parts": {
+            "kept": [
+              {
+                "where": "answer",
+                "sentence": "The PE image is a 32-bit executable (PE_IMAGE) on x64 architecture, confirmed by the pe_header and format entries which indicate 'is_dll': false and 'architecture': 'x64'.",
+                "reason": null
+              },
+              {
+                "where": "answer",
+                "sentence": "The static detector predicted the label as 'benign' with a raw score of 0.004876991504946674 (below the threshold of 0.8321860386013389).",
+                "reason": null
+              },
+              {
+                "where": "findings[0]",
+                "kind": "OBSERVED",
+                "sentence": "The image is a PE32+ executable on x64 architecture (is_dll: false).",
+                "sources": [
+                  "E1"
+                ],
+                "reason": null
+              },
+              {
+                "where": "findings[1]",
+                "kind": "OBSERVED",
+                "sentence": "The static detector predicted the label as 'benign' with a raw score of 0.004876991504946674.",
+                "sources": [
+                  "E2"
+                ],
+                "reason": null
+              }
+            ],
+            "dropped": [
+              {
+                "where": "answer",
+                "sentence": "It remains unknown whether any specific APIs are imported or used, as no import entries were viewed.",
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              },
+              {
+                "where": "findings[2]",
+                "kind": "LIMITATION",
+                "sentence": "No import entries were viewed, so specific API usage is unknown.",
+                "sources": [],
+                "reason": "câu dạng phủ định/vắng mặt (NEGATION_RE)"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

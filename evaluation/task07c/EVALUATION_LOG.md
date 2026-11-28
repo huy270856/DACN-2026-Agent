@@ -82,3 +82,32 @@
   20/20, latency 1.08 & 1.10 × V4. Hành vi: M4_raw 0.05/0.10; 7/7 run RP trượt có `findings = []`.
   Bảng quyết định: "M4 giảm nhưng M1b giảm". `REPORT.md` viết xong; CHALLENGES_ARCHITECTURE A4 → PARTIAL, thêm A5.
 - Full regression trước commit kết quả: 895 passed / 0 failed / 4 skipped (+83 subtests).
+
+## 2026-11-28 — TASK 07C-R (Owner chọn "C rồi B, có time-box") — tiêu chí ghi TRƯỚC khi chạy
+
+- Loại: `DEV_DIAGNOSTIC`, track **replay tất định offline** (không chạy Qwen). Input chỉ đọc: trace frozen 07B
+  `evaluation/task07b/results/frozen/V4_s42`, `V4_s7` (contract v4.0). Không sửa artifact 07B.
+- Renderer tất định: tách `answer` và `findings[].text` thành câu; câu khớp `NEGATION_RE` hoặc `ABSENCE_RE`
+  (đúng regex 07C) → "Nội dung bị loại" kèm lý do; câu khác trích nguyên văn, ghi model-authored; coverage từ
+  trusted trace (`viewed_literals`, query log). Không tạo, không sửa chữ.
+- Metric: M1b render (citation entry liên quan nằm trong finding còn ≥ 1 câu được giữ); M4 render (thỏa do cấu
+  trúc); số câu bị loại/run; tỷ lệ run còn ≥ 1 câu có mặt; spot-check thủ công 5 báo cáo.
+- **Tiêu chí (cả hai seed):** M1b render ≥ 6/8, **và** ≥ 90% run có báo cáo còn ≥ 1 câu có mặt, **và** spot-check
+  không có báo cáo nào vô nghĩa. Đạt → báo Planner (review kiểm renderer). Không đạt → báo Planner; bước sau là B.
+
+## 2026-11-28 — TASK 07C-R kết quả (offline, `results/rerender_07b/`, `rerender_07b.py`)
+
+| Tiêu chí (cả hai seed) | V4_s42 | V4_s7 | Kết luận |
+|---|---|---|---|
+| M1b render ≥ 6/8 | 7/8 | 7/8 | đạt (= M1b trace 7/8) |
+| ≥ 90% run còn ≥ 1 câu có mặt | 17/20 (85%) | 17/20 (85%) | **không đạt** |
+| Spot-check 5 báo cáo không vô nghĩa | — | — | **không đạt** |
+
+- M4 render 0/20 ở cả hai seed (thỏa do cấu trúc). Câu bị loại mỗi run: 0–10 (median ≈ 4–5).
+- Run không còn câu có mặt: s42 0005, 0018 (NOT_STATIC), 0007 (RELEVANT_ABSENT); s7 0007, 0014, 0016 (RELEVANT_ABSENT).
+- Spot-check (0004 s42, 0013 s42, 0007 s7, 0010 s7, 0018 s42): 0013 và 0010 đọc được tốt; 0004 đọc được nhưng mất
+  câu trả lời chính (đúng: không có CreateFile/ReadFile/WriteFile); **0007 s7 rỗng hoàn toàn** — câu hỏi
+  RELEVANT_ABSENT có câu trả lời đúng là "không có", nên lọc phủ định xóa đúng phần trả lời; 0018 s42 chỉ còn câu
+  giới hạn. `NEGATION_RE` cũng loại cả câu giới hạn trung thực ("cannot be confirmed").
+- **Kết luận: 07C-R KHÔNG ĐẠT.** Lọc phủ định sau sự kiện trên v4.0 giữ được M1b nhưng làm mất câu trả lời ở các
+  câu hỏi mà câu trả lời đúng là vắng mặt. Theo chỉ thị, bước sau là B (final hai bước), chưa làm.
