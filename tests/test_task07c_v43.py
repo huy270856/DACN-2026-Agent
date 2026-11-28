@@ -100,3 +100,14 @@ def test_v43_metrics_rendered_answer():
     r2 = dict(r, final=final2, verification={"flags": [], "absence_claims": {"accepted": [], "rejected": []}})
     assert M.run_row(r2, case_, 12288)["rendered_answer"] is False
     assert M.summarize([M.run_row(r, case_, 12288), M.run_row(r2, case_, 12288)])["rendered_answer_rate"] == {"n": 1, "d": 2}
+
+
+def test_v43_unresolved_topic_counts_in_m4():
+    from evaluation.task07b import metrics as M
+    case_ = {"accessibility_class": M.RA, "reference_EVALUATOR_ONLY": {"relevant_entries": []}}
+    final = dict(_f2(unresolved=(("The file has no network APIs at all", "INSUFFICIENT_EVIDENCE"),)), findings=[])
+    r = {"schema_version": "investigation-v4.3", "alias": "s", "status": "FINISHED", "final": final, "turns": [],
+         "trusted_metadata": {"resolved_sources": []},
+         "verification": {"flags": [], "absence_claims": {"accepted": [], "rejected": []}}}
+    row = M.run_row(r, case_, 12288)
+    assert row["M4_unscoped"] is True and row["v42_M4_rendered_unscoped"] is True

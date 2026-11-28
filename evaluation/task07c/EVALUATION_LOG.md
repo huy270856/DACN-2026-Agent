@@ -129,3 +129,9 @@
 ## 2026-11-28 — Review v4.3 PASS (f955e21..b41fa25) → freeze
 - Có 3 nit, không chặn: unresolved.topic render nguyên văn (đã ghi phạm vi vào PROTOCOL_V43), message lỗi trong config thiếu "4.3", step_repairs tách khỏi repair_attempts. Không sửa code (chỉ thị chỉ sửa CORE).
 - Commit này là pre-run freeze cho V4_3. Sau freeze không sửa code hay metrics.
+- Planner yêu cầu sửa 1 điểm Medium trước freeze; không cần review lại vì chỉ mở rộng phạm vi đo:
+  - đưa unresolved.topic vào M4 render và M4_raw;
+  - thêm 1 test;
+  - sửa message lỗi trong config cho có 4.3.
+- Commit 5169eec bị thay bằng freeze mới. Chưa có run nào chạy trên 5169eec.
+- freeze 5169eec bị thay thế trước khi chạy vì bổ sung phạm vi đo M4 (diagnostic); không có run nào. Regression: 901 passed / 0 failed / 4 skipped (+83 subtests).

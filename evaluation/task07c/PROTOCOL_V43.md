@@ -26,3 +26,8 @@ Bổ sung cho `PROTOCOL.md`: giữ nguyên mọi điều khoản, chỉ khác c�
 - M4 render chỉ phủ findings và absence_claims. `unresolved.topic` được render nguyên văn và không qua
   `statement_absence`.
 - Số repair theo từng bước nằm trong `step_repairs`, không cộng vào `repair_attempts`.
+
+**Sửa trước freeze (Planner, Medium):** đè lên ghi chú phạm vi ở trên.
+- M4 render phủ findings + unresolved.topic. Phần findings thỏa do cấu trúc; phần topic thì không. M4_raw cũng tính
+  cả topic (metrics v4).
+- Số repair báo theo `step_repairs`.

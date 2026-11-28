@@ -39,6 +39,8 @@ def _final_texts(r: Dict[str, Any]) -> List[str]:
     if _engine(r) == "v4" and r.get("schema_version") in ("investigation-v4.2", "investigation-v4.3"):
         # v4.2: model-written text = statements only (rendered absence lines come from verified claims)
         texts = [x.get("statement") or "" for x in f.get("findings", [])]
+        # v4.3: unresolved.topic is model-authored free text rendered verbatim -> counted in M4 (raw and render)
+        texts += [u.get("topic") or "" for u in f.get("unresolved", [])]
     elif _engine(r) == "v4":
         texts = [f.get("answer") or ""] + [x.get("text") or "" for x in f.get("findings", [])]
     else:
@@ -125,7 +127,8 @@ def run_row(r: Dict[str, Any], case: Dict[str, Any], num_ctx: int) -> Dict[str, 
                           and int(s["cited_in"][9:-1]) in kept_idx}
         rendered_unscoped = any(ABSENCE_RE.search(x["statement"]) and not LIMITATION_RE.search(x["statement"])
                                 and not SCOPE_RE.search(x["statement"])
-                                for i, x in enumerate(final.get("findings", [])) if i in kept_idx)
+                                for i, x in enumerate(final.get("findings", [])) if i in kept_idx) or             any(ABSENCE_RE.search(u.get("topic", "")) and not LIMITATION_RE.search(u.get("topic", ""))
+                and not SCOPE_RE.search(u.get("topic", "")) for u in final.get("unresolved", []))
     else:
         rendered_cited, rendered_unscoped = None, None
     return {
