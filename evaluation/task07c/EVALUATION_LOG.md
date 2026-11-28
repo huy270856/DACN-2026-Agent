@@ -72,3 +72,13 @@
   Medium: ghi "M4 render thỏa do cấu trúc", thêm `M4_raw_pre_repair`. Sửa ở `a9c6408`; re-review PASS.
 - Commit tiếp theo là **pre-run freeze**. S4 do Owner chạy ngoài session:
   `run_s4.ps1 -FreezeCommit <SHA>` (authorization `DACN_OWNER_07C_EVAL_GO`). Không sửa file tracked trong lúc chạy.
+
+## 2026-11-28 — S4 (Owner) và S5
+
+- S4: Owner chạy `run_s4.ps1 -FreezeCommit f7a4ec6…`, 08:48:33–09:08:30; Ollama 0.40.16, digest `d8b0f5e9…`.
+  40/40 run có final (25 FINISHED, 15 FINISHED_FLAGGED); 0 lỗi hạ tầng/truncation/overflow/isolation.
+- S5: `metrics.py` không đổi sau freeze (`task07b-metrics-v3`) → `results/frozen/metrics_v3.json` (write-once).
+  Tiêu chí sản phẩm: M4 render 0/20 & 0/20 (do cấu trúc), **M1b render 5/8 & 4/8 (< 6/8, không đạt)**, M10 20/20 &
+  20/20, latency 1.08 & 1.10 × V4. Hành vi: M4_raw 0.05/0.10; 7/7 run RP trượt có `findings = []`.
+  Bảng quyết định: "M4 giảm nhưng M1b giảm". `REPORT.md` viết xong; CHALLENGES_ARCHITECTURE A4 → PARTIAL, thêm A5.
+- Full regression trước commit kết quả: 895 passed / 0 failed / 4 skipped (+83 subtests).

@@ -1,0 +1,578 @@
+{
+  "track": "RAW_PE_E2E_BENIGN_FRESH_COHORT",
+  "audit_version": "task07b-cohort-audit-v1",
+  "seed": "task07b-cohort-v1",
+  "audit_sha256": "a8043b7312878504895360cb89b65f6406bd4ebba4da98b8558e0f83d20e51a2",
+  "created_utc": "2026-11-27T03:43:47.755410+00:00",
+  "questions_version": "task07b-questions (06B-J v2 templates + lexicon)",
+  "questions_sha256": "8628084ffba2cd9aceb7cdcb13899d513371dcb9d107a31e3cfbdde6b6c97060",
+  "targets": {
+    "RELEVANT_PRESENT": 8,
+    "RELEVANT_ABSENT": 4,
+    "NOT_STATIC_ANSWERABLE": 4,
+    "INITIAL_EVIDENCE_SUFFICIENT": 4
+  },
+  "min_beyond_v3": 5,
+  "within_v3": 3,
+  "v3_reach": 48,
+  "allocation_version": "task07b-allocation-v2 (5 beyond + 3 within v3.4 reach)",
+  "allocation_notes": [],
+  "evaluation_kind": "DEV_EVALUATION_FRESH_COHORT",
+  "confirmatory": "NOT_RUN",
+  "cases": [
+    {
+      "source": "C:\\Windows\\System32\\AppVDllSurrogate.exe",
+      "sha256": "6c430b80b9ca5cfb27b6eb4d4e7d73d347b92ff9706b7db73d5555ab9fb74a3e",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "AppVDllSurrogate.exe",
+        "OriginalFilename": "AppVDllSurrogate.exe",
+        "FileDescription": "Client DLL Surrogate Host"
+      },
+      "question_id": "Q07B_NOT_STATIC_ANSWERABLE",
+      "question_text": "Does this file actually communicate over the network when it runs? State what the available evidence can and cannot establish about this.",
+      "accessibility_class": "NOT_STATIC_ANSWERABLE",
+      "capability_family": null,
+      "reference_EVALUATOR_ONLY": {
+        "answer": "UNANSWERABLE statically: declared imports can at most show a declared capability, never runtime communication",
+        "network_relevant_entries": []
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature",
+      "alias": "sample_0001"
+    },
+    {
+      "source": "C:\\Windows\\System32\\regedt32.exe",
+      "sha256": "fc849afc9fcf34d295abf59955f0b0f8a226e2df064d0b6314e1c9c0b6c65527",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "regedt32.exe",
+        "OriginalFilename": "regedt32.exe",
+        "FileDescription": "Registry Editor Utility"
+      },
+      "question_id": "Q07B_NOT_STATIC_ANSWERABLE",
+      "question_text": "Does this file actually communicate over the network when it runs? State what the available evidence can and cannot establish about this.",
+      "accessibility_class": "NOT_STATIC_ANSWERABLE",
+      "capability_family": null,
+      "reference_EVALUATOR_ONLY": {
+        "answer": "UNANSWERABLE statically: declared imports can at most show a declared capability, never runtime communication",
+        "network_relevant_entries": []
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature",
+      "alias": "sample_0002"
+    },
+    {
+      "source": "C:\\Windows\\System32\\appidtel.exe",
+      "sha256": "218d7d39668ddf073c43a7e5f6a5992d0d1494cb259226bf51433470479b67f8",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "appidtel.exe",
+        "OriginalFilename": "APPIDTEL.EXE",
+        "FileDescription": "Initializes Appid ManagedInstaller and Smartscreen Telemetry"
+      },
+      "question_id": "Q07B_RELEVANT_PRESENT_REGISTRY",
+      "question_text": "What does the available static evidence indicate about this file's capability for Windows registry access (opening, reading or modifying registry keys/values)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "RELEVANT_PRESENT",
+      "capability_family": "REGISTRY",
+      "reference_EVALUATOR_ONLY": {
+        "relevant_entries": [
+          "ADVAPI32.dll!RegCloseKey",
+          "ADVAPI32.dll!RegSetValueExW"
+        ],
+        "relevant_indices": [
+          38,
+          42
+        ],
+        "first_relevant_index": 38,
+        "beyond_v3_reach": false,
+        "declared_entries": 59,
+        "answer": "Declared REGISTRY references in the full import table: 2"
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature",
+      "alias": "sample_0003"
+    },
+    {
+      "source": "C:\\Windows\\System32\\osk.exe",
+      "sha256": "e9becd8df5b2fef7c7f75d22f8c9df70e1440d4cb84dd1a948a64c630bbc23bd",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "osk.exe",
+        "OriginalFilename": "osk.exe",
+        "FileDescription": "Accessibility On-Screen Keyboard"
+      },
+      "question_id": "Q07B_RELEVANT_PRESENT_FILE",
+      "question_text": "What does the available static evidence indicate about this file's capability for file-system access (creating, reading, writing, moving or deleting files)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "RELEVANT_PRESENT",
+      "capability_family": "FILE",
+      "reference_EVALUATOR_ONLY": {
+        "relevant_entries": [
+          "KERNEL32.dll!DeleteFileW",
+          "KERNEL32.dll!GetFileAttributesW"
+        ],
+        "relevant_indices": [
+          65,
+          66
+        ],
+        "first_relevant_index": 65,
+        "beyond_v3_reach": true,
+        "declared_entries": 403,
+        "answer": "Declared FILE references in the full import table: 2"
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature",
+      "alias": "sample_0004"
+    },
+    {
+      "source": "C:\\Windows\\System32\\msdtc.exe",
+      "sha256": "bc1f5e9adfd3a25a92bd3a684f777996a8a29c170a20003121f0fc59f06fbab1",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "msdtc.exe",
+        "OriginalFilename": "MSDTC.EXE",
+        "FileDescription": "Microsoft Distributed Transaction Coordinator Service"
+      },
+      "question_id": "Q07B_NOT_STATIC_ANSWERABLE",
+      "question_text": "Does this file actually communicate over the network when it runs? State what the available evidence can and cannot establish about this.",
+      "accessibility_class": "NOT_STATIC_ANSWERABLE",
+      "capability_family": null,
+      "reference_EVALUATOR_ONLY": {
+        "answer": "UNANSWERABLE statically: declared imports can at most show a declared capability, never runtime communication",
+        "network_relevant_entries": []
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature",
+      "alias": "sample_0005"
+    },
+    {
+      "source": "C:\\Windows\\System32\\fveprompt.exe",
+      "sha256": "0a27198decc1642d020d5afd184407cf532949f2f71362ab1ae46575f25863cb",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "fveprompt.exe",
+        "OriginalFilename": "FVEPROMPT.EXE",
+        "FileDescription": "BitLocker Drive Encryption"
+      },
+      "question_id": "Q07B_RELEVANT_PRESENT_PROCESS",
+      "question_text": "What does the available static evidence indicate about this file's capability for process control (creating, opening or terminating processes, or accessing another process's memory)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "RELEVANT_PRESENT",
+      "capability_family": "PROCESS",
+      "reference_EVALUATOR_ONLY": {
+        "relevant_entries": [
+          "KERNEL32.dll!TerminateProcess",
+          "SHELL32.dll!ShellExecuteW",
+          "SHELL32.dll!ShellExecuteExW"
+        ],
+        "relevant_indices": [
+          32,
+          76,
+          83
+        ],
+        "first_relevant_index": 32,
+        "beyond_v3_reach": false,
+        "declared_entries": 90,
+        "answer": "Declared PROCESS references in the full import table: 3"
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature",
+      "alias": "sample_0006"
+    },
+    {
+      "source": "C:\\Windows\\System32\\dtdump.exe",
+      "sha256": "5262a12b9afd78ff33f2a0ad64b39a170d1a91474854aacf7541886dc2c59cb1",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "dtdump.exe",
+        "OriginalFilename": "DTDUMP.EXE",
+        "FileDescription": "DTDUMP.EXE"
+      },
+      "question_id": "Q07B_RELEVANT_ABSENT_SERVICE",
+      "question_text": "What does the available static evidence indicate about this file's capability for Windows service control (opening the service manager, creating, starting, stopping or configuring services)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "RELEVANT_ABSENT",
+      "capability_family": "SERVICE",
+      "reference_EVALUATOR_ONLY": {
+        "relevant_entries": [],
+        "relevant_indices": [],
+        "first_relevant_index": null,
+        "beyond_v3_reach": false,
+        "declared_entries": 111,
+        "answer": "No declared SERVICE references in the full import table; dynamically resolved APIs remain possible"
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature",
+      "alias": "sample_0007"
+    },
+    {
+      "source": "C:\\Windows\\System32\\rstrui.exe",
+      "sha256": "9d411e7e2a50e3175ea8cdbe109d2e6605a2ebefc8a638a22e53c6ac9af8cd26",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "rstrui.exe",
+        "OriginalFilename": "rstrui.exe",
+        "FileDescription": "Microsoft® Windows System Restore"
+      },
+      "question_id": "Q07B_RELEVANT_PRESENT_FILE",
+      "question_text": "What does the available static evidence indicate about this file's capability for file-system access (creating, reading, writing, moving or deleting files)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "RELEVANT_PRESENT",
+      "capability_family": "FILE",
+      "reference_EVALUATOR_ONLY": {
+        "relevant_entries": [
+          "KERNEL32.dll!CreateFileW",
+          "KERNEL32.dll!MoveFileExW",
+          "KERNEL32.dll!FindNextFileW",
+          "KERNEL32.dll!FindFirstFileW",
+          "KERNEL32.dll!CreateDirectoryW",
+          "KERNEL32.dll!DeleteFileW",
+          "KERNEL32.dll!GetFileAttributesW"
+        ],
+        "relevant_indices": [
+          46,
+          93,
+          96,
+          97,
+          122,
+          123,
+          124
+        ],
+        "first_relevant_index": 46,
+        "beyond_v3_reach": false,
+        "declared_entries": 277,
+        "answer": "Declared FILE references in the full import table: 7"
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature",
+      "alias": "sample_0008"
+    },
+    {
+      "source": "C:\\Windows\\System32\\smartscreen.exe",
+      "sha256": "aee701b4481a829097132072917d60f78d56fa3768aacbed4bab545c1af99f41",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "smartscreen.exe",
+        "OriginalFilename": "smartscreen.exe",
+        "FileDescription": "Microsoft Defender SmartScreen"
+      },
+      "question_id": "Q07B_RELEVANT_PRESENT_PROCESS",
+      "question_text": "What does the available static evidence indicate about this file's capability for process control (creating, opening or terminating processes, or accessing another process's memory)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "RELEVANT_PRESENT",
+      "capability_family": "PROCESS",
+      "reference_EVALUATOR_ONLY": {
+        "relevant_entries": [
+          "api-ms-win-core-processthreads-l1-1-1.dll!OpenProcess"
+        ],
+        "relevant_indices": [
+          250
+        ],
+        "first_relevant_index": 250,
+        "beyond_v3_reach": true,
+        "declared_entries": 280,
+        "answer": "Declared PROCESS references in the full import table: 1"
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature",
+      "alias": "sample_0009"
+    },
+    {
+      "source": "C:\\Windows\\System32\\certreq.exe",
+      "sha256": "88e2b3400bdd3ef6ce4f1e51a87d59485b372d83db8d7a5dc5750242a84acb0f",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "certreq.exe",
+        "OriginalFilename": "CertReq.exe",
+        "FileDescription": "CertReq.exe"
+      },
+      "question_id": "Q07B_INITIAL_EVIDENCE_SUFFICIENT",
+      "question_text": "What kind of PE image is this (executable or DLL, architecture), and what did the static detector output? State what remains unknown.",
+      "accessibility_class": "INITIAL_EVIDENCE_SUFFICIENT",
+      "capability_family": null,
+      "reference_EVALUATOR_ONLY": {
+        "answer": "PE kind/arch from static parse; detector output = whatever the frozen initial CaseState records",
+        "unknowns": "runtime behaviour; detector score is not a calibrated probability"
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature",
+      "alias": "sample_0010"
+    },
+    {
+      "source": "C:\\Windows\\System32\\SecurityHealthSystray.exe",
+      "sha256": "129cc582d72581f1459c7a9ac8b020dcd3642fae6a69acc26c680190494970db",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "SecurityHealthSystray.exe",
+        "OriginalFilename": "SecurityHealthSystray.exe",
+        "FileDescription": "Windows Security notification icon"
+      },
+      "question_id": "Q07B_INITIAL_EVIDENCE_SUFFICIENT",
+      "question_text": "What kind of PE image is this (executable or DLL, architecture), and what did the static detector output? State what remains unknown.",
+      "accessibility_class": "INITIAL_EVIDENCE_SUFFICIENT",
+      "capability_family": null,
+      "reference_EVALUATOR_ONLY": {
+        "answer": "PE kind/arch from static parse; detector output = whatever the frozen initial CaseState records",
+        "unknowns": "runtime behaviour; detector score is not a calibrated probability"
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature",
+      "alias": "sample_0011"
+    },
+    {
+      "source": "C:\\Windows\\System32\\cttunesvr.exe",
+      "sha256": "3ad27fc6d50f5ad75b0c3e0378c7a32d062d3e95fa5d7259c0601dfcada8d3f3",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "cttunesvr.exe",
+        "OriginalFilename": "CTTUNESVR.EXE",
+        "FileDescription": "ClearType Tuner"
+      },
+      "question_id": "Q07B_RELEVANT_ABSENT_FILE",
+      "question_text": "What does the available static evidence indicate about this file's capability for file-system access (creating, reading, writing, moving or deleting files)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "RELEVANT_ABSENT",
+      "capability_family": "FILE",
+      "reference_EVALUATOR_ONLY": {
+        "relevant_entries": [],
+        "relevant_indices": [],
+        "first_relevant_index": null,
+        "beyond_v3_reach": false,
+        "declared_entries": 98,
+        "answer": "No declared FILE references in the full import table; dynamically resolved APIs remain possible"
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature",
+      "alias": "sample_0012"
+    },
+    {
+      "source": "C:\\Windows\\System32\\dmcertinst.exe",
+      "sha256": "0d4647310764a3c376a501d1c4105afa278e01eb96717dd4fcc653f26f3f072d",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "dmcertinst.exe",
+        "OriginalFilename": "dmcertinst.exe",
+        "FileDescription": "DM Certificate Installer"
+      },
+      "question_id": "Q07B_RELEVANT_PRESENT_REGISTRY",
+      "question_text": "What does the available static evidence indicate about this file's capability for Windows registry access (opening, reading or modifying registry keys/values)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "RELEVANT_PRESENT",
+      "capability_family": "REGISTRY",
+      "reference_EVALUATOR_ONLY": {
+        "relevant_entries": [
+          "api-ms-win-core-registry-l1-1-0.dll!RegCloseKey",
+          "api-ms-win-core-registry-l1-1-0.dll!RegCreateKeyExW",
+          "api-ms-win-core-registry-l1-1-0.dll!RegSetValueExW",
+          "api-ms-win-core-registry-l1-1-0.dll!RegQueryValueExW",
+          "api-ms-win-core-registry-l1-1-0.dll!RegOpenKeyExW"
+        ],
+        "relevant_indices": [
+          115,
+          116,
+          117,
+          118,
+          120
+        ],
+        "first_relevant_index": 115,
+        "beyond_v3_reach": true,
+        "declared_entries": 215,
+        "answer": "Declared REGISTRY references in the full import table: 5"
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature",
+      "alias": "sample_0013"
+    },
+    {
+      "source": "C:\\Windows\\System32\\SysResetErr.exe",
+      "sha256": "7bbda98e5e2b86b4066c3ea67f191ecd1117c737582b7d07bc2364850a5d0423",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "SysResetErr.exe",
+        "OriginalFilename": "SysResetErr.exe",
+        "FileDescription": "Windows System Reset"
+      },
+      "question_id": "Q07B_RELEVANT_ABSENT_NETWORK",
+      "question_text": "What does the available static evidence indicate about this file's capability for network communication (for example sockets, name resolution, HTTP or ICMP)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "RELEVANT_ABSENT",
+      "capability_family": "NETWORK",
+      "reference_EVALUATOR_ONLY": {
+        "relevant_entries": [],
+        "relevant_indices": [],
+        "first_relevant_index": null,
+        "beyond_v3_reach": false,
+        "declared_entries": 100,
+        "answer": "No declared NETWORK references in the full import table; dynamically resolved APIs remain possible"
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature",
+      "alias": "sample_0014"
+    },
+    {
+      "source": "C:\\Windows\\System32\\verifier.exe",
+      "sha256": "a5e85c3a6b10bb5c7a1656a4ea4de709a6c066bde038419a71bf46a3b25e44e0",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "verifier.exe",
+        "OriginalFilename": "verifier.exe",
+        "FileDescription": "Verifier Configuration Editor"
+      },
+      "question_id": "Q07B_RELEVANT_PRESENT_SERVICE",
+      "question_text": "What does the available static evidence indicate about this file's capability for Windows service control (opening the service manager, creating, starting, stopping or configuring services)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "RELEVANT_PRESENT",
+      "capability_family": "SERVICE",
+      "reference_EVALUATOR_ONLY": {
+        "relevant_entries": [
+          "api-ms-win-service-management-l1-1-0.dll!CloseServiceHandle",
+          "api-ms-win-service-management-l1-1-0.dll!OpenServiceW",
+          "api-ms-win-service-management-l1-1-0.dll!StartServiceW",
+          "api-ms-win-service-management-l1-1-0.dll!OpenSCManagerW",
+          "api-ms-win-service-winsvc-l1-1-0.dll!QueryServiceStatus",
+          "api-ms-win-service-winsvc-l1-1-0.dll!ControlService"
+        ],
+        "relevant_indices": [
+          150,
+          151,
+          152,
+          153,
+          154,
+          155
+        ],
+        "first_relevant_index": 150,
+        "beyond_v3_reach": true,
+        "declared_entries": 160,
+        "answer": "Declared SERVICE references in the full import table: 6"
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature",
+      "alias": "sample_0015"
+    },
+    {
+      "source": "C:\\Windows\\System32\\SystemPropertiesDataExecutionPrevention.exe",
+      "sha256": "b04f56e5ed68292ff0c6ab9f3c71ee9fda19963317b33e000c26d4f9ad0889ae",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "SystemPropertiesDataExecutionPrevention.exe",
+        "OriginalFilename": "SystemPropertiesDataExecutionPrevention.EXE",
+        "FileDescription": "Change Data Execution Prevention Settings"
+      },
+      "question_id": "Q07B_RELEVANT_ABSENT_REGISTRY",
+      "question_text": "What does the available static evidence indicate about this file's capability for Windows registry access (opening, reading or modifying registry keys/values)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "RELEVANT_ABSENT",
+      "capability_family": "REGISTRY",
+      "reference_EVALUATOR_ONLY": {
+        "relevant_entries": [],
+        "relevant_indices": [],
+        "first_relevant_index": null,
+        "beyond_v3_reach": false,
+        "declared_entries": 25,
+        "answer": "No declared REGISTRY references in the full import table; dynamically resolved APIs remain possible"
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature",
+      "alias": "sample_0016"
+    },
+    {
+      "source": "C:\\Windows\\System32\\drvinst.exe",
+      "sha256": "3896bd7b3f5bf89e7560acd8830a4cd56b2432fe7ffd09019ed93c9f4494af40",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "drvinst.exe",
+        "OriginalFilename": "DrvInst.EXE",
+        "FileDescription": "Driver Installation Module"
+      },
+      "question_id": "Q07B_INITIAL_EVIDENCE_SUFFICIENT",
+      "question_text": "What kind of PE image is this (executable or DLL, architecture), and what did the static detector output? State what remains unknown.",
+      "accessibility_class": "INITIAL_EVIDENCE_SUFFICIENT",
+      "capability_family": null,
+      "reference_EVALUATOR_ONLY": {
+        "answer": "PE kind/arch from static parse; detector output = whatever the frozen initial CaseState records",
+        "unknowns": "runtime behaviour; detector score is not a calibrated probability"
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature",
+      "alias": "sample_0017"
+    },
+    {
+      "source": "C:\\Windows\\System32\\ResetEngine.exe",
+      "sha256": "c9c502d17f58983ab594a2d271f0e07dee2dbc0c69ed0bf9819134dbf20adb6b",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "ResetEngine.exe",
+        "OriginalFilename": "RESETENGINE.EXE",
+        "FileDescription": "Push-Button Reset Engine"
+      },
+      "question_id": "Q07B_NOT_STATIC_ANSWERABLE",
+      "question_text": "Does this file actually communicate over the network when it runs? State what the available evidence can and cannot establish about this.",
+      "accessibility_class": "NOT_STATIC_ANSWERABLE",
+      "capability_family": null,
+      "reference_EVALUATOR_ONLY": {
+        "answer": "UNANSWERABLE statically: declared imports can at most show a declared capability, never runtime communication",
+        "network_relevant_entries": []
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature",
+      "alias": "sample_0018"
+    },
+    {
+      "source": "C:\\Windows\\System32\\MDEServer.exe",
+      "sha256": "ec25f973021b8012dab3eb760f7f5177e41dd00cf1694e888223fbc2bac5a6f0",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "MDEServer.exe",
+        "OriginalFilename": "MDEServer.exe",
+        "FileDescription": "Cast to Device Server"
+      },
+      "question_id": "Q07B_RELEVANT_PRESENT_NETWORK",
+      "question_text": "What does the available static evidence indicate about this file's capability for network communication (for example sockets, name resolution, HTTP or ICMP)? State what is observed, what is not, and what remains unknown.",
+      "accessibility_class": "RELEVANT_PRESENT",
+      "capability_family": "NETWORK",
+      "reference_EVALUATOR_ONLY": {
+        "relevant_entries": [
+          "WS2_32.dll!InetPtonW",
+          "WS2_32.dll!InetNtopW",
+          "IPHLPAPI.DLL!GetAdaptersAddresses",
+          "IPHLPAPI.DLL!ResolveIpNetEntry2",
+          "IPHLPAPI.DLL!GetIpNetEntry2",
+          "IPHLPAPI.DLL!GetBestInterfaceEx"
+        ],
+        "relevant_indices": [
+          257,
+          258,
+          259,
+          260,
+          261,
+          262
+        ],
+        "first_relevant_index": 257,
+        "beyond_v3_reach": true,
+        "declared_entries": 263,
+        "answer": "Declared NETWORK references in the full import table: 6"
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature",
+      "alias": "sample_0019"
+    },
+    {
+      "source": "C:\\Windows\\System32\\chkntfs.exe",
+      "sha256": "c571f4867a2aaee70b8548b9bb220360b6f347d6413d55212d120ebf5bb2b4fd",
+      "program_identity_EVALUATOR_ONLY": {
+        "filename": "chkntfs.exe",
+        "OriginalFilename": "CHKNTFS.EXE",
+        "FileDescription": "NTFS Volume Maintenance Utility"
+      },
+      "question_id": "Q07B_INITIAL_EVIDENCE_SUFFICIENT",
+      "question_text": "What kind of PE image is this (executable or DLL, architecture), and what did the static detector output? State what remains unknown.",
+      "accessibility_class": "INITIAL_EVIDENCE_SUFFICIENT",
+      "capability_family": null,
+      "reference_EVALUATOR_ONLY": {
+        "answer": "PE kind/arch from static parse; detector output = whatever the frozen initial CaseState records",
+        "unknowns": "runtime behaviour; detector score is not a calibrated probability"
+      },
+      "true_label_EVALUATOR_ONLY": "benign",
+      "label_basis": "OS provenance + valid Microsoft signature",
+      "alias": "sample_0020"
+    }
+  ],
+  "task07b_filter": {
+    "source_manifest": "evaluation/task07b/results/cohort/cases_v2_EVALUATOR_ONLY.json",
+    "source_sha256": "0bcef34a324db4235f82da7455f7b49cbe8d2e5157deea95023d47cbd1c132a4",
+    "aliases": [
+      "sample_0001",
+      "sample_0002",
+      "sample_0003",
+      "sample_0004",
+      "sample_0005",
+      "sample_0006",
+      "sample_0007",
+      "sample_0008",
+      "sample_0009",
+      "sample_0010",
+      "sample_0011",
+      "sample_0012",
+      "sample_0013",
+      "sample_0014",
+      "sample_0015",
+      "sample_0016",
+      "sample_0017",
+      "sample_0018",
+      "sample_0019",
+      "sample_0020"
+    ]
+  }
+}

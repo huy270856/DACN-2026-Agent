@@ -28,4 +28,18 @@ Mỗi mục: Task · Vấn đề · Bằng chứng · Quyết định/hướng x
 - **Task:** 07B
 - **Vấn đề:** model chỉ hỏi query hẹp rồi kết luận "không có cả họ API", ví dụ nói không có process opening trong khi có `OpenProcess`. M4-UNSCOPED tăng lên 0.55–0.60.
 - **Hướng xử lý:** sang 07C, bắt claim vắng mặt phải trích query/DLL đã phủ, hoặc trả coverage tất định ở lượt final.
+- **07C:** ledger tất định + `absence_claims` (v4.1) chưa đủ: sau repair Qwen vẫn lặp absence rộng bằng free-text
+  (smoke 2/2). Chuyển sang final có cấu trúc `investigation-v4.2` + trusted renderer loại statement phủ định (P1).
+  Eval 40 run: M4_raw 0.05/0.10 (so 0.60/0.55 ở 07B, định dạng khác), nhưng M1b giảm 7/8 → 5/8, 4/8 vì model bỏ
+  trống `findings` (7/7 run trượt có findings = [], 4/7 đã query trúng entry). `evaluation/task07c/REPORT.md`.
+- **Trạng thái:** PARTIAL — absence được kiểm soát bằng cấu trúc + trusted filter, đổi lại mất phát hiện có mặt (A5).
+
+## A5. Ép cấu trúc absence làm model bỏ trống phát hiện có mặt
+- **Task:** 07C
+- **Vấn đề:** khi cho phép `findings` rỗng và nhấn mạnh absence, Qwen 4B chỉ điền `absence_claims` và bỏ trống
+  phát hiện có mặt, kể cả khi đã thấy entry liên quan. Ngược lại, khi bắt `findings` ≥ 1 (smoke 3), model điền câu
+  phủ định vào ô bắt buộc. Model không giữ được đồng thời hai ràng buộc.
+- **Bằng chứng:** `evaluation/task07c/REPORT.md` §2b; smoke `results/dev_smoke_3`, `dev_smoke_4`.
+- **Hướng xử lý (đề xuất, chưa làm):** nhắc tất định "đã xem các entry I…" ở lượt final và yêu cầu statement có mặt
+  khi đã xem ≥ 1 entry; đo lại trên DEV trước.
 - **Trạng thái:** OPEN.
