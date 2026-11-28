@@ -1,5 +1,30 @@
 # CLAUDE.md — DACN-2026-Agent
 
+## Agent Orchestration & Token Efficiency
+
+- Use subagents instead of Agent Teams.
+- Never create Agent Teams or spawn teammates.
+- Reuse existing agent definitions in `.claude/agents/`.
+- Delegate only tasks that benefit from specialized agents.
+- Handle simple tasks directly in the main session.
+- Limit concurrent subagents to a maximum of two unless necessary.
+- Require concise subagent reports.
+- Avoid redundant analysis, repeated file reads, and duplicated work.
+- Preserve existing progress and continue unfinished tasks when resuming a session.
+
+## Challenge logs (bắt buộc sau mỗi task lớn)
+
+- Sau khi xong mỗi task lớn hoặc sub-task (07A, 07B, 08…), session dev MUST cập nhật:
+  - `docs/CHALLENGES_ARCHITECTURE.md`: khó khăn kiến trúc lớn buộc phải đổi thiết kế, contract, luồng hoặc phân vai (ví dụ: SLM ôm quá nhiều vai trò nên phải chuyển phần tất định sang trusted code).
+  - `docs/CHALLENGES_TECHNICAL.md`: khó khăn kỹ thuật lớn làm hỏng run, mất dữ liệu, chặn tiến độ hoặc tốn nhiều giờ.
+- Chỉ ghi khó khăn LỚN. Không ghi bug nhỏ hay nit. Dùng đúng format của file. Cập nhật trạng thái các mục cũ (OPEN/PARTIAL/RESOLVED) thay vì thêm mục trùng.
+
+## Ưu tiên sửa lỗi (chỉ thị Owner)
+
+- Dev chỉ ưu tiên sửa lỗi CORE: lỗi ảnh hưởng tới tính đúng, security invariant, tính toàn vẹn kết quả hoặc kết luận nghiên cứu.
+- Lỗi nhỏ, nit, trình bày: ghi lại, không sửa, không chặn tiến độ.
+- Review chỉ chặn (FAIL) ở mức High/Critical.
+
 These are the repository-wide instructions for Claude Code. They apply to every task. Task prompts can add requirements but MUST NOT weaken the security or research-integrity rules here unless the project owner says so explicitly. When a task prompt conflicts with this file, stop and ask.
 
 Keywords: **MUST / MUST NOT** are hard requirements. **SHOULD / SHOULD NOT** are strong defaults. A deviation from a SHOULD must be justified in the delivery report.
