@@ -65,3 +65,10 @@
   893 passed / 0 failed / 4 skipped.
 - Smoke `results/dev_smoke_4/V4_2_s42_r4`: sample_0010 FINISHED_FLAGGED (1 statement phủ định bị loại; statement
   WS2_32 giữ); sample_0012 FINISHED (findings rỗng; 5/5 absence_claims accepted ở lần đầu). Không có lỗi khác.
+
+## 2026-11-28 — S3: review FAIL (1 High) → sửa → re-review PASS → pre-run freeze
+
+- Review a013d18: High = kind sai trong run_s4 (đã thêm `DEV_DIAGNOSTIC_CONSUMED_COHORT` + guard tree sạch);
+  Medium: ghi "M4 render thỏa do cấu trúc", thêm `M4_raw_pre_repair`. Sửa ở `a9c6408`; re-review PASS.
+- Commit tiếp theo là **pre-run freeze**. S4 do Owner chạy ngoài session:
+  `run_s4.ps1 -FreezeCommit <SHA>` (authorization `DACN_OWNER_07C_EVAL_GO`). Không sửa file tracked trong lúc chạy.
